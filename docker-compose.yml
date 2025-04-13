@@ -1,0 +1,79 @@
+version: '3.8'
+
+services:
+  # Apostrophe CMS web application
+  apostrophe:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: apostrophe-cms
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - MONGODB_URI=mongodb://mongodb:27017/apostrophe
+      - SESSION_SECRET=change_this_to_a_secure_secret
+    volumes:
+      - ./website:/app
+      - /app/node_modules
+    depends_on:
+      - mongodb
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+
+  # MongoDB database
+  mongodb:
+    image: mongo:7.0
+    container_name: apostrophe-mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    command: mongod --quiet --logpath /dev/null
+    restart: unless-stopped
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+
+  # Mongo Express for database management (optional, development only)
+  mongo-express:
+    image: mongo-express:latest
+    container_name: apostrophe-mongo-express
+    ports:
+      - "8081:8081"
+    environment:
+      - ME_CONFIG_MONGODB_SERVER=mongodb
+      - ME_CONFIG_MONGODB_PORT=27017
+      - ME_CONFIG_BASICAUTH_USERNAME=admin
+      - ME_CONFIG_BASICAUTH_PASSWORD=password
+    depends_on:
+      - mongodb
+    restart: unless-stopped
+
+  # Redis for caching (optional, but recommended for production)
+  redis:
+    image: redis:7-alpine
+    container_name: apostrophe-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+volumes:
+  mongodb_data:
+  redis_data: 
