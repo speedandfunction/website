@@ -10,7 +10,7 @@ RUN apk add --no-cache wget=1.25.0-r0
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 
 # Copy package files for efficient caching
-COPY website/package.json website/package-lock.json* ./
+COPY website/ ./
 
 # Install dependencies with specific flags for production
 RUN npm ci && \
@@ -18,13 +18,13 @@ RUN npm ci && \
     npm cache clean --force
 
 # Copy the rest of the application
-COPY website/ ./
+
 
 # Set proper ownership
-RUN chown -R appuser:appgroup /app
+# RUN chown -R appuser:appgroup /app
 
-# Switch to non-root user
-USER appuser
+# # Switch to non-root user
+# USER appuser
 
 # Define a health check
 HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 CMD wget --no-verbose --tries=1 --spider http://localhost:3000/ || exit 1
