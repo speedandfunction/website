@@ -9,7 +9,7 @@ services:
       - "3000:3000"
     environment:
       - NODE_ENV=development
-      - MONGODB_URI=mongodb://mongodb:27017/apostrophe
+      - APOS_MONGODB_URI=mongodb://mongodb:27017/apostrophe
       - SESSION_SECRET=change_this_to_a_secure_secret
 
     command: ["npm", "start"]

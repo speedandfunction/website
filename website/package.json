@@ -38,7 +38,8 @@
     "connect-redis": "^7.1.1",
     "express": "^5.1.0",
     "googleapis": "^148.0.0",
-    "lodash": "^4.17.21"
+    "lodash": "^4.17.21",
+    "postmark": "^4.0.5"
   },
   "devDependencies": {
     "@babel/core": "^7.23.9",
