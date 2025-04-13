@@ -1,0 +1,16 @@
+<section class="sf-section" data-simple-cards-widget>
+  {% area data.widget, 'intro' %}
+  <div class="sf-simple-cards">
+    {% for card in data.widget.cards %}
+      <div class="sf-simple-card">
+        <div class="sf-simple-card-wrap">
+          {% if card.cardTitle %}
+            <h4 class="sf-simple-card__title">{{ card.cardTitle }}</h4>
+          {% endif %}
+          {% area card, 'cardContent' %}
+          <div class="background-circle"></div>          
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</section>

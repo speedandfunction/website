@@ -1,0 +1,154 @@
+{% import 'fragments/utilities.html' as utilities %}
+
+<script src="https://maps.googleapis.com/maps/api/js?key={{ process.env.GOOGLE_MAPS_API_KEY }}"></script>
+
+<section class="sf-map">
+  <div id="map" style="height: 500px; width: 100%;"></div>
+</section>
+
+<script>
+  function initMap() {
+    // Monochrome style
+    const mapStyle = [
+      {
+        "elementType": "geometry",
+        "stylers": [{ "color": "#f5f5f5" }]
+      },
+      {
+        "elementType": "labels.icon",
+        "stylers": [{ "visibility": "off" }]
+      },
+      {
+        "elementType": "labels.text.fill",
+        "stylers": [{ "color": "#616161" }]
+      },
+      {
+        "elementType": "labels.text.stroke",
+        "stylers": [{ "color": "#f5f5f5" }]
+      },
+      {
+        "featureType": "administrative.land_parcel",
+        "elementType": "labels.text.fill",
+        "stylers": [{ "color": "#bdbdbd" }]
+      },
+      {
+        "featureType": "poi",
+        "elementType": "geometry",
+        "stylers": [{ "color": "#eeeeee" }]
+      },
+      {
+        "featureType": "poi",
+        "elementType": "labels.text.fill",
+        "stylers": [{ "color": "#757575" }]
+      },
+      {
+        "featureType": "poi.park",
+        "elementType": "geometry",
+        "stylers": [{ "color": "#e5e5e5" }]
+      },
+      {
+        "featureType": "poi.park",
+        "elementType": "labels.text.fill",
+        "stylers": [{ "color": "#9e9e9e" }]
+      },
+      {
+        "featureType": "road",
+        "elementType": "geometry",
+        "stylers": [{ "color": "#ffffff" }]
+      },
+      {
+        "featureType": "road.arterial",
+        "elementType": "labels.text.fill",
+        "stylers": [{ "color": "#757575" }]
+      },
+      {
+        "featureType": "road.highway",
+        "elementType": "geometry",
+        "stylers": [{ "color": "#dadada" }]
+      },
+      {
+        "featureType": "road.highway",
+        "elementType": "labels.text.fill",
+        "stylers": [{ "color": "#616161" }]
+      },
+      {
+        "featureType": "road.local",
+        "elementType": "labels.text.fill",
+        "stylers": [{ "color": "#9e9e9e" }]
+      },
+      {
+        "featureType": "transit.line",
+        "elementType": "geometry",
+        "stylers": [{ "color": "#e5e5e5" }]
+      },
+      {
+        "featureType": "transit.station",
+        "elementType": "geometry",
+        "stylers": [{ "color": "#eeeeee" }]
+      },
+      {
+        "featureType": "water",
+        "elementType": "geometry",
+        "stylers": [{ "color": "#c9c9c9" }]
+      },
+      {
+        "featureType": "water",
+        "elementType": "labels.text.fill",
+        "stylers": [{ "color": "#9e9e9e" }]
+      }
+    ];
+
+    // Map options
+    const mapOptions = {
+      zoom: 2,
+      center: { lat: 20, lng: 0 },
+      styles: mapStyle,
+      disableDefaultUI: true, // Disable all default UI
+      zoomControl: true // Enable zoom control
+    };
+
+    // Create the map
+    const map = new google.maps.Map(document.getElementById('map'), mapOptions);
+
+    const locations = [
+      { lat: 48.3794, lng: 31.1656, label: '51' }, // Ukraine
+      { lat: 51.9194, lng: 19.1451, label: '7' },  // Poland
+      { lat: 39.3999, lng: -8.2245, label: '3' },  // Portugal
+      { lat: 42.7087, lng: 19.3744, label: '10' }, // Montenegro
+      { lat: 56.1304, lng: -106.3468, label: '5' }, // Canada
+      { lat: 51.1657, lng: 10.4515, label: '3' },  // Germany
+      { lat: -14.235, lng: -51.9253, label: '1' }, // Brazil
+      { lat: 42.3154, lng: 43.3569, label: '2' },  // Georgia
+      { lat: 55.3781, lng: -3.436, label: '4' },   // United Kingdom
+      { lat: 37.0902, lng: -95.7129, label: '3' }, // United States
+      { lat: 42.7339, lng: 25.4858, label: '3' },  // Bulgaria
+      { lat: 55.1694, lng: 23.8813, label: '1' },  // Lithuania
+      { lat: -38.4161, lng: -63.6167, label: '1' }, // Argentina
+      { lat: 38.9637, lng: 35.2433, label: '1' }   // Turkey
+    ];
+    const icon = {
+      url: '/images/marker.png',
+      scaledSize: new google.maps.Size(30, 30),
+      origin: new google.maps.Point(0, 0),
+      anchor: new google.maps.Point(15, 30),
+      labelOrigin: new google.maps.Point(15, 10)
+    };
+
+    // Add markers with labels
+    locations.forEach(location => {
+      return new google.maps.Marker({
+        position: location,
+        map: map,
+        label: {
+          text: location.label,
+          color: '#000000',
+          fontSize: '11px',
+          fontWeight: 'bold'
+        },
+        icon: icon
+      });
+    });
+  }
+  window.onload = initMap;
+</script>
+

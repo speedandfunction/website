@@ -1,4 +1,4 @@
-version: '3.8'
+
 
 services:
   apostrophe:
@@ -7,7 +7,6 @@ services:
     user: root
     environment:
       - NODE_ENV=development
-      - REDIS_URI=redis://redis:6379
     ports:
       - "9229:9229"  # For Node.js debugging
     volumes:

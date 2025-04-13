@@ -1,0 +1,16 @@
+.bp-video-widget {
+  width: 100%;
+}
+
+.bp-image-widget {
+  max-width: 100%;
+}
+
+.lozad {
+  opacity: 0;
+  transition: opacity 0.5s ease-in;
+}
+
+.lozad[data-loaded="true"] {
+  opacity: 1;
+}

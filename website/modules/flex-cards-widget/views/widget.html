@@ -1,0 +1,33 @@
+<section class="sf-cards" data-flex-cards-widget>
+  <div class="sf-container">
+    <div class="sf-intro">
+      {% area data.widget, 'intro' %}
+    </div>
+    <div class="flex-cards">
+      {% for card in data.widget.cards %}
+      <div class="card-swiper flip-card">
+        <div class="card-swiper-content">
+          <div class="card-swiper-front{% if card.cardColor %} card-swiper-front_black {% endif %}" >
+            <div class="card-swiper-heading">
+              {% if card.cardTitle %}
+                <h3 class="card-swiper__title">{{ card.cardTitle }}</h3>
+              {% endif %}
+            </div>
+          </div>
+          <div class="card-swiper-back">
+            {% if card.cardTitle %}<h3 class="card-swiper__title">{{ card.cardTitle }}</h3>{% endif %}
+            {% area card, 'cardContent' %}
+          </div>
+
+          <!-- Plus minus action button -->
+          <div class="card-swiper__button">
+            <div class="rounded-action">
+              <div class="rounded-action__btn"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>

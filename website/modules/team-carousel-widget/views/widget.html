@@ -1,0 +1,39 @@
+{% import 'fragments/utilities.html' as utilities %}
+<div class="sf-container">
+  <section class="sf-team">
+    {% for teamMember in data.widget._teamMembers %}
+      <div class="sf-team-card">
+        <div>
+          {% set attachment = apos.image.first(teamMember.headshot) %}
+          {% if attachment %}
+            <img
+              class="sf-team-card__avatar{% if not data.user %} lozad{% endif %}"
+              {# Modern browsers, best when used with a "sizes" attribute #}
+              srcset="{{ apos.image.srcset(attachment) }}"
+              {# Legacy browsers #}
+              src="{{ apos.attachment.url(attachment, { size: data.options.size or 'full' }) }}"
+              {# image.first attaches this property of the image piece for you #}
+              alt="{{ attachment._alt or '' }}"
+              {# Effective width and height (takes cropping into account) #}
+              {# Responsive design: make sure an editor-chosen focal point remains visible #}
+              {% if apos.attachment.hasFocalPoint(attachment) %}
+                style="object-position: {{ apos.attachment.focalPointToObjectPosition(attachment) }}"
+              {%- endif -%}
+            />
+          {% endif %}          
+        </div>
+        <div class="sf-team-card__bio">
+          {% if teamMember.title %}
+            <h3 class="sf-team-card__title">{{ teamMember.title }}</h3>
+          {% endif %}
+
+          {% if teamMember.position %}
+            <h4 class="sf-team-card__position body-medium">{{ teamMember.position }}</h4>
+          {% endif %}
+        </div>
+      </div>
+    {% endfor %}
+  <!-- Team member Whole team link -->
+  <!-- {% render utilities.link(data.widget.button) %} -->
+  </section>
+</div>

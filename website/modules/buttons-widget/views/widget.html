@@ -1,0 +1,7 @@
+{% import 'fragments/utilities.html' as utilities %}
+
+<div class="sf-buttons-group" data-links-widget>
+	{% for item in data.widget.buttonCollection %}
+		{% render utilities.button(item.button, item.buttonConfig) %}
+	{% endfor %}
+	</div>

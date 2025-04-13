@@ -1,0 +1,87 @@
+{% macro getPath(link) %}
+    {%- set path = "" -%}
+    {% if link.linkType === "page" and link._page and link._page[0] %}
+        {%- set path = link._page[0]._url -%}
+    {% elif link.linkType === "article" and link._article and link._article[0] %}
+        {%- set path = link._article[0]._url -%}
+    {% elif link.linkType === "custom" %}
+        {%- set path = link.customUrl -%}
+    {% elif link.linkType === "file" and link._file and link._file[0] %}
+        {%- set path = link._file[0]._url -%}
+    {% endif %}
+    {{- path -}}
+{% endmacro %}
+
+
+{% fragment siteLogo() %}
+  <a href="/" class="sf-logo">S&F</a>
+{% endfragment %}
+
+{% fragment navLink(link, class) %}
+  {% set path = getPath(link) %}
+  {% set currentPath = data.page._url %}
+  {% if path %}
+      <a aria-label="{{ link.linkTitle or pageTitle or path }}" href="{{ path }}" class="{{ class }}{% if path == currentPath %} active{% endif %}" {% if link.target[0] === '_blank' %} target="_blank" {% endif %}>{{ link.linkTitle or pageTitle or path }}</a>
+  {% endif %}
+{% endfragment %}
+
+{% fragment button(link, config) %}
+  {% set path = getPath(link) %}
+  {% if path|length > 0 %}
+    <a class="sf-button{% if config.buttonStyle %} {{ config.buttonStyle }}{% endif %}" href="{{ path  }}" {% if link.target[0] === '_blank' %} target="_blank" {% endif %}><span>{{ link.linkTitle or path }}</span></a>
+  {% elif link.linkTitle %}
+    {{ link.linkTitle }}
+  {% endif %}
+{% endfragment %}
+
+{% fragment link(link) %}
+  {% set path = getPath(link) %}
+  {% if path|length > 0 %}
+    <a href="{{ path  }}" {% if link.target[0] === '_blank' %} target="_blank" {% endif %}>{{ link.linkTitle or path }}</a>
+  {% elif link.linkTitle %}
+    {{ link.linkTitle }}
+  {% endif %}
+{% endfragment %}
+
+{% fragment testimonialCard(card) %}
+  <div class="swiper-slide">
+    <div class="card-swiper flip-card">
+      <div class="card-swiper-content">
+        <div class="card-swiper-front">
+          {% set attachment = apos.image.first(card.headshot) %}
+          {% if attachment %}
+            <img class="card-swiper__ava {% if not data.user %} lozad{% endif %}"
+              {# Modern browsers, best when used with a "sizes" attribute #}
+              srcset="{{ apos.image.srcset(attachment) }}"
+              {# Legacy browsers #}
+              src="{{ apos.attachment.url(attachment, { size: data.options.size or 'full' }) }}"
+              {# image.first attaches this property of the image piece for you #}
+              alt="{{ attachment._alt or '' }}"
+              {# Responsive design: make sure an editor-chosen focal point remains visible #}
+              {% if apos.attachment.hasFocalPoint(attachment) %}
+                style="object-position: {{ apos.attachment.focalPointToObjectPosition(attachment) }}"
+              {%- endif -%}
+            />
+          {% endif %}
+          <div class="card-swiper-wrap">
+            {% if card.position %}
+              <h3 class="card-swiper__title">{{ card.position }}</h3>
+            {% endif %}
+            {% if card.title %}
+              <h4 class="sf-team-card__position body-medium">{{ card.title }}</h4>
+            {% endif %}
+          </div>
+        </div>
+        <div class="card-swiper-back">
+          <div class="card-swiper__feedback">
+            {% area card, 'feedback' %}
+          </div>
+          <hr>
+          {% if card.url %}
+            <a class="card-swiper__url" href="https://{{ card.url }}/">{{ card.url }}</a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endfragment %}
