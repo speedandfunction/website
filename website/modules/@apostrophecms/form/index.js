@@ -126,7 +126,7 @@ module.exports = {
       submission: {
         async usePostmark(req, form, submission) {
           if (form.enablePostmark) {
-            const emailSubject = `${form.title} Form (speedandfunction.com)`;
+            const emailSubject = `${form.title} Form (${form.domainName || 'defaultdomain.com'})`;
             let html = '<ul>';
             for (const key in submission) {
               if (Object.prototype.hasOwnProperty.call(submission, key)) {
