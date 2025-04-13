@@ -34,12 +34,16 @@
     "ext": "js,html,less,scss,json"
   },
   "dependencies": {
+    "@apostrophecms/form": "^1.4.2",
+    "@barba/core": "^2.10.3",
     "apostrophe": "^4.14.2",
     "connect-redis": "^7.1.1",
     "express": "^5.1.0",
     "googleapis": "^148.0.0",
+    "gsap": "^3.12.7",
     "lodash": "^4.17.21",
     "lozad": "^1.16.0",
+    "normalize.css": "^8.0.1",
     "postmark": "^4.0.5",
     "swiper": "^11.2.6"
   },

@@ -1,0 +1,54 @@
+{% import 'fragments/utilities.html' as utilities %}
+
+{% fragment header() %}
+<header class="sf-container">
+	<div class="sf-header">
+		{% render utilities.siteLogo() %}
+		<div class="sf-menu" data-menu-button>
+			<div id="nav-icon">
+				<span></span>
+				<span></span>			
+			</div> 
+		</div>		
+	</div>
+	<nav class="sf-nav" data-menu>
+		<ol class="sf-nav__list">
+			{% for item in data.global.primaryNav %}
+				<li>{% render utilities.navLink(item.menuItem) %}</li>
+			{% endfor %}
+		</ol>
+	</nav>
+</header>
+{% endfragment %}
+
+{% fragment footer() %}
+	<footer class="sf-container">
+		<div class="sf-footer">
+			<div class="sf-contact">
+				<h2 class="sf-head">S&F</h2>
+				<h3 class="sf-contact__head">Evolving with Purpose: Co-Creating a Future Without Limits.</h3>
+				<div class="sf-contact__content">
+					{% area data.global, 'comAddress' %}
+				</div>
+			</div>
+			<div class="sf-navigation">
+				<h2 class="sf-head">navigation</h2>
+				<ul class="sf-navigation__list">
+					{% for item in data.global.primaryNav %}
+						<li>{% render utilities.navLink(item.menuItem) %}</li>
+					{% endfor %}
+				</ul>
+				<h2 class="sf-head">Follow</h2>
+				<div class="sf-navigation__social">
+					{% for item in data.global.socialMediaLinks %}
+						{% render utilities.navLink(item.SMLink) %}
+					{% endfor %}
+				</div>
+			</div>
+			<div class="sf-subscribe">
+				{% area data.global, 'footerForm' %}
+			</div>
+		</div>
+		<p class="sf-copy">S&F 2024 &#169; All rights reserved</p>
+  </footer>
+{% endfragment %}
