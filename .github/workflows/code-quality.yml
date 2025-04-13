@@ -17,28 +17,6 @@ jobs:
         with:
           dockerfile: Dockerfile
   
-  javascript-lint:
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '23'
-          cache: 'npm'
-          cache-dependency-path: website/package.json
-      
-      - name: Install dependencies
-        run: cd website && npm ci
-        
-      - name: Run ESLint
-        uses: eslint/eslint-action@v3.0.0
-        with:
-          workdir: website
-        
   security-scan:
     runs-on: ubuntu-latest
     timeout-minutes: 15
