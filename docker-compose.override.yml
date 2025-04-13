@@ -4,6 +4,7 @@ services:
   apostrophe:
     # In development mode, use nodemon instead of normal start
     command: npm run dev
+    user: root
     environment:
       - NODE_ENV=development
       - REDIS_URI=redis://redis:6379

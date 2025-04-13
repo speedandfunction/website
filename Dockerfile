@@ -21,10 +21,10 @@ RUN npm ci && \
 
 
 # Set proper ownership
-# RUN chown -R appuser:appgroup /app
+RUN chown -R appuser:appgroup /app
 
-# # Switch to non-root user
-# USER appuser
+# Switch to non-root user
+USER appuser
 
 # Define a health check
 HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 CMD wget --no-verbose --tries=1 --spider http://localhost:3000/ || exit 1
