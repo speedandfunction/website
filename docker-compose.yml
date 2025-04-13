@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   # Apostrophe CMS web application
   apostrophe:
@@ -14,14 +12,7 @@ services:
       - MONGODB_URI=mongodb://mongodb:27017/apostrophe
       - SESSION_SECRET=change_this_to_a_secure_secret
     volumes:
-      - ./website:/app
-      - /app/node_modules
       - ./website/coverage:/app/coverage
-    entrypoint: >
-      sh -c "
-        mkdir -p /app/coverage &&
-        chmod -R 777 /app/coverage &&
-        exec $${@}"
     command: ["npm", "start"]
     depends_on:
       - mongodb
@@ -85,4 +76,4 @@ services:
 
 volumes:
   mongodb_data:
-  redis_data: 
+  redis_data:
