@@ -10,7 +10,7 @@ RUN apk add --no-cache wget=1.25.0-r0
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 
 # Copy package files for efficient caching
-COPY website/package.json website/package-lock.json* ./
+COPY website/ ./
 
 # Install dependencies with specific flags for production
 RUN npm ci && \
@@ -18,7 +18,7 @@ RUN npm ci && \
     npm cache clean --force
 
 # Copy the rest of the application
-COPY website/ ./
+
 
 # Set proper ownership
 RUN chown -R appuser:appgroup /app

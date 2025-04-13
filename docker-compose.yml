@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   # Apostrophe CMS web application
   apostrophe:
@@ -13,9 +11,8 @@ services:
       - NODE_ENV=development
       - MONGODB_URI=mongodb://mongodb:27017/apostrophe
       - SESSION_SECRET=change_this_to_a_secure_secret
-    volumes:
-      - ./website:/app
-      - /app/node_modules
+
+    command: ["npm", "start"]
     depends_on:
       - mongodb
     restart: unless-stopped
@@ -25,6 +22,8 @@ services:
       timeout: 5s
       retries: 3
       start_period: 15s
+    # Command to run tests: docker compose run --rm apostrophe npm run test
+    # Command to run tests with coverage: docker compose run --rm apostrophe npm run test -- --coverage
 
   # MongoDB database
   mongodb:
@@ -76,4 +75,4 @@ services:
 
 volumes:
   mongodb_data:
-  redis_data: 
+  redis_data:
