@@ -1,9 +1,10 @@
 /**
  * Stub test file
  */
+import { stub } from './stub';
 
 describe('Stub Test Suite', () => {
   test('should pass', () => {
-    expect(true).toBe(true);
+    expect(stub()).toBe('stub');
   });
 }); 
