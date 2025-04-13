@@ -3,8 +3,8 @@ FROM node:23-alpine
 # Create app directory and set permissions
 WORKDIR /app
 
-# Install dependencies needed for health checks
-RUN apk add --no-cache wget
+# Install dependencies needed for health checks with pinned version
+RUN apk add --no-cache wget=3.2.1-r0
 
 # Create a non-root user and group 
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
