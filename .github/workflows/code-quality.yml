@@ -4,6 +4,11 @@ on:
   pull_request:
     types: [synchronize, opened, reopened]
 
+# Add permissions block to limit workflow access
+permissions:
+  contents: read
+  security-events: write
+
 jobs:
   docker-lint:
     runs-on: ubuntu-latest
