@@ -92,8 +92,7 @@ module.exports = {
         serviceAccountPrivateKey: {
           label: 'Google Service Account private_key',
           type: 'string',
-          placeholder:
-            '-----BEGIN PRIVATE KEY-----\nMIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQDUMjBkpLDyFoJW\n... (rest of the key content omitted for privacy) ...\nrR6PyzcvojIKIYSm0LsOboNEIQ==\n-----END PRIVATE KEY-----\n',
+          placeholder: process.env.SERVICE_ACCOUNT_PRIVATE_KEY || '',
           textarea: true,
           required: true,
           if: {
