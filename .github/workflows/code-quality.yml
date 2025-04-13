@@ -4,11 +4,10 @@ on:
   pull_request:
     types: [synchronize, opened, reopened]
 
-# Add permissions block to limit workflow access
+
+# Set minimum permissions by default
 permissions:
   contents: read
-  security-events: write
-  pull-requests: write
 
 jobs:
   docker-lint:
@@ -26,6 +25,10 @@ jobs:
   security-scan:
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    # Specify permissions needed for this job
+    permissions:
+      security-events: write
+      pull-requests: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
