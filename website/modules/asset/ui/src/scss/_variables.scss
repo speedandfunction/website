@@ -1,0 +1,79 @@
+// _variables.scss
+
+// Colors
+$white: #ffffff;  // White
+$gray-100: #F5F5F5;  // Very Light Gray
+$gray-200: #C4C4C4;  // Light Gray
+$gray-300: #7C7C7C;  // Gray
+$gray-400: #2C2C2C;  // Dark Gray
+$gray-500: #191919;  // Very Dark Gray
+$gray-600: #060B05;
+$black: #000000;  // Black
+$red: #F3949C;
+
+
+// Font weights
+$font-weight-normal: 400;
+$font-weight-medium: 500;
+$font-weight-bold: 600;
+$font-weight-extra-bold: 700;
+
+// Font styles
+$font-style-normal: normal;
+$font-style-italic: italic;
+
+
+// Breakpoints
+$breakpoint-extra-small: 420px;
+$breakpoint-small: 576px;
+$breakpoint-medium: 768px;
+$breakpoint-large: 992px;
+$breakpoint-extra-large: 1200px;
+$breakpoint-extra-extra-large: 1440px;
+
+// Heading sizes
+$font-size-h1: 42px;
+$font-size-h2: 42px;
+$font-size-h3: 26px;
+$font-size-h4: 20px;
+
+// Mobile font sizes
+$font-size-h1-mobile: 32px;
+$font-size-h2-mobile: 32px;
+$font-size-h3-mobile: 20px;
+$font-size-h4-mobile: 20px;
+
+// Body text sizes
+$font-size-body-xlarge: 26px;
+$font-size-body-large: 20px;
+$font-size-body-medium: 16px;
+$font-size-body-small: 14px;
+
+// Mobile body text sizes
+$font-size-body-large-mobile: 20px;
+$font-size-body-medium-mobile: 12px;
+$font-size-body-small-mobile: 12px;
+
+// Line heights
+$line-height-h1: 100%; 
+$line-height-h2: 100%;
+$line-height-h3: 100%;
+$line-height-h4: 100%; 
+
+$line-height-body-large: 100%; 
+$line-height-body-medium: 100%;
+$line-height-body-small: 100%;
+
+// Font weights
+$font-weight-heading: $font-weight-extra-bold;
+$font-weight-body: $font-weight-medium;
+
+// Spacings
+$spacing-10: 10px;
+$spacing-20: 20px;
+$spacing-30: 30px;
+$spacing-40: 40px;
+$spacing-50: 50px;
+$spacing-60: 60px;
+$spacing-80: 80px;
+

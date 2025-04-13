@@ -1,0 +1,121 @@
+.sf-simple-cards {
+  display: flex;
+  flex-wrap: wrap;
+  counter-reset: card-counter;
+  @include border(border-bottom);
+  @include breakpoint-medium {
+    border: 0;
+  }
+}
+
+.sf-simple-card {
+  width: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  @include border(border);
+  box-sizing: border-box;
+  border-bottom: 0;
+
+
+  
+  @include breakpoint-medium {
+    width: 33.3%;
+    @include border(border-bottom);
+  }
+  .background-circle {
+    z-index: -10;
+    background-color: $gray-500;
+    border-radius: 100%;
+    width: 6.25em;
+    height: 6.25em;
+    position: absolute;
+    inset: -80% -34% auto auto;
+    @include transition(all, 0.5s);
+    @include breakpoint-medium {
+      inset: -50% -32% auto auto;
+    }
+  }
+  &__title {
+    font-weight: 700;
+    color: $gray-500;
+    font-size: 14px;
+    margin: 0 0 10px;
+    @include transition(color);
+    @include breakpoint-medium {
+      font-size: 22px;
+      line-height: 24px;
+      margin: 0 0 20px;
+    }
+  }
+  &__text {
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 20px;
+    color: $gray-300;
+    margin: 0;
+    @include transition(color);
+    @include breakpoint-medium {
+      margin: 0 0 15px;
+    }
+    p {
+      margin: 0;
+    }
+  }
+}
+.sf-simple-card-wrap {
+  padding: 20px;
+  @include transition(transform, 0.5s);
+  transform: scale3d(1, 1, 1);
+  transform-style: preserve-3d;
+  overflow: hidden;
+  height: 100%;
+  @include breakpoint-medium {
+    padding: 40px;
+  }
+  &:hover {
+    transform: scale3d(1.05, 1.05, 1);
+    z-index: 10;
+    padding-left: 24px;
+    padding-right: 24px;
+    @include breakpoint-medium {
+      padding-left: 40px;
+      padding-right: 40px;
+    }
+    &::before {
+      color: $gray-300;
+    }
+    .sf-simple-card__title {
+      color: $gray-100;
+    }
+    .sf-simple-card__text {
+      color: $gray-200;
+    }
+    .background-circle {
+      width: 40em;
+      height: 40em;
+      transform: translate3d(-5%, -10%, 0);
+    }
+  }
+  &::before {
+    content: counter(card-counter, decimal-leading-zero);
+    counter-increment: card-counter;
+    font-size: 10px;
+    line-height: 14px;
+    font-weight: 700;
+    color: $gray-200;
+    margin-bottom: 6px;
+    @include transition(color);
+  }
+}
+
+@include breakpoint-medium {
+  .sf-simple-card:not(:nth-child(3n)) {
+    border-right: none;
+  }  
+  .sf-simple-card:not(:nth-last-child(-n+3)) {
+    border-bottom: none;
+  }
+}
+
+

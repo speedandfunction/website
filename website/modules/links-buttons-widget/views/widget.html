@@ -1,0 +1,26 @@
+{% import 'fragments/utilities.html' as utilities %}
+
+<section data-links-widget class="sf-links-do">
+	<div class="sf-container">
+		<div class="sf-intro">
+			{% area data.widget, 'intro' %}   
+		</div>
+		{% if data.widget.links|length > 0 %}
+			<ol class="sf-links-do__list">
+				{% for item in data.widget.links %}
+					{% set indexString = loop.index|string %}
+					{% set paddedIndex = '0' + indexString if indexString|length < 2 else indexString %}
+					<li>{% render utilities.link(item.link) %}</li>
+				{% endfor %}
+			</ol>
+		{% endif %}
+		
+		{% if data.widget.buttons|length > 0 %}
+			{% for item in data.widget.buttons %}
+				<div class="sf-links-do__action">
+					{% render utilities.button(item.button) %}
+				</div>
+			{% endfor %}
+		{% endif %}
+	</div>
+</section>

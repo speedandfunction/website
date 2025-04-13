@@ -1,0 +1,47 @@
+.sf-counter {
+  text-align: center;
+  color: $gray-500;
+  &__num {
+    display: inline-block;
+    @include transition(all);
+    font-weight: 700;
+    font-size: 58px;
+    @include breakpoint-medium {
+      font-size: 94px;
+    }
+  }
+  &__text {
+    font-weight: 700;
+    font-size: 10px;
+    line-height: 14px;
+    text-transform: uppercase;
+    padding: 5px 0;
+    margin: 0;
+    @include breakpoint-medium {
+      font-size: 14px;
+      line-height: 20px;
+      padding: 13px 0;
+    }
+  }
+}
+.swiper-counter {
+  position: relative;
+  height: 95px;
+  margin-top: 80px;
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 31px;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: rgba($gray-300, 0.4);
+  }
+  @include breakpoint-medium {
+    margin-top: 40px;
+    height: 150px;
+    &::after {
+      bottom: 42px;
+    }
+  }
+}

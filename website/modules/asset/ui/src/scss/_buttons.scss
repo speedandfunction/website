@@ -1,0 +1,150 @@
+.sf-button {
+	position: relative;
+	display: inline-block;
+	border: 0;
+	appearance: none;
+	border-radius: 0;
+	background: none;
+	box-shadow: none;
+	background-color: $gray-500;
+	padding: 10px 40px;
+	font-size: 10px;
+	font-weight: 700;
+	color: $white;
+	text-decoration: none;
+	text-transform: uppercase;
+	cursor: pointer;
+	&_underline {
+		color: $gray-500;
+		background-color: transparent;
+		padding: 10px 0;
+		span {
+			position: relative;
+			&::before {
+				content: "";
+				background-color: $gray-200;
+				position: absolute;
+				bottom: -3px;
+				left: 0;
+				height: 2px;
+				width: 100%;
+			}
+			&::after {
+				content: "";
+				background-color: $gray-500;
+				position: absolute;
+				bottom: -3px;
+				left: 0;
+				height: 2px;
+				width: 0;
+				transition: 0.2s;
+			}
+		}
+		&:hover, &:focus {
+			span {
+				&::after {
+					width: 100%;
+				}
+			}
+		}
+	}
+}
+.sf-buttons-group {
+	margin-top: 40px;
+	.sf-button {
+		margin: 0 0 10px;
+		padding: 10px 40px;
+		&:last-child {
+			margin-bottom: 0;
+		}
+		@include breakpoint-medium {
+			margin: 0;
+		}
+	}
+	@include breakpoint-medium {
+		display: flex;
+		justify-content: center;
+	}
+}
+// Carousel controls
+.swiper-controls {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-top: 20px;
+	@include breakpoint-medium {
+		margin-top: 40px;
+	}
+}
+.swiper-nav {
+  position: relative;
+  display: flex;
+  gap: 20px;
+  .swiper-button-prev, .swiper-button-next {
+    left: inherit;
+    right: inherit;
+    position: relative;
+    width: auto;
+    height: auto;
+    margin-top: 0;
+    font-size: 10px;
+    line-height: 14px;
+    font-weight: 500;
+    color: $gray-300;
+    text-transform: uppercase;
+    user-select: none;
+    &:hover, &:focus {
+      color: $gray-500;
+    }
+  }
+  .swiper-button-next {
+    &::after {
+      content: '';
+      font-size: 0;
+      @include arrow-button($gray-300);
+      margin-left: 10px;
+    }
+    &:hover, &:focus {
+      &::after {
+        @include arrow-button($gray-500);
+      }
+    }
+  }
+  .swiper-button-prev {
+    &::after {
+      content: '';
+      font-size: 0;
+    }
+    &::before {
+      position: relative;
+      content: '';
+      @include arrow-button($gray-300);
+      transform: rotate(180deg);
+      margin-right: 10px;
+    }
+    &:hover, &:focus {
+      &::before {
+        @include arrow-button($gray-500);
+      }
+    }
+  }
+}
+.sf-button-in {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 40px;
+	height: 40px;
+	background-color: $gray-100;
+	font-weight: 500;
+	font-size: 14px;
+	line-height: 20px;
+	color: $gray-300;
+	text-decoration: none;
+	margin: 0;
+	@include transition(background-color);
+	&:hover, &:focus {
+		background-color: $gray-200;
+		color: $gray-500;
+	}
+}

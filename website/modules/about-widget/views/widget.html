@@ -1,0 +1,13 @@
+<section class="sf-section" data-about-widget>
+    {% area data.widget, 'intro' %}
+  <div class="swiper swiper-counter">
+    <div class="swiper-wrapper">
+    {% for item in data.widget.records %}
+      <div class="swiper-slide sf-counter">
+        <span class="sf-counter__num" data-target="{{ item.number}}">0</span>
+        <p class="sf-counter__text">{{ item.description}}</p>
+      </div>
+    {% endfor %}  
+    </div>
+  </div>
+</section>

@@ -1,0 +1,62 @@
+* {
+	box-sizing: border-box;	
+}
+
+.sr-only {
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
+.sf-container {
+	position: relative;
+	width: 100%;
+	max-width: $breakpoint-extra-extra-large;
+	padding: 0 40px;
+	margin: 0 auto;
+
+	@include breakpoint-extra-extra-large {
+		padding: 0 120px;
+	}
+}
+.sf-wrapper {
+	position: relative;
+}
+.sf-section {
+	margin-bottom: 80px;
+	@include breakpoint-medium {
+		margin-bottom: 120px;
+	}
+}
+.sf-head {
+	font-size: 10px;
+	font-weight: 700;
+	color: $gray-300;
+	text-transform: uppercase;
+	margin: 0 0 5px;
+	@include breakpoint-medium {
+		margin-bottom: 10px;
+	}
+}
+.sf-title {
+	font-size: 22px;
+	line-height: 24px;
+	margin: 0 0 20px;
+	color: $gray-500;
+	@include breakpoint-medium {
+		font-size: 36px;
+		line-height: 40px;
+		margin: 0 0 40px;
+	}
+}
+.sf-rich {
+	font-size: 14px;
+	line-height: 20px;
+	color: $gray-300;
+	font-weight: 500;
+	margin: 0;
+}

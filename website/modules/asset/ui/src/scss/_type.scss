@@ -1,0 +1,16 @@
+a {
+  text-decoration: none;
+
+  &:hover,
+  &:focus {
+    text-decoration: underline;
+  }
+}
+
+::selection {
+  background-color: $white;
+}
+
+code {
+  white-space: normal;
+}

@@ -1,0 +1,64 @@
+// _mixins.scss
+
+@mixin font-settings($size, $line-height, $weight) {
+  font-size: $size;
+  line-height: $line-height;
+  font-weight: $weight;
+}
+
+@mixin heading-styles($size, $line-height) {
+  @include font-settings($size, $line-height, $font-weight-heading);
+}
+
+@mixin body-text-styles($size, $line-height) {
+  @include font-settings($size, $line-height, $font-weight-body);
+}
+
+@mixin breakpoint-extra-small {
+	@media (min-width: $breakpoint-extra-small) { @content; }
+}
+
+@mixin breakpoint-small {
+  @media (min-width: $breakpoint-small) { @content; }
+}
+
+@mixin breakpoint-medium {
+  @media (min-width: $breakpoint-medium) { @content; }
+}
+
+@mixin breakpoint-large {
+  @media (min-width: $breakpoint-large) { @content; }
+}
+
+@mixin breakpoint-extra-large {
+  @media (min-width: $breakpoint-extra-large) { @content; }
+}
+
+@mixin breakpoint-extra-extra-large {
+  @media (min-width: $breakpoint-extra-extra-large) { @content; }
+}
+
+@mixin transition($property: all, $duration: 0.3s, $timing-function: ease) {
+  transition: $property $duration $timing-function;
+}
+
+@mixin border($direction, $width: 1px, $style: solid, $color: $gray-300, $alpha: 0.4) {
+  #{$direction}: #{$width} #{$style} rgba($color, $alpha);
+}
+
+@function encodecolor($string) {
+  @if type-of($string) == 'color' {
+      $hex: str-slice(ie-hex-str($string), 4);
+      $string: unquote("#{$hex}");
+  }
+
+  $string: '%23' + $string;
+  @return $string;
+}
+
+@mixin arrow-button($color) {
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 21 8" style="enable-background:new 0 0 21 8" xml:space="preserve"> <path fill="#{encodecolor($color)}" d="M20.3536 4.35355C20.5488 4.15829 20.5488 3.84171 20.3536 3.64645L17.1716 0.464466C16.9763 0.269204 16.6597 0.269204 16.4645 0.464466C16.2692 0.659728 16.2692 0.976311 16.4645 1.17157L19.2929 4L16.4645 6.82843C16.2692 7.02369 16.2692 7.34027 16.4645 7.53553C16.6597 7.7308 16.9763 7.7308 17.1716 7.53553L20.3536 4.35355ZM0 4.5H20V3.5H0V4.5Z"/> </svg>');
+  background-repeat: no-repeat;
+  width: 21px;
+  height: 8px;
+}

@@ -1,0 +1,147 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700;800&display=swap');
+@font-face {
+  font-family: 'Philosopher';
+  src: url('/fonts/subset-Philosopher-Bold.woff2') format('woff2');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Pixelify Sans';
+  src: url('/fonts/subset-PixelifySans-Bold.woff2') format('woff2');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Poiret One';
+  src: url('/fonts/subset-PoiretOne-Regular.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Pinyon Script';
+  src: url('/fonts/subset-PinyonScript-Regular.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Redacted Script';
+  src: url('/fonts/subset-RedactedScript-Regular.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Redressed';
+  src: url('/fonts/subset-Redressed-Regular.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Racing Sans One';
+  src: url('/fonts/subset-RacingSansOne-Regular.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Roboto Mono';
+  src: url('/fonts/subset-RobotoMono-Regular.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Rock 3D';
+  src: url('/fonts/subset-Rock3D-Regular.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Yesteryear';
+  src: url('/fonts/subset-Yesteryear-Regular.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Rubik Glitch Pop';
+  src: url('/fonts/subset-RubikGlitchPop-Regular.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+body {
+	font-family: "Poppins", serif;
+}
+
+h1, .heading-1 {
+  @include heading-styles($font-size-h1, $line-height-h1);
+}
+
+h2, .heading-2 {
+  @include heading-styles($font-size-h2, $line-height-h2);
+}
+
+h3, .heading-3 {
+  @include heading-styles($font-size-h3, $line-height-h3);
+}
+
+h4, .heading-4 {
+  @include heading-styles($font-size-h4, $line-height-h4);
+}
+
+.body-large {
+  @include body-text-styles($font-size-body-large, $line-height-body-large);
+}
+
+.body-medium {
+  @include body-text-styles($font-size-body-medium, $line-height-body-medium);
+}
+
+.body-small {
+  @include body-text-styles($font-size-body-small, $line-height-body-small);
+}
+
+// Mobile styles
+@include breakpoint-medium {
+  h1, .heading-1 {
+    @include heading-styles($font-size-h1-mobile, $line-height-h1);
+  }
+  h2, .heading-2 {
+    @include heading-styles($font-size-h2-mobile, $line-height-h2);
+  }
+  h3, .heading-3 {
+    @include heading-styles($font-size-h3-mobile, $line-height-h3);
+  }
+  h4, .heading-4 {
+    @include heading-styles($font-size-h4-mobile, $line-height-h4);
+  }
+
+  .body-large  {
+    @include body-text-styles($font-size-body-large-mobile, $line-height-body-large);
+  }
+  .body-medium {
+    @include body-text-styles($font-size-body-medium-mobile, $line-height-body-medium);
+  }
+  .body-small {
+    @include body-text-styles($font-size-body-small-mobile, $line-height-body-small);
+	}
+}
+
+//Text colors
+.text-gray {
+  color: $gray-300;
+}
+.text-black {
+  color: $gray-500;
+}
+.text-white {
+  color: $gray-100;
+}
