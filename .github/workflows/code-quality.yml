@@ -63,4 +63,50 @@ jobs:
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: docker-scan-results.sarif
-          category: docker-scout 
+          category: docker-scout
+
+  unit-tests:
+    runs-on: ubuntu-latest
+    if: ${{ github.actor != 'dependabot[bot]' }}
+    timeout-minutes: 10
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build app image
+        run: docker compose build
+
+      - name: Run tests
+        run: docker compose run --rm app-nextjs npm run test -- --coverage
+
+      - name: Save coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: website/coverage/lcov.info
+  
+  sonarqube:
+    runs-on: ubuntu-latest
+    if: ${{ github.actor != 'dependabot[bot]' }}
+    needs: unit-tests
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download coverage report
+        uses: actions/download-artifact@v4
+        with:
+          name: coverage-report
+
+      - name: SonarQube Scan
+        uses: sonarsource/sonarqube-scan-action@v5.0.0
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+      - name: SonarQube Quality Gate check
+        uses: sonarsource/sonarqube-quality-gate-action@v1.1.0
+        timeout-minutes: 5
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

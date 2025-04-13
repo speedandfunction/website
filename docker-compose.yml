@@ -16,6 +16,7 @@ services:
     volumes:
       - ./website:/app
       - /app/node_modules
+      - ./website/coverage:/app/coverage
     depends_on:
       - mongodb
     restart: unless-stopped
@@ -25,6 +26,8 @@ services:
       timeout: 5s
       retries: 3
       start_period: 15s
+    # Command to run tests: docker compose run --rm apostrophe npm run test
+    # Command to run tests with coverage: docker compose run --rm apostrophe npm run test -- --coverage
 
   # MongoDB database
   mongodb:
