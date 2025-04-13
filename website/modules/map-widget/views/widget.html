@@ -1,6 +1,6 @@
 {% import 'fragments/utilities.html' as utilities %}
 
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBl4g5g6AekJq9H4HwF3thoUh2175X3rpw"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key={{ process.env.GOOGLE_MAPS_API_KEY }}"></script>
 
 <section class="sf-map">
   <div id="map" style="height: 500px; width: 100%;"></div>
