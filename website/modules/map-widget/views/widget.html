@@ -136,7 +136,7 @@
 
     // Add markers with labels
     locations.forEach(location => {
-      new google.maps.Marker({
+      return new google.maps.Marker({
         position: location,
         map: map,
         label: {
