@@ -17,6 +17,12 @@ services:
       - ./website:/app
       - /app/node_modules
       - ./website/coverage:/app/coverage
+    entrypoint: >
+      sh -c "
+        mkdir -p /app/coverage &&
+        chmod -R 777 /app/coverage &&
+        exec $${@}"
+    command: ["npm", "start"]
     depends_on:
       - mongodb
     restart: unless-stopped
