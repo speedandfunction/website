@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  apostrophe:
+    # In development mode, use nodemon instead of normal start
+    command: npm run dev
+    environment:
+      - NODE_ENV=development
+      - REDIS_URI=redis://redis:6379
+    ports:
+      - "9229:9229"  # For Node.js debugging
+    volumes:
+      - ./website:/app
+      - /app/node_modules
+
+  # Uncomment to enable Adminer for database management 
+  # adminer:
+  #   image: adminer:latest
+  #   container_name: apostrophe-adminer
+  #   ports:
+  #     - "8080:8080"
+  #   depends_on:
+  #     - mongodb
+  #   restart: unless-stopped 

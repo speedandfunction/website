@@ -3,6 +3,9 @@ FROM node:23-alpine
 # Create app directory and set permissions
 WORKDIR /app
 
+# Install dependencies needed for health checks with pinned version
+RUN apk add --no-cache wget=1.25.0-r0
+
 # Create a non-root user and group 
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 
@@ -10,7 +13,7 @@ RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 COPY website/package.json website/package-lock.json* ./
 
 # Install dependencies with specific flags for production
-RUN npm ci --only=production && \
+RUN npm ci && \
     # Clean npm cache to reduce image size
     npm cache clean --force
 
