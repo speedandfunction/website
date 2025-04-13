@@ -11,8 +11,7 @@ services:
       - NODE_ENV=development
       - MONGODB_URI=mongodb://mongodb:27017/apostrophe
       - SESSION_SECRET=change_this_to_a_secure_secret
-    volumes:
-      - ./website/coverage:/app/coverage
+
     command: ["npm", "start"]
     depends_on:
       - mongodb

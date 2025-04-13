@@ -77,10 +77,10 @@ jobs:
         run: mkdir -p website/coverage
 
       - name: Build app image
-        run: docker compose build
+        run: docker compose -f docker-compose.yml -f docker-compose.override.yml build
 
       - name: Run tests
-        run: docker compose run --rm apostrophe npm run test -- --coverage
+        run: docker compose -f docker-compose.yml -f docker-compose.override.yml run --rm apostrophe npm run test -- --coverage
 
       - name: Save coverage report
         uses: actions/upload-artifact@v4
