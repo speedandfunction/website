@@ -1,0 +1,50 @@
+{
+  "name": "apostrophe-site",
+  "version": "1.0.0",
+  "description": "Apostrophe CMS website",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon",
+    "build": "NODE_ENV=production node app.js apostrophe:generation",
+    "serve": "NODE_ENV=production node app.js"
+  },
+  "nodemonConfig": {
+    "delay": 1000,
+    "verbose": true,
+    "watch": [
+      "./app.js",
+      "./lib/**/*.js",
+      "./modules/**/*.js"
+    ],
+    "ignoreRoot": [
+      ".git"
+    ],
+    "ignore": [
+      "lib/modules/*/public/js/*.js",
+      "locales/*.json",
+      "public/modules/**/*.js",
+      "public/uploads",
+      "public/apos-minified/*.js",
+      "public/css/master-*.less",
+      "data"
+    ],
+    "ext": "js,html,less,scss,json"
+  },
+  "dependencies": {
+    "apostrophe": "^4.14.2",
+    "express": "^5.1.0",
+    "lodash": "^4.17.21"
+  },
+  "devDependencies": {
+    "eslint": "^9.24.0",
+    "eslint-config-apostrophe": "^5.0.0",
+    "nodemon": "^3.1.9"
+  },
+  "author": "",
+  "license": "MIT",
+  "engines": {
+    "node": ">=16.x",
+    "npm": ">=8.x"
+  }
+} 
