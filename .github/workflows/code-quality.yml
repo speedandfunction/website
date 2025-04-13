@@ -3,6 +3,9 @@ name: Code Quality
 on:
   pull_request:
     types: [synchronize, opened, reopened]
+  push:
+    branches:
+      - main
 
 
 # Set minimum permissions by default
