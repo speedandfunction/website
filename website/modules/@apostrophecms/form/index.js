@@ -4,120 +4,120 @@ const postmark = require('postmark');
 module.exports = {
   options: {
     emailSubmissions: false,
-    saveSubmissions: false
+    saveSubmissions: false,
     // shortcut: 'G,J',
-  },
-  fields: {
-    add: {
-      onSubmitSuccess: {
-        label: 'Custom Code - On Submit Success',
-        help: 'JavaScript code',
-        placeholder: 'function runSubmitSuccess(event) {...custom code...}',
-        type: 'string',
-        textarea: true
-      },
-      emailConfirmationField: {
-        label: 'Specify the email field',
-        help: 'Enter the "name" value of the field in which people will enter their email address.',
-        type: 'string',
-        required: true,
-        if: {
-          sendConfirmationEmail: true
-        }
-      },
-      enablePostmark: {
-        label: 'Enable and configure connection to Postmark mailing.',
-        help: 'To enable this function, you need to create a Postmark account',
-        type: 'boolean',
-        toggle: {
-          true: 'Enable',
-          false: 'Disable'
+    fields: {
+      add: {
+        onSubmitSuccess: {
+          label: 'Custom Code - On Submit Success',
+          help: 'JavaScript code',
+          placeholder: 'function runSubmitSuccess(event) {...custom code...}',
+          type: 'string',
+          textarea: true
         },
-        def: false
-      },
-      postmarkApiKey: {
-        type: 'string',
-        help: 'Use the credentials from Postmark Default Transactional Stream',
-        label: 'Postmark API Key',
-        required: true,
-        if: {
-          enablePostmark: true
-        }
-      },
-      fromEmail: {
-        label: 'From Email address',
-        type: 'email',
-        required: true,
-        if: {
-          enablePostmark: true
-        }
-      },
-      toEmail: {
-        label: 'To Email address',
-        type: 'email',
-        required: true,
-        if: {
-          enablePostmark: true
-        }
-      },
-      enableSpreadsheet: {
-        label: 'Enable and configure connection to Google Spreadsheets.',
-        help: 'To enable this function, you need to create a Service Account in your Google Cloud Project and retrieve the client_email and private_key. See readme file in module folder.',
-        type: 'boolean',
-        toggle: {
-          true: 'Enable',
-          false: 'Disable'
+        emailConfirmationField: {
+          label: 'Specify the email field',
+          help: 'Enter the "name" value of the field in which people will enter their email address.',
+          type: 'string',
+          required: true,
+          if: {
+            sendConfirmationEmail: true
+          }
         },
-        def: false
-      },
-      spreadsheetId: {
-        label: 'Google Spreadsheet ID',
-        type: 'string',
-        help: 'Target spreadsheet',
-        placeholder: '1vBBJqm5W4wk1IOlBoYA01ImVWE-plyPZ5wwH1jwZFiY',
-        required: true,
-        if: {
-          enableSpreadsheet: true
+        enablePostmark: {
+          label: 'Enable and configure connection to Postmark mailing.',
+          help: 'To enable this function, you need to create a Postmark account',
+          type: 'boolean',
+          toggle: {
+            true: 'Enable',
+            false: 'Disable'
+          },
+          def: false
+        },
+        postmarkApiKey: {
+          type: 'string',
+          help: 'Use the credentials from Postmark Default Transactional Stream',
+          label: 'Postmark API Key',
+          required: true,
+          if: {
+            enablePostmark: true
+          }
+        },
+        fromEmail: {
+          label: 'From Email address',
+          type: 'email',
+          required: true,
+          if: {
+            enablePostmark: true
+          }
+        },
+        toEmail: {
+          label: 'To Email address',
+          type: 'email',
+          required: true,
+          if: {
+            enablePostmark: true
+          }
+        },
+        enableSpreadsheet: {
+          label: 'Enable and configure connection to Google Spreadsheets.',
+          help: 'To enable this function, you need to create a Service Account in your Google Cloud Project and retrieve the client_email and private_key. See readme file in module folder.',
+          type: 'boolean',
+          toggle: {
+            true: 'Enable',
+            false: 'Disable'
+          },
+          def: false
+        },
+        spreadsheetId: {
+          label: 'Google Spreadsheet ID',
+          type: 'string',
+          help: 'Target spreadsheet',
+          placeholder: '1vBBJqm5W4wk1IOlBoYA01ImVWE-plyPZ5wwH1jwZFiY',
+          required: true,
+          if: {
+            enableSpreadsheet: true
+          }
+        },
+        serviceAccountEmail: {
+          label: 'Google Service Account client_email',
+          type: 'email',
+          help: 'Please make sure to share your target sheet with this email and grant it editor access.',
+          placeholder: 'procrea1@civil-zodiac-406414.iam.gserviceaccount.com',
+          required: true,
+          if: {
+            enableSpreadsheet: true
+          }
+        },
+        serviceAccountPrivateKey: {
+          label: 'Google Service Account private_key',
+          type: 'string',
+          placeholder:
+            '-----BEGIN PRIVATE KEY-----\nMIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQDUMjBkpLDyFoJW\n... (rest of the key content omitted for privacy) ...\nrR6PyzcvojIKIYSm0LsOboNEIQ==\n-----END PRIVATE KEY-----\n',
+          textarea: true,
+          required: true,
+          if: {
+            enableSpreadsheet: true
+          }
         }
       },
-      serviceAccountEmail: {
-        label: 'Google Service Account client_email',
-        type: 'email',
-        help: 'Please make sure to share your target sheet with this email and grant it editor access.',
-        placeholder: 'procrea1@civil-zodiac-406414.iam.gserviceaccount.com',
-        required: true,
-        if: {
-          enableSpreadsheet: true
+      group: {
+        postmark: {
+          label: 'Postmark Configs',
+          fields: [ 'enablePostmark', 'postmarkApiKey', 'fromEmail', 'toEmail' ]
+        },
+        googleSpreadsheet: {
+          label: 'Google Spreadsheet',
+          fields: [
+            'enableSpreadsheet',
+            'spreadsheetId',
+            'serviceAccountEmail',
+            'serviceAccountPrivateKey'
+          ]
+        },
+        afterSubmit: {
+          fields: [ 'onSubmitSuccess' ]
         }
-      },
-      serviceAccountPrivateKey: {
-        label: 'Google Service Account private_key',
-        type: 'string',
-        placeholder:
-          '-----BEGIN PRIVATE KEY-----\nMIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQDUMjBkpLDyFoJW\n... (rest of the key content omitted for privacy) ...\nrR6PyzcvojIKIYSm0LsOboNEIQ==\n-----END PRIVATE KEY-----\n',
-        textarea: true,
-        required: true,
-        if: {
-          enableSpreadsheet: true
-        }
-      }
-    },
-    group: {
-      postmark: {
-        label: 'Postmark Configs',
-        fields: [ 'enablePostmark', 'postmarkApiKey', 'fromEmail', 'toEmail' ]
-      },
-      googleSpreadsheet: {
-        label: 'Google Spreadsheet',
-        fields: [
-          'enableSpreadsheet',
-          'spreadsheetId',
-          'serviceAccountEmail',
-          'serviceAccountPrivateKey'
-        ]
-      },
-      afterSubmit: {
-        fields: [ 'onSubmitSuccess' ]
       }
     }
   },
