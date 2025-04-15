@@ -12,12 +12,14 @@ RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 # Copy package files for efficient caching
 COPY website/ ./
 
-# Install dependencies with specific flags for production
-RUN npm ci && \
+# Set build arguments with defaults
+ARG NODE_ENV=production
+ARG NPM_INSTALL_FLAGS=
+
+# Install dependencies based on environment and flags
+RUN npm ci $NPM_INSTALL_FLAGS && \
     # Clean npm cache to reduce image size
     npm cache clean --force
-
-# Copy the rest of the application
 
 
 # Set proper ownership

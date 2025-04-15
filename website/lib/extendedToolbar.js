@@ -1,4 +1,4 @@
-// extendedToolbar.js
+// ExtendedToolbar.js
 
 module.exports = {
   toolbar: [

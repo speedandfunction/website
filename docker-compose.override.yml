@@ -1,7 +1,11 @@
-
-
 services:
   apostrophe:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - NODE_ENV=development
+        - NPM_INSTALL_FLAGS=--include=dev  # Install all dependencies including dev
     # In development mode, use nodemon instead of normal start
     command: npm run dev
     user: root

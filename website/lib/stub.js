@@ -1,3 +1,1 @@
-export const stub = () => {
-  return 'stub';
-};
+export const stub = () => 'stub';
