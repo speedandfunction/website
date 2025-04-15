@@ -71,7 +71,6 @@ module.exports = {
     'no-unused-vars': 'error',
     'no-undef': 'error',
     'no-param-reassign': 'error',
-    complexity: [ 'error', 5 ],
     'max-depth': 'off',
     'max-lines': [ 'error', 300 ],
     'max-lines-per-function': 'off',
