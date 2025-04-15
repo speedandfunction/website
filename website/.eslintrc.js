@@ -96,7 +96,8 @@ module.exports = {
     'complexity': 'off',
     'no-invalid-this': 'off',
     'node/no-missing-import': 'off',
-    'import/no-named-as-default': 'off'
+    'import/no-named-as-default': 'off',
+    'capitalized-comments': 'off'
   },
   overrides: [
     {
