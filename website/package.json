@@ -9,7 +9,8 @@
     "build": "NODE_ENV=production node app.js apostrophe:generation",
     "serve": "NODE_ENV=production node app.js",
     "test": "jest",
-    "test:coverage": "jest --coverage"
+    "test:coverage": "jest --coverage",
+    "lint": "eslint ."
   },
   "nodemonConfig": {
     "delay": 1000,

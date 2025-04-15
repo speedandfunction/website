@@ -2,7 +2,7 @@ const linkSchema = require('../../../lib/linkSchema');
 
 module.exports = {
   options: {
-    deferWidgetLoading: true,
+    deferWidgetLoading: true
   },
   fields: {
     add: {

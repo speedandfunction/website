@@ -91,6 +91,20 @@ jobs:
           name: coverage-report
           path: website/coverage/lcov.info
   
+  lint:
+    runs-on: ubuntu-latest
+    if: ${{ github.actor != 'dependabot[bot]' }}
+    timeout-minutes: 10
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build app image
+        run: docker compose -f docker-compose.yml -f docker-compose.override.yml build
+
+      - name: Run lint
+        run: docker compose -f docker-compose.yml -f docker-compose.override.yml run --rm apostrophe npm run lint
+  
   sonarqube:
     runs-on: ubuntu-latest
     if: ${{ github.actor != 'dependabot[bot]' }}

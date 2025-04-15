@@ -1,10 +1,8 @@
-const path = require('path');
-
 require('apostrophe')({
   shortName: 'apostrophe-site',
   baseUrl: process.env.BASE_URL || 'http://localhost:3000',
-  
-  // Session configuration 
+
+  // Session configuration
   modules: {
     // Core modules configuration
     '@apostrophecms/express': {
@@ -12,16 +10,18 @@ require('apostrophe')({
         session: {
           // If using Redis (recommended for production)
           secret: process.env.SESSION_SECRET || 'changeme',
-          store: process.env.REDIS_URI ? {
-            connect: require('connect-redis'),
-            options: {
-              url: process.env.REDIS_URI || 'redis://localhost:6379'
+          store: process.env.REDIS_URI
+            ? {
+              connect: require('connect-redis'),
+              options: {
+                url: process.env.REDIS_URI || 'redis://localhost:6379'
+              }
             }
-          } : {}
+            : {}
         }
       }
     },
-    
+
     // Configure page types
     '@apostrophecms/rich-text-widget': {},
     '@apostrophecms/image-widget': {
@@ -78,4 +78,4 @@ require('apostrophe')({
     // The project"s first custom page type.
     'default-page': {}
   }
-}); 
+});

@@ -7,4 +7,4 @@ describe('Stub Test Suite', () => {
   test('should pass', () => {
     expect(stub()).toBe('stub');
   });
-}); 
+});
