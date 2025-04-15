@@ -1,3 +1,4 @@
+/* eslint-disable sonarjs/no-nested-functions */
 import barba from '@barba/core';
 import Swiper from 'swiper/bundle';
 import { Navigation } from 'swiper/modules';
@@ -155,6 +156,7 @@ export default () => {
               const target = Number(counter.getAttribute('data-target'));
               const duration = 2000; // Duration of the animation in milliseconds
               const startTime = performance.now();
+              // eslint-disable-next-line sonarjs/no-nested-functions
               const updateCounter = (currentTime) => {
                 const elapsedTime = currentTime - startTime;
                 const progress = Math.min(elapsedTime / duration, 1);

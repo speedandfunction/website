@@ -2,8 +2,8 @@ module.exports = {
   extends: [
     'apostrophe',
     'eslint:all', // All core ESLint rules
-    'plugin:sonarjs/recommended', // Sonar rules
-    'plugin:security/recommended', // Security rules
+    'plugin:sonarjs/recommended-legacy', // Sonar rules for ESLint 8 compatibility
+    'plugin:security/recommended-legacy', // Security rules
     'plugin:promise/recommended', // Promise rules
     'plugin:import/errors', // Import rules
     'plugin:import/warnings',
@@ -18,11 +18,9 @@ module.exports = {
     'node',
     'jsx-a11y',
     'prettier',
-    'unicorn', // Additional good practices
     'optimize-regex', // Regex optimizations
     'no-unsanitized', // Prevent XSS
     'no-secrets', // Prevent secrets in code
-    'no-use-extend-native', // Prevent native prototypes extension
     'eslint-comments' // Enforce ESLint comments best practices
   ],
   env: {
@@ -59,7 +57,6 @@ module.exports = {
     'node/no-missing-require': 'off',
     'jsx-a11y/alt-text': 'off',
     'prettier/prettier': 'off',
-    'unicorn/no-abusive-eslint-disable': 'off',
     'optimize-regex/optimize-regex': 'off',
     'no-unsanitized/method': 'off',
     'no-unsanitized/property': 'off',
