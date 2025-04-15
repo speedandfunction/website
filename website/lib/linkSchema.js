@@ -1,4 +1,4 @@
-// linkSchema.js
+// LinkSchema.js
 
 module.exports = {
   type: 'object',

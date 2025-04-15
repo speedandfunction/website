@@ -1,5 +1,5 @@
 const extendedToolbar = require('../../lib/extendedToolbar');
-// const additionalMetaData = require("../partials/additionalMetaData");
+// Const additionalMetaData = require("../partials/additionalMetaData");
 
 module.exports = {
   cascades: [ 'batchOperations' ],

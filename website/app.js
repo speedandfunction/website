@@ -49,8 +49,10 @@ require('apostrophe')({
     'leadership-carousel-widget': {},
     'insights-carousel-widget': {},
     'contact-widget': {},
-    // 'links-buttons-widget': {},
-    // 'team-carousel-widget': {},
+    /*
+     * 'links-buttons-widget': {},
+     * 'team-carousel-widget': {},
+     */
 
     // The main form module
     '@apostrophecms/form': {},

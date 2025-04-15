@@ -6,7 +6,7 @@ import lozad from 'lozad';
 
 export default () => {
 
-  // init all scripts after first visiting the page
+  // Init all scripts after first visiting the page
   initializeAllComponents();
 
   // Barba pages
@@ -39,8 +39,10 @@ export default () => {
             // Call the wrapper function to initialize all components
             initializeAllComponents();
 
-            // Toggle the menu state
-            // document.querySelector('[data-header-menu]').classList.toggle('close');
+            /*
+             * Toggle the menu state
+             * document.querySelector('[data-header-menu]').classList.toggle('close');
+             */
 
             // Remove the previou page container to avoid blinking
             data.current.container.remove();
@@ -71,66 +73,60 @@ export default () => {
 
   // Lazy loading
   function initImageLozad() {
-    const observer = lozad(); // lazy loads elements with default selector as '.lozad'
+    const observer = lozad(); // Lazy loads elements with default selector as '.lozad'
     observer.observe();
   }
 
   // Counter vertical carousel
   function initCounterSwiper() {
     if (document.querySelector('.swiper-counter')) {
-      apos.util.onReady(() => {
-        return new Swiper('.swiper-counter', {
-          direction: 'vertical',
-          loop: true,
-          autoplay: {
-            delay: 5000
-          }
-        });
-      });
+      apos.util.onReady(() => new Swiper('.swiper-counter', {
+        direction: 'vertical',
+        loop: true,
+        autoplay: {
+          delay: 5000
+        }
+      }));
     }
   }
 
   // Projects carousel
   function initClientsSwiper() {
     if (document.querySelector('.sf-projects-swiper')) {
-      apos.util.onReady(() => {
-        return new Swiper('.sf-projects-swiper', {
-          mousewheel: {
-            forceToAxis: true
-          },
-          loop: true,
-          navigation: {
-            el: '.swiper-nav',
-            nextEl: '.swiper-button-next',
-            prevEl: '.swiper-button-prev'
-          },
-          modules: [ Navigation ],
-          slidesPerView: 1
-        });
-      });
+      apos.util.onReady(() => new Swiper('.sf-projects-swiper', {
+        mousewheel: {
+          forceToAxis: true
+        },
+        loop: true,
+        navigation: {
+          el: '.swiper-nav',
+          nextEl: '.swiper-button-next',
+          prevEl: '.swiper-button-prev'
+        },
+        modules: [ Navigation ],
+        slidesPerView: 1
+      }));
     };
   }
 
   // Persons carousel
   function initTeamSwiper() {
     if (document.querySelector('.sf-person-swiper')) {
-      apos.util.onReady(() => {
-        return new Swiper('.sf-person-swiper', {
-          loop: true,
-          navigation: {
-            el: '.swiper-nav',
-            nextEl: '.swiper-button-next',
-            prevEl: '.swiper-button-prev'
-          },
-          modules: [ Navigation ],
-          slidesPerView: 1,
-          breakpoints: {
-            768: {
-              slidesPerView: 3
-            }
+      apos.util.onReady(() => new Swiper('.sf-person-swiper', {
+        loop: true,
+        navigation: {
+          el: '.swiper-nav',
+          nextEl: '.swiper-button-next',
+          prevEl: '.swiper-button-prev'
+        },
+        modules: [ Navigation ],
+        slidesPerView: 1,
+        breakpoints: {
+          768: {
+            slidesPerView: 3
           }
-        });
-      });
+        }
+      }));
     };
   }
   // Change fonts for the hero FUTURE word
@@ -156,7 +152,7 @@ export default () => {
           entries.forEach(entry => {
             if (entry.isIntersecting) {
               const counter = entry.target;
-              const target = +counter.getAttribute('data-target');
+              const target = Number(counter.getAttribute('data-target'));
               const duration = 2000; // Duration of the animation in milliseconds
               const startTime = performance.now();
               const updateCounter = (currentTime) => {

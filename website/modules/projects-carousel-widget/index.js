@@ -25,7 +25,7 @@ module.exports = {
         type: 'relationship',
         withType: 'projects',
         withRelationships: [ '_file' ],
-        // max: 3,
+        // Max: 3,
         builders: {
           project: {
             title: 1,

@@ -5,7 +5,7 @@ module.exports = {
   options: {
     emailSubmissions: false,
     saveSubmissions: false,
-    // shortcut: 'G,J',
+    // Shortcut: 'G,J',
     fields: {
       add: {
         onSubmitSuccess: {
@@ -128,7 +128,7 @@ module.exports = {
             const emailSubject = `${form.title} Form (${form.domainName || 'defaultdomain.com'})`;
             let html = '<ul>';
             for (const key in submission) {
-              if (Object.prototype.hasOwnProperty.call(submission, key)) {
+              if (Object.hasOwn(submission, key)) {
                 html += `<li><strong>${key}:</strong> ${submission[key]}</li>`;
               }
             }
@@ -187,9 +187,11 @@ module.exports = {
 
           if (form.enableSpreadsheet) {
             try {
-              // Insert data into Google Sheets
-              // Ensure this is defined in your form
-              const spreadsheetId = form.spreadsheetId;
+              /*
+               * Insert data into Google Sheets
+               * Ensure this is defined in your form
+               */
+              const { spreadsheetId } = form;
               const range = 'Sheet1!A1'; // Specify the sheet and range, e.g., Sheet1!A1
 
               // Google Sheets JWT Authentication

@@ -16,7 +16,7 @@ module.exports = {
               label: 'Menu Item',
               ...linkSchema
             }
-            //  sublinks: {} for future second level of menu
+            //  Sublinks: {} for future second level of menu
           }
         }
       },

@@ -1,5 +1,7 @@
-// This configures the @apostrophecms/page module to add a "home" page type to the
-// pages menu
+/*
+ * This configures the @apostrophecms/page module to add a "home" page type to the
+ * pages menu
+ */
 
 module.exports = {
   options: {

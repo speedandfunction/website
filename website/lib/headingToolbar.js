@@ -1,4 +1,4 @@
-// headingToolbar.js
+// HeadingToolbar.js
 module.exports = {
   toolbar: [
     'styles',
