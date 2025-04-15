@@ -61,7 +61,6 @@ module.exports = {
     'no-unsanitized/method': 'off',
     'no-unsanitized/property': 'off',
     'no-secrets/no-secrets': 'off',
-    'no-use-extend-native/no-use-extend-native': 'off',
     'eslint-comments/no-unused-disable': 'off',
     
     // Core ESLint rules set to error
