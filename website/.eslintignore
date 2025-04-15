@@ -1,0 +1,9 @@
+node_modules/
+dist/
+build/
+public/
+.next/
+coverage/
+.git/
+.cache/ 
+apos-build/
