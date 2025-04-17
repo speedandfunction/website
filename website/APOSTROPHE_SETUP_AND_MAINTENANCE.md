@@ -58,15 +58,15 @@ module.exports = {
             max: 1,
             widgets: {
               '@apostrophecms/rich-text': {
-                ...headingToolbar
-              }
-            }
-          }
-        }
+                ...headingToolbar,
+              },
+            },
+          },
+        },
         // ... other fields
-      }
-    }
-  }
+      },
+    },
+  },
 };
 ```
 

@@ -5,13 +5,13 @@ module.exports = {
   options: {
     label: 'Testimonial',
     pluralLabel: 'Testimonials',
-    searchable: false
+    searchable: false,
   },
   fields: {
     add: {
       title: {
         label: 'Name',
-        type: 'string'
+        type: 'string',
       },
       headshot: {
         label: 'Image/Logo/Headshot',
@@ -22,24 +22,24 @@ module.exports = {
           help: '1:1 is recommended',
           widgets: {
             '@apostrophecms/image': {
-              aspectRatio: [ 1, 1 ]
-            }
-          }
-        }
+              aspectRatio: [1, 1],
+            },
+          },
+        },
       },
       position: {
         label: 'Position',
-        type: 'string'
+        type: 'string',
       },
       organization: {
         label: 'Organization',
-        type: 'string'
+        type: 'string',
       },
       url: {
         label: 'URL',
         type: 'string',
         help: 'Site url without http protocol.',
-        placeholder: 'wikimediafoundation.org'
+        placeholder: 'wikimediafoundation.org',
       },
       feedback: {
         label: 'Feedback',
@@ -48,33 +48,40 @@ module.exports = {
           max: 1,
           widgets: {
             '@apostrophecms/rich-text': {
-              ...extendedToolbar
-            }
-          }
-        }
-      }
+              ...extendedToolbar,
+            },
+          },
+        },
+      },
     },
     group: {
       basics: {
         label: 'Basics',
-        fields: [ 'headshot', 'title', 'position', 'organization', 'feedback', 'url' ]
-      }
-    }
+        fields: [
+          'headshot',
+          'title',
+          'position',
+          'organization',
+          'feedback',
+          'url',
+        ],
+      },
+    },
   },
   columns: {
     add: {
       title: {
         label: 'Name',
-        name: 'title'
+        name: 'title',
       },
       position: {
         label: 'Position',
-        name: 'position'
+        name: 'position',
       },
       organization: {
         label: 'Organization',
-        name: 'organization'
-      }
-    }
-  }
+        name: 'organization',
+      },
+    },
+  },
 };

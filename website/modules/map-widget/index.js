@@ -5,8 +5,8 @@ module.exports = {
   options: {
     label: 'Map Team',
     // PreviewImage: 'png',
-    icon: 'map-marker-icon'
-  }
+    icon: 'map-marker-icon',
+  },
   /*
    * Fields: {
    *   add: {

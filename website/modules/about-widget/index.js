@@ -4,7 +4,7 @@ module.exports = {
   extend: '@apostrophecms/widget-type',
   options: {
     label: 'About Widget',
-    icon: 'anchor-icon'
+    icon: 'anchor-icon',
   },
   fields: {
     add: {
@@ -15,10 +15,10 @@ module.exports = {
           max: 1,
           widgets: {
             '@apostrophecms/rich-text': {
-              ...headingToolbar
-            }
-          }
-        }
+              ...headingToolbar,
+            },
+          },
+        },
       },
       records: {
         label: 'Counter',
@@ -29,16 +29,16 @@ module.exports = {
             number: {
               label: 'Number',
               type: 'integer',
-              required: true
+              required: true,
             },
             description: {
               label: 'Description',
               type: 'string',
-              textarea: true
-            }
-          }
-        }
-      }
-    }
-  }
+              textarea: true,
+            },
+          },
+        },
+      },
+    },
+  },
 };

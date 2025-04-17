@@ -9,8 +9,8 @@ module.exports = {
     shortcut: 'G,C',
     sort: {
       title: 1,
-      updatedAt: -1
-    }
+      updatedAt: -1,
+    },
   },
   fields: {
     add: {
@@ -20,14 +20,14 @@ module.exports = {
         choices: [
           {
             label: 'Image',
-            value: 'image'
+            value: 'image',
           },
           {
             label: 'Video',
-            value: 'video'
-          }
+            value: 'video',
+          },
         ],
-        def: 'image'
+        def: 'image',
       },
       picture: {
         label: 'Image',
@@ -38,13 +38,13 @@ module.exports = {
           min: 1,
           widgets: {
             '@apostrophecms/image': {
-              aspectRatio: [ 1200, 900 ]
-            }
-          }
+              aspectRatio: [1200, 900],
+            },
+          },
         },
         if: {
-          mediaType: 'image'
-        }
+          mediaType: 'image',
+        },
       },
       _file: {
         label: 'Video file',
@@ -53,18 +53,18 @@ module.exports = {
         max: 1,
         required: true,
         if: {
-          mediaType: 'video'
-        }
+          mediaType: 'video',
+        },
       },
       stack: {
         label: 'Stack',
         type: 'string',
-        required: true
+        required: true,
       },
       subtitle: {
         label: 'Subtitle',
         type: 'string',
-        required: true
+        required: true,
       },
       content: {
         label: 'Content',
@@ -73,17 +73,25 @@ module.exports = {
           max: 1,
           widgets: {
             '@apostrophecms/rich-text': {
-              ...extendedToolbar
-            }
-          }
-        }
-      }
+              ...extendedToolbar,
+            },
+          },
+        },
+      },
     },
     group: {
       basics: {
         label: 'Basics',
-        fields: [ 'mediaType', 'picture', '_file', 'title', 'stack', 'subtitle', 'content' ]
-      }
-    }
-  }
+        fields: [
+          'mediaType',
+          'picture',
+          '_file',
+          'title',
+          'stack',
+          'subtitle',
+          'content',
+        ],
+      },
+    },
+  },
 };

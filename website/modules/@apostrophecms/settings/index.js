@@ -2,20 +2,20 @@ module.exports = {
   options: {
     subforms: {
       title: {
-        fields: [ 'title' ],
+        fields: ['title'],
         protection: true,
-        reload: true
+        reload: true,
       },
       changePassword: {
-        fields: [ 'password' ]
-      }
+        fields: ['password'],
+      },
     },
 
     groups: {
       account: {
         label: 'Account',
-        subforms: [ 'title', 'changePassword' ]
-      }
-    }
-  }
+        subforms: ['title', 'changePassword'],
+      },
+    },
+  },
 };
