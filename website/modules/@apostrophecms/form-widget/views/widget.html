@@ -12,6 +12,7 @@ onSubmitSuccess = form.onSubmitSuccess %}
   {% set params = '' %} {% for param in form.queryParamList %} {% if loop.last
   %} {% set params = params + param.key %} {% else %} {% set params = params +
   param.key + ',' %} {% endif %} {% endfor %} {% endif %}
+
   <form
     data-apos-form-form="{{ form._id }}"
     class="sf-form {{ prependIfPrefix('__form') }}"
@@ -19,7 +20,8 @@ onSubmitSuccess = form.onSubmitSuccess %}
     {%
     if
     form.enableQueryParams
-    %}data-apos-form-params="{{params}}"
+    %}
+    data-apos-form-params="{{params}}"
     {%
     endif
     %}
@@ -45,6 +47,7 @@ onSubmitSuccess = form.onSubmitSuccess %}
       <p>{{ __t('aposForm:widgetNoScript') }}</p>
     </noscript>
     {% endif %}
+
     <button
       type="submit"
       class="sf-button"
@@ -52,13 +55,16 @@ onSubmitSuccess = form.onSubmitSuccess %}
       {%
       if
       recaptchaReady
-      %}disabled{%
+      %}
+      disabled
+      {%
       endif
       %}
     >
       {{ form.submitLabel or __t('aposForm:widgetSubmit') }}
     </button>
   </form>
+
   <p
     role="alert"
     style="display: none"
@@ -78,18 +84,21 @@ onSubmitSuccess = form.onSubmitSuccess %}
     {{ __t('aposForm:widgetCaptchaError') }}
   </p>
   {% endif %}
+
   <p
     class="apos-form-hidden {{ prependIfPrefix('__spinner') }}"
     data-apos-form-spinner
   >
     {{ __t('aposForm:widgetSubmitting') }}
   </p>
+
   <div
     role="alert"
     data-apos-form-thank-you
     class="apos-form-hidden apos-form-submission-thank-you {{ prependIfPrefix('__submission-thank-you') }}"
   >
     <h3>{{ form.thankYouHeading or __t('aposForm:defaultThankYou') }}</h3>
+
     {% if not apos.area.isEmpty(form, 'thankYouBody') %} {% area form,
     'thankYouBody' %} {% endif %} {% if onSubmitSuccess %}
     <script>
