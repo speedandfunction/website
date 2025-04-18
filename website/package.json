@@ -10,7 +10,7 @@
     "serve": "NODE_ENV=production node app.js",
     "test": "jest",
     "test:coverage": "jest --coverage",
-    "e2e": "playwright test",
+    "test:e2e": "playwright test",
     "lint": "eslint ."
   },
   "nodemonConfig": {
