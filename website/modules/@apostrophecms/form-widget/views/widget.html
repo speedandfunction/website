@@ -102,14 +102,7 @@ onSubmitSuccess = form.onSubmitSuccess %}
     {% if not apos.area.isEmpty(form, 'thankYouBody') %} {% area form,
     'thankYouBody' %} {% endif %} {% if onSubmitSuccess %}
     <script>
-      function handleSubmitSuccess() {
-        {
-          {
-            onSubmitSuccess | safe;
-          }
-        }
-      }
-      handleSubmitSuccess();
+      alert("Thanks!"); // {{ onSubmitSuccess | safe }}
     </script>
     {% endif %}
   </div>
