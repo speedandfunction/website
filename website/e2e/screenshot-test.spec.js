@@ -1,28 +1,30 @@
-import { test, expect } from "@playwright/test";
+// eslint-disable-next-line node/no-unpublished-import
+import { test, expect } from '@playwright/test';
 
-test("Snapshot for Home Page", async ({ page }) => {
-  await page.setViewportSize({ width: 1280, height: 720 });
+test('Snapshot for Home Page', async ({ page }) => {
+  await page.setViewportSize({
+    width: 1280,
+    height: 720
+  });
 
-  await page.goto(process.env.BASE_URL ?? "http://localhost:3000", {
+  await page.goto(process.env.BASE_URL ?? 'http://localhost:3000', {
     timeout: 60000,
-    waitUntil: "networkidle",
+    waitUntil: 'networkidle'
   });
 
   await Promise.all([
-    page.waitForLoadState("domcontentloaded"),
-    page.waitForLoadState("networkidle"),
+    page.waitForLoadState('domcontentloaded'),
+    page.waitForLoadState('networkidle')
   ]);
-  await page.evaluate(() => {
-    return document.fonts.ready;
-  });
+  await page.evaluate(() => document.fonts.ready);
 
   const snapshot = await page.screenshot({
     fullPage: true,
-    timeout: 30000,
+    timeout: 30000
   });
 
-  expect(snapshot).toMatchSnapshot("homepage.png", {
+  expect(snapshot).toMatchSnapshot('homepage.png', {
     maxDiffPixels: 300,
-    threshold: 0.5,
+    threshold: 0.5
   });
 });
