@@ -10,7 +10,8 @@
     "serve": "NODE_ENV=production node app.js",
     "test": "jest",
     "test:coverage": "jest --coverage",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "format": "prettier --write '**/**/*.{js,jsx,ts,tsx,json,css,md}'"
   },
   "nodemonConfig": {
     "delay": 1000,
