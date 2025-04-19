@@ -1,7 +1,7 @@
-const linkSchema = require('../../lib/linkSchema');
-const buttonConfig = require('../../lib/buttonConfig');
+import linkSchema from '../../lib/linkSchema.js';
+import buttonConfig from '../../lib/buttonConfig.js';
 
-module.exports = {
+export default {
   extend: '@apostrophecms/widget-type',
   options: {
     label: 'Buttons',

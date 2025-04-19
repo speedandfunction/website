@@ -1,6 +1,6 @@
-const headingToolbar = require('../../../lib/headingToolbar');
+import headingToolbar from '../../../lib/headingToolbar.js';
 
-module.exports = {
+export default {
   options: {
     fields: {
       add: {

@@ -1,6 +1,6 @@
-const linkSchema = require('../../../lib/linkSchema');
+import linkSchema from '../../../lib/linkSchema.js';
 
-module.exports = {
+export default {
   options: {
     deferWidgetLoading: true
   },

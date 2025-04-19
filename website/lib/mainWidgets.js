@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   expanded: true,
   groups: {
     basic: {

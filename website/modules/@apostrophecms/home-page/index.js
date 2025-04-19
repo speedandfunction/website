@@ -1,6 +1,6 @@
-const mainWidgets = require('../../../lib/mainWidgets');
+import mainWidgets from '../../../lib/mainWidgets.js';
 
-module.exports = {
+export default {
   options: {
     label: 'Home Page'
   },

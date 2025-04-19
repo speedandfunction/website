@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   extends: [
     'apostrophe',
     'eslint:all', // All core ESLint rules

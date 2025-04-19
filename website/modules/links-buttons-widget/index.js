@@ -1,7 +1,7 @@
-const headingToolbar = require('../../lib/headingToolbar');
-const linkSchema = require('../../lib/linkSchema');
+import headingToolbar from '../../lib/headingToolbar.js';
+import linkSchema from '../../lib/linkSchema.js';
 
-module.exports = {
+export default {
   extend: '@apostrophecms/widget-type',
   options: {
     label: 'Links/Buttons Widget',

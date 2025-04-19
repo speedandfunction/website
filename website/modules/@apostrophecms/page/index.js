@@ -3,7 +3,7 @@
  * pages menu
  */
 
-module.exports = {
+export default {
   options: {
     types: [
       {

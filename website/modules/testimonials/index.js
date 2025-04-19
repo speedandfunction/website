@@ -1,6 +1,6 @@
-const extendedToolbar = require('../../lib/extendedToolbar');
+import extendedToolbar from '../../lib/extendedToolbar.js';
 
-module.exports = {
+export default {
   extend: '@apostrophecms/piece-type',
   options: {
     label: 'Testimonial',
