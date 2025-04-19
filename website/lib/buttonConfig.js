@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   buttonConfig: {
     label: 'Button Config',
     type: 'object',

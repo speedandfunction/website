@@ -1,6 +1,6 @@
 // ExtendedToolbar.js
 
-module.exports = {
+export default {
   toolbar: [
     'styles',
     '|',

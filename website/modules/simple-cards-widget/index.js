@@ -1,7 +1,7 @@
-const extendedToolbar = require('../../lib/extendedToolbar');
-const headingToolbar = require('../../lib/headingToolbar');
+import extendedToolbar from'../../lib/extendedToolbar.js';
+import headingToolbar from'../../lib/headingToolbar.js';
 
-module.exports = {
+export default {
   extend: '@apostrophecms/widget-type',
   options: {
     label: 'Simple Cards',
