@@ -8,7 +8,8 @@ module.exports = {
     'plugin:import/errors', // Import rules
     'plugin:import/warnings',
     'plugin:node/recommended', // Node.js rules
-    'plugin:jsx-a11y/strict' // Accessibility rules
+    'plugin:jsx-a11y/strict', // Accessibility rules
+    'plugin:prettier/recommended',
   ],
   plugins: [
     'sonarjs',
@@ -21,31 +22,31 @@ module.exports = {
     'optimize-regex', // Regex optimizations
     'no-unsanitized', // Prevent XSS
     'no-secrets', // Prevent secrets in code
-    'eslint-comments' // Enforce ESLint comments best practices
+    'eslint-comments', // Enforce ESLint comments best practices
   ],
   env: {
     browser: true,
     node: true,
     es6: true,
     jest: true,
-    commonjs: true
+    commonjs: true,
   },
   parserOptions: {
     ecmaVersion: 2022,
     sourceType: 'module',
     ecmaFeatures: {
-      impliedStrict: true
-    }
+      impliedStrict: true,
+    },
   },
   globals: {
-    apos: 'readonly'
+    apos: 'readonly',
   },
   settings: {
     'import/resolver': {
       node: {
-        extensions: [ '.js', '.ts' ]
-      }
-    }
+        extensions: ['.js', '.ts'],
+      },
+    },
   },
   rules: {
     // Enable all rules from enabled plugins with "error" level
@@ -62,7 +63,7 @@ module.exports = {
     'no-unsanitized/property': 'off',
     'no-secrets/no-secrets': 'off',
     'eslint-comments/no-unused-disable': 'off',
-    
+
     // Core ESLint rules set to error
     'no-console': 'off',
     'no-debugger': 'error',
@@ -71,12 +72,12 @@ module.exports = {
     'no-undef': 'error',
     'no-param-reassign': 'error',
     'max-depth': 'off',
-    'max-lines': [ 'error', 300 ],
+    'max-lines': ['error', 300],
     'max-lines-per-function': 'off',
-    'max-nested-callbacks': [ 'error', 3 ],
+    'max-nested-callbacks': ['error', 3],
     'max-params': 'off',
     'max-statements': 'off',
-    
+
     // Disable rules causing the most issues
     'sort-keys': 'off',
     'line-comment-position': 'off',
@@ -92,19 +93,19 @@ module.exports = {
     'no-trailing-spaces': 'off',
     'quote-props': 'off',
     'no-dupe-keys': 'off',
-    'complexity': 'off',
+    complexity: 'off',
     'no-invalid-this': 'off',
     'node/no-missing-import': 'off',
     'import/no-named-as-default': 'off',
-    'capitalized-comments': 'off'
+    'capitalized-comments': 'off',
   },
   overrides: [
     {
-      files: [ '**/*.test.js', '**/*.spec.js', '**/tests/**/*.js' ],
+      files: ['**/*.test.js', '**/*.spec.js', '**/tests/**/*.js'],
       rules: {
         'max-lines-per-function': 'off',
-        'max-statements': 'off'
-      }
-    }
-  ]
+        'max-statements': 'off',
+      },
+    },
+  ],
 };
