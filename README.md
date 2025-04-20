@@ -3,6 +3,7 @@
 This repository contains a complete Docker Compose setup for Apostrophe CMS with all required services.
 
 ## Status
+
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=speedandfunction_website&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=speedandfunction_website)
 
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=speedandfunction_website&metric=bugs)](https://sonarcloud.io/summary/new_code?id=speedandfunction_website)
@@ -54,6 +55,18 @@ Environment variables are stored in the `.env` file. For production, you should 
 - **View logs**: `docker-compose logs -f`
 - **Rebuild containers**: `docker-compose up -d --build`
 
+## DataBase Management
+
+- **Inport database**: `scripts/import_db_from_json.sh`
+- **Export database**: `scripts/export_db_to_json.sh`
+
+For doing these script executable, run
+
+```bash
+  chmod +x scripts/setup.sh
+  setup.sh
+```
+
 ## Data Persistence
 
 MongoDB and Redis data are stored in Docker volumes for persistence between restarts:
@@ -65,4 +78,4 @@ To remove all data and start fresh:
 
 ```bash
 docker-compose down -v
-``` 
+```
