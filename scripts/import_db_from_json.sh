@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 
 CONTAINER="apostrophe-mongodb"
 IMPORT_DIR="./export"
