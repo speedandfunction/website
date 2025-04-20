@@ -1,12 +1,8 @@
-import connectRedis from 'connect-redis';
-import { createRequire } from 'module';
-const require = createRequire(import.meta.url);
-const apostrophe = require('apostrophe');
-
-apostrophe({
+// eslint-disable-next-line no-undef
+require('apostrophe')({
   shortName: 'apostrophe-site',
   baseUrl: process.env.BASE_URL || 'http://localhost:3000',
-  
+
   // Session configuration
   modules: {
     // Core modules configuration
@@ -17,7 +13,7 @@ apostrophe({
           secret: process.env.SESSION_SECRET || 'changeme',
           store: process.env.REDIS_URI
             ? {
-              connect: connectRedis,
+              connect: require('connect-redis'),
               options: {
                 url: process.env.REDIS_URI || 'redis://localhost:6379'
               }
