@@ -8,12 +8,12 @@ module.exports = {
     types: [
       {
         name: 'default-page',
-        label: 'Default'
+        label: 'Default',
       },
       {
         name: '@apostrophecms/home-page',
-        label: 'Home'
-      }
-    ]
-  }
+        label: 'Home',
+      },
+    ],
+  },
 };

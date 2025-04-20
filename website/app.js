@@ -12,27 +12,27 @@ require('apostrophe')({
           secret: process.env.SESSION_SECRET || 'changeme',
           store: process.env.REDIS_URI
             ? {
-              connect: require('connect-redis'),
-              options: {
-                url: process.env.REDIS_URI || 'redis://localhost:6379'
+                connect: require('connect-redis'),
+                options: {
+                  url: process.env.REDIS_URI || 'redis://localhost:6379',
+                },
               }
-            }
-            : {}
-        }
-      }
+            : {},
+        },
+      },
     },
 
     // Configure page types
     '@apostrophecms/rich-text-widget': {},
     '@apostrophecms/image-widget': {
       options: {
-        className: 'bp-image-widget'
-      }
+        className: 'bp-image-widget',
+      },
     },
     '@apostrophecms/video-widget': {
       options: {
-        className: 'bp-video-widget'
-      }
+        className: 'bp-video-widget',
+      },
     },
 
     // Custom Widgets
@@ -78,6 +78,6 @@ require('apostrophe')({
     // `asset` supports the project"s webpack build for client-side assets.
     asset: {},
     // The project"s first custom page type.
-    'default-page': {}
-  }
+    'default-page': {},
+  },
 });

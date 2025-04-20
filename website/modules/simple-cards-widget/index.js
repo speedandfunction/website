@@ -5,7 +5,7 @@ module.exports = {
   extend: '@apostrophecms/widget-type',
   options: {
     label: 'Simple Cards',
-    icon: 'view-column-icon'
+    icon: 'view-column-icon',
   },
   fields: {
     add: {
@@ -16,10 +16,10 @@ module.exports = {
           max: 1,
           widgets: {
             '@apostrophecms/rich-text': {
-              ...headingToolbar
-            }
-          }
-        }
+              ...headingToolbar,
+            },
+          },
+        },
       },
       cards: {
         label: 'Cards',
@@ -30,7 +30,7 @@ module.exports = {
           add: {
             cardTitle: {
               label: 'Title',
-              type: 'string'
+              type: 'string',
             },
             cardContent: {
               label: 'Content',
@@ -40,14 +40,14 @@ module.exports = {
                 widgets: {
                   '@apostrophecms/rich-text': {
                     className: 'sf-simple-card__text',
-                    ...extendedToolbar
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
+                    ...extendedToolbar,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  },
 };

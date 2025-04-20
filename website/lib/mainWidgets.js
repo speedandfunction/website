@@ -10,9 +10,9 @@ module.exports = {
         map: {},
         about: {},
         'simple-cards': {},
-        'links-buttons': {}
+        'links-buttons': {},
       },
-      columns: 2
+      columns: 2,
     },
     layout: {
       label: 'Specialty',
@@ -21,9 +21,9 @@ module.exports = {
         'testimonials-carousel': {},
         'insights-carousel': {},
         contact: {},
-        '@apostrophecms/html': {}
+        '@apostrophecms/html': {},
       },
-      columns: 2
-    }
-  }
+      columns: 2,
+    },
+  },
 };

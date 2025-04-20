@@ -6,7 +6,7 @@ module.exports = {
     add: {
       linkTitle: {
         label: 'Link Title',
-        type: 'string'
+        type: 'string',
       },
       linkType: {
         label: 'Link type',
@@ -14,17 +14,17 @@ module.exports = {
         choices: [
           {
             label: 'Page',
-            value: 'page'
+            value: 'page',
           },
           {
             label: 'File',
-            value: 'file'
+            value: 'file',
           },
           {
             label: 'Custom URL',
-            value: 'custom'
-          }
-        ]
+            value: 'custom',
+          },
+        ],
       },
       _page: {
         label: 'Link to page',
@@ -34,12 +34,12 @@ module.exports = {
         builders: {
           project: {
             title: 1,
-            _url: 1
-          }
+            _url: 1,
+          },
         },
         if: {
-          linkType: 'page'
-        }
+          linkType: 'page',
+        },
       },
       _file: {
         label: 'Link to file',
@@ -47,15 +47,15 @@ module.exports = {
         withType: '@apostrophecms/file',
         max: 1,
         if: {
-          linkType: 'file'
-        }
+          linkType: 'file',
+        },
       },
       customUrl: {
         label: 'URL for custom link',
         type: 'url',
         if: {
-          linkType: 'custom'
-        }
+          linkType: 'custom',
+        },
       },
       target: {
         label: 'Will the link open a new browser tab?',
@@ -63,10 +63,10 @@ module.exports = {
         choices: [
           {
             label: 'Open in a new tab',
-            value: '_blank'
-          }
-        ]
-      }
-    }
-  }
+            value: '_blank',
+          },
+        ],
+      },
+    },
+  },
 };

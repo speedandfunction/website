@@ -5,7 +5,7 @@ module.exports = {
   extend: '@apostrophecms/widget-type',
   options: {
     label: 'Buttons',
-    icon: 'dots-vertical-icon'
+    icon: 'dots-vertical-icon',
   },
   fields: {
     add: {
@@ -17,12 +17,12 @@ module.exports = {
           add: {
             button: {
               label: 'Button',
-              ...linkSchema
+              ...linkSchema,
             },
-            ...buttonConfig
-          }
-        }
-      }
-    }
-  }
+            ...buttonConfig,
+          },
+        },
+      },
+    },
+  },
 };

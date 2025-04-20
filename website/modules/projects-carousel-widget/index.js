@@ -4,7 +4,7 @@ module.exports = {
   extend: '@apostrophecms/widget-type',
   options: {
     label: 'Projects Carousel',
-    icon: 'binoculars-icon'
+    icon: 'binoculars-icon',
   },
   fields: {
     add: {
@@ -15,16 +15,16 @@ module.exports = {
           max: 1,
           widgets: {
             '@apostrophecms/rich-text': {
-              ...headingToolbar
-            }
-          }
-        }
+              ...headingToolbar,
+            },
+          },
+        },
       },
       _selectedProjects: {
         label: 'Selected projects',
         type: 'relationship',
         withType: 'projects',
-        withRelationships: [ '_file' ],
+        withRelationships: ['_file'],
         // Max: 3,
         builders: {
           project: {
@@ -34,10 +34,10 @@ module.exports = {
             stack: 1,
             subtitle: 1,
             _file: 1,
-            content: 1
-          }
-        }
-      }
-    }
-  }
+            content: 1,
+          },
+        },
+      },
+    },
+  },
 };
