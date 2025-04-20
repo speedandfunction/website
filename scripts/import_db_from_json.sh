@@ -7,7 +7,6 @@ DB="apostrophe"
 collections=(
   "aposDocs"
   "aposFormSubmissions"
-  "aposUsersSafe"
   "aposCache"
   "aposAttachments"
 )
