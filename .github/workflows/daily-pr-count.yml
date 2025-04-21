@@ -6,6 +6,10 @@ on:
     - cron: '0 20 * * *'
   workflow_dispatch:  # Allow manual triggering
 
+permissions:
+  contents: read
+  pull-requests: read
+
 jobs:
   count-prs:
     runs-on: ubuntu-latest

@@ -12,7 +12,7 @@ const BOT_NAME = process.env.BOT_NAME || 'PRs_bot'; // Custom bot name for Slack
 
 // Calculate timestamp for 24 hours ago
 const now = new Date();
-const twentyFourHoursAgo = new Date(now.getTime() - (24 * 60 * 60 * 1000));
+const twentyFourHoursAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
 const timestamp = twentyFourHoursAgo.toISOString();
 
 // Build the GitHub API request options
@@ -22,8 +22,8 @@ const options = {
   method: 'GET',
   headers: {
     'User-Agent': 'PR-Counter-Script',
-    'Accept': 'application/vnd.github.v3+json',
-  }
+    Accept: 'application/vnd.github.v3+json',
+  },
 };
 
 // Add Authorization header only if GITHUB_TOKEN is provided
@@ -35,13 +35,13 @@ if (GITHUB_TOKEN) {
 function getMessageStyle(count) {
   if (count < 4) {
     return {
-      emoji: ':disappointed:', 
-      message: `Only ${count} PRs merged in the last 24 hours. We need to pick up the pace! Let's aim for more productivity tomorrow.`
+      emoji: ':disappointed:',
+      message: `Only ${count} PRs merged in the last 24 hours. We need to pick up the pace! Let's aim for more productivity tomorrow.`,
     };
   } else {
     return {
-      emoji: ':rocket:', 
-      message: `Great job team! ${count} PRs merged in the last 24 hours. Keep up the excellent work! :clap:`
+      emoji: ':rocket:',
+      message: `Great job team! ${count} PRs merged in the last 24 hours. Keep up the excellent work! :clap:`,
     };
   }
 }
@@ -55,32 +55,32 @@ function postToSlack(message) {
 
   // Parse the webhook URL
   const webhookUrl = new URL(SLACK_WEBHOOK_URL);
-  
+
   // Create Slack payload
   const payload = {
     text: message,
     username: BOT_NAME,
-    icon_emoji: ':bar_chart:'
+    icon_emoji: ':bar_chart:',
   };
-  
+
   // Add channel override if specified
   if (SLACK_CHANNEL) {
     payload.channel = SLACK_CHANNEL;
     console.log(`Posting to Slack channel: ${SLACK_CHANNEL}`);
   }
-  
+
   const postData = JSON.stringify(payload);
-  
+
   const slackOptions = {
     hostname: webhookUrl.hostname,
     path: webhookUrl.pathname,
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Content-Length': Buffer.byteLength(postData)
-    }
+      'Content-Length': Buffer.byteLength(postData),
+    },
   };
-  
+
   const slackReq = https.request(slackOptions, (res) => {
     if (res.statusCode === 200) {
       console.log('Successfully posted to Slack!');
@@ -95,11 +95,11 @@ function postToSlack(message) {
       });
     }
   });
-  
+
   slackReq.on('error', (error) => {
     console.error('Error posting to Slack:', error);
   });
-  
+
   slackReq.write(postData);
   slackReq.end();
 }
@@ -107,55 +107,57 @@ function postToSlack(message) {
 // Make the GitHub API request
 const req = https.request(options, (res) => {
   let data = '';
-  
+
   res.on('data', (chunk) => {
     data += chunk;
   });
-  
+
   res.on('end', () => {
     if (res.statusCode !== 200) {
       console.error(`Error: Received status code ${res.statusCode}`);
       console.error(data);
       process.exit(1);
     }
-    
+
     try {
       const pulls = JSON.parse(data);
-      
+
       // Filter PRs merged in the last 24 hours
-      const recentlyMergedPRs = pulls.filter(pr => {
+      const recentlyMergedPRs = pulls.filter((pr) => {
         return pr.merged_at && pr.merged_at >= timestamp;
       });
-      
+
       const count = recentlyMergedPRs.length;
       console.log(`Number of PRs merged in the last 24 hours: ${count}`);
-      
+
       // Get message style based on PR count
       const style = getMessageStyle(count);
-      
+
       // Build message for console and Slack
       let message = `${style.emoji} *PR Summary for ${OWNER}/${REPO}* ${style.emoji}\n`;
       message += `${style.message}\n`;
-      
+
       // Optionally display the PRs
       if (count > 0) {
         console.log('\nList of recently merged PRs:');
-        message += "\n*Recently merged PRs:*\n";
-        
-        recentlyMergedPRs.forEach(pr => {
+        message += '\n*Recently merged PRs:*\n';
+
+        recentlyMergedPRs.forEach((pr) => {
           const prLine = `- <${pr.html_url}|#${pr.number}>: ${pr.title} (merged at ${new Date(pr.merged_at).toLocaleString()})`;
-          console.log(`- #${pr.number}: ${pr.title} (merged at ${new Date(pr.merged_at).toLocaleString()})`);
-          message += prLine + "\n";
+          console.log(
+            `- #${pr.number}: ${pr.title} (merged at ${new Date(pr.merged_at).toLocaleString()})`,
+          );
+          message += prLine + '\n';
         });
       }
-      
+
       if (count === 0) {
-        message += "\n:warning: *No PRs were merged in the last 24 hours* :warning:";
+        message +=
+          '\n:warning: *No PRs were merged in the last 24 hours* :warning:';
       }
-      
+
       // Post to Slack if webhook URL is provided
       postToSlack(message);
-      
     } catch (error) {
       console.error('Error parsing response:', error);
       process.exit(1);
@@ -168,4 +170,4 @@ req.on('error', (error) => {
   process.exit(1);
 });
 
-req.end(); 
+req.end();
