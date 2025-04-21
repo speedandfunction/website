@@ -60,7 +60,12 @@ describe('app.js', () => {
 
     expect(config.baseUrl).toBe('http://localhost:3000');
     expect(config.modules['@apostrophecms/express'].options.session.secret).toBe('changeme');
-    expect(config.modules['@apostrophecms/express'].options.session.store).toEqual({});
+    expect(config.modules['@apostrophecms/express'].options.session.store).toEqual({
+      connect: mockConnectRedisFn,
+      options: {
+        url: 'redis://localhost:6379'
+      }
+    });
   });
 
   test('should configure all required modules', () => {

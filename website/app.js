@@ -6,21 +6,19 @@ require('apostrophe')({
   modules: {
     // Core modules configuration
     '@apostrophecms/express': {
-      options: {
-        session: {
-          // If using Redis (recommended for production)
-          secret: process.env.SESSION_SECRET || 'changeme',
-          store: process.env.REDIS_URI
-            ? {
-                connect: require('connect-redis'),
-                options: {
-                  url: process.env.REDIS_URI || 'redis://localhost:6379',
-                },
-              }
-            : {},
+  options: {
+    session: {
+      // If using Redis (recommended for production)
+      secret: process.env.SESSION_SECRET || 'changeme',
+      store: {
+        connect: require('connect-redis'),
+        options: {
+          url: process.env.REDIS_URI || 'redis://localhost:6379',
         },
       },
     },
+  },
+},
 
     // Configure page types
     '@apostrophecms/rich-text-widget': {},
