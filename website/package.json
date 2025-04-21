@@ -10,6 +10,7 @@
     "serve": "NODE_ENV=production node app.js",
     "test": "jest",
     "test:coverage": "jest --coverage",
+    "pretest:e2e": "npx playwright install --with-deps",
     "test:e2e": "playwright test",
     "lint": "eslint ."
   },

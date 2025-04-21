@@ -3,6 +3,7 @@
 This repository contains a complete Docker Compose setup for Apostrophe CMS with all required services.
 
 ## Status
+
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=speedandfunction_website&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=speedandfunction_website)
 
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=speedandfunction_website&metric=bugs)](https://sonarcloud.io/summary/new_code?id=speedandfunction_website)
@@ -40,6 +41,25 @@ For development with hot reloading, use:
 docker-compose -f docker-compose.yml -f docker-compose.override.yml up -d
 ```
 
+## End-to-End Testing with Playwright
+
+This project uses [Playwright](https://playwright.dev/) for end-to-end testing.
+
+### Running Tests Locally
+
+Before running the Playwright tests for the first time, install the required browsers and dependencies:
+
+```bash
+npm run pretest:e2e
+npm run test:e2e
+```
+
+For subsequent runs, you can skip the install step and just run:
+
+```bash
+npm run test:e2e
+```
+
 ## Environment Variables
 
 Environment variables are stored in the `.env` file. For production, you should change:
@@ -65,4 +85,4 @@ To remove all data and start fresh:
 
 ```bash
 docker-compose down -v
-``` 
+```
