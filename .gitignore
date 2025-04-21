@@ -147,3 +147,6 @@ website/public/apos-minified
 website/data/
 website/apos-build
 website/public/apos-frontend
+
+dump.archive
+
