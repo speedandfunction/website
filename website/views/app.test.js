@@ -1,4 +1,4 @@
-import { jest, expect, describe, test, beforeEach, afterEach } from '@jest/globals';
+const { expect, describe, test, beforeEach, afterEach } = require('@jest/globals');
 
 const mockApostropheFn = jest.fn();
 const mockConnectRedisFn = jest.fn();
@@ -6,11 +6,10 @@ jest.mock('apostrophe', () => mockApostropheFn);
 jest.mock('connect-redis', () => mockConnectRedisFn);
 
 describe('app.js', () => {
-  let originalEnv;
+  let originalEnv = {};
 
   beforeEach(() => {
     originalEnv = { ...process.env };
-
     jest.clearAllMocks();
     jest.resetModules();
   });
@@ -24,7 +23,7 @@ describe('app.js', () => {
 
     expect(mockApostropheFn).toHaveBeenCalled();
 
-    const config = mockApostropheFn.mock.calls[0][0];
+    const [config] = mockApostropheFn.mock.calls[0];
 
     expect(config.shortName).toBe('apostrophe-site');
     expect(config.baseUrl).toBe('http://localhost:3000');
@@ -37,7 +36,7 @@ describe('app.js', () => {
 
     require('../app.js');
 
-    const config = mockApostropheFn.mock.calls[0][0];
+    const [config] = mockApostropheFn.mock.calls[0];
 
     expect(config.baseUrl).toBe('http://test.com');
     expect(config.modules['@apostrophecms/express'].options.session.secret).toBe('test-secret');
@@ -51,7 +50,7 @@ describe('app.js', () => {
 
     require('../app.js');
 
-    const config = mockApostropheFn.mock.calls[0][0];
+    const [config] = mockApostropheFn.mock.calls[0];
 
     expect(config.baseUrl).toBe('http://localhost:3000');
     expect(config.modules['@apostrophecms/express'].options.session.secret).toBe('changeme');
@@ -61,7 +60,7 @@ describe('app.js', () => {
   test('should configure all required modules', () => {
     require('../app.js');
 
-    const config = mockApostropheFn.mock.calls[0][0];
+    const [config] = mockApostropheFn.mock.calls[0];
 
     expect(config.modules['@apostrophecms/express']).toBeDefined();
     expect(config.modules['@apostrophecms/form']).toBeDefined();
@@ -75,10 +74,23 @@ describe('app.js', () => {
 
     require('../app.js');
 
-    const config = mockApostropheFn.mock.calls[0][0];
+    const [config] = mockApostropheFn.mock.calls[0];
     const sessionStore = config.modules['@apostrophecms/express'].options.session.store;
 
     expect(sessionStore.connect).toBe(mockConnectRedisFn);
+    expect(sessionStore.options.url).toBe('redis://test:6379');
+  });
+
+  test('should properly import and use connect-redis module', () => {
+    process.env.REDIS_URI = 'redis://test:6379';
+    
+    require('../app.js');
+    
+    const [config] = mockApostropheFn.mock.calls[0];
+    const sessionStore = config.modules['@apostrophecms/express'].options.session.store;
+    
+    expect(sessionStore.connect).toBe(mockConnectRedisFn);
+    expect(sessionStore.options).toBeDefined();
     expect(sessionStore.options.url).toBe('redis://test:6379');
   });
 }); 
