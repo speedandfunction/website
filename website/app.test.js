@@ -1,12 +1,13 @@
 const { expect, describe, test, beforeEach, afterEach } = require('@jest/globals');
 
-const mockApostropheFn = jest.fn();
 const mockConnectRedisFn = jest.fn();
+const mockApostropheFn = jest.fn();
+
 jest.mock('apostrophe', () => mockApostropheFn);
 jest.mock('connect-redis', () => mockConnectRedisFn);
 
 describe('app.js', () => {
-  let originalEnv = {};
+  let originalEnv;
 
   beforeEach(() => {
     originalEnv = { ...process.env };
@@ -19,7 +20,7 @@ describe('app.js', () => {
   });
 
   test('should initialize apostrophe with correct configuration', () => {
-    require('../app.js');
+    require('./app.js');
 
     expect(mockApostropheFn).toHaveBeenCalled();
 
@@ -34,13 +35,18 @@ describe('app.js', () => {
     process.env.SESSION_SECRET = 'test-secret';
     process.env.REDIS_URI = 'redis://test:6379';
 
-    require('../app.js');
+    require('./app.js');
 
     const [config] = mockApostropheFn.mock.calls[0];
 
     expect(config.baseUrl).toBe('http://test.com');
     expect(config.modules['@apostrophecms/express'].options.session.secret).toBe('test-secret');
-    expect(config.modules['@apostrophecms/express'].options.session.store.options.url).toBe('redis://test:6379');
+    expect(config.modules['@apostrophecms/express'].options.session.store).toEqual({
+      connect: mockConnectRedisFn,
+      options: {
+        url: 'redis://test:6379'
+      }
+    });
   });
 
   test('should use default values when environment variables are not set', () => {
@@ -48,7 +54,7 @@ describe('app.js', () => {
     delete process.env.SESSION_SECRET;
     delete process.env.REDIS_URI;
 
-    require('../app.js');
+    require('./app.js');
 
     const [config] = mockApostropheFn.mock.calls[0];
 
@@ -58,7 +64,7 @@ describe('app.js', () => {
   });
 
   test('should configure all required modules', () => {
-    require('../app.js');
+    require('./app.js');
 
     const [config] = mockApostropheFn.mock.calls[0];
 
@@ -67,30 +73,5 @@ describe('app.js', () => {
     expect(config.modules['@apostrophecms/form-widget']).toBeDefined();
     expect(config.modules.asset).toBeDefined();
     expect(config.modules['default-page']).toBeDefined();
-  });
-
-  test('should configure Redis store when REDIS_URI is provided', () => {
-    process.env.REDIS_URI = 'redis://test:6379';
-
-    require('../app.js');
-
-    const [config] = mockApostropheFn.mock.calls[0];
-    const sessionStore = config.modules['@apostrophecms/express'].options.session.store;
-
-    expect(sessionStore.connect).toBe(mockConnectRedisFn);
-    expect(sessionStore.options.url).toBe('redis://test:6379');
-  });
-
-  test('should properly import and use connect-redis module', () => {
-    process.env.REDIS_URI = 'redis://test:6379';
-    
-    require('../app.js');
-    
-    const [config] = mockApostropheFn.mock.calls[0];
-    const sessionStore = config.modules['@apostrophecms/express'].options.session.store;
-    
-    expect(sessionStore.connect).toBe(mockConnectRedisFn);
-    expect(sessionStore.options).toBeDefined();
-    expect(sessionStore.options.url).toBe('redis://test:6379');
   });
 }); 
