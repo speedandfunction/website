@@ -41,11 +41,15 @@ cd your-repo
 
 ### 2. Install dependencies
 
+Navigate to the app directory with `cd website/`, then run:
+
 ```bash
 npm ci
 ```
 
 ### 3. Start all services with Docker Compose
+
+Return to the repo root with `cd ..`, then run:
 
 ```bash
 docker compose up -d
@@ -99,6 +103,13 @@ Then run:
 
 ```bash
 docker exec -it apostrophe-mongodb bash -c "mongorestore --archive=/tmp/dump.archive --drop --nsFrom='a3-snf.*' --nsTo='apostrophe.*'"
+```
+
+#### 4.6 Restart Docker Compose
+
+```bash
+docker-compose down
+docker-compose up -d
 ```
 
 ### 5. Access the Apostrophe CMS
