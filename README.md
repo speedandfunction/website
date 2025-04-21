@@ -47,14 +47,21 @@ This project uses [Playwright](https://playwright.dev/) for end-to-end testing.
 
 ### Running Tests Locally
 
-Before running the Playwright tests for the first time, install the required browsers and dependencies:
+Before testing, **make sure the app is running at** [http://localhost:3000](http://localhost:3000).
+
+To run the tests for the first time and generate the initial snapshots in the `website/e2e` folder, use:
 
 ```bash
-npm run pretest:e2e
 npm run test:e2e
 ```
 
-For subsequent runs, you can skip the install step and just run:
+For future test sessions, this same command will compare the current UI state with the stored snapshots:
+
+```bash
+npm run test:e2e
+```
+
+If you’ve made intentional UI changes and need to update the snapshots, delete the existing ones in the `website/e2e` folder and rerun the tests:
 
 ```bash
 npm run test:e2e
