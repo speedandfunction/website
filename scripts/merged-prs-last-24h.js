@@ -23,9 +23,13 @@ const options = {
   headers: {
     'User-Agent': 'PR-Counter-Script',
     'Accept': 'application/vnd.github.v3+json',
-    'Authorization': GITHUB_TOKEN ? `token ${GITHUB_TOKEN}` : undefined
   }
 };
+
+// Add Authorization header only if GITHUB_TOKEN is provided
+if (GITHUB_TOKEN) {
+  options.headers.Authorization = `token ${GITHUB_TOKEN}`;
+}
 
 // Function to get emoji and message based on PR count
 function getMessageStyle(count) {
