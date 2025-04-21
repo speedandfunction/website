@@ -49,23 +49,17 @@ This project uses [Playwright](https://playwright.dev/) for end-to-end testing.
 
 Before testing, **make sure the app is running at** [http://localhost:3000](http://localhost:3000).
 
-To run the tests for the first time and generate the initial snapshots in the `website/e2e` folder, use:
+To run the end-to-end tests, use the following command:
 
 ```bash
 npm run test:e2e
 ```
 
-For future test sessions, this same command will compare the current UI state with the stored snapshots:
+- On the first run, this generates the initial snapshots in the `website/e2e` folder.
 
-```bash
-npm run test:e2e
-```
+- On subsequent runs, it compares the current UI state with the stored snapshots.
 
-If you’ve made intentional UI changes and need to update the snapshots, delete the existing ones in the `website/e2e` folder and rerun the tests:
-
-```bash
-npm run test:e2e
-```
+- If you've made intentional UI changes, delete the existing snapshots in `website/e2e` and rerun the `npm run test:e2e` command to update them.
 
 ## Environment Variables
 
