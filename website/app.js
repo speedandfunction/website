@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-undef
 require('apostrophe')({
   shortName: 'apostrophe-site',
   baseUrl: process.env.BASE_URL || 'http://localhost:3000',

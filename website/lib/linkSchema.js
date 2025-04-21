@@ -1,6 +1,6 @@
 // LinkSchema.js
 
-module.exports = {
+export default {
   type: 'object',
   fields: {
     add: {

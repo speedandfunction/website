@@ -1,7 +1,7 @@
-const extendedToolbar = require('../../lib/extendedToolbar');
-// const additionalMetaData = require("../partials/additionalMetaData");
+import extendedToolbar from '../../lib/extendedToolbar.js';
+// import additionalMetaData from "../partials/additionalMetaData.js";
 
-module.exports = {
+export default {
   cascades: [ 'batchOperations' ],
   extend: '@apostrophecms/piece-type',
   options: {

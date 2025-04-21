@@ -1,7 +1,7 @@
-const extendedToolbar = require('../../lib/extendedToolbar');
-// Const additionalMetaData = require("../partials/additionalMetaData");
+import extendedToolbar from '../../lib/extendedToolbar.js';
+// import additionalMetaData from "../partials/additionalMetaData.js";
 
-module.exports = {
+export default {
   extend: '@apostrophecms/piece-type',
   options: {
     label: 'Project',

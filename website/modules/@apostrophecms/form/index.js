@@ -1,7 +1,7 @@
-const { google } = require('googleapis');
-const postmark = require('postmark');
+import {google } from 'googleapis';
+import postmark from 'postmark';
 
-module.exports = {
+export default {
   options: {
     emailSubmissions: false,
     saveSubmissions: false,
