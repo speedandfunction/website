@@ -28,14 +28,23 @@ Add user authentication to login page
 ```
 
 ## Git Command Format
-When using the git commit command, use a single `-m` flag with properly formatted message including title, blank line, and bullet points:
+To create a commit with proper line breaks, use the text editor method instead of inline -m flags:
 
 ```
-git commit -m "Title
+# This opens your default text editor where you can properly format the message
+git commit
+```
+
+Alternatively, you can use heredoc syntax in the shell:
+
+```
+git commit -F- << EOF
+Title
 
 - Item 1
 - Item 2
-- Item 3"
+- Item 3
+EOF
 ```
 
 ## Process
