@@ -6,7 +6,7 @@ module.exports = {
   options: {
     label: 'Flex Cards',
     previewImage: 'png',
-    icon: 'view-column-icon'
+    icon: 'view-column-icon',
   },
   fields: {
     add: {
@@ -17,10 +17,10 @@ module.exports = {
           max: 1,
           widgets: {
             '@apostrophecms/rich-text': {
-              ...headingToolbar
-            }
-          }
-        }
+              ...headingToolbar,
+            },
+          },
+        },
       },
       cards: {
         label: 'Cards',
@@ -31,18 +31,18 @@ module.exports = {
           add: {
             cardTitle: {
               label: 'Title',
-              type: 'string'
+              type: 'string',
             },
             cardColor: {
               type: 'color',
-              label: 'Card color'
+              label: 'Card color',
             },
             _image: {
               label: 'Image',
               type: 'relationship',
               withType: '@apostrophecms/image',
               help: 'Aspect Ratio 2:3 is recommended',
-              max: 1
+              max: 1,
             },
             cardContent: {
               label: 'Content',
@@ -51,14 +51,14 @@ module.exports = {
                 max: 1,
                 widgets: {
                   '@apostrophecms/rich-text': {
-                    ...extendedToolbar
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
+                    ...extendedToolbar,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  },
 };

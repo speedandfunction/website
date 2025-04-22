@@ -3,12 +3,9 @@ module.exports = {
     addFileGroups: [
       {
         name: 'videofiles',
-        extensions: [
-          'mov',
-          'mp4'
-        ],
-        extensionMaps: {}
-      }
-    ]
-  }
+        extensions: ['mov', 'mp4'],
+        extensionMaps: {},
+      },
+    ],
+  },
 };

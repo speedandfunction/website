@@ -7,14 +7,15 @@ module.exports = {
     '!**/babel.config.js',
     '!**/jest.config.js',
     '!**/public/**',
-    '!**/data/**'
+    '!**/data/**',
   ],
   coverageDirectory: 'coverage',
   coverageReporters: [ 'text', 'lcov' ],
   testMatch: [ '**/__tests__/**/*.js', '**/?(*.)+(spec|test).js' ],
+  testPathIgnorePatterns: [ '/node_modules/', '/e2e/' ],
   verbose: true,
   transform: {
-    '^.+\\.(js|jsx)$': 'babel-jest'
+    '^.+\\.(js|jsx)$': 'babel-jest',
   },
-  moduleFileExtensions: [ 'js', 'jsx', 'json', 'node' ]
+  moduleFileExtensions: ['js', 'jsx', 'json', 'node'],
 };

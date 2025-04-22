@@ -6,7 +6,7 @@ module.exports = {
   options: {
     label: 'Links/Buttons Widget',
     previewImage: 'png',
-    icon: 'format-list-bulleted-icon'
+    icon: 'format-list-bulleted-icon',
   },
   fields: {
     add: {
@@ -17,10 +17,10 @@ module.exports = {
           max: 1,
           widgets: {
             '@apostrophecms/rich-text': {
-              ...headingToolbar
-            }
-          }
-        }
+              ...headingToolbar,
+            },
+          },
+        },
       },
       links: {
         label: 'Links',
@@ -30,10 +30,10 @@ module.exports = {
           add: {
             link: {
               label: 'Link',
-              ...linkSchema
-            }
-          }
-        }
+              ...linkSchema,
+            },
+          },
+        },
       },
       buttons: {
         label: 'Buttons',
@@ -43,11 +43,11 @@ module.exports = {
           add: {
             button: {
               label: 'Button',
-              ...linkSchema
-            }
-          }
-        }
-      }
-    }
-  }
+              ...linkSchema,
+            },
+          },
+        },
+      },
+    },
+  },
 };

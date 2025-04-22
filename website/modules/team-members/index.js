@@ -2,7 +2,7 @@ const extendedToolbar = require('../../lib/extendedToolbar');
 // const additionalMetaData = require("../partials/additionalMetaData");
 
 module.exports = {
-  cascades: [ 'batchOperations' ],
+  cascades: ['batchOperations'],
   extend: '@apostrophecms/piece-type',
   options: {
     label: 'Team Member',
@@ -11,26 +11,26 @@ module.exports = {
     sort: {
       order: 1,
       title: 1,
-      updatedAt: -1
-    }
+      updatedAt: -1,
+    },
   },
   fields: {
     add: {
       title: {
         label: 'Name',
         type: 'string',
-        required: true
+        required: true,
       },
       position: {
         label: 'Position',
-        type: 'string'
+        type: 'string',
       },
       order: {
         label: 'Order',
         help: 'Use this field to order the team. Sorting is acsending, starting from 1',
         type: 'integer',
         min: 1,
-        def: 1
+        def: 1,
       },
       headshot: {
         label: 'Headshot',
@@ -41,9 +41,9 @@ module.exports = {
           max: 1,
           min: 1,
           widgets: {
-            '@apostrophecms/image': {}
-          }
-        }
+            '@apostrophecms/image': {},
+          },
+        },
       },
       bio: {
         label: 'Bio',
@@ -52,49 +52,49 @@ module.exports = {
           max: 1,
           widgets: {
             '@apostrophecms/rich-text': {
-              ...extendedToolbar
-            }
-          }
-        }
-      }
+              ...extendedToolbar,
+            },
+          },
+        },
+      },
     },
     group: {
       basics: {
         label: 'Basics',
-        fields: [ 'title', 'position', 'order' ]
+        fields: ['title', 'position', 'order'],
       },
       details: {
         label: 'Details',
-        fields: [ 'headshot', 'bio' ]
-      }
-    }
+        fields: ['headshot', 'bio'],
+      },
+    },
   },
   columns: {
     add: {
       title: {
         label: 'Name',
-        name: 'title'
+        name: 'title',
       },
       order: {
-        label: 'Order'
+        label: 'Order',
       },
       position: {
-        label: 'Position'
-      }
-    }
+        label: 'Position',
+      },
+    },
   },
-  utilityOperations (self) {
+  utilityOperations(self) {
     return {
       add: {
         peopleforce: {
           label: 'Peopleforce',
           modalOptions: {
-            modal: 'AposPeopleModal'
+            modal: 'AposPeopleModal',
           },
           canCreate: true,
-          canEdit: true
-        }
-      }
+          canEdit: true,
+        },
+      },
     };
-  }
+  },
 };

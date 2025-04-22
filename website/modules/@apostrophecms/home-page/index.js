@@ -2,7 +2,7 @@ const mainWidgets = require('../../../lib/mainWidgets');
 
 module.exports = {
   options: {
-    label: 'Home Page'
+    label: 'Home Page',
   },
   fields: {
     add: {
@@ -11,27 +11,24 @@ module.exports = {
         options: {
           max: 1,
           widgets: {
-            'home-hero': {}
-          }
-        }
+            'home-hero': {},
+          },
+        },
       },
       main: {
         type: 'area',
-        options: mainWidgets
-      }
+        options: mainWidgets,
+      },
     },
     group: {
       hero: {
         label: 'Hero',
-        fields: [
-          'title',
-          'header'
-        ]
+        fields: ['title', 'header'],
       },
       mainArea: {
         label: 'Main page content',
-        fields: [ 'main' ]
-      }
-    }
-  }
+        fields: ['main'],
+      },
+    },
+  },
 };

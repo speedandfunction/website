@@ -13,7 +13,7 @@ module.exports = {
           help: 'JavaScript code',
           placeholder: 'function runSubmitSuccess(event) {...custom code...}',
           type: 'string',
-          textarea: true
+          textarea: true,
         },
         emailConfirmationField: {
           label: 'Specify the email field',
@@ -21,8 +21,8 @@ module.exports = {
           type: 'string',
           required: true,
           if: {
-            sendConfirmationEmail: true
-          }
+            sendConfirmationEmail: true,
+          },
         },
         enablePostmark: {
           label: 'Enable and configure connection to Postmark mailing.',
@@ -30,9 +30,9 @@ module.exports = {
           type: 'boolean',
           toggle: {
             true: 'Enable',
-            false: 'Disable'
+            false: 'Disable',
           },
-          def: false
+          def: false,
         },
         postmarkApiKey: {
           type: 'string',
@@ -40,24 +40,24 @@ module.exports = {
           label: 'Postmark API Key',
           required: true,
           if: {
-            enablePostmark: true
-          }
+            enablePostmark: true,
+          },
         },
         fromEmail: {
           label: 'From Email address',
           type: 'email',
           required: true,
           if: {
-            enablePostmark: true
-          }
+            enablePostmark: true,
+          },
         },
         toEmail: {
           label: 'To Email address',
           type: 'email',
           required: true,
           if: {
-            enablePostmark: true
-          }
+            enablePostmark: true,
+          },
         },
         enableSpreadsheet: {
           label: 'Enable and configure connection to Google Spreadsheets.',
@@ -65,9 +65,9 @@ module.exports = {
           type: 'boolean',
           toggle: {
             true: 'Enable',
-            false: 'Disable'
+            false: 'Disable',
           },
-          def: false
+          def: false,
         },
         spreadsheetId: {
           label: 'Google Spreadsheet ID',
@@ -76,8 +76,8 @@ module.exports = {
           placeholder: '1vBBJqm5W4wk1IOlBoYA01ImVWE-plyPZ5wwH1jwZFiY',
           required: true,
           if: {
-            enableSpreadsheet: true
-          }
+            enableSpreadsheet: true,
+          },
         },
         serviceAccountEmail: {
           label: 'Google Service Account client_email',
@@ -86,8 +86,8 @@ module.exports = {
           placeholder: 'procrea1@civil-zodiac-406414.iam.gserviceaccount.com',
           required: true,
           if: {
-            enableSpreadsheet: true
-          }
+            enableSpreadsheet: true,
+          },
         },
         serviceAccountPrivateKey: {
           label: 'Google Service Account private_key',
@@ -96,14 +96,14 @@ module.exports = {
           textarea: true,
           required: true,
           if: {
-            enableSpreadsheet: true
-          }
-        }
+            enableSpreadsheet: true,
+          },
+        },
       },
       group: {
         postmark: {
           label: 'Postmark Configs',
-          fields: [ 'enablePostmark', 'postmarkApiKey', 'fromEmail', 'toEmail' ]
+          fields: ['enablePostmark', 'postmarkApiKey', 'fromEmail', 'toEmail'],
         },
         googleSpreadsheet: {
           label: 'Google Spreadsheet',
@@ -111,14 +111,14 @@ module.exports = {
             'enableSpreadsheet',
             'spreadsheetId',
             'serviceAccountEmail',
-            'serviceAccountPrivateKey'
-          ]
+            'serviceAccountPrivateKey',
+          ],
         },
         afterSubmit: {
-          fields: [ 'onSubmitSuccess' ]
-        }
-      }
-    }
+          fields: ['onSubmitSuccess'],
+        },
+      },
+    },
   },
   handlers(self, options) {
     return {
@@ -134,7 +134,9 @@ module.exports = {
             }
             html += '</ul>';
 
-            const postmarkClient = new postmark.ServerClient(form.postmarkApiKey);
+            const postmarkClient = new postmark.ServerClient(
+              form.postmarkApiKey,
+            );
 
             const sendPostmarkEmail = async (from, to, subject, htmlBody) => {
               try {
@@ -143,7 +145,7 @@ module.exports = {
                   To: to,
                   Subject: subject,
                   HtmlBody: htmlBody,
-                  MessageStream: 'outbound'
+                  MessageStream: 'outbound',
                 });
                 console.log(`Email sent successfully to ${to}`, response);
                 if (response.ErrorCode) {
@@ -159,7 +161,7 @@ module.exports = {
                 form.fromEmail,
                 form.toEmail,
                 emailSubject,
-                html
+                html,
               );
 
               if (form.sendConfirmationEmail) {
@@ -172,11 +174,11 @@ module.exports = {
                     form.fromEmail,
                     senderEmail,
                     'Confirmation of Form Submission from Procrea',
-                    confirmationHtml
+                    confirmationHtml,
                   );
                 } else {
                   console.warn(
-                    `Email confirmation field "${form.emailConfirmationField}" not found in the submission.`
+                    `Email confirmation field "${form.emailConfirmationField}" not found in the submission.`,
                   );
                 }
               }
@@ -198,37 +200,37 @@ module.exports = {
               const auth = new google.auth.JWT({
                 email: form.serviceAccountEmail,
                 key: form.serviceAccountPrivateKey.replace(/\\n/g, '\n'),
-                scopes: [ 'https://www.googleapis.com/auth/spreadsheets' ]
+                scopes: ['https://www.googleapis.com/auth/spreadsheets'],
               });
 
               const sheets = google.sheets({
                 version: 'v4',
-                auth
+                auth,
               });
               const id = Date.now().toString();
 
               const values = [
                 id,
                 new Date().toISOString(),
-                ...Object.values(submission)
+                ...Object.values(submission),
               ];
               // Convert submission data to array format for Sheets
 
-              const resource = { values: [ values ] };
+              const resource = { values: [values] };
 
               await sheets.spreadsheets.values.append({
                 spreadsheetId,
                 range,
                 valueInputOption: 'RAW',
-                resource
+                resource,
               });
               console.log('Data inserted into Google Sheets successfully.');
             } catch (error) {
               console.error('Error Sheets data insertion', error);
             }
           }
-        }
-      }
+        },
+      },
     };
-  }
+  },
 };

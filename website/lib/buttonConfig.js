@@ -10,16 +10,16 @@ module.exports = {
           choices: [
             {
               label: 'Dark ⚫',
-              value: 'btn-dark'
+              value: 'btn-dark',
             },
             {
               label: 'Underline ⚪',
-              value: 'sf-button_underline'
-            }
+              value: 'sf-button_underline',
+            },
           ],
-          def: 'btn-dark'
-        }
-      }
-    }
-  }
+          def: 'btn-dark',
+        },
+      },
+    },
+  },
 };

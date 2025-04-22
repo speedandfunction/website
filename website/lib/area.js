@@ -20,25 +20,22 @@ module.exports = {
       'horizontalRule',
       '|',
       'undo',
-      'redo'
+      'redo',
     ],
     styles: [
       {
         tag: 'p',
-        label: 'Paragraph (P)'
+        label: 'Paragraph (P)',
       },
       {
         tag: 'h3',
-        label: 'Heading 3 (H3)'
+        label: 'Heading 3 (H3)',
       },
       {
         tag: 'h4',
-        label: 'Heading 4 (H4)'
-      }
+        label: 'Heading 4 (H4)',
+      },
     ],
-    insert: [
-      'table',
-      'image'
-    ]
-  }
+    insert: ['table', 'image'],
+  },
 };
