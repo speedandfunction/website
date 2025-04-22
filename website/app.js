@@ -1,4 +1,11 @@
 const apostrophe = require('apostrophe');
+/**
+ * Generates the configuration object for initializing an ApostropheCMS site.
+ *
+ * The configuration includes site metadata, base URL, session management with Redis support, and registration of core, custom, and form-related modules and widgets. Custom widgets and pieces are included for site-specific functionality.
+ *
+ * @returns {object} The configuration object for ApostropheCMS initialization.
+ */
 function createAposConfig() {
   return {
     shortName: 'apostrophe-site',
