@@ -15,7 +15,7 @@ When creating a commit, follow these guidelines:
 ## Commit Message Format
 - Title: One sentence summary (max 120 characters)
 - Empty line
-- Body: Bullet list of changes
+- Body: Bullet list of changes (with NO extra lines between bullet points)
 - No additional text
 
 ## Example:
@@ -25,6 +25,15 @@ Add user authentication to login page
 - Add password validation function
 - Create JWT token generation
 - Add error handling for invalid credentials
+```
+
+## Git Command Format
+When using the git commit command, use a single `-m` flag for the title and a single `-m` flag for the entire bullet list:
+
+```
+git commit -m "Title" -m "- Item 1
+- Item 2
+- Item 3"
 ```
 
 ## Process

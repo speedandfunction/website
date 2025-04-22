@@ -16,7 +16,7 @@ When creating or updating a pull request, follow these guidelines:
 
 ## Pull Request Format
 - Title: One sentence summary (max 120 characters)
-- Body: Bullet list of changes only
+- Body: Bullet list of changes only (with NO extra lines between bullet points)
 - No additional text or explanations
 
 ## Example:
@@ -27,6 +27,11 @@ Add user authentication to login page
 - Create JWT token generation
 - Add error handling for invalid credentials
 ```
+
+## PR Description Formatting
+When creating a PR, ensure that all bullet points are written without extra lines between them.
+In GitHub or similar platforms, preview the PR description to verify there are no unwanted
+line breaks between bullet points.
 
 ## Process
 1. Analyze changes between main and current branch
