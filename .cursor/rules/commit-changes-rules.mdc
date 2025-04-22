@@ -1,16 +1,22 @@
 ---
-description: 
-globs: 
+description:
+globs:
 alwaysApply: false
 ---
-# Commit Message Guidelines
+# Commit Changes Guidelines
 
-When creating a commit, follow these guidelines:
+When making changes to the codebase, follow these guidelines for committing your work:
 
 ## Analysis Process
 1. Run `git --no-pager status` to see which files have changed
 2. Run `git --no-pager diff` to see the actual changes in the code
 3. Analyze the changes to understand the purpose and impact
+
+## Commit Process
+1. Review and stage your changes
+2. Prepare a proper commit message (see format below)
+3. Commit the changes
+4. Push to remote repository
 
 ## Commit Message Format
 - Title: One sentence summary (max 120 characters)
@@ -47,9 +53,3 @@ git commit -F /tmp/commit-msg.txt && rm /tmp/commit-msg.txt
 ```
 git commit -m "Your commit title" -m "- First bullet point"
 ```
-
-## Process
-1. Analyze changes
-2. Create commit message following the format
-3. Commit the changes
-4. Push to remote repository
