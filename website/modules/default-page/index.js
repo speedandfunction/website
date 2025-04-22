@@ -13,17 +13,9 @@ module.exports = {
       },
     },
     group: {
-      hero: {
-        label: 'Page Intro',
-        fields: ['title'],
-      },
       mainArea: {
         label: 'Main page content',
         fields: ['main'],
-      },
-      pageIntroWidget: {
-        label: 'Page Intro Section',
-        fields: ['label', 'title', 'description'],
       },
     },
   },
