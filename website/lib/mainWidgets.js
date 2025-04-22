@@ -22,6 +22,8 @@ module.exports = {
         'insights-carousel': {},
         contact: {},
         '@apostrophecms/html': {},
+        'page-intro': {},
+        'home-hero': {},
       },
       columns: 2,
     },
