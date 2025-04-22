@@ -21,6 +21,10 @@ module.exports = {
         label: 'Main page content',
         fields: ['main'],
       },
+      pageIntroWidget: {
+        label: 'Page Intro Section',
+        fields: ['label', 'title', 'description'],
+      },
     },
   },
 };
