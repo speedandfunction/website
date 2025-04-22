@@ -5,6 +5,15 @@ module.exports = {
   },
   fields: {
     add: {
+      header: {
+        type: 'area',
+        options: {
+          max: 1,
+          widgets: {
+            'default-hero': {},
+          },
+        },
+      },
       main: {
         type: 'area',
         options: {
