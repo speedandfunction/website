@@ -10,8 +10,9 @@ module.exports = {
     '!**/data/**',
   ],
   coverageDirectory: 'coverage',
-  coverageReporters: ['text', 'lcov'],
-  testMatch: ['**/__tests__/**/*.js', '**/?(*.)+(spec|test).js'],
+  coverageReporters: [ 'text', 'lcov' ],
+  testMatch: [ '**/__tests__/**/*.js', '**/?(*.)+(spec|test).js' ],
+  testPathIgnorePatterns: [ '/node_modules/', '/e2e/' ],
   verbose: true,
   transform: {
     '^.+\\.(js|jsx)$': 'babel-jest',
