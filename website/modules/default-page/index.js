@@ -22,9 +22,13 @@ module.exports = {
       },
     },
     group: {
-      basics: {
-        label: 'Basics',
-        fields: ['title', 'main'],
+      hero: {
+        label: 'Hero',
+        fields: ['title', 'header'],
+      },
+      mainArea: {
+        label: 'Main page content',
+        fields: ['main'],
       },
     },
   },
