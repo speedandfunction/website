@@ -6,6 +6,7 @@
   font-size: $font-size-body-small;
   font-style: $font-style-normal;
   font-weight: $font-weight-extra-bold;
+  text-align: center;
 }
 
 .page-intro__label {
@@ -16,6 +17,7 @@
 .page-intro__title {
   color: $gray-500;
   margin: 0 0 20px;
+  max-width: 580px;
 }
 
 .page-intro__description {
@@ -23,5 +25,4 @@
   line-height: 140%;
   margin: 0 0 40px;
   max-width: 412px;
-  text-align: center;
 }
