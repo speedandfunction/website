@@ -27,7 +27,7 @@
 }
 
 @mixin breakpoint-medium {
-  @media (max-width: $breakpoint-medium) {
+  @media (min-width: $breakpoint-medium) {
     @content;
   }
 }
