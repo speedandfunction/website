@@ -28,23 +28,20 @@ Add user authentication to login page
 ```
 
 ## Git Command Format
-To create a commit with proper line breaks, use the text editor method instead of inline -m flags:
+You can save your commit message to a temporary file and then use it with `git commit -F`:
 
 ```
-# This opens your default text editor where you can properly format the message
-git commit
-```
-
-Alternatively, you can use heredoc syntax in the shell:
-
-```
-git commit -F- << EOF
+# Create commit message in a temp file in the /tmp directory
+cat > /tmp/commit-msg.txt << EOF
 Title
 
 - Item 1
 - Item 2
 - Item 3
 EOF
+
+# Use the file for commit and then remove it
+git commit -F /tmp/commit-msg.txt && rm /tmp/commit-msg.txt
 ```
 
 ## Process
