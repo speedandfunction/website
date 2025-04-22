@@ -10,18 +10,23 @@
 }
 
 .page-intro__label {
+  margin-bottom: 6px;
+  font-size: $font-size-body-medium-mobile;
   text-transform: uppercase;
-  margin-bottom: 10px;
   @include breakpoint-medium {
-    font-size: $font-size-body-medium-mobile;
-    margin-bottom: 6px;
+    font-size: $font-size-body-small;
+    margin-bottom: 10px;
   }
 }
 
 .page-intro__title {
   color: $gray-500;
+  font-size: $font-size-h1-mobile;
   margin: 0 0 20px;
   max-width: min(580px, 90%);
+  @include breakpoint-medium {
+    font-size: $font-size-h1;
+  }
 }
 
 .page-intro__description {
