@@ -128,6 +128,26 @@ For development with hot reloading, use:
 docker-compose -f docker-compose.yml -f docker-compose.override.yml up -d
 ```
 
+## End-to-End Testing with Playwright
+
+This project uses [Playwright](https://playwright.dev/) for end-to-end testing.
+
+### Running Tests Locally
+
+Before testing, **make sure the app is running at** [http://localhost:3000](http://localhost:3000).
+
+To run the end-to-end tests, use the following command:
+
+```bash
+npm run test:e2e
+```
+
+- On the first run, this generates the initial snapshots in the `website/e2e` folder.
+
+- On subsequent runs, it compares the current UI state with the stored snapshots.
+
+- If you've made intentional UI changes, delete the existing snapshots in `website/e2e` and rerun the `npm run test:e2e` command to update them.
+
 ## Environment Variables
 
 Environment variables are stored in the `.env` file. For production, you should change:
