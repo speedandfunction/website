@@ -28,10 +28,12 @@ Add user authentication to login page
 ```
 
 ## Git Command Format
-When using the git commit command, use a single `-m` flag for the title and a single `-m` flag for the entire bullet list:
+When using the git commit command, use a single `-m` flag with properly formatted message including title, blank line, and bullet points:
 
 ```
-git commit -m "Title" -m "- Item 1
+git commit -m "Title
+
+- Item 1
 - Item 2
 - Item 3"
 ```
