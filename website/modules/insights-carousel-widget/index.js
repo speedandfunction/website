@@ -4,7 +4,7 @@ module.exports = {
   extend: '@apostrophecms/widget-type',
   options: {
     label: 'Insights Carousel',
-    icon: 'binoculars-icon'
+    icon: 'binoculars-icon',
   },
   fields: {
     add: {
@@ -15,11 +15,11 @@ module.exports = {
           max: 1,
           widgets: {
             '@apostrophecms/rich-text': {
-              ...headingToolbar
-            }
-          }
-        }
-      }
-    }
-  }
+              ...headingToolbar,
+            },
+          },
+        },
+      },
+    },
+  },
 };

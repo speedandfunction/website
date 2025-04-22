@@ -3,13 +3,13 @@ const extendedToolbar = require('../../lib/extendedToolbar');
 module.exports = {
   extend: '@apostrophecms/widget-type',
   options: {
-    label: 'Hero Homepage Widget'
+    label: 'Hero Homepage Widget',
   },
   fields: {
     add: {
       heading: {
         label: 'Heading',
-        type: 'string'
+        type: 'string',
       },
       content: {
         label: 'Hero Content',
@@ -19,11 +19,11 @@ module.exports = {
             buttons: {},
             '@apostrophecms/rich-text': {
               ...extendedToolbar,
-              insert: [ 'image' ]
-            }
-          }
-        }
-      }
-    }
-  }
+              insert: ['image'],
+            },
+          },
+        },
+      },
+    },
+  },
 };

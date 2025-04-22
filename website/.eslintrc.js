@@ -93,11 +93,19 @@ module.exports = {
     'no-trailing-spaces': 'off',
     'quote-props': 'off',
     'no-dupe-keys': 'off',
-    complexity: 'off',
+    'complexity': 'off',
     'no-invalid-this': 'off',
     'node/no-missing-import': 'off',
     'import/no-named-as-default': 'off',
     'capitalized-comments': 'off',
+    'init-declarations': 'off',
+    'prefer-destructuring': ['error', {
+      'array': true,
+      'object': true
+    }],
+    'node/no-extraneous-require': ['error', {
+      'allowModules': ['@jest/globals']
+    }]
   },
   overrides: [
     {
@@ -105,6 +113,8 @@ module.exports = {
       rules: {
         'max-lines-per-function': 'off',
         'max-statements': 'off',
+        'node/no-extraneous-require': 'off',
+        'prefer-destructuring': 'off'
       },
     },
   ],

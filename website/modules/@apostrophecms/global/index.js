@@ -2,7 +2,7 @@ const linkSchema = require('../../../lib/linkSchema');
 
 module.exports = {
   options: {
-    deferWidgetLoading: true
+    deferWidgetLoading: true,
   },
   fields: {
     add: {
@@ -14,11 +14,11 @@ module.exports = {
           add: {
             menuItem: {
               label: 'Menu Item',
-              ...linkSchema
-            }
+              ...linkSchema,
+            },
             //  Sublinks: {} for future second level of menu
-          }
-        }
+          },
+        },
       },
       comAddress: {
         label: 'Company Address',
@@ -30,17 +30,17 @@ module.exports = {
               styles: [
                 {
                   tag: 'p',
-                  label: 'Text'
+                  label: 'Text',
                 },
                 {
                   tag: 'h2',
                   label: 'Heading',
-                  class: 'sf-head'
-                }
-              ]
-            }
-          }
-        }
+                  class: 'sf-head',
+                },
+              ],
+            },
+          },
+        },
       },
       footerLinks: {
         label: 'Footer Links',
@@ -50,10 +50,10 @@ module.exports = {
           add: {
             footerLink: {
               label: 'Link',
-              ...linkSchema
-            }
-          }
-        }
+              ...linkSchema,
+            },
+          },
+        },
       },
       socialMediaLinks: {
         label: 'Social Media Links',
@@ -63,10 +63,10 @@ module.exports = {
           add: {
             SMLink: {
               label: 'Social Media Link',
-              ...linkSchema
-            }
-          }
-        }
+              ...linkSchema,
+            },
+          },
+        },
       },
       footerForm: {
         label: 'Footer Form',
@@ -74,20 +74,20 @@ module.exports = {
         options: {
           max: 1,
           widgets: {
-            '@apostrophecms/form': {}
-          }
-        }
-      }
+            '@apostrophecms/form': {},
+          },
+        },
+      },
     },
     group: {
       navs: {
         label: 'Header',
-        fields: [ 'primaryNav' ]
+        fields: ['primaryNav'],
       },
       footer: {
         label: 'Footer',
-        fields: [ 'comAddress', 'footerLinks', 'socialMediaLinks', 'footerForm' ]
-      }
-    }
-  }
+        fields: ['comAddress', 'footerLinks', 'socialMediaLinks', 'footerForm'],
+      },
+    },
+  },
 };

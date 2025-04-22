@@ -1,5 +1,4 @@
 const apostrophe = require('apostrophe');
-
 function createAposConfig() {
   return {
     shortName: 'apostrophe-site',

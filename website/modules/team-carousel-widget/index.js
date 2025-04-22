@@ -2,7 +2,7 @@ module.exports = {
   extend: '@apostrophecms/widget-type',
   options: {
     label: 'Our Team',
-    icon: 'instagram-icon'
+    icon: 'instagram-icon',
   },
   fields: {
     add: {
@@ -12,9 +12,9 @@ module.exports = {
         options: {
           max: 1,
           widgets: {
-            'links-buttons': {}
-          }
-        }
+            'links-buttons': {},
+          },
+        },
       },
       _teamMembers: {
         label: 'Team Members',
@@ -27,10 +27,10 @@ module.exports = {
             // _url: 1,
             headshot: 1,
             position: 1,
-            bio: 1
-          }
-        }
-      }
-    }
-  }
+            bio: 1,
+          },
+        },
+      },
+    },
+  },
 };
