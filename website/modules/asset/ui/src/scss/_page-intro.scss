@@ -17,12 +17,12 @@
 .page-intro__title {
   color: $gray-500;
   margin: 0 0 20px;
-  max-width: 580px;
+  max-width: min(580px, 90%);
 }
 
 .page-intro__description {
   font-weight: $font-weight-normal;
-  line-height: 140%;
+  line-height: $line-height-body;
   margin: 0 0 40px;
-  max-width: 412px;
+  max-width: min(412px, 90%);
 }
