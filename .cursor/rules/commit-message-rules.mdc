@@ -28,20 +28,24 @@ Add user authentication to login page
 ```
 
 ## Git Command Format
-You can save your commit message to a temporary file and then use it with `git commit -F`:
+For creating commit messages with proper formatting, use one of these approaches:
 
+### Method 1: Build commit message using separate echo commands
 ```
-# Create commit message in a temp file in the /tmp directory
-cat > /tmp/commit-msg.txt << EOF
-Title
+# Create commit message file line by line
+echo "Your commit title" > /tmp/commit-msg.txt
+echo "" >> /tmp/commit-msg.txt
+echo "- First bullet point" >> /tmp/commit-msg.txt
+echo "- Second bullet point" >> /tmp/commit-msg.txt
+echo "- Third bullet point" >> /tmp/commit-msg.txt
 
-- Item 1
-- Item 2
-- Item 3
-EOF
-
-# Use the file for commit and then remove it
+# Commit using the file and clean up
 git commit -F /tmp/commit-msg.txt && rm /tmp/commit-msg.txt
+```
+
+### Method 2: For simple commits, use the -m flag twice
+```
+git commit -m "Your commit title" -m "- First bullet point"
 ```
 
 ## Process
