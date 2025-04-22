@@ -15,41 +15,59 @@
 }
 
 @mixin breakpoint-extra-small {
-	@media (min-width: $breakpoint-extra-small) { @content; }
+  @media (min-width: $breakpoint-extra-small) {
+    @content;
+  }
 }
 
 @mixin breakpoint-small {
-  @media (min-width: $breakpoint-small) { @content; }
+  @media (min-width: $breakpoint-small) {
+    @content;
+  }
 }
 
 @mixin breakpoint-medium {
-  @media (min-width: $breakpoint-medium) { @content; }
+  @media (max-width: $breakpoint-medium) {
+    @content;
+  }
 }
 
 @mixin breakpoint-large {
-  @media (min-width: $breakpoint-large) { @content; }
+  @media (min-width: $breakpoint-large) {
+    @content;
+  }
 }
 
 @mixin breakpoint-extra-large {
-  @media (min-width: $breakpoint-extra-large) { @content; }
+  @media (min-width: $breakpoint-extra-large) {
+    @content;
+  }
 }
 
 @mixin breakpoint-extra-extra-large {
-  @media (min-width: $breakpoint-extra-extra-large) { @content; }
+  @media (min-width: $breakpoint-extra-extra-large) {
+    @content;
+  }
 }
 
 @mixin transition($property: all, $duration: 0.3s, $timing-function: ease) {
   transition: $property $duration $timing-function;
 }
 
-@mixin border($direction, $width: 1px, $style: solid, $color: $gray-300, $alpha: 0.4) {
+@mixin border(
+  $direction,
+  $width: 1px,
+  $style: solid,
+  $color: $gray-300,
+  $alpha: 0.4
+) {
   #{$direction}: #{$width} #{$style} rgba($color, $alpha);
 }
 
 @function encodecolor($string) {
   @if type-of($string) == 'color' {
-      $hex: str-slice(ie-hex-str($string), 4);
-      $string: unquote("#{$hex}");
+    $hex: str-slice(ie-hex-str($string), 4);
+    $string: unquote('#{$hex}');
   }
 
   $string: '%23' + $string;

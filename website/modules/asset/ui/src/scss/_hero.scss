@@ -19,10 +19,10 @@
   h1 {
     display: inline;
     font-weight: 700;
-    font-size: 36px;
+    font-size: 58px;
     margin: 0 auto;
     @include breakpoint-medium {
-      font-size: 58px;
+      font-size: 36px;
       line-height: 68px;
     }
   }
@@ -49,10 +49,10 @@
     display: block;
     line-height: 55px;
     font-family: 'Pixelify Sans', sans-serif;
+    display: inline-block;
     @include breakpoint-medium {
-      display: inline-block;
-      text-align: left;
       min-width: 222px;
+      text-align: center;
     }
   }
 }
