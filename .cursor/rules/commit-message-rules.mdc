@@ -1,0 +1,34 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Commit Message Guidelines
+
+When creating a commit, follow these guidelines:
+
+## Analysis Process
+1. Run `git --no-pager status` to see which files have changed
+2. Run `git --no-pager diff` to see the actual changes in the code
+3. Analyze the changes to understand the purpose and impact
+
+## Commit Message Format
+- Title: One sentence summary (max 120 characters)
+- Empty line
+- Body: Bullet list of changes
+- No additional text
+
+## Example:
+```
+Add user authentication to login page
+
+- Add password validation function
+- Create JWT token generation
+- Add error handling for invalid credentials
+```
+
+## Process
+1. Analyze changes
+2. Create commit message following the format
+3. Commit the changes
+4. Push to remote repository
