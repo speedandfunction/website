@@ -2,7 +2,7 @@ const { createAposConfig } = require('./app');
 const mockConnectRedis = jest.fn();
 jest.mock('connect-redis', () => mockConnectRedis);
 describe('createAposConfig', () => {
-  let originalEnv;
+  let originalEnv = null;
   beforeEach(() => {
     originalEnv = { ...process.env };
   });

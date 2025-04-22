@@ -1,5 +1,4 @@
 const apostrophe = require('apostrophe');
-// require('apostrophe')({
 function createAposConfig() {
   return {
     shortName: 'apostrophe-site',
@@ -35,6 +34,7 @@ function createAposConfig() {
       },
       // Custom Widgets
       'home-hero-widget': {},
+      'default-hero-widget': {},
       'buttons-widget': {},
       'flex-cards-widget': {},
       'links-buttons-widget': {},
