@@ -142,6 +142,18 @@ Environment variables are stored in the `.env` file. For production, you should 
 - **View logs**: `docker-compose logs -f`
 - **Rebuild containers**: `docker-compose up -d --build`
 
+## DataBase Management
+
+- **Inport database**: `scripts/import_db_from_json.sh`
+- **Export database**: `scripts/export_db_to_json.sh`
+
+For doing these script executable, run
+
+```bash
+  chmod +x scripts/setup.sh
+  setup.sh
+```
+
 ## Data Persistence
 
 MongoDB and Redis data are stored in Docker volumes for persistence between restarts:
