@@ -14,8 +14,8 @@
     "test:e2e": "playwright test",
     "lint": "eslint .",
     "lint:pr-script": "eslint ../scripts/merged-prs-last-24h.js --no-eslintrc --env node --parser-options=ecmaVersion:2022",
-    "format": "npx prettier --write '**/**/*.{js,jsx,ts,tsx,json,css,md}'",
-    "format:pr-script": "npx prettier --write ../scripts/merged-prs-last-24h.js"
+    "format": "prettier --write '**/**/*.{js,jsx,ts,tsx,json,css,md}'",
+    "format:pr-script": "prettier --write ../scripts/merged-prs-last-24h.js"
   },
   "nodemonConfig": {
     "delay": 1000,
