@@ -3,6 +3,7 @@ function createAposConfig() {
   return {
     shortName: 'apostrophe-site',
     baseUrl: process.env.BASE_URL || 'http://localhost:3000',
+
     // Session configuration
     modules: {
       // Core modules configuration
@@ -20,6 +21,7 @@ function createAposConfig() {
           },
         },
       },
+
       // Configure page types
       '@apostrophecms/rich-text-widget': {},
       '@apostrophecms/image-widget': {
@@ -32,6 +34,7 @@ function createAposConfig() {
           className: 'bp-video-widget',
         },
       },
+
       // Custom Widgets
       'home-hero-widget': {},
       'default-hero-widget': {},
@@ -52,6 +55,7 @@ function createAposConfig() {
        * 'links-buttons-widget': {},
        * 'team-carousel-widget': {},
        */
+
       // The main form module
       '@apostrophecms/form': {},
       // The form widget module, allowing editors to add forms to content areas
@@ -67,10 +71,12 @@ function createAposConfig() {
       '@apostrophecms/form-conditional-widget': {},
       '@apostrophecms/form-divider-widget': {},
       '@apostrophecms/form-group-widget': {},
+
       // Custom Pieces
       'team-members': {},
       projects: {},
       testimonials: {},
+
       // `asset` supports the project"s webpack build for client-side assets.
       asset: {},
       // The project"s first custom page type.
@@ -78,6 +84,7 @@ function createAposConfig() {
     },
   };
 }
+
 /* istanbul ignore next */
 if (require.main === module) {
   apostrophe(createAposConfig());
