@@ -29,6 +29,7 @@ Before you begin, ensure you have met the following requirements:
 - [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) installed on your local machine.
 - [Node.js](https://nodejs.org/) installed on your local machine.
 - [MongoDB Database Tools](https://www.mongodb.com/try/download/database-tools) installed on your local machine.
+- [GitLab CLI](https://docs.gitlab.com/ee/editor_extensions/gitlab_cli/) installed on your local machine. This is required for creating and updating pull requests using Cursor AI.
 
 ### Steps
 
@@ -216,6 +217,7 @@ To create or update a pull request using Cursor AI:
 3. Cursor AI will help you format a proper PR following our standardized format:
    - A descriptive title (max 120 characters)
    - A bullet list of changes without repeating the title
+4. GitLab CLI will be used in the background to create or update the pull request
 
 Example chat message:
 ```
