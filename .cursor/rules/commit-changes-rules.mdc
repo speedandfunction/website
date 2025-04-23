@@ -1,0 +1,55 @@
+---
+description: Rules for commiting and pushing changes
+globs: 
+alwaysApply: false
+---
+# Commit Changes Guidelines
+
+When making changes to the codebase, follow these guidelines for committing your work:
+
+## Analysis Process
+1. Run `git --no-pager status` to see which files have changed
+2. Run `git --no-pager diff` to see the actual changes in the code
+3. Analyze the changes to understand the purpose and impact
+
+## Commit Process
+1. Review and stage your changes
+2. Prepare a proper commit message (see format below)
+3. Commit the changes
+4. Push to remote repository
+
+## Commit Message Format
+- Title: One sentence summary (max 120 characters)
+- Empty line
+- Body: Bullet list of changes (with NO extra lines between bullet points)
+- No additional text
+
+## Example:
+```
+Add user authentication to login page
+
+- Add password validation function
+- Create JWT token generation
+- Add error handling for invalid credentials
+```
+
+## Git Command Format
+For creating commit messages with proper formatting, use one of these approaches:
+
+### Method 1: Build commit message using separate echo commands
+```
+# Create commit message file line by line
+echo "Your commit title" > /tmp/commit-msg.txt
+echo "" >> /tmp/commit-msg.txt
+echo "- First bullet point" >> /tmp/commit-msg.txt
+echo "- Second bullet point" >> /tmp/commit-msg.txt
+echo "- Third bullet point" >> /tmp/commit-msg.txt
+
+# Commit using the file and clean up
+git commit -F /tmp/commit-msg.txt && rm /tmp/commit-msg.txt
+```
+
+### Method 2: For simple commits, use the -m flag twice
+```
+git commit -m "Your commit title" -m "- First bullet point"
+```

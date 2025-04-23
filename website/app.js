@@ -50,6 +50,7 @@ function createAposConfig() {
       'leadership-carousel-widget': {},
       'insights-carousel-widget': {},
       'contact-widget': {},
+      'page-intro-widget': {},
       /*
        * 'links-buttons-widget': {},
        * 'team-carousel-widget': {},

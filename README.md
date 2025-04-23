@@ -29,6 +29,7 @@ Before you begin, ensure you have met the following requirements:
 - [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) installed on your local machine.
 - [Node.js](https://nodejs.org/) installed on your local machine.
 - [MongoDB Database Tools](https://www.mongodb.com/try/download/database-tools) installed on your local machine.
+- [GitLab CLI](https://docs.gitlab.com/ee/editor_extensions/gitlab_cli/) installed on your local machine. This is required for creating and updating pull requests using Cursor AI.
 
 ### Steps
 
@@ -69,7 +70,7 @@ docker exec -it apostrophe-cms node app @apostrophecms/user:add admin admin
 mv 'your link to backup file' dump.archive
 ```
 
-> ⚠️ Don’t forget to add `dump.archive` to your `.gitignore`.
+> ⚠️ Don't forget to add `dump.archive` to your `.gitignore`.
 
 #### 4.3 Copy the dump archive to the MongoDB container
 
@@ -164,7 +165,7 @@ Environment variables are stored in the `.env` file. For production, you should 
 
 ## DataBase Management
 
-- **Inport database**: `scripts/import_db_from_json.sh`
+- **Import database**: `scripts/import_db_from_json.sh`
 - **Export database**: `scripts/export_db_to_json.sh`
 
 For doing these script executable, run
@@ -186,3 +187,41 @@ To remove all data and start fresh:
 ```bash
 docker-compose down -v
 ```
+
+## Using Cursor AI for Git Operations
+
+### Committing Changes
+
+You can easily commit your changes using Cursor AI by following these steps:
+
+1. Make your changes to the codebase
+2. Type "commit changes" in the AI chat
+3. Cursor AI will help you create a commit message following our standardized format:
+   - A descriptive title (max 120 characters)
+   - An empty line
+   - A bullet list of specific changes
+
+Example chat message:
+```text
+commit changes
+```
+
+This will trigger Cursor AI to analyze your changes and help you create a properly formatted commit following the rules in `.cursor/rules/commit-changes-rules.mdc`.
+
+### Creating or Updating Pull Requests
+
+To create or update a pull request using Cursor AI:
+
+1. Make sure your changes are committed
+2. Type "create pull request" or "update pull request" in the AI chat
+3. Cursor AI will help you format a proper PR following our standardized format:
+   - A descriptive title (max 120 characters)
+   - A bullet list of changes without repeating the title
+4. GitLab CLI will be used in the background to create or update the pull request
+
+Example chat message:
+```text
+create pull request
+```
+
+This will trigger Cursor AI to help you create a properly formatted PR, following the rules in `.cursor/rules/pull-request-rules.mdc`.
