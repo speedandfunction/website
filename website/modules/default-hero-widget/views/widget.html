@@ -1,0 +1,16 @@
+{% set widget = data.widget %}
+
+<div class="default-hero">
+  {% if widget.backgroundImage %}
+  <div class="default-hero__background">
+    {% area widget, 'backgroundImage' %}
+  </div>
+  {% endif %}
+
+  <div class="default-hero__content">
+    <h1 class="default-hero__title">{{ widget.title }}</h1>
+    {% if widget.subtitle %}
+    <p class="default-hero__subtitle">{{ widget.subtitle }}</p>
+    {% endif %}
+  </div>
+</div>
