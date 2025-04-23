@@ -39,6 +39,7 @@ When creating a PR, ensure that:
 - All bullet points are written without extra lines between them
 - The body starts directly with bullet points (no introductory text)
 - When using GitHub CLI, use `--body-file` instead of `--body` to avoid escape character issues
+- Always create the PR body file in the `/tmp/` folder (e.g., `/tmp/pr-body.md`)
 In GitHub or similar platforms, preview the PR description to verify there are no unwanted
 line breaks between bullet points.
 
