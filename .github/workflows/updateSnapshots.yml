@@ -28,15 +28,15 @@ jobs:
         continue-on-error: true
 
       - name: Ensure snapshot directory exists
-        run: mkdir -p website/e2e/
+        run: mkdir -p e2e/
 
       - name: Copy snapshots from container
-        run: docker compose cp apostrophe:/app/e2e/screenshot-test.spec.js-snapshots website/e2e/
+        run: docker cp apostrophe-cms:/app/e2e/screenshot-test.spec.js-snapshots e2e/
 
       - name: Upload snapshots as artifact
         uses: actions/upload-artifact@v4
         with:
           name: playwright-snapshots
-          path: website/e2e/screenshot-test.spec.js-snapshots
+          path: e2e/screenshot-test.spec.js-snapshots
           overwrite: true
           retention-days: 20
