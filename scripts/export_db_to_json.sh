@@ -19,10 +19,14 @@ for collection in "${collections[@]}"
 do
   echo "📦 Exporting $collection..."
 
+  # Export formatted JSON by default (using --pretty flag internally)
   docker exec "$CONTAINER" mongoexport \
     --uri="mongodb://mongodb:27017/$DB" \
     --collection "$collection" \
     --out "/dump/${collection}.json" \
-    --jsonArray
+    --jsonArray \
+    --pretty
   docker cp "$CONTAINER:/dump/${collection}.json" "$EXPORT_DIR/${collection}.json"
 done
+
+echo "✅ Export completed successfully! Prettified JSON files are in the $EXPORT_DIR directory."
