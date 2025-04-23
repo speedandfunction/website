@@ -195,14 +195,14 @@ docker-compose down -v
 You can easily commit your changes using Cursor AI by following these steps:
 
 1. Make your changes to the codebase
-2. Type "commit message" in the AI chat
+2. Type "commit changes" in the AI chat
 3. Cursor AI will help you create a commit message following our standardized format:
    - A descriptive title (max 120 characters)
    - An empty line
    - A bullet list of specific changes
 
 Example chat message:
-```
+```text
 commit changes
 ```
 
@@ -220,8 +220,8 @@ To create or update a pull request using Cursor AI:
 4. GitLab CLI will be used in the background to create or update the pull request
 
 Example chat message:
-```
+```text
 create pull request
 ```
 
-This will trigger Cursor AI to help you create a properly formatted PR following the rules in `.cursor/rules/pull-request-rules.mdc`.
+This will trigger Cursor AI to help you create a properly formatted PR, following the rules in `.cursor/rules/pull-request-rules.mdc`.
