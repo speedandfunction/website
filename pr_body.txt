@@ -1,0 +1,5 @@
+- Update export script to format JSON output with proper indentation
+- Enhance import script to skip empty collections
+- Add meaningful success messages to both scripts
+
+These improvements make the database management scripts more reliable and user-friendly, helping developers better understand the import/export process status and reducing errors from malformed data.
