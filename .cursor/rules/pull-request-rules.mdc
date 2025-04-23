@@ -1,5 +1,5 @@
 ---
-description: 
+description: Rules for creating and updating pull requests
 globs: 
 alwaysApply: false
 ---

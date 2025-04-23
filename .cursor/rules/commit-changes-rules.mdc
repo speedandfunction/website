@@ -1,6 +1,6 @@
 ---
-description:
-globs:
+description: Rules for commiting and pushing changes
+globs: 
 alwaysApply: false
 ---
 # Commit Changes Guidelines
