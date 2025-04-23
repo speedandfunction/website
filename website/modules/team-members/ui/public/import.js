@@ -1,6 +1,6 @@
 apos.util.onReady(function () {
   const importButton = document.querySelector('[data-apos-import-peopleforce]');
-  
+
   if (importButton) {
     importButton.addEventListener('click', async function () {
       try {

@@ -5,7 +5,7 @@ module.exports = {
   options: {
     label: 'Testimonials Carousel',
     previewImage: 'png',
-    icon: 'flare-icon'
+    icon: 'flare-icon',
   },
   fields: {
     add: {
@@ -16,10 +16,10 @@ module.exports = {
           max: 1,
           widgets: {
             '@apostrophecms/rich-text': {
-              ...headingToolbar
-            }
-          }
-        }
+              ...headingToolbar,
+            },
+          },
+        },
       },
       _testimonials: {
         label: 'Testimonials',
@@ -34,10 +34,10 @@ module.exports = {
             position: 1,
             organization: 1,
             url: 1,
-            headshot: 1
-          }
-        }
-      }
-    }
-  }
+            headshot: 1,
+          },
+        },
+      },
+    },
+  },
 };
