@@ -202,10 +202,10 @@ You can easily commit your changes using Cursor AI by following these steps:
 
 Example chat message:
 ```
-commit message
+commit changes
 ```
 
-This will trigger Cursor AI to analyze your changes and help you create a properly formatted commit following the rules in `.cursor/rules/commit-message-rules.mdc`.
+This will trigger Cursor AI to analyze your changes and help you create a properly formatted commit following the rules in `.cursor/rules/commit-changes-rules.mdc`.
 
 ### Creating or Updating Pull Requests
 
