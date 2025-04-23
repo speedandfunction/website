@@ -1,3 +1,5 @@
+const mainWidgets = require('../../lib/mainWidgets');
+
 module.exports = {
   extend: '@apostrophecms/page-type',
   options: {
@@ -5,48 +7,28 @@ module.exports = {
   },
   fields: {
     add: {
-      main: {
+      header: {
         type: 'area',
         options: {
+          max: 1,
           widgets: {
-            '@apostrophecms/rich-text': {
-              toolbar: [
-                'styles',
-                '|',
-                'bold',
-                'italic',
-                'strike',
-                'link',
-                '|',
-                'bulletList',
-                'orderedList',
-              ],
-              styles: [
-                {
-                  tag: 'p',
-                  label: 'Paragraph (P)',
-                },
-                {
-                  tag: 'h3',
-                  label: 'Heading 3 (H3)',
-                },
-                {
-                  tag: 'h4',
-                  label: 'Heading 4 (H4)',
-                },
-              ],
-              insert: ['table', 'image'],
-            },
-            '@apostrophecms/image': {},
-            '@apostrophecms/video': {},
+            'default-hero': {},
           },
         },
       },
+      main: {
+        type: 'area',
+        options: mainWidgets,
+      },
     },
     group: {
-      basics: {
-        label: 'Basics',
-        fields: ['title', 'main'],
+      hero: {
+        label: 'Hero',
+        fields: ['title', 'header'],
+      },
+      mainArea: {
+        label: 'Main page content',
+        fields: ['main'],
       },
     },
   },
