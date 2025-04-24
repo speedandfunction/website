@@ -28,13 +28,25 @@ done
 
 for collection in "${collections[@]}"
 do
+  IMPORT_FILE="/import/${collection}.json"
+  
+  # Check if the file contains only an empty array
+  CONTENT=$(docker exec "$CONTAINER" cat "$IMPORT_FILE")
+  if [ "$CONTENT" == "[]" -o "$CONTENT" == "" ]; then
+    echo "⏭️  Skipping $collection - empty array"
+    
+    # Drop the collection if it exists
+    docker exec "$CONTAINER" mongosh --quiet --eval "db.getSiblingDB('$DB').${collection}.drop()"
+    continue
+  fi
+  
   echo "🔄 Importing $collection..."
 
   docker exec "$CONTAINER" mongoimport \
     --uri="mongodb://mongodb:27017/$DB" \
     --collection "$collection" \
     --drop \
-    --file "/import/${collection}.json" \
+    --file "$IMPORT_FILE" \
     --jsonArray
 done
 
