@@ -1,160 +1,175 @@
 .sf-header {
-	display: flex;
-	justify-content: space-between;
-	padding: 40px 0 80px;
-	align-items: center;
-	color: $gray-300;
-	@include breakpoint-medium {
-		padding: 60px 0;
-		margin-bottom: 60px;
-	}
-	.sf-logo {
-		font-size: 12px;
-		font-weight: 800;
-		z-index: 11;
-		text-transform: uppercase;
-		color: $gray-500;
-		text-decoration: none;
-		&:hover, &:focus {
-			color: $gray-500;
-		}
-		@include breakpoint-medium {
-			font-size: 14px;
-			color: $gray-300;
-		}
-	}
+  display: flex;
+  justify-content: space-between;
+  padding: 40px 0 80px;
+  align-items: center;
+  color: $gray-300;
+  @include breakpoint-medium {
+    padding: 60px 0;
+    margin-bottom: 60px;
+  }
+  .sf-logo {
+    font-size: 12px;
+    font-weight: 800;
+    z-index: 11;
+    text-transform: uppercase;
+    color: $gray-500;
+    text-decoration: none;
+    &:hover,
+    &:focus {
+      color: $gray-500;
+    }
+    @include breakpoint-medium {
+      font-size: 14px;
+      color: $gray-300;
+    }
+  }
 }
 #nav-icon {
-	width: 14px;
+  width: 14px;
   height: 8px;
   position: relative;
   margin: 0;
   transform: rotate(0deg);
-  transition: .3s ease-in-out;
+  transition: 0.3s ease-in-out;
   cursor: pointer;
-	@include breakpoint-medium {
-		width: 20px;
-		height: 10px;
-	}
-	span {
-		display: block;
-		position: absolute;
-		height: 1px;
-		width: 100%;
-		background: $gray-500;
-		border-radius: 10px;
-		opacity: 1;
-		left: 0;
-		transform: rotate(0deg);
-		transition: .25s ease-in-out;
-		@include breakpoint-medium {
-			background: $gray-300;
-		}
-		&:nth-child(1) {
-			top: 0;
-			transform-origin: left center;
-		}
-		&:nth-child(2) {
-			top: 8px;
-			transform-origin: left center;
-			@include breakpoint-medium {
-				top: 10px;
-			}
-		}
-	}
+  @include breakpoint-medium {
+    width: 20px;
+    height: 10px;
+  }
+  span {
+    display: block;
+    position: absolute;
+    height: 1px;
+    width: 100%;
+    background: $gray-500;
+    border-radius: 10px;
+    opacity: 1;
+    left: 0;
+    transform: rotate(0deg);
+    transition: 0.25s ease-in-out;
+    @include breakpoint-medium {
+      background: $gray-300;
+    }
+    &:nth-child(1) {
+      top: 0;
+      transform-origin: left center;
+    }
+    &:nth-child(2) {
+      top: 8px;
+      transform-origin: left center;
+      @include breakpoint-medium {
+        top: 10px;
+      }
+    }
+  }
 }
 .sf-menu {
-	display: flex;
-	align-items: center;
-	gap: 10px;
-	text-transform: uppercase;
-	&.open {
-		#nav-icon {
-			span {
-				background: $gray-500;
-				&:nth-child(1) {
-					transform: rotate(32deg);
-					top: 0;
-					left: 0;
-					@include breakpoint-medium {
-						transform: rotate(28deg);
-					}
-				}
-				&:nth-child(2) {
-					transform: rotate(-35deg);
-					top: 8px;
-					left: 0;
-					@include breakpoint-medium {
-						top: 10px;
-						transform: rotate(-30deg);
-					}
-				}
-			}
-		}
-	}
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-transform: uppercase;
+  &.open {
+    #nav-icon {
+      span {
+        background: $gray-500;
+        &:nth-child(1) {
+          transform: rotate(32deg);
+          top: 0;
+          left: 0;
+          @include breakpoint-medium {
+            transform: rotate(28deg);
+          }
+        }
+        &:nth-child(2) {
+          transform: rotate(-35deg);
+          top: 8px;
+          left: 0;
+          @include breakpoint-medium {
+            top: 10px;
+            transform: rotate(-30deg);
+          }
+        }
+      }
+    }
+  }
 }
 .sf-nav {
-	position: absolute;
-	background-color: $white;
-	top: -400%;
-	right: 0;
-	width: 100%;
-	z-index: 10;
-	transition: top ease-in-out .5s;
-	@include breakpoint-medium {
-		width: auto;
-		top: -140%;
-		right: 30px;
-	}
-	@include breakpoint-extra-extra-large {
-		right: 120px;
-	}
-	&.open {
-		top: 70px;
-		@include breakpoint-medium {
-			top: 120px;
-		}
-	}
-	&__list {
-		text-align: center;
+  position: absolute;
+  background-color: $white;
+  top: 70px;
+  right: 0;
+  width: 100%;
+  z-index: 10;
+  transform: translateY(-200%);
+  transition: transform 1s cubic-bezier(0.77, 0, 0.175, 1);
+  overflow: hidden;
+
+  @include breakpoint-medium {
+    width: auto;
+    right: 30px;
+  }
+
+  @include breakpoint-extra-extra-large {
+    right: 120px;
+  }
+
+  &.open {
+    transform: translateY(0);
+    @include breakpoint-medium {
+      transform: translateY(40px);
+    }
+  }
+
+  &__list {
+    text-align: center;
     list-style-type: none;
-		padding-right: 30px;
-		margin-left: 0;
-		margin-top: 0;
-		margin-bottom: 50px;
-		@include breakpoint-medium {
-			text-align: right;
-			padding-right: 10px;
-			@include border(border-right);
-			margin-bottom: 20px;
-		}
-	}
-	li {
-		position: relative;
-		margin-bottom: 20px;
-		a {
-			position: relative;
-			left: 0;
-			font-size: 10px;
-			color: $gray-300;
-			font-weight: 500;
-			text-transform: uppercase;
-			text-decoration: none;
-			@include transition(all);
-			&.active {
-				font-weight: 700;
-				color: $gray-500;
-			}
-			&:hover, &:focus {
-				font-weight: 700;
-				color: $gray-500;
-			}
-			@include breakpoint-medium {
-				font-size: 14px;
-				&:hover, &:focus {
-					padding-right: 10px;
-				}
-			}
-		}
-	}
+    padding-right: 30px;
+    margin-left: 0;
+    margin-top: 0;
+    margin-bottom: 50px;
+
+    @include breakpoint-medium {
+      text-align: right;
+      padding-right: 10px;
+      @include border(border-right);
+      margin-bottom: 20px;
+    }
+  }
+
+  li {
+    position: relative;
+    margin-bottom: 20px;
+
+    a {
+      position: relative;
+      left: 0;
+      font-size: 10px;
+      color: $gray-300;
+      font-weight: 500;
+      text-transform: uppercase;
+      text-decoration: none;
+      @include transition(all);
+
+      &.active {
+        font-weight: 700;
+        color: $gray-500;
+      }
+
+      &:hover,
+      &:focus {
+        font-weight: 700;
+        color: $gray-500;
+      }
+
+      @include breakpoint-medium {
+        font-size: 14px;
+
+        &:hover,
+        &:focus {
+          padding-right: 10px;
+        }
+      }
+    }
+  }
 }
