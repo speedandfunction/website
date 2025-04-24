@@ -16,9 +16,10 @@ When creating or updating a pull request, follow these guidelines:
 
 ## Pull Request Format
 - Title: One sentence summary (max 120 characters)
-- Body: Bullet list of changes only (with NO extra lines between bullet points)
+- Body: 
+  - Bullet list of changes (with NO extra lines between bullet points)
+  - After the list, add a brief explanation of why this PR is needed
 - Do NOT repeat the title in the body
-- No additional text or explanations
 
 ## Example:
 ```
@@ -28,6 +29,8 @@ Body:
 - Add password validation function
 - Create JWT token generation
 - Add error handling for invalid credentials
+
+This feature is necessary to secure user accounts and prevent unauthorized access to the application.
 ```
 
 ## PR Description Formatting
@@ -36,6 +39,7 @@ When creating a PR, ensure that:
 - All bullet points are written without extra lines between them
 - The body starts directly with bullet points (no introductory text)
 - When using GitHub CLI, use `--body-file` instead of `--body` to avoid escape character issues
+- Always create the PR body file in the `/tmp/` folder (e.g., `/tmp/pr-body.md`)
 In GitHub or similar platforms, preview the PR description to verify there are no unwanted
 line breaks between bullet points.
 
