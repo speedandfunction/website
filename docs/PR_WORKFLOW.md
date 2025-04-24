@@ -36,7 +36,7 @@ Once your changes are committed and pushed, create a pull request:
 1. Type "Create pull request" in the chat - this command will:
    - Generate `title` and `description` according to the PR guidelines
    - Create or update the PR with generated `title` and `decription`
-![Create Pull Request Example](docs/CreatePullRequest.png)
+![Create Pull Request Example](/docs/CreatePullRequest.png)
 
 
 ## Workflow Diagram
