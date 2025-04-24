@@ -104,6 +104,8 @@
   transform: translateY(-200%);
   transition: transform 1s cubic-bezier(0.77, 0, 0.175, 1);
   overflow: hidden;
+  max-height: calc(100vh - 70px);
+  overflow-y: auto;
 
   @include breakpoint-medium {
     width: auto;
