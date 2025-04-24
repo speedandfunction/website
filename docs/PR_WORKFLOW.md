@@ -1,4 +1,4 @@
-# Pull Request Workflow
+# Pull Request Workflow via Cursor
 
 This document outlines the standard workflow for making changes to the codebase through Pull Requests.
 
@@ -21,7 +21,7 @@ Replace `your-feature-name` with a descriptive name for your changes.
 
 ### 2. Make and Commit Changes
 
-After making your changes, use the "I" chat to commit them:
+After making your changes, use the "AI" chat to commit them:
 
 1. Review the changes
 2. Type "Commit changes" in the chat - this command will:
