@@ -27,15 +27,17 @@ After making your changes, use the "AI" chat to commit them:
 2. Type "Commit changes" in the chat - this command will:
    - Create a properly formatted commit message following the commit guidelines
    - Push your changes to the remote repository
+![Commit Changes Example](docs/CommitChanges.png)
 
 ### 3. Create a Pull Request
 
 Once your changes are committed and pushed, create a pull request:
 
 1. Type "Create pull request" in the chat - this command will:
-   - Set the PR title and description according to the PR guidelines
-   - Request reviewers if needed
-   - Complete the PR creation
+   - Generate `title` and `description` according to the PR guidelines
+   - Create or update the PR with generated `title` and `decription`
+![Create Pull Request Example](docs/CreatePullRequest.png)
+
 
 ## Workflow Diagram
 
