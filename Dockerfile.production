@@ -1,0 +1,56 @@
+FROM node:20-alpine AS builder
+
+# Create app directory
+WORKDIR /app
+
+# Copy package files
+COPY website/package*.json ./
+
+# Install dependencies
+RUN npm ci
+
+# Copy source
+COPY website/ ./
+
+# Build the application
+RUN npm run build
+
+FROM node:20-alpine AS runner
+
+WORKDIR /app
+
+# Copy package files
+COPY website/package*.json ./
+
+# Install production dependencies only
+RUN npm ci --only=production
+
+# Copy built application from builder
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/modules ./modules
+COPY --from=builder /app/lib ./lib
+COPY --from=builder /app/app.js ./app.js
+
+# Create a non-root user
+RUN addgroup --system --gid 1001 nodejs && \
+    adduser --system --uid 1001 nextjs --ingroup nodejs
+
+# Set proper ownership
+RUN chown -R nextjs:nodejs /app
+
+# Switch to non-root user
+USER nextjs
+
+# Expose the port
+EXPOSE 3000
+
+# Set production environment
+ENV NODE_ENV production
+ENV PORT 3000
+
+# Define healthcheck
+HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 \
+  CMD wget --no-verbose --tries=1 --spider http://localhost:${PORT}/ || exit 1
+
+# Start the application
+CMD ["npm", "run", "serve"] 
