@@ -40,20 +40,18 @@ Once your changes are committed and pushed, create a pull request:
 ## Workflow Diagram
 
 ```mermaid
-flowchart TD
+flowchart LR
     A[Start] --> B[Checkout main branch]
     B --> C[Pull latest changes]
     C --> D[Create feature branch]
     D --> E[Make code changes]
     E --> F[Review changes]
-    F --> G[Commit changes via I-chat]
-    G --> H[Push to remote]
-    H --> I[Create PR via I-chat]
+    F --> G[Commit changes via AI chat]
+    G --> I[Create PR via AI chat]
     I --> J[PR review process]
-    J --> K[Merge to main]
     
     style A fill:#f9f,stroke:#333,stroke-width:2px
-    style K fill:#9f9,stroke:#333,stroke-width:2px
+    style J fill:#9f9,stroke:#333,stroke-width:2px
 ```
 
 ## Notes
