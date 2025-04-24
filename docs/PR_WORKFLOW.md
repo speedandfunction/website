@@ -27,7 +27,7 @@ After making your changes, use the "AI" chat to commit them:
 2. Type "Commit changes" in the chat - this command will:
    - Create a properly formatted commit message following the commit guidelines
    - Push your changes to the remote repository
-![Commit Changes Example](docs/CommitChanges.png)
+<img src="/docs/CommitChanges.png" alt="Commit Changes Example" width="320" />
 
 ### 3. Create a Pull Request
 
