@@ -1,7 +1,7 @@
 {% import 'fragments/utilities.html' as utilities %}
 
-<div class="sf-buttons-group" data-links-widget>
+<div class="sf-buttons-group" data-links-widget data-alignment="{{ data.widget.alignment }}">
 	{% for item in data.widget.buttonCollection %}
 		{% render utilities.button(item.button, item.buttonConfig) %}
 	{% endfor %}
-	</div>
+</div>
