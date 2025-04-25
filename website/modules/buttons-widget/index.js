@@ -9,6 +9,25 @@ module.exports = {
   },
   fields: {
     add: {
+      alignment: {
+        label: 'Alignment',
+        type: 'radio',
+        choices: [
+          {
+            label: 'Left⬅️',
+            value: 'left',
+          },
+          {
+            label: 'Center↕️',
+            value: 'center',
+          },
+          {
+            label: 'Right➡️',
+            value: 'right',
+          },
+        ],
+        def: 'center',
+      },
       buttonCollection: {
         label: 'Button Collection',
         type: 'array',
