@@ -11,7 +11,7 @@
         "-e",
         "GITHUB_TOOLSETS=all",
         "--env-file",
-        "~/.cursor/secrets/.env",
+        "${HOME}/.cursor/secrets/.env",
         "ghcr.io/github/github-mcp-server"
       ],
       "env": {}
