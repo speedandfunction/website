@@ -1,5 +1,8 @@
 name: 'Deploy to Railway'
 
+permissions:
+  contents: read
+
 on:
   push:
     branches:
