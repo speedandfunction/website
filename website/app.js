@@ -1,4 +1,6 @@
 const apostrophe = require('apostrophe');
+require('dotenv').config({ path: '../.env' });
+
 function createAposConfig() {
   return {
     shortName: 'apostrophe-site',
@@ -51,8 +53,6 @@ function createAposConfig() {
       'insights-carousel-widget': {},
       'contact-widget': {},
       'page-intro-widget': {},
-      'whitespace-widget': {},
-
       /*
        * 'links-buttons-widget': {},
        * 'team-carousel-widget': {},
@@ -83,7 +83,6 @@ function createAposConfig() {
       asset: {},
       // The project"s first custom page type.
       'default-page': {},
-      '@apostrophecms/import-export': {},
     },
   };
 }
