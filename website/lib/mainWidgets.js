@@ -11,6 +11,8 @@ module.exports = {
         about: {},
         'simple-cards': {},
         'links-buttons': {},
+        '@apostrophecms/rich-text': {},
+        'buttons': {},
       },
       columns: 2,
     },
