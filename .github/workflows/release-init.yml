@@ -16,4 +16,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           branch: releases/v.${{ inputs.release-version }}
-          sha: '${{ github.event.pull_request.head.sha }}'
+          sha: '${{ github.sha }}'
