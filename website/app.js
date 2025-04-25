@@ -11,6 +11,8 @@ function createAposConfig() {
       // Core modules configuration
       '@apostrophecms/express': {
         options: {
+          port: process.env.PORT || 3000,
+          address: '0.0.0.0',
           session: {
             // If using Redis (recommended for production)
             secret: process.env.SESSION_SECRET || 'changeme',
@@ -46,6 +48,12 @@ function createAposConfig() {
                 next();
               },
             },
+            afterListen(args) {
+              const address = self.apos.httpServer.address();
+              console.log(
+                `ApostropheCMS is now listening on ${address.address}:${address.port}`,
+              );
+            },
           };
         },
       },
@@ -79,6 +87,7 @@ function createAposConfig() {
       'insights-carousel-widget': {},
       'contact-widget': {},
       'page-intro-widget': {},
+      'whitespace-widget': {},
       /*
        * 'links-buttons-widget': {},
        * 'team-carousel-widget': {},
@@ -116,12 +125,15 @@ function createAposConfig() {
 /* istanbul ignore next */
 if (require.main === module) {
   console.log('Starting ApostropheCMS with HTTP request logging enabled...');
+  console.log(`Environment PORT: ${process.env.PORT || 'not set'}`);
+
   apostrophe(createAposConfig())
     .then(() => {
       console.log('ApostropheCMS initialization completed');
     })
     .catch((error) => {
       console.error('ApostropheCMS initialization failed:', error);
+      console.error(error.stack);
       throw new Error(`Failed to initialize ApostropheCMS: ${error.message}`);
     });
 }
