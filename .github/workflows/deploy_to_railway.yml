@@ -27,13 +27,9 @@ on:
         default: false
 
 jobs:
-  deploy-to-railway:
+  build-and-push-docker-image:
     runs-on: ubuntu-latest
-    container: ghcr.io/railwayapp/cli:latest
     environment: Development
-    env:
-      SVC_ID: my-service-id
-      RAILWAY_TOKEN: ${{ secrets.RAILWAY_GITHUB_ACTIONS }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -56,6 +52,16 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           
+
+  deploy-to-railway:
+    needs: build-and-push-docker-image
+    runs-on: ubuntu-latest
+    container: ghcr.io/railwayapp/cli:latest
+    environment: Development
+    env:
+      SVC_ID: my-service-id
+      RAILWAY_TOKEN: ${{ secrets.RAILWAY_GITHUB_ACTIONS }}
+    steps:
       - name: Apply new image to Railway
         run:  railway up --service=${{ env.SVC_ID  }}
           
