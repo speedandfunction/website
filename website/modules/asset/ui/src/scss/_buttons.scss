@@ -63,7 +63,15 @@
 	}
 	@include breakpoint-medium {
 		display: flex;
-		justify-content: center;
+		&[data-alignment="left"] {
+			justify-content: flex-start;
+		}
+		&[data-alignment="center"] {
+			justify-content: center;
+		}
+		&[data-alignment="right"] {
+			justify-content: flex-end;
+		}
 	}
 }
 // Carousel controls
