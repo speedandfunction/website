@@ -13,6 +13,7 @@ module.exports = {
         'links-buttons': {},
         '@apostrophecms/rich-text': {},
         'buttons': {},
+        'whitespace': {},
       },
       columns: 2,
     },
