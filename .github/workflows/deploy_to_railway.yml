@@ -21,7 +21,7 @@ on:
         - Production
         default: Development
       restore-db:
-        description: 'Restore database to original state (Reset database for Development and restore anon dump for Test and Pre-prod)'
+        description: 'Restore database to original state (Reset database for Development and restore anon dump for Staging and Production)'
         required: false
         type: boolean
         default: false
