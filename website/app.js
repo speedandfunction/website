@@ -22,6 +22,32 @@ function createAposConfig() {
             },
           },
         },
+        handlers(self) {
+          return {
+            '@apostrophecms/express:middleware': {
+              addRequestLogging(req, res, next) {
+                console.log(
+                  `[${new Date().toISOString()}] ${req.method} ${req.url}`,
+                );
+
+                // Log request details
+                const startTime = Date.now();
+
+                // Override end to calculate response time
+                const originalEnd = res.end;
+                res.end = function (...args) {
+                  const responseTime = Date.now() - startTime;
+                  console.log(
+                    `[${new Date().toISOString()}] RESPONSE: ${req.method} ${req.url} ${res.statusCode} - ${responseTime}ms`,
+                  );
+                  originalEnd.apply(res, args);
+                };
+
+                next();
+              },
+            },
+          };
+        },
       },
 
       // Configure page types
@@ -89,6 +115,15 @@ function createAposConfig() {
 
 /* istanbul ignore next */
 if (require.main === module) {
-  apostrophe(createAposConfig());
+  console.log('Starting ApostropheCMS with HTTP request logging enabled...');
+  apostrophe(createAposConfig())
+    .then(() => {
+      console.log('ApostropheCMS initialization completed');
+    })
+    .catch((error) => {
+      console.error('ApostropheCMS initialization failed:', error);
+      throw new Error(`Failed to initialize ApostropheCMS: ${error.message}`);
+    });
 }
+
 module.exports = { createAposConfig };
