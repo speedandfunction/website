@@ -30,6 +30,7 @@ jobs:
   deploy-to-railway:
     runs-on: ubuntu-latest
     container: ghcr.io/railwayapp/cli:latest
+    environment: Development
     env:
       SVC_ID: my-service-id
       RAILWAY_TOKEN: ${{ secrets.RAILWAY_GITHUB_ACTIONS }}
