@@ -1,0 +1,37 @@
+name: 'Deploy to Railway'
+
+permissions:
+  contents: read
+
+on:
+  push:
+    branches:
+      - main
+      - 'releases/**'
+
+  workflow_dispatch:
+    inputs:
+      deploy-env:
+        description: 'Environment to deploy'
+        required: true
+        type: choice
+        options:
+        - Development
+        - Staging
+        - Production
+        default: Development
+      restore-db:
+        description: 'Restore database to original state (Reset database for Development and restore anon dump for Staging and Production)'
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  deploy-to-railway:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Do nothing
+        run: echo "Do nothing here"
+
