@@ -48,7 +48,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: docker.io/${{ secrets.DOCKERHUB_USERNAME }}/snf-website-apostrophe-cms:build
+          tags: docker.io/${{ secrets.DOCKERHUB_USERNAME }}/snf-website-apostrophe-cms:${{ env.ENV_NAME }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
           
