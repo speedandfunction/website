@@ -28,6 +28,7 @@ on:
 
 jobs:
   deploy-to-railway:
+    name: Deploy to Railway
     runs-on: ubuntu-latest
     container: node:22
     environment: 'Development'
@@ -41,6 +42,8 @@ jobs:
       - name: Apply new image to Railway
         run:  railway up --service=apostrophe-cms
   restore-db:
+    name: Restore DB
+    needs: deploy-to-railway
     environment: 'Development'
     runs-on: ubuntu-latest
     if: ${{inputs.restore-db == true }}

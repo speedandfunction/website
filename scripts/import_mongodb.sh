@@ -5,11 +5,6 @@
 
 set -e
 
-
-# MongoDB connection string (fixed format)
-MONGO_URI="mongodb://mongo:GkkZwYXEFAuaXvkCypSziFJgGLBoAJdg@switchyard.proxy.rlwy.net:13276/?authSource=admin"
-DB_NAME="test"  # Database name
-
 # Default options - drop collections by default
 DROP_OPTION="--drop"
 
