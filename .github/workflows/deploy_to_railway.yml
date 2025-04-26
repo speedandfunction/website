@@ -59,10 +59,9 @@ jobs:
     container: ghcr.io/railwayapp/cli:latest
     environment: Development
     env:
-      SVC_ID: my-service-id
       RAILWAY_TOKEN: ${{ secrets.RAILWAY_GITHUB_ACTIONS }}
     steps:
       - name: Apply new image to Railway
-        run:  railway up --service=${{ env.SVC_ID  }}
+        run:  railway up --service=${{ env.RAILWAY_SERVICE_ID  }} --detach
           
 
