@@ -57,4 +57,5 @@ jobs:
         run: ./scripts/drop_collections.sh
       - name: Update DB
         run: ./scripts/import_mongodb.sh ./export
+        shell: bash
 
