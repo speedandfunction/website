@@ -45,6 +45,7 @@
     "@barba/core": "^2.10.3",
     "apostrophe": "^4.15.0",
     "connect-redis": "^7.1.1",
+    "dotenv": "^16.5.0",
     "express": "^5.1.0",
     "googleapis": "^148.0.0",
     "gsap": "^3.12.7",
