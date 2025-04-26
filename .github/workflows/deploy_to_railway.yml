@@ -56,11 +56,15 @@ jobs:
   deploy-to-railway:
     needs: build-and-push-docker-image
     runs-on: ubuntu-latest
-    container: ghcr.io/railwayapp/cli:latest
+    container: node:22
     environment: 'Development'
     env:
       RAILWAY_TOKEN: ${{ secrets.RAILWAY_GITHUB_ACTIONS }}
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: install
+        run: npm i -g @railway/cli
       - name: Apply new image to Railway
         run:  railway up --service=apostrophe-cms
           
