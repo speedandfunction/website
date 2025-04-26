@@ -43,7 +43,7 @@ jobs:
   restore-db:
     environment: 'Development'
     runs-on: ubuntu-latest
-    if: github.event_name == 'workflow_dispatch' && inputs.restore-db == 'true'
+    if: ${{inputs.restore-db == true }}
     env:
       MONGO_URI: ${{ secrets.MONGO_URI }}
       DB_NAME: ${{ vars.DB_NAME }}
