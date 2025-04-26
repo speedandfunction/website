@@ -40,5 +40,18 @@ jobs:
         run: npm i -g @railway/cli
       - name: Apply new image to Railway
         run:  railway up --service=apostrophe-cms
-          
+  restore-db:
+    environment: 'Development'
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch' && inputs.restore-db == 'true'
+    env:
+      MONGO_URI: ${{ secrets.MONGO_URI }}
+      DB_NAME: ${{ vars.DB_NAME }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Drop DB
+        run: ./scripts/drop_collections.sh
+      - name: Update DB
+        run: ./scripts/import_mongodb.sh ./export
 
