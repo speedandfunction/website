@@ -35,14 +35,16 @@ fi
 
 # Test connection first
 echo "Testing MongoDB connection..."
-if ! docker run --rm mongo:latest mongosh "$MONGO_URI" --eval "db.serverStatus()" > /dev/null 2>&1; then
+if ! docker run --rm mongo:latest mongosh "$MONGO_URI" --quiet \
+    --eval "db.getSiblingDB('$DB_NAME').serverStatus()" > /dev/null 2>&1; then
     echo "Error: Failed to connect to MongoDB. Please check your connection string and credentials."
-    echo "Connection string: $MONGO_URI"
+    echo "Connection host: ${MONGO_URI#*//}"  # hide user:pass@
+    echo "Connecting to database: $DB_NAME"
     exit 1
 fi
 
 echo "Connection successful!"
-echo "Importing MongoDB data from $JSON_DIR to $MONGO_URI (database: $DB_NAME)"
+echo "Importing MongoDB data from $JSON_DIR to host ${MONGO_URI#*//} (database: $DB_NAME)"
 
 # Function to import a JSON file
 import_file() {
