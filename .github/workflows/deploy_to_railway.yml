@@ -62,6 +62,6 @@ jobs:
       RAILWAY_TOKEN: ${{ secrets.RAILWAY_GITHUB_ACTIONS }}
     steps:
       - name: Apply new image to Railway
-        run:  railway up --service=${{ vars.RAILWAY_SERVICE_ID  }} --detach
+        run:  railway up --environment=${{ vars.RAILWAY_ENVIRONMENT_ID }} --service=${{ vars.RAILWAY_SERVICE_ID  }} --detach
           
 
