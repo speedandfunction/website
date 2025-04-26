@@ -1,4 +1,8 @@
 #!/bin/bash
+set -euo pipefail
+
+: "${MONGO_URI:?Environment variable MONGO_URI must be set}"
+: "${DB_NAME:?Environment variable DB_NAME must be set}"
 
 # MongoDB import script
 # Usage: ./import_mongodb.sh <json_directory> [--no-drop]
