@@ -50,30 +50,29 @@ import_file() {
     # Skip empty files
     if [ ! -s "$FILE" ]; then
         echo "Skipping empty file: $FILENAME"
-        return 0
+        # Use true command instead of return 0
+        true
+    else
+        echo "Importing $FILENAME to collection $COLLECTION_NAME..."
+        
+        # Check if the file starts with [ which indicates a JSON array
+        local TYPE_OPTS=""
+        if grep -q "^\[" "$FILE"; then
+            TYPE_OPTS="--jsonArray"
+        fi
+        
+        # Use mongoimport to import the file
+        docker run --rm -v "$JSON_DIR:/data" mongo:latest \
+            mongoimport --uri="$MONGO_URI" \
+            --db="$DB_NAME" \
+            --collection="$COLLECTION_NAME" \
+            --file="/data/$(basename "$FILE")" \
+            $DROP_OPTION \
+            $TYPE_OPTS
+        
+        # Capture exit status directly without return
+        # This will propagate to the if statement that calls the function
     fi
-    
-    echo "Importing $FILENAME to collection $COLLECTION_NAME..."
-    
-    # Check if the file starts with [ which indicates a JSON array
-    local TYPE_OPTS=""
-    if grep -q "^\[" "$FILE"; then
-        TYPE_OPTS="--jsonArray"
-    fi
-    
-    # Use mongoimport to import the file
-    if ! docker run --rm -v "$JSON_DIR:/data" mongo:latest \
-        mongoimport --uri="$MONGO_URI" \
-        --db="$DB_NAME" \
-        --collection="$COLLECTION_NAME" \
-        --file="/data/$(basename "$FILE")" \
-        $DROP_OPTION \
-        $TYPE_OPTS; then
-        echo "Warning: Failed to import $FILENAME"
-        return 1
-    fi
-    
-    return 0
 }
 
 # Counter for successful imports
@@ -84,6 +83,8 @@ for JSON_FILE in "$JSON_DIR"/*.json; do
     if [ -f "$JSON_FILE" ]; then
         if import_file "$JSON_FILE"; then
             ((SUCCESSFUL_IMPORTS++))
+        else
+            echo "Warning: Failed to import $(basename "$JSON_FILE")"
         fi
     fi
 done
