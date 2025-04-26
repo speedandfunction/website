@@ -3,7 +3,6 @@
 # MongoDB import script
 # Usage: ./import_mongodb.sh <json_directory> [--no-drop]
 
-set -e
 
 # Default options - drop collections by default
 DROP_OPTION="--drop"
