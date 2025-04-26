@@ -29,7 +29,7 @@ on:
 jobs:
   build-and-push-docker-image:
     runs-on: ubuntu-latest
-    environment: Development
+    environment: 'Development'
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -57,7 +57,7 @@ jobs:
     needs: build-and-push-docker-image
     runs-on: ubuntu-latest
     container: ghcr.io/railwayapp/cli:latest
-    environment: Development
+    environment: 'Development'
     env:
       RAILWAY_TOKEN: ${{ secrets.RAILWAY_GITHUB_ACTIONS }}
     steps:
