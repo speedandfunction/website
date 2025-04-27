@@ -25,7 +25,12 @@ if [ $# -lt 1 ]; then
     exit 1
 fi
 
-JSON_DIR=$(realpath "$1")
+# Use realpath if available, otherwise fallback to readlink -f
+if command -v realpath >/dev/null; then
+    JSON_DIR=$(realpath "$1")
+else
+    JSON_DIR=$(readlink -f "$1")
+fi
 
 # Check if the directory exists
 if [ ! -d "$JSON_DIR" ]; then
@@ -49,7 +54,8 @@ echo "Importing MongoDB data from $JSON_DIR to host ${MONGO_URI#*//} (database: 
 # Function to import a JSON file
 import_file() {
     local FILE=$1
-    local FILENAME=$(basename "$FILE")
+    local FILENAME
+    FILENAME=$(basename "$FILE")
     local COLLECTION_NAME="${FILENAME%.*}"
     
     # Skip empty files
