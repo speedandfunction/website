@@ -53,14 +53,14 @@ fi
 
 # Set docker command based on local flag
 if [ "$USE_LOCAL" = true ]; then
-    DOCKER_CMD="docker exec -i $CONTAINER"
+    DOCKER_CMD=(docker exec -i "$CONTAINER")
 else
-    DOCKER_CMD="docker run --rm -v $JSON_DIR:/data mongo:latest"
+    DOCKER_CMD=(docker run -i --rm mongo:latest)
 fi
 
 # Test connection first
 echo "Testing MongoDB connection..."
-if ! $DOCKER_CMD mongosh "$MONGO_URI" --quiet \
+if ! "${DOCKER_CMD[@]}" mongosh "$MONGO_URI" --quiet \
     --eval "db.getSiblingDB('$DB_NAME').serverStatus()" > /dev/null 2>&1; then
     echo "Error: Failed to connect to MongoDB. Please check your connection string and credentials."
     echo "Connection host: ${MONGO_URI#*//}"  # hide user:pass@
@@ -93,10 +93,10 @@ import_file() {
         fi
         
         # Common mongoimport arguments
-        local IMPORT_ARGS="--uri=$MONGO_URI --db=$DB_NAME --collection=$COLLECTION_NAME $DROP_OPTION $TYPE_OPTS"
+        local IMPORT_ARGS=(--uri="$MONGO_URI" --db="$DB_NAME" --collection="$COLLECTION_NAME" $DROP_OPTION $TYPE_OPTS)
         
         # Use mongoimport with stdin redirection for both modes
-        $DOCKER_CMD mongoimport $IMPORT_ARGS < "$FILE"
+        "${DOCKER_CMD[@]}" mongoimport "${IMPORT_ARGS[@]}" < "$FILE"
         
         # Capture exit status directly without return
         # This will propagate to the if statement that calls the function
