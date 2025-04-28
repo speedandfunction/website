@@ -1,6 +1,6 @@
 {% import 'fragments/utilities.html' as utilities %}
 
-<section data-links-widget class="sf-links-do">
+<section data-links-widget class="sf-links-do" {% if data.widget.textSpacing %}style="--widget-text-spacing: {{ data.widget.textSpacing }}px"{% endif %}>
 	<div class="sf-container">
 		<div class="sf-intro">
 			{% area data.widget, 'intro' %}   

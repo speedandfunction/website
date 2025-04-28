@@ -28,7 +28,7 @@
 {% fragment button(link, config) %}
   {% set path = getPath(link) %}
   {% if path|length > 0 %}
-    <a class="sf-button{% if config.buttonStyle %} {{ config.buttonStyle }}{% endif %}" href="{{ path  }}" {% if link.target[0] === '_blank' %} target="_blank" {% endif %}><span>{{ link.linkTitle or path }}</span></a>
+    <a class="sf-button{% if config.buttonStyle %} {{ config.buttonStyle }}{% endif %}" href="{{ path  }}" {% if link.target[0] === '_blank' %} target="_blank" {% endif %} {% if config.textSpacing %} style="--button-text-spacing: {{ config.textSpacing }}px"{% endif %}><span>{{ link.linkTitle or path }}</span></a>
   {% elif link.linkTitle %}
     {{ link.linkTitle }}
   {% endif %}
@@ -58,9 +58,7 @@
               {# image.first attaches this property of the image piece for you #}
               alt="{{ attachment._alt or '' }}"
               {# Responsive design: make sure an editor-chosen focal point remains visible #}
-              {% if apos.attachment.hasFocalPoint(attachment) %}
-                style="object-position: {{ apos.attachment.focalPointToObjectPosition(attachment) }}"
-              {%- endif -%}
+              {% if apos.attachment.hasFocalPoint(attachment) %}style="object-position: {{ apos.attachment.focalPointToObjectPosition(attachment) }}"{% endif %}
             />
           {% endif %}
           <div class="card-swiper-wrap">
