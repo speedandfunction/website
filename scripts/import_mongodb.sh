@@ -93,7 +93,9 @@ import_file() {
         fi
         
         # Common mongoimport arguments
-        local IMPORT_ARGS=(--uri="$MONGO_URI" --db="$DB_NAME" --collection="$COLLECTION_NAME" $DROP_OPTION $TYPE_OPTS)
+        local IMPORT_ARGS=(--uri="$MONGO_URI" --db="$DB_NAME" --collection="$COLLECTION_NAME")
+        if [[ -n $DROP_OPTION ]]; then IMPORT_ARGS+=("$DROP_OPTION"); fi
+        if [[ -n $TYPE_OPTS ]]; then IMPORT_ARGS+=("$TYPE_OPTS"); fi
         
         # Use mongoimport with stdin redirection for both modes
         "${DOCKER_CMD[@]}" mongoimport "${IMPORT_ARGS[@]}" < "$FILE"
