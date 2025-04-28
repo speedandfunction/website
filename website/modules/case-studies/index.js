@@ -51,10 +51,6 @@ module.exports = {
         label: 'Basics',
         fields: ['title', 'articleDate', 'authorInfo', '_tags'],
       },
-      content: {
-        label: 'Content',
-        fields: ['heroImage', 'summary', 'heroBanner', 'internalContent'],
-      },
     },
   },
   columns: {
