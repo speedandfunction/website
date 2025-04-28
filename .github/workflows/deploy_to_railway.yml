@@ -1,0 +1,61 @@
+name: 'Deploy to Railway'
+
+permissions:
+  contents: read
+
+on:
+  push:
+    branches:
+      - main
+      - 'releases/**'
+
+  workflow_dispatch:
+    inputs:
+      deploy-env:
+        description: 'Environment to deploy'
+        required: true
+        type: choice
+        options:
+        - Development
+        - Staging
+        - Production
+        default: Development
+      restore-db:
+        description: 'Restore database to original state (Reset database for Development and restore anon dump for Staging and Production)'
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  deploy-to-railway:
+    name: Deploy to Railway
+    runs-on: ubuntu-latest
+    container: node:22
+    environment: 'Development'
+    env:
+      RAILWAY_TOKEN: ${{ secrets.RAILWAY_GITHUB_ACTIONS }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Install Railway CLI
+        run: npm i -g @railway/cli
+      - name: Apply new image to Railway
+        run:  railway up --service=apostrophe-cms
+  restore-db:
+    name: Restore DB
+    needs: deploy-to-railway
+    environment: 'Development'
+    runs-on: ubuntu-latest
+    if: ${{inputs.restore-db == true }}
+    env:
+      MONGO_URI: ${{ secrets.MONGO_URI }}
+      DB_NAME: ${{ vars.DB_NAME }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Drop DB
+        run: ./scripts/drop_collections.sh
+      - name: Update DB
+        run: ./scripts/import_mongodb.sh ./export
+        shell: bash
+
