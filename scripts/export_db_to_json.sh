@@ -25,7 +25,8 @@ do
     --collection "$collection" \
     --out "/dump/${collection}.json" \
     --jsonArray \
-    --pretty
+    --pretty \
+    --sort '{"_id": 1}'
   docker cp "$CONTAINER:/dump/${collection}.json" "$EXPORT_DIR/${collection}.json"
 done
 
