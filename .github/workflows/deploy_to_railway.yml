@@ -16,12 +16,17 @@ on:
         required: true
         type: choice
         options:
-        - Development
-        - Staging
-        - Production
+          - Development
+          - Staging
+          - Production
         default: Development
       restore-db:
         description: 'Restore database to original state (Reset database for Development and restore anon dump for Staging and Production)'
+        required: false
+        type: boolean
+        default: false
+      create-admin:
+        description: 'Create first admin user'
         required: false
         type: boolean
         default: false
@@ -40,7 +45,7 @@ jobs:
       - name: Install Railway CLI
         run: npm i -g @railway/cli
       - name: Apply new image to Railway
-        run:  railway up --service=apostrophe-cms
+        run: railway up --service=apostrophe-cms
   restore-db:
     name: Restore DB
     needs: deploy-to-railway
@@ -50,12 +55,27 @@ jobs:
     env:
       MONGO_URI: ${{ secrets.MONGO_URI }}
       DB_NAME: ${{ vars.DB_NAME }}
+      ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+      - name: Install MongoDB Tools
+        run: |
+          wget https://fastdl.mongodb.org/tools/db/mongodb-database-tools-ubuntu2204-x86_64-100.9.4.deb
+          sudo dpkg -i mongodb-database-tools-ubuntu2204-x86_64-100.9.4.deb
+          wget https://downloads.mongodb.com/compass/mongodb-mongosh_2.1.1_amd64.deb
+          sudo dpkg -i mongodb-mongosh_2.1.1_amd64.deb
       - name: Drop DB
         run: ./scripts/drop_collections.sh
       - name: Update DB
         run: ./scripts/import_mongodb.sh ./export
         shell: bash
-
+      - name: Check environment variables
+        run: |
+          echo "MONGO_URI is set: ${MONGO_URI:+yes}"
+          echo "DB_NAME is set: ${DB_NAME:+yes}"
+          echo "ADMIN_PASSWORD is set: ${ADMIN_PASSWORD:+yes}"
+      - name: Create admin user
+        if: ${{ inputs.create-admin == true }}
+        run: ./scripts/create-admin-user.sh
+        shell: bash
