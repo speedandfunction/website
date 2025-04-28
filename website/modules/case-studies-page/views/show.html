@@ -1,0 +1,19 @@
+{% extends "layout.html" %} {% block main %}
+<div>
+  {{ data.piece.title }} {% if data.piece._tags %}
+  <div>
+    <ul>
+      {% for tag in data.piece._tags %}
+      <li>
+        <a
+          href="{{ data.piece._parentUrl | build({}, { tags: { $addToSet: tag.slug } }) }}"
+        >
+          {{ tag.title }}
+        </a>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% endif %}
+</div>
+{% endblock main %}

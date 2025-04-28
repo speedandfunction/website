@@ -84,9 +84,9 @@ function createAposConfig() {
       // The project"s first custom page type.
       'default-page': {},
       '@apostrophecms/import-export': {},
-      'article-tags': {},
-      'tfp-articles': {},
-      'tfp-articles-page': {},
+      'cases-tags': {},
+      'case-studies': {},
+      'case-studies-page': {},
     },
   };
 }

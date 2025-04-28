@@ -1,9 +1,9 @@
 module.exports = {
   extend: '@apostrophecms/piece-type',
   options: {
-    label: 'Article Tag',
-    pluralLabel: 'Article Tags',
-    slugPrefix: 'article-tag-',
+    label: 'Case Study Tag',
+    pluralLabel: 'Case Studies Tags',
+    slugPrefix: 'cases-tag-',
     shortcut: 'G,M',
   },
   fields: {

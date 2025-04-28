@@ -1,8 +1,8 @@
 module.exports = {
   extend: '@apostrophecms/piece-type',
   options: {
-    label: 'Article',
-    pluralLabel: 'Articles',
+    label: 'Case Study',
+    pluralLabel: 'Case Studies',
     sort: {
       articleDate: -1,
       updatedAt: -1,
@@ -37,7 +37,7 @@ module.exports = {
       _tags: {
         type: 'relationship',
         label: 'Tags',
-        withType: 'article-tags',
+        withType: 'cases-tags',
         builders: {
           project: {
             title: 1,
@@ -59,8 +59,8 @@ module.exports = {
   },
   columns: {
     add: {
-      articleDate: {
-        label: 'Article Date',
+      caseDate: {
+        label: 'Case Study Date',
       },
     },
   },

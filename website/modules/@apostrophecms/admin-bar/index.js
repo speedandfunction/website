@@ -11,8 +11,8 @@ module.exports = {
         ],
       },
       {
-        label: 'Blog',
-        items: ['tfp-articles', 'article-tags'],
+        label: 'Cases',
+        items: ['case-studies', 'cases-tags'],
       },
     ],
   },

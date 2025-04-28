@@ -15,8 +15,8 @@ module.exports = {
         label: 'Home',
       },
       {
-        name: 'tfp-articles-page',
-        label: 'Blog Landing Page',
+        name: 'case-studies-page',
+        label: 'Case Studies Page',
       },
     ],
     park: [
@@ -27,11 +27,11 @@ module.exports = {
         type: '@apostrophecms/search',
       },
       {
-        parkedId: 'blogParkedId',
-        type: 'tfp-articles-page',
+        parkedId: 'caseParkedId',
+        type: 'case-studies-page',
         _defaults: {
-          slug: '/blog',
-          title: 'Blog',
+          slug: '/cases',
+          title: 'Case Studies',
         },
       },
     ],
