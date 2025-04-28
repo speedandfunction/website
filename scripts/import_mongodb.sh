@@ -7,21 +7,34 @@ set -euo pipefail
 # MongoDB import script
 # Usage: ./import_mongodb.sh <json_directory> [--no-drop]
 
-
 # Default options - drop collections by default
 DROP_OPTION="--drop"
+CONTAINER="apostrophe-mongodb"
 
-# Parse optional arguments
-if [ "$2" == "--no-drop" ]; then
-    DROP_OPTION=""
-    echo "Using --no-drop option: Collections will not be dropped before import"
+# Check if MONGO_URI contains localhost or 0.0.0.0
+if [[ "$MONGO_URI" == *"localhost"* || "$MONGO_URI" == *"0.0.0.0"* ]]; then
+    USE_LOCAL=true
+    echo "Detected local MongoDB connection. Using local container: $CONTAINER"
+else
+    USE_LOCAL=false
 fi
 
+# Parse optional arguments
+for arg in "$@"; do
+    case $arg in
+        --no-drop)
+            DROP_OPTION=""
+            echo "Using --no-drop option: Collections will not be dropped before import"
+            ;;
+    esac
+done
+
 # Check if directory is provided
-if [ $# -lt 1 ]; then
+if [ $# -lt 1 ] || [[ "$1" == --* ]]; then
     echo "Usage: $0 <json_directory> [--no-drop]"
     echo "Please provide the directory containing JSON files to import"
     echo "Collections are dropped before import by default (use --no-drop to prevent this)"
+    echo "Note: If MONGO_URI contains 'localhost' or '0.0.0.0', a local container named $CONTAINER will be used"
     exit 1
 fi
 
@@ -38,9 +51,16 @@ if [ ! -d "$JSON_DIR" ]; then
     exit 1
 fi
 
+# Set docker command based on local flag
+if [ "$USE_LOCAL" = true ]; then
+    DOCKER_CMD=(docker exec -i "$CONTAINER")
+else
+    DOCKER_CMD=(docker run -i --rm mongo:latest)
+fi
+
 # Test connection first
 echo "Testing MongoDB connection..."
-if ! docker run --rm mongo:latest mongosh "$MONGO_URI" --quiet \
+if ! "${DOCKER_CMD[@]}" mongosh "$MONGO_URI" --quiet \
     --eval "db.getSiblingDB('$DB_NAME').serverStatus()" > /dev/null 2>&1; then
     echo "Error: Failed to connect to MongoDB. Please check your connection string and credentials."
     echo "Connection host: ${MONGO_URI#*//}"  # hide user:pass@
@@ -72,14 +92,13 @@ import_file() {
             TYPE_OPTS="--jsonArray"
         fi
         
-        # Use mongoimport to import the file
-        docker run --rm -v "$JSON_DIR:/data" mongo:latest \
-            mongoimport --uri="$MONGO_URI" \
-            --db="$DB_NAME" \
-            --collection="$COLLECTION_NAME" \
-            --file="/data/$(basename "$FILE")" \
-            $DROP_OPTION \
-            $TYPE_OPTS
+        # Common mongoimport arguments
+        local IMPORT_ARGS=(--uri="$MONGO_URI" --db="$DB_NAME" --collection="$COLLECTION_NAME")
+        if [[ -n $DROP_OPTION ]]; then IMPORT_ARGS+=("$DROP_OPTION"); fi
+        if [[ -n $TYPE_OPTS ]]; then IMPORT_ARGS+=("$TYPE_OPTS"); fi
+        
+        # Use mongoimport with stdin redirection for both modes
+        "${DOCKER_CMD[@]}" mongoimport "${IMPORT_ARGS[@]}" < "$FILE"
         
         # Capture exit status directly without return
         # This will propagate to the if statement that calls the function
