@@ -22,6 +22,15 @@ module.exports = {
           },
         },
       },
+      textSpacing: {
+        label: 'Text Spacing',
+        type: 'range',
+        min: 0,
+        max: 40,
+        step: 4,
+        def: 0,
+        help: 'Space between text and button/link (in pixels)'
+      },
       links: {
         label: 'Links',
         type: 'array',
