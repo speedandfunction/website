@@ -10,6 +10,10 @@ module.exports = {
           '@apostrophecms/file-tag',
         ],
       },
+      {
+        label: 'Blog',
+        items: ['tfp-articles', 'article-tags'],
+      },
     ],
   },
 };
