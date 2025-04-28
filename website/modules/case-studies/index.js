@@ -55,7 +55,7 @@ module.exports = {
   },
   columns: {
     add: {
-      caseDate: {
+      articleDate: {
         label: 'Case Study Date',
       },
     },
