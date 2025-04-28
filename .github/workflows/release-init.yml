@@ -1,0 +1,28 @@
+name: '[Release] Init release (create release branch for code freeze)'
+
+on:
+  workflow_dispatch:
+    inputs:
+      release-version:
+        description: 'Release version (e.g. 0.1.0)'
+        required: true
+        type: string
+
+# Add permissions block to limit GITHUB_TOKEN scope
+permissions:
+  contents: write
+
+jobs:
+  create-release-branch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Create release branch
+        uses: peterjgrainger/action-create-branch@v3.0.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          branch: releases/v.${{ inputs['release-version'] }}
+          sha: '${{ github.sha }}'
