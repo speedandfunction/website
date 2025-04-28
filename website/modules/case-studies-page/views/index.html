@@ -3,6 +3,7 @@ import '@apostrophecms/pager:macros.html' as pager with context %} {% set tags =
 data.piecesFilters.tags %} {% block main %}
 <div>
   <div>
+    <div>{% area data.page, 'main' %}</div>
     <form action="" method="GET">
       <input
         type="text"
