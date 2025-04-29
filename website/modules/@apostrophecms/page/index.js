@@ -14,6 +14,26 @@ module.exports = {
         name: '@apostrophecms/home-page',
         label: 'Home',
       },
+      {
+        name: 'case-studies-page',
+        label: 'Case Studies Page',
+      },
+    ],
+    park: [
+      {
+        slug: '/search',
+        parkedId: 'search',
+        title: 'Search',
+        type: '@apostrophecms/search',
+      },
+      {
+        parkedId: 'caseParkedId',
+        type: 'case-studies-page',
+        _defaults: {
+          slug: '/cases',
+          title: 'Case Studies',
+        },
+      },
     ],
   },
 };

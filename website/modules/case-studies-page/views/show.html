@@ -1,0 +1,29 @@
+{% extends "layout.html" %} {% block main %}
+<div class="cs_details-page">
+  {% if data.piece._tags %}
+  <div class="cs_tags">
+    <h3 class="tags-heading">Tags</h3>
+    <ul class="tags-list">
+      {% for tag in data.piece._tags %}
+      <li class="tag-item">
+        <a
+          class="tag-link{% if tag.selected %} selected{% endif %}"
+          href="{{ data.piece._parentUrl | build({}, { tags: { $addToSet: tag.slug } }) }}"
+        >
+          {{ tag.title }}
+        </a>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% endif %}
+
+  <div class="cs_grid">
+    <article class="cs_card">
+      <header class="header">
+        <h1 class="title">{{ data.piece.title }}</h1>
+      </header>
+    </article>
+  </div>
+</div>
+{% endblock main %}
