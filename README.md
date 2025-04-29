@@ -190,15 +190,7 @@ Environment variables are stored in the `.env` file. For production, you should 
 
 ## DataBase Management
 
-- **Import database**: `scripts/import_db_from_json.sh`
-- **Export database**: `scripts/export_db_to_json.sh`
-
-For doing these script executable, run
-
-```bash
-  chmod +x scripts/setup.sh
-  setup.sh
-```
+- **Import database**: `MONGO_URI=mongodb://localhost:27017 DB_NAME=apostrophe ./scripts/import_mongodb.sh ./export`
 
 ## Data Persistence
 
@@ -227,6 +219,7 @@ You can easily commit your changes using Cursor AI by following these steps:
    - A bullet list of specific changes
 
 Example chat message:
+
 ```text
 commit changes
 ```
@@ -245,10 +238,9 @@ To create or update a pull request using Cursor AI:
 4. GitLab CLI will be used in the background to create or update the pull request
 
 Example chat message:
+
 ```text
 create pull request
 ```
 
 This will trigger Cursor AI to help you create a properly formatted PR, following the rules in `.cursor/rules/pull-request-rules.mdc`.
-
-

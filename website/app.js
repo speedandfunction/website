@@ -83,6 +83,10 @@ function createAposConfig() {
       asset: {},
       // The project"s first custom page type.
       'default-page': {},
+      '@apostrophecms/import-export': {},
+      'cases-tags': {},
+      'case-studies': {},
+      'case-studies-page': {},
     },
   };
 }
