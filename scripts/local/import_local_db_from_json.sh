@@ -30,12 +30,17 @@ for collection in "${collections[@]}"
 do
   IMPORT_FILE="/import/${collection}.json"
   
-  # Check if the file contains only an empty array
-  CONTENT=$(docker exec "$CONTAINER" cat "$IMPORT_FILE")
-  if [ "$CONTENT" == "[]" -o "$CONTENT" == "" ]; then
+  # First check if file is empty or doesn't exist in container
+  if docker exec "$CONTAINER" test ! -s "$IMPORT_FILE"; then
+    echo "⏭️  Skipping $collection - empty file"
+    docker exec "$CONTAINER" mongosh --quiet --eval "db.getSiblingDB('$DB').${collection}.drop()"
+    continue
+  fi
+  
+  # Then check if file only contains empty JSON array
+  # Using grep instead of loading whole file into memory
+  if docker exec "$CONTAINER" grep -q "^\[\]$" "$IMPORT_FILE"; then
     echo "⏭️  Skipping $collection - empty array"
-    
-    # Drop the collection if it exists
     docker exec "$CONTAINER" mongosh --quiet --eval "db.getSiblingDB('$DB').${collection}.drop()"
     continue
   fi
