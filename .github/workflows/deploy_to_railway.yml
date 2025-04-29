@@ -1,4 +1,4 @@
-name: 'Deploy to Railway'
+name: "Deploy to Railway"
 
 permissions:
   contents: read
@@ -7,12 +7,12 @@ on:
   push:
     branches:
       - main
-      - 'releases/**'
+      - "releases/**"
 
   workflow_dispatch:
     inputs:
       deploy-env:
-        description: 'Environment to deploy'
+        description: "Environment to deploy"
         required: true
         type: choice
         options:
@@ -21,12 +21,12 @@ on:
           - Production
         default: Development
       restore-db:
-        description: 'Restore database to original state (Reset database for Development and restore anon dump for Staging and Production)'
+        description: "Restore database to original state (Reset database for Development and restore anon dump for Staging and Production)"
         required: false
         type: boolean
         default: false
       create-admin:
-        description: 'Create first admin user'
+        description: "Create first admin user"
         required: false
         type: boolean
         default: false
@@ -36,7 +36,7 @@ jobs:
     name: Deploy to Railway
     runs-on: ubuntu-latest
     container: node:22
-    environment: 'Development'
+    environment: "Development"
     env:
       RAILWAY_TOKEN: ${{ secrets.RAILWAY_GITHUB_ACTIONS }}
     steps:
@@ -49,7 +49,7 @@ jobs:
   restore-db:
     name: Restore DB
     needs: deploy-to-railway
-    environment: 'Development'
+    environment: "Development"
     runs-on: ubuntu-latest
     if: ${{inputs.restore-db == true }}
     env:
@@ -58,12 +58,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      - name: Install MongoDB Tools
-        run: |
-          wget https://fastdl.mongodb.org/tools/db/mongodb-database-tools-ubuntu2204-x86_64-100.9.4.deb
-          sudo dpkg -i mongodb-database-tools-ubuntu2204-x86_64-100.9.4.deb
-          wget https://downloads.mongodb.com/compass/mongodb-mongosh_2.1.1_amd64.deb
-          sudo dpkg -i mongodb-mongosh_2.1.1_amd64.deb
       - name: Drop DB
         run: ./scripts/drop_collections.sh
       - name: Create users file
@@ -72,7 +66,3 @@ jobs:
       - name: Update DB
         run: ./scripts/import_mongodb.sh ./export
         shell: bash
-      - name: Check environment variables
-        run: |
-          echo "MONGO_URI is set: ${MONGO_URI:+yes}"
-          echo "DB_NAME is set: ${DB_NAME:+yes}"
