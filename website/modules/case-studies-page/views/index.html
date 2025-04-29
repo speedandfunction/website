@@ -28,7 +28,8 @@ data.piecesFilters.tags %} {% block main %}
       <div class="tags-filter">
         <p class="tags-title">Tags:</p>
         <ul class="tags-list">
-          {% for tag in tags %} {% if tag.value in data.url %}
+          {% for tag in tags %} {% if data.query.tags and tag.value in
+          data.query.tags %}
           <li class="tag-item active">
             <a
               class="tag-link"
