@@ -17,8 +17,6 @@
   box-sizing: border-box;
   border-bottom: 0;
 
-
-  
   @include breakpoint-medium {
     width: 33.3%;
     @include border(border-bottom);
@@ -88,7 +86,8 @@
     .sf-simple-card__title {
       color: $gray-100;
     }
-    .sf-simple-card__text {
+    .sf-simple-card__text,
+    .sf-button_underline {
       color: $gray-200;
     }
     .background-circle {
@@ -112,10 +111,8 @@
 @include breakpoint-medium {
   .sf-simple-card:not(:nth-child(3n)) {
     border-right: none;
-  }  
-  .sf-simple-card:not(:nth-last-child(-n+3)) {
+  }
+  .sf-simple-card:not(:nth-last-child(-n + 3)) {
     border-bottom: none;
   }
 }
-
-
