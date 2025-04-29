@@ -140,34 +140,25 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: playwright-snapshots
-          path: e2e/screenshot-test.spec.js-snapshots
+          path: website/e2e/tests/screenshot-test.spec.js-snapshots
           merge-multiple: true
           github-token: ${{ secrets.GITHUB_TOKEN }}
           repository: ${{ github.repository }}
           run-id: ${{ env.latest_run_id }}
 
       - name: Verify downloaded snapshots
-        run: ls -la e2e/screenshot-test.spec.js-snapshots
-
-      - name: Build app image
-        run: docker compose -f docker-compose.yml -f docker-compose.override.yml build
+        run: ls -la website/e2e/tests/screenshot-test.spec.js-snapshots
 
       - name: Start Docker services
-        run: docker compose -f docker-compose.yml -f docker-compose.override.yml up -d
-
-      - name: Run as root to install system deps
-        run: docker compose exec --user root apostrophe npx playwright install-deps
-
-      - name: Install Playwright Browsers
-        run: docker compose exec apostrophe npx playwright install
+        run: docker-compose -f docker-compose.yml -f docker-compose.e2e.yml up -d --build
 
       - name: Copy snapshots to Docker container
         run: |
-          docker cp e2e/screenshot-test.spec.js-snapshots apostrophe-cms:/app/e2e/
+          docker cp website/e2e/tests/screenshot-test.spec.js-snapshots apostrophe-playwright-test:/e2e/tests/
 
       - name: Run Playwright tests
         run: |
-          timeout 600s docker compose exec apostrophe sh -c "npm run test:e2e -- e2e/" || echo "TESTS_FAILED=true" >> $GITHUB_ENV
+          timeout 600s docker compose exec playwright-test sh -c "npm run test:e2e" || echo "TESTS_FAILED=true" >> $GITHUB_ENV
         continue-on-error: true
 
       - name: Upload snapshots as new artifact
@@ -175,7 +166,7 @@ jobs:
         if: always()
         with:
           name: playwright-report
-          path: website/playwright-report/
+          path: website/e2e/playwright-report/
           retention-days: 20
 
       - name: Fail workflow if tests failed

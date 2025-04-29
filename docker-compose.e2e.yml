@@ -1,0 +1,17 @@
+networks:
+  my-proxy-net:
+    external:
+      name: sf-website-development
+
+services:
+  playwright-test:
+    container_name: apostrophe-playwright-test
+    build:
+      context: ./website/e2e
+      dockerfile: Dockerfile
+    depends_on:
+      - apostrophe
+    environment:
+      - BASE_URL=http://apostrophe:3000
+    networks:
+      - my-proxy-net

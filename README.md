@@ -158,21 +158,31 @@ docker-compose -f docker-compose.yml -f docker-compose.override.yml up -d
 
 This project uses [Playwright](https://playwright.dev/) for end-to-end testing.
 
+- **Snapshot Management:** To establish a baseline for UI tests, trigger the **"Update Snapshots"** workflow manually via the GitHub Actions UI. This builds the environment, runs Playwright tests with `--update-snapshots`, and uploads the snapshots as a GitHub Actions artifact.
+
+- **Automated E2E Testing:** On every push request or PR, the **"E2E Tests"** workflow runs. It downloads the latest uploaded snapshots artifact and compares the current UI against it, ensuring UI consistency across branches.
+
 ### Running Tests Locally
 
 Before testing, **make sure the app is running at** [http://localhost:3000](http://localhost:3000).
 
-To run the end-to-end tests, use the following command:
+To run the end-to-end tests, go to the `website/e2e` folder and run:
+
+```bash
+npm ci
+```
+
+Then, run the tests with:
 
 ```bash
 npm run test:e2e
 ```
 
-- On the first run, this generates the initial snapshots in the `website/e2e` folder.
+- On the first run, this generates the initial snapshots in the `website/e2e/tests` folder.
 
 - On subsequent runs, it compares the current UI state with the stored snapshots.
 
-- If you've made intentional UI changes, delete the existing snapshots in `website/e2e` and rerun the `npm run test:e2e` command to update them.
+- If you've made intentional UI changes, run `npm run test:e2e:update` to update the snapshots.
 
 ## Environment Variables
 
@@ -227,6 +237,7 @@ You can easily commit your changes using Cursor AI by following these steps:
    - A bullet list of specific changes
 
 Example chat message:
+
 ```text
 commit changes
 ```
@@ -245,10 +256,9 @@ To create or update a pull request using Cursor AI:
 4. GitLab CLI will be used in the background to create or update the pull request
 
 Example chat message:
+
 ```text
 create pull request
 ```
 
 This will trigger Cursor AI to help you create a properly formatted PR, following the rules in `.cursor/rules/pull-request-rules.mdc`.
-
-

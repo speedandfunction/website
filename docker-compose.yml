@@ -1,3 +1,7 @@
+networks:
+  proxynet:
+    name: sf-website-development
+
 services:
   # Apostrophe CMS web application
   apostrophe:
@@ -17,11 +21,21 @@ services:
       - mongodb
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/"]
+      test:
+        [
+          "CMD",
+          "wget",
+          "--no-verbose",
+          "--tries=1",
+          "--spider",
+          "http://localhost:3000/",
+        ]
       interval: 30s
       timeout: 5s
       retries: 3
       start_period: 15s
+    networks:
+      - proxynet
     # Command to run tests: docker compose run --rm apostrophe npm run test
     # Command to run tests with coverage: docker compose run --rm apostrophe npm run test -- --coverage
 
@@ -41,6 +55,8 @@ services:
       timeout: 5s
       retries: 3
       start_period: 5s
+    networks:
+      - proxynet
 
   # Mongo Express for database management (optional, development only)
   mongo-express:
@@ -56,6 +72,8 @@ services:
     depends_on:
       - mongodb
     restart: unless-stopped
+    networks:
+      - proxynet
 
   # Redis for caching (optional, but recommended for production)
   redis:
@@ -72,6 +90,8 @@ services:
       interval: 10s
       timeout: 5s
       retries: 3
+    networks:
+      - proxynet
 
 volumes:
   mongodb_data:
