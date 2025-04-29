@@ -63,13 +63,14 @@ echo "Testing MongoDB connection..."
 if ! "${DOCKER_CMD[@]}" mongosh "$MONGO_URI" --quiet \
     --eval "db.getSiblingDB('$DB_NAME').serverStatus()" > /dev/null 2>&1; then
     echo "Error: Failed to connect to MongoDB. Please check your connection string and credentials."
-    echo "Connection host: ${MONGO_URI#*//}"  # hide user:pass@
+    echo "Connection host: $(echo "${MONGO_URI#*//}" | sed -E 's/([^:]*:[^@]*)@/***@/')"  # mask credentials
     echo "Connecting to database: $DB_NAME"
     exit 1
 fi
 
 echo "Connection successful!"
-echo "Importing MongoDB data from $JSON_DIR to host ${MONGO_URI#*//} (database: $DB_NAME)"
+echo "Importing MongoDB data from $JSON_DIR to host $(echo "${MONGO_URI#*//}" | sed -E 's/([^:]*:[^@]*)@/***@/')" \
+    "(database: $DB_NAME)"
 
 # Function to import a JSON file
 import_file() {
