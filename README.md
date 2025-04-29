@@ -165,14 +165,14 @@ Environment variables are stored in the `.env` file. For production, you should 
 
 ## DataBase Management
 
-- **Import database**: `scripts/import_db_from_json.sh`
+- **Import database**: `scripts/local/import_local_db_from_json.sh`
 - **Export database**: `scripts/export_db_to_json.sh`
 
 For doing these script executable, run
 
 ```bash
-  chmod +x scripts/setup.sh
-  scripts/setup.sh
+  chmod +x scripts/local/setup.sh
+  scripts/local/setup.sh
 ```
 
 ## Data Persistence

@@ -6,8 +6,8 @@ echo "🛠 Running setup script..."
 case "$OSTYPE" in
   linux-gnu* | darwin* | msys* | cygwin* | linux-musl)
     echo "🧪 Detected Unix-like OS"
-    chmod +x scripts/drop_db.sh
-    chmod +x scripts/import_db_from_json.sh
+    chmod +x scripts/local/drop_local_db.sh
+    chmod +x scripts/local/import_local_db_from_json.sh
     chmod +x scripts/export_db_to_json.sh
     echo "✅ Scripts are now executable. You can run them."
     ;;
