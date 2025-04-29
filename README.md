@@ -2,6 +2,31 @@
 
 This repository contains a complete Docker Compose setup for Apostrophe CMS with all required services.
 
+## Table of Contents
+
+- [Status](#status)
+- [Services](#services)
+- [Get Started](#get-started)
+  - [Prerequisites](#prerequisites)
+  - [Steps](#steps)
+    - [1. Clone this repository](#1-clone-this-repository)
+    - [2. Install dependencies](#2-install-dependencies)
+    - [3. Start all services with Docker Compose](#3-start-all-services-with-docker-compose)
+    - [4. Database Management](#4-database-management)
+    - [5. Access the Apostrophe CMS](#5-access-the-apostrophe-cms)
+    - [6. Access Mongo Express](#6-access-mongo-express)
+- [Development](#development)
+- [End-to-End Testing with Playwright](#end-to-end-testing-with-playwright)
+  - [Running Tests Locally](#running-tests-locally)
+- [Environment Variables](#environment-variables)
+- [Container Management](#container-management)
+- [DataBase Management](#database-management)
+- [Data Persistence](#data-persistence)
+- [Using Cursor AI for Git Operations](#using-cursor-ai-for-git-operations)
+  - [Committing Changes](#committing-changes)
+  - [Creating or Updating Pull Requests](#creating-or-updating-pull-requests)
+- [PR Workflow](docs/PR_WORKFLOW.md)
+
 ## Status
 
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=speedandfunction_website&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=speedandfunction_website)  
