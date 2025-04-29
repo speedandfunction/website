@@ -53,7 +53,6 @@ function createAposConfig() {
       'insights-carousel-widget': {},
       'contact-widget': {},
       'page-intro-widget': {},
-      'case-studies-intro-widget': {},
       'whitespace-widget': {},
       /*
        * 'links-buttons-widget': {},
