@@ -1,12 +1,8 @@
 {% extends "layout.html" %} {% block main %}
-<article class="case-study_detail">
-  <header class="case-study_header">
-    <h1 class="case-study_title">{{ data.piece.title }}</h1>
-  </header>
-
+<div class="cs_details-page">
   {% if data.piece._tags %}
-  <div class="case-study_tags">
-    <h2 class="tags-heading">Related Tags</h2>
+  <div class="cs_tags">
+    <h3 class="tags-heading">Tags</h3>
     <ul class="tags-list">
       {% for tag in data.piece._tags %}
       <li class="tag-item">
@@ -15,12 +11,19 @@
           href="{{ data.piece._parentUrl | build({}, { tags: { $addToSet: tag.slug } }) }}"
         >
           {{ tag.title }}
-          <span class="tag-count">[ {{ tag.count }} ]</span>
         </a>
       </li>
       {% endfor %}
     </ul>
   </div>
   {% endif %}
-</article>
+
+  <div class="cs_grid">
+    <article class="cs_card">
+      <header class="header">
+        <h1 class="title">{{ data.piece.title }}</h1>
+      </header>
+    </article>
+  </div>
+</div>
 {% endblock main %}
