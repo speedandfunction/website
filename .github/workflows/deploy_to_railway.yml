@@ -55,7 +55,6 @@ jobs:
     env:
       MONGO_URI: ${{ secrets.MONGO_URI }}
       DB_NAME: ${{ vars.DB_NAME }}
-      ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -67,6 +66,9 @@ jobs:
           sudo dpkg -i mongodb-mongosh_2.1.1_amd64.deb
       - name: Drop DB
         run: ./scripts/drop_collections.sh
+      - name: Create users file
+        if: ${{ inputs.create-admin == true }}
+        run: echo "${{ secrets.USERS_JSON }}" > export/aposUsersSafe.json
       - name: Update DB
         run: ./scripts/import_mongodb.sh ./export
         shell: bash
@@ -74,8 +76,3 @@ jobs:
         run: |
           echo "MONGO_URI is set: ${MONGO_URI:+yes}"
           echo "DB_NAME is set: ${DB_NAME:+yes}"
-          echo "ADMIN_PASSWORD is set: ${ADMIN_PASSWORD:+yes}"
-      - name: Create admin user
-        if: ${{ inputs.create-admin == true }}
-        run: ./scripts/create-admin-user.sh
-        shell: bash
