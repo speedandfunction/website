@@ -149,4 +149,4 @@ website/apos-build
 website/public/apos-frontend
 
 dump.archive
-
+.prettierrc

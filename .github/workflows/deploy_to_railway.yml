@@ -16,12 +16,17 @@ on:
         required: true
         type: choice
         options:
-        - Development
-        - Staging
-        - Production
+          - Development
+          - Staging
+          - Production
         default: Development
       restore-db:
         description: 'Restore database to original state (Reset database for Development and restore anon dump for Staging and Production)'
+        required: false
+        type: boolean
+        default: false
+      create-admin:
+        description: 'Create first admin user'
         required: false
         type: boolean
         default: false
@@ -40,7 +45,7 @@ jobs:
       - name: Install Railway CLI
         run: npm i -g @railway/cli
       - name: Apply new image to Railway
-        run:  railway up --service=apostrophe-cms
+        run: railway up --service=apostrophe-cms
   restore-db:
     name: Restore DB
     needs: deploy-to-railway
@@ -55,7 +60,9 @@ jobs:
         uses: actions/checkout@v4
       - name: Drop DB
         run: ./scripts/drop_collections.sh
+      - name: Create users file
+        if: ${{ inputs.create-admin == true }}
+        run: echo "${{ secrets.USERS_JSON }}" > export/aposUsersSafe.json
       - name: Update DB
         run: ./scripts/import_mongodb.sh ./export
         shell: bash
-
