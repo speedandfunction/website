@@ -11,21 +11,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Docker starts services
-        run: docker-compose -f docker-compose.yml -f docker-compose.e2e.yml up -d --build
-
-      - name: Wait for services to start
-        run: sleep 15
-
       - name: Run Playwright tests with snapshot update
-        run: docker compose exec playwright-test sh -c "npm run test:e2e:update"
+        run: |
+          docker compose -f docker-compose.yml -f docker-compose.e2e.yml run --rm --build \
+          --entrypoint "sh -c 'until wget -qO- http://apostrophe:3000/; do echo Waiting for Apostrophe...; sleep 2; done && npm run test:e2e:update -c playwright.config.js'" \
+          playwright-test
         continue-on-error: true
-
-      - name: Ensure snapshot directory exists
-        run: mkdir -p website/e2e/tests
-
-      - name: Copy snapshots from container
-        run: docker cp apostrophe-playwright-test:/e2e/tests/screenshot-test.spec.js-snapshots website/e2e/tests
 
       - name: Upload snapshots as artifact
         uses: actions/upload-artifact@v4
