@@ -50,10 +50,10 @@ jobs:
 
       - name: Deploy to Railway
         run: |
+          railway link --environment Development
           railway up \
             --service=apostrophe-cms \
-            --detach \
-            --environment=Development
+            --detach
 
   restore-db:
     name: Restore DB
