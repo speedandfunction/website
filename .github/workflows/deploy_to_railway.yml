@@ -47,30 +47,9 @@ jobs:
       - name: Apply new image to Railway
         run: railway up --service=apostrophe-cms
 
-  create-admin:
-    name: Create Admin User
-    needs: deploy-to-railway
-    if: ${{ inputs.create-admin == true }}
-    runs-on: ubuntu-latest
-    container: node:22
-    environment: 'Development'
-    env:
-      APOS_MONGODB_URI: ${{ secrets.MONGO_URI }}
-    defaults:
-      run:
-        working-directory: website
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      - name: Install dependencies
-        run: npm install
-      - name: Create admin user
-        run: |
-          echo "1111" | node app.js @apostrophecms/user:add admin admin
-
   restore-db:
     name: Restore DB
-    needs: [deploy-to-railway, create-admin]
+    needs: deploy-to-railway
     environment: 'Development'
     runs-on: ubuntu-latest
     if: ${{ inputs.restore-db == true }}
@@ -85,3 +64,25 @@ jobs:
       - name: Update DB
         run: ./scripts/import_mongodb.sh ./export
         shell: bash
+
+  create-admin:
+    name: Create Admin User
+    needs: restore-db
+    if: ${{ inputs.create-admin == true }}
+    runs-on: ubuntu-latest
+    container: node:22
+    environment: 'Development'
+    env:
+      APOS_MONGODB_URI: ${{ secrets.MONGO_URI }}
+      ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
+    defaults:
+      run:
+        working-directory: website
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Install dependencies
+        run: npm install
+      - name: Create admin user
+        run: |
+          echo "$ADMIN_PASSWORD" | node app.js @apostrophecms/user:add admin admin
