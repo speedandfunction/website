@@ -1,5 +1,4 @@
 #!/bin/bash
-set -euo pipefail
 
 : "${MONGO_URI:?Environment variable MONGO_URI must be set}"
 : "${DB_NAME:?Environment variable DB_NAME must be set}"
