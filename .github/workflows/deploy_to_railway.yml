@@ -46,12 +46,13 @@ jobs:
         run: npm i -g @railway/cli
       - name: Apply new image to Railway
         run: railway up --service=apostrophe-cms
+
   restore-db:
     name: Restore DB
     needs: deploy-to-railway
     environment: 'Development'
     runs-on: ubuntu-latest
-    if: ${{inputs.restore-db == true }}
+    if: ${{ inputs.restore-db == true }}
     env:
       MONGO_URI: ${{ secrets.MONGO_URI }}
       DB_NAME: ${{ vars.DB_NAME }}
@@ -62,7 +63,13 @@ jobs:
         run: ./scripts/drop_collections.sh
       - name: Create users file
         if: ${{ inputs.create-admin == true }}
-        run: echo "${{ secrets.USERS_JSON }}" > export/aposUsersSafe.json
+        run: |
+          echo '${{ secrets.APOS_USERS_SAFE_BASE64 }}' | base64 -d > export/aposUsersSafe.json
+          # Validate JSON
+          if ! jq empty export/aposUsersSafe.json 2>/dev/null; then
+            echo "Error: Invalid JSON in aposUsersSafe.json"
+            exit 1
+          fi
       - name: Update DB
         run: ./scripts/import_mongodb.sh ./export
         shell: bash
