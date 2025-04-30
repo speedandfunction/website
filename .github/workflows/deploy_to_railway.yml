@@ -35,17 +35,25 @@ jobs:
   deploy-to-railway:
     name: Deploy to Railway
     runs-on: ubuntu-latest
-    container: node:22
     environment: 'Development'
     env:
       RAILWAY_TOKEN: ${{ secrets.RAILWAY_GITHUB_ACTIONS }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Start services with Docker Compose
+        run: docker compose up -d
+
       - name: Install Railway CLI
         run: npm i -g @railway/cli
-      - name: Apply new image to Railway
-        run: railway up --service=apostrophe-cms
+
+      - name: Deploy to Railway
+        run: |
+          railway up \
+            --service=apostrophe-cms \
+            --detach \
+            --environment=Development
 
   restore-db:
     name: Restore DB
@@ -70,19 +78,18 @@ jobs:
     needs: restore-db
     if: ${{ inputs.create-admin == true }}
     runs-on: ubuntu-latest
-    container: node:22
     environment: 'Development'
     env:
       APOS_MONGODB_URI: ${{ secrets.MONGO_URI }}
       ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
-    defaults:
-      run:
-        working-directory: website
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      - name: Install dependencies
-        run: npm install
+
+      - name: Start services with Docker Compose
+        run: docker compose up -d
+
       - name: Create admin user
         run: |
-          echo "$ADMIN_PASSWORD" | node app.js @apostrophecms/user:add admin admin
+          docker compose exec -T apostrophe \
+            /bin/sh -c "echo \"$ADMIN_PASSWORD\" | node app.js @apostrophecms/user:add admin admin"
