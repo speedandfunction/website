@@ -1,8 +1,7 @@
 FROM mcr.microsoft.com/playwright:v1.52.0
 
-RUN id -u pwuser 2>/dev/null || adduser --disabled-password --gecos '' --home /e2e pwuser
-
-RUN mkdir -p /e2e/tests/screenshot-test.spec.js-snapshots \
+RUN id -u pwuser 2>/dev/null || adduser --disabled-password --gecos '' --home /e2e pwuser \
+ && mkdir -p /e2e/tests/screenshot-test.spec.js-snapshots \
              /e2e/playwright-report \
  && chown -R pwuser:pwuser /e2e \
  && chmod -R u+rwX,go-rwx /e2e
