@@ -35,6 +35,23 @@ module.exports = {
         label: 'Organization',
         type: 'string',
       },
+      _caseStudy: {
+        label: 'Case Study',
+        type: 'relationship',
+        withType: 'projects',
+        max: 1,
+        builders: {
+          project: {
+            title: 1,
+            stack: 1,
+            subtitle: 1,
+            content: 1,
+            picture: 1,
+            mediaType: 1,
+            _file: 1,
+          },
+        },
+      },
       url: {
         label: 'URL',
         type: 'string',
@@ -62,6 +79,7 @@ module.exports = {
           'title',
           'position',
           'organization',
+          '_caseStudy',
           'feedback',
           'url',
         ],

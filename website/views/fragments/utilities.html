@@ -75,6 +75,14 @@
             {% area card, 'feedback' %}
           </div>
           <hr>
+          {% if card._caseStudy %}
+            <div class="card-swiper__case-study">
+              <h5 class="card-swiper__case-study-title">Case Study: {{ card._caseStudy[0].title }}</h5>
+              <p class="card-swiper__case-study-subtitle">{{ card._caseStudy[0].subtitle }}</p>
+              <p class="card-swiper__case-study-stack">{{ card._caseStudy[0].stack }}</p>
+            </div>
+            <hr>
+          {% endif %}
           {% if card.url %}
             <a class="card-swiper__url" href="https://{{ card.url }}/">{{ card.url }}</a>
           {% endif %}
