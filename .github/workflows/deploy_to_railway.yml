@@ -50,6 +50,7 @@ jobs:
 
       - name: Deploy to Railway
         run: |
+          railway login --token $RAILWAY_GITHUB_ACTIONS
           railway link --environment Development
           railway up \
             --service=apostrophe-cms \
