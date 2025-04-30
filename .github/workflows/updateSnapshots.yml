@@ -18,6 +18,9 @@ jobs:
           sudo chown -R 1000:1000 website/e2e/tests/screenshot-test.spec.js-snapshots
           sudo chown -R 1000:1000 website/e2e/playwright-report
 
+      - name: Create Docker network
+        run: docker network create sf-website-development || true
+
       - name: Run Playwright tests with snapshot update
         run: |
           docker compose -f docker-compose.yml -f docker-compose.e2e.yml run --rm --build \

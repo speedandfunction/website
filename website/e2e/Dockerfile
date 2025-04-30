@@ -9,10 +9,9 @@ RUN id -u pwuser 2>/dev/null || adduser --disabled-password --gecos '' --home /e
 USER pwuser
 WORKDIR /e2e
 
-COPY --chown=root:root --chmod=644 package.json package-lock.json playwright.config.js ./
+COPY --chown=pwuser:pwuser --chmod=644 package.json package-lock.json playwright.config.js ./
+COPY --chown=pwuser:pwuser --chmod=755 ./tests ./tests
 
 RUN npm ci --ignore-scripts
-
-COPY --chown=root:root --chmod=755 ./tests ./tests
 
 ENTRYPOINT [ "npx", "playwright", "test" ]

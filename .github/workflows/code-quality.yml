@@ -149,6 +149,9 @@ jobs:
       - name: Verify downloaded snapshots
         run: ls -la website/e2e/tests/screenshot-test.spec.js-snapshots
 
+      - name: Create Docker network
+        run: docker network create sf-website-development || true
+
       - name: Run Playwright tests
         run: |
           set -e
