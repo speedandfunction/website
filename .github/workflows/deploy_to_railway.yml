@@ -48,14 +48,8 @@ jobs:
       - name: Install Railway CLI
         run: npm i -g @railway/cli
 
-      - name: Deploy to Railway
-        env:
-          RAILWAY_TOKEN: ${{ secrets.RAILWAY_GITHUB_ACTIONS }}
-        run: |
-          railway link --environment Development
-          railway up \
-            --service=apostrophe-cms \
-            --detach
+      - name: Apply new image to Railway
+        run: railway up --service=apostrophe-cms
 
   restore-db:
     name: Restore DB
