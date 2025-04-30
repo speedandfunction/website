@@ -11,12 +11,19 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Ensure snapshot and report dirs are writable by container user
+        run: |
+          mkdir -p website/e2e/tests/screenshot-test.spec.js-snapshots
+          mkdir -p website/e2e/playwright-report
+          sudo chown -R 1000:1000 website/e2e/tests/screenshot-test.spec.js-snapshots
+          sudo chown -R 1000:1000 website/e2e/playwright-report
+
       - name: Run Playwright tests with snapshot update
         run: |
           docker compose -f docker-compose.yml -f docker-compose.e2e.yml run --rm --build \
           --entrypoint "sh -c 'until wget -qO- http://apostrophe:3000/; do echo Waiting for Apostrophe...; sleep 2; done && npm run test:e2e:update -c playwright.config.js'" \
           playwright-test
-        continue-on-error: true
+        continue-on-error: false
 
       - name: Upload snapshots as artifact
         uses: actions/upload-artifact@v4

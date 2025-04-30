@@ -149,12 +149,12 @@ jobs:
       - name: Verify downloaded snapshots
         run: ls -la website/e2e/tests/screenshot-test.spec.js-snapshots
 
-      - name: Run Playwright tests inside container (snapshots already mounted)
+      - name: Run Playwright tests
         run: |
           docker compose -f docker-compose.yml -f docker-compose.e2e.yml run --rm --build \
           --entrypoint "sh -c 'until wget -qO- http://apostrophe:3000/; do echo Waiting for Apostrophe...; sleep 2; done && npm run test:e2e -c playwright.config.js'" \
           playwright-test
-        continue-on-error: true
+        continue-on-error: false
 
       - name: Upload snapshots as new artifact
         uses: actions/upload-artifact@v4
