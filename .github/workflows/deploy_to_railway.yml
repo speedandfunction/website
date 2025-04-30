@@ -84,4 +84,4 @@ jobs:
       - name: Install dependencies
         run: npm install
       - name: Create admin user
-        run: node app.js @apostrophecms/user:add admin admin "$ADMIN_PASSWORD"
+        run: node app.js @apostrophecms/user:add admin admin --password="$ADMIN_PASSWORD"
