@@ -13,10 +13,10 @@ jobs:
 
       - name: Ensure snapshot and report dirs are writable by container user
         run: |
-          mkdir -p website/e2e/tests/screenshot-test.spec.js-snapshots
-          mkdir -p website/e2e/playwright-report
-          sudo chown -R 1000:1000 website/e2e/tests/screenshot-test.spec.js-snapshots
-          sudo chown -R 1000:1000 website/e2e/playwright-report
+          mkdir -p e2e/tests/screenshot-test.spec.js-snapshots
+          mkdir -p e2e/playwright-report
+          sudo chown -R 1000:1000 e2e/tests/screenshot-test.spec.js-snapshots
+          sudo chown -R 1000:1000 e2e/playwright-report
 
       - name: Create Docker network
         run: docker network create sf-website-development || true
@@ -32,6 +32,6 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: playwright-snapshots
-          path: website/e2e/tests/screenshot-test.spec.js-snapshots
+          path: e2e/tests/screenshot-test.spec.js-snapshots
           overwrite: true
           retention-days: 20

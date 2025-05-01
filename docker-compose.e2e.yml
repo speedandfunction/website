@@ -7,15 +7,17 @@ services:
   playwright-test:
     container_name: apostrophe-playwright-test
     build:
-      context: ./website/e2e
+      context: ./e2e
       dockerfile: Dockerfile
     depends_on:
       - apostrophe
     environment:
       - BASE_URL=http://apostrophe:3000
+      - WAIT_HOSTS=apostrophe:3000
+      - WAIT_TIMEOUT=60
     networks:
       - my-proxy-net
-    user: "1000:1000"
     volumes:
-      - ./website/e2e/tests/screenshot-test.spec.js-snapshots:/e2e/tests/screenshot-test.spec.js-snapshots
-      - ./website/e2e/playwright-report:/e2e/playwright-report
+      - ./e2e/tests/screenshot-test.spec.js-snapshots:/e2e/tests/screenshot-test.spec.js-snapshots
+      - ./e2e/playwright-report:/e2e/playwright-report
+      - ./e2e/test-results:/e2e/test-results
