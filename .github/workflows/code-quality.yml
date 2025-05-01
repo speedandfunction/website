@@ -156,16 +156,20 @@ jobs:
         run: |
           set -e
           docker compose -f docker-compose.yml -f docker-compose.e2e.yml run --rm --build \
-          --entrypoint "sh -c 'until wget -qO- http://apostrophe:3000/; do echo Waiting for Apostrophe...; sleep 2; done && npm run test:e2e -c playwright.config.js'" \
+          --entrypoint "sh -c 'until wget -qO- http://apostrophe:3000/ > /dev/null; do echo Waiting for Apostrophe...; sleep 2; done && npm run test:e2e -c playwright.config.js'" \
           playwright-test
         continue-on-error: false
+
+      - name: Copy snapshots from Docker volume
+        run: |
+          docker cp $(docker ps -aqf "name=apostrophe-playwright-test"):/e2e/tests/screenshot-test.spec.js-snapshots ./website/e2e/tests/screenshot-test.spec.js-snapshots
 
       - name: Upload snapshots as new artifact
         uses: actions/upload-artifact@v4
         if: always()
         with:
           name: playwright-report
-          path: e2e/playwright-report/
+          path: website/e2e/playwright-report/
           retention-days: 20
 
       - name: Fail workflow if tests failed
