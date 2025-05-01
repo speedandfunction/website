@@ -3,7 +3,7 @@ name: 'Deploy to Railway'
 permissions:
   contents: read
 
-on:
+on
   push:
     branches:
       - main
@@ -35,7 +35,7 @@ jobs:
   deploy-to-railway:
     name: Deploy to Railway
     runs-on: ubuntu-latest
-    environment: 'Development'
+    environment: ${{ inputs.deploy-env }}
     env:
       RAILWAY_TOKEN: ${{ secrets.RAILWAY_GITHUB_ACTIONS }}
     steps:
@@ -54,7 +54,7 @@ jobs:
   restore-db:
     name: Restore DB
     needs: deploy-to-railway
-    environment: 'Development'
+    environment: ${{ inputs.deploy-env }}
     runs-on: ubuntu-latest
     if: ${{ inputs.restore-db == true }}
     env:
@@ -74,7 +74,7 @@ jobs:
     needs: restore-db
     if: ${{ inputs.create-admin == true }}
     runs-on: ubuntu-latest
-    environment: 'Development'
+    environment: ${{ inputs.deploy-env }}
     env:
       APOS_MONGODB_URI: ${{ secrets.MONGO_URI }}
       ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
