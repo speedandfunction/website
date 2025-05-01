@@ -15,11 +15,9 @@ COPY package*.json playwright.config.js ./
 COPY tests ./tests/
 COPY entrypoint.sh /entrypoint.sh
 
-# Install dependencies as root, with --ignore-scripts
-RUN npm ci --ignore-scripts
-
-# Create directories with safe permissions
-RUN mkdir -p /e2e/tests/screenshot-test.spec.js-snapshots \
+# Install dependencies and create directories with safe permissions
+RUN npm ci --ignore-scripts \
+    && mkdir -p /e2e/tests/screenshot-test.spec.js-snapshots \
              /e2e/playwright-report \
              /e2e/test-results \
     && chown -R pwuser:pwuser /e2e \

@@ -20,4 +20,7 @@ services:
     volumes:
       - ./website/e2e/tests/screenshot-test.spec.js-snapshots:/e2e/tests/screenshot-test.spec.js-snapshots
       - ./website/e2e/playwright-report:/e2e/playwright-report
-      - ./website/e2e/test-results:/e2e/test-results
+      - test-results-data:/e2e/test-results
+
+volumes:
+  test-results-data:
