@@ -152,11 +152,15 @@ jobs:
       - name: Create Docker network
         run: docker network create sf-website-development || true
 
+      - name: Ensure report dir exists
+        run: mkdir -p website/e2e/playwright-report
+
       - name: Run Playwright tests
         run: |
           set -e
           docker compose -f docker-compose.yml -f docker-compose.e2e.yml run --name apostrophe-playwright-test --build \
           -v ${{ github.workspace }}/e2e/tests/screenshot-test.spec.js-snapshots:/e2e/tests/screenshot-test.spec.js-snapshots \
+          -v ${{ github.workspace }}/website/e2e/playwright-report:/e2e/playwright-report \
           --entrypoint "sh -c 'until wget -qO- http://apostrophe:3000/ > /dev/null; do echo Waiting for Apostrophe...; sleep 2; done && npm run test:e2e -c playwright.config.js'" \
           playwright-test
         continue-on-error: false
@@ -165,11 +169,6 @@ jobs:
         run: |
           docker cp $(docker ps -aqf "name=apostrophe-playwright-test"):/e2e/tests/screenshot-test.spec.js-snapshots ./website/e2e/tests/screenshot-test.spec.js-snapshots
 
-      - name: Stop and remove Playwright test container
-        run: |
-          docker stop apostrophe-playwright-test || true
-          docker rm apostrophe-playwright-test || true
-
       - name: Upload snapshots as new artifact
         uses: actions/upload-artifact@v4
         if: always()
@@ -177,6 +176,11 @@ jobs:
           name: playwright-report
           path: website/e2e/playwright-report/
           retention-days: 20
+
+      - name: Stop and remove Playwright test container
+        run: |
+          docker stop apostrophe-playwright-test || true
+          docker rm apostrophe-playwright-test || true
 
       - name: Fail workflow if tests failed
         if: ${{ env.TESTS_FAILED == 'true' }}
