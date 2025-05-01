@@ -7,7 +7,7 @@ services:
   playwright-test:
     container_name: apostrophe-playwright-test
     build:
-      context: ./e2e
+      context: ./website/e2e
       dockerfile: Dockerfile
     depends_on:
       - apostrophe
@@ -18,6 +18,6 @@ services:
     networks:
       - my-proxy-net
     volumes:
-      - ./e2e/tests/screenshot-test.spec.js-snapshots:/e2e/tests/screenshot-test.spec.js-snapshots
-      - ./e2e/playwright-report:/e2e/playwright-report
-      - ./e2e/test-results:/e2e/test-results
+      - ./website/e2e/tests/screenshot-test.spec.js-snapshots:/e2e/tests/screenshot-test.spec.js-snapshots
+      - ./website/e2e/playwright-report:/e2e/playwright-report
+      - ./website/e2e/test-results:/e2e/test-results
