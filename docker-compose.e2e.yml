@@ -18,11 +18,10 @@ services:
     networks:
       - proxynet
     volumes:
-      - test-snapshots-data:/e2e/tests/screenshot-test.spec.js-snapshots
+      - ./website/e2e/tests/screenshot-test.spec.js-snapshots:/e2e/tests/screenshot-test.spec.js-snapshots
       - playwright-report-data:/e2e/playwright-report
       - test-results-data:/e2e/test-results
 
 volumes:
-  test-snapshots-data:
   playwright-report-data:
   test-results-data:
