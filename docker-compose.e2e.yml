@@ -1,5 +1,5 @@
 networks:
-  my-proxy-net:
+  proxynet:
     name: sf-website-development
     external: true
 
@@ -16,7 +16,7 @@ services:
       - WAIT_HOSTS=apostrophe:3000
       - WAIT_TIMEOUT=60
     networks:
-      - my-proxy-net
+      - proxynet
     volumes:
       - ./website/e2e/tests/screenshot-test.spec.js-snapshots:/e2e/tests/screenshot-test.spec.js-snapshots
       - ./website/e2e/playwright-report:/e2e/playwright-report

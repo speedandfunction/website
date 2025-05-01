@@ -16,8 +16,7 @@ COPY tests ./tests/
 COPY entrypoint.sh /entrypoint.sh
 
 # Install dependencies as root, with --ignore-scripts
-RUN npm ci --ignore-scripts \
-    && npm install -g playwright@1.52.0 --ignore-scripts
+RUN npm ci --ignore-scripts
 
 # Create directories with safe permissions
 RUN mkdir -p /e2e/tests/screenshot-test.spec.js-snapshots \
