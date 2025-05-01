@@ -200,15 +200,7 @@ Environment variables are stored in the `.env` file. For production, you should 
 
 ## DataBase Management
 
-- **Import database**: `scripts/import_db_from_json.sh`
-- **Export database**: `scripts/export_db_to_json.sh`
-
-For doing these script executable, run
-
-```bash
-  chmod +x scripts/setup.sh
-  setup.sh
-```
+- **Import database**: `MONGO_URI=mongodb://localhost:27017 DB_NAME=apostrophe ./scripts/import_mongodb.sh ./export`
 
 ## Data Persistence
 

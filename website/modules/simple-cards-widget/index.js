@@ -36,12 +36,12 @@ module.exports = {
               label: 'Content',
               type: 'area',
               options: {
-                max: 1,
                 widgets: {
                   '@apostrophecms/rich-text': {
                     className: 'sf-simple-card__text',
                     ...extendedToolbar,
                   },
+                  buttons: {},
                 },
               },
             },

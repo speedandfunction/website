@@ -44,7 +44,7 @@ In GitHub or similar platforms, preview the PR description to verify there are n
 line breaks between bullet points.
 
 ## Process
-1. Analyze changes between main and current branch
+1. Analyze changes between origin/main and current branch
 2. Create PR title and bullet list description
 3. Create new PR or update existing PR tied to current branch
 4. Request review if needed

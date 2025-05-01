@@ -10,6 +10,10 @@ module.exports = {
           '@apostrophecms/file-tag',
         ],
       },
+      {
+        label: 'Cases',
+        items: ['case-studies', 'cases-tags'],
+      },
     ],
   },
 };

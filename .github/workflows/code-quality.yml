@@ -177,10 +177,12 @@ jobs:
           path: website/e2e/playwright-report/
           retention-days: 20
 
-      - name: Stop and remove Playwright test container
+      - name: Stop and remove all Docker Compose containers
         run: |
-          docker stop apostrophe-playwright-test || true
-          docker rm apostrophe-playwright-test || true
+          docker compose -f docker-compose.yml -f docker-compose.e2e.yml down --volumes --remove-orphans
+
+      - name: Remove Docker network
+        run: docker network rm sf-website-development || true
 
       - name: Fail workflow if tests failed
         if: ${{ env.TESTS_FAILED == 'true' }}
