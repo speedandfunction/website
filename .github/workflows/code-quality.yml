@@ -155,7 +155,8 @@ jobs:
       - name: Run Playwright tests
         run: |
           set -e
-          docker compose -f docker-compose.yml -f docker-compose.e2e.yml run --rm --build \
+          docker compose -f docker-compose.yml -f docker-compose.e2e.yml run --name apostrophe-playwright-test --build \
+          -v ${{ github.workspace }}/e2e/tests/screenshot-test.spec.js-snapshots:/e2e/tests/screenshot-test.spec.js-snapshots \
           --entrypoint "sh -c 'until wget -qO- http://apostrophe:3000/ > /dev/null; do echo Waiting for Apostrophe...; sleep 2; done && npm run test:e2e -c playwright.config.js'" \
           playwright-test
         continue-on-error: false
@@ -163,6 +164,11 @@ jobs:
       - name: Copy snapshots from Docker volume
         run: |
           docker cp $(docker ps -aqf "name=apostrophe-playwright-test"):/e2e/tests/screenshot-test.spec.js-snapshots ./website/e2e/tests/screenshot-test.spec.js-snapshots
+
+      - name: Stop and remove Playwright test container
+        run: |
+          docker stop apostrophe-playwright-test || true
+          docker rm apostrophe-playwright-test || true
 
       - name: Upload snapshots as new artifact
         uses: actions/upload-artifact@v4

@@ -23,7 +23,7 @@ jobs:
 
       - name: Run Playwright tests with snapshot update
         run: |
-          docker compose -f docker-compose.yml -f docker-compose.e2e.yml run --rm --build \
+          docker compose -f docker-compose.yml -f docker-compose.e2e.yml run --name apostrophe-playwright-test --build \
           --entrypoint "sh -c 'until wget -qO- http://apostrophe:3000/ > /dev/null; do echo Waiting for Apostrophe...; sleep 2; done && npm run test:e2e:update -c playwright.config.js'" \
           playwright-test
         continue-on-error: false
@@ -39,3 +39,8 @@ jobs:
           path: website/e2e/tests/screenshot-test.spec.js-snapshots
           overwrite: true
           retention-days: 20
+
+      - name: Stop and remove Playwright test container
+        run: |
+          docker stop apostrophe-playwright-test || true
+          docker rm apostrophe-playwright-test || true
