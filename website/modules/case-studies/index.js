@@ -11,6 +11,58 @@ module.exports = {
   },
   fields: {
     add: {
+      mediaType: {
+        label: 'Media Type',
+        type: 'radio',
+        choices: [
+          {
+            label: 'Image',
+            value: 'image',
+          },
+          {
+            label: 'Video',
+            value: 'video',
+          },
+        ],
+        def: 'image',
+      },
+      picture: {
+        label: 'Image',
+        type: 'area',
+        required: true,
+        options: {
+          max: 1,
+          min: 1,
+          widgets: {
+            '@apostrophecms/image': {
+              aspectRatio: [1200, 900],
+            },
+          },
+        },
+        if: {
+          mediaType: 'image',
+        },
+      },
+      _file: {
+        label: 'Video file',
+        type: 'relationship',
+        withType: '@apostrophecms/file',
+        max: 1,
+        required: true,
+        if: {
+          mediaType: 'video',
+        },
+      },
+      stack: {
+        label: 'Technology Stack',
+        type: 'string',
+        required: true,
+      },
+      subtitle: {
+        label: 'Subtitle',
+        type: 'string',
+        required: true,
+      },
       articleDate: {
         label: 'Date',
         type: 'date',
@@ -45,11 +97,34 @@ module.exports = {
           },
         },
       },
+      content: {
+        label: 'Content',
+        type: 'area',
+        options: {
+          widgets: {
+            '@apostrophecms/rich-text': {},
+          },
+        },
+      },
     },
     group: {
       basics: {
         label: 'Basics',
-        fields: ['title', 'articleDate', 'authorInfo', '_tags'],
+        fields: [
+          'title',
+          'mediaType',
+          'picture',
+          '_file',
+          'stack',
+          'subtitle',
+          'articleDate',
+          'authorInfo',
+          '_tags',
+        ],
+      },
+      content: {
+        label: 'Content',
+        fields: ['content'],
       },
     },
   },
@@ -57,6 +132,9 @@ module.exports = {
     add: {
       articleDate: {
         label: 'Case Study Date',
+      },
+      stack: {
+        label: 'Technology Stack',
       },
     },
   },
