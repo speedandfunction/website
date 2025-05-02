@@ -1,4 +1,4 @@
-name: 'Deploy to Railway'
+name: Deploy to Railway
 
 permissions:
   contents: read
