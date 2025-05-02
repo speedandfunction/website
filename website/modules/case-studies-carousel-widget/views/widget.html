@@ -4,20 +4,7 @@
     <div class="swiper-wrapper">
       {% for case in data.widget._selectedCases %}
       <div class="swiper-slide">
-        <div class="sf-projects-swiper__src">
-          {% if case.mediaType == 'video' %}
-          <video
-            autoplay="autoplay"
-            loop="loop"
-            muted
-            defaultMuted
-            playsinline
-            preload="auto"
-          >
-            <source src="{{ case._file[0]._url }}" type="video/mp4" />
-          </video>
-          {% else %} {% area case, 'picture' %} {% endif %}
-        </div>
+        <div class="sf-projects-swiper__src">{% area case, 'picture' %}</div>
         <div class="sf-projects-info">
           <h4 class="sf-projects-info__title">{{ case.title }}</h4>
           <span class="sf-projects-info__stack">{{ case.stack }}</span>

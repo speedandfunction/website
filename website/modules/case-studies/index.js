@@ -11,21 +11,6 @@ module.exports = {
   },
   fields: {
     add: {
-      mediaType: {
-        label: 'Media Type',
-        type: 'radio',
-        choices: [
-          {
-            label: 'Image',
-            value: 'image',
-          },
-          {
-            label: 'Video',
-            value: 'video',
-          },
-        ],
-        def: 'image',
-      },
       picture: {
         label: 'Image',
         type: 'area',
@@ -38,19 +23,6 @@ module.exports = {
               aspectRatio: [1200, 900],
             },
           },
-        },
-        if: {
-          mediaType: 'image',
-        },
-      },
-      _file: {
-        label: 'Video file',
-        type: 'relationship',
-        withType: '@apostrophecms/file',
-        max: 1,
-        required: true,
-        if: {
-          mediaType: 'video',
         },
       },
       stack: {
@@ -112,9 +84,7 @@ module.exports = {
         label: 'Basics',
         fields: [
           'title',
-          'mediaType',
           'picture',
-          '_file',
           'stack',
           'subtitle',
           'articleDate',
