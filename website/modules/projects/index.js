@@ -11,6 +11,8 @@ module.exports = {
       title: 1,
       updatedAt: -1,
     },
+    quickCreate: false,
+    quickEdit: false,
   },
   fields: {
     add: {
@@ -91,6 +93,22 @@ module.exports = {
           'subtitle',
           'content',
         ],
+      },
+    },
+  },
+  columns: {
+    add: {
+      title: {
+        label: 'Title',
+        name: 'title',
+      },
+      subtitle: {
+        label: 'Subtitle',
+        name: 'subtitle',
+      },
+      stack: {
+        label: 'Stack',
+        name: 'stack',
       },
     },
   },

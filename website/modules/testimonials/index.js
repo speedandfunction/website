@@ -51,6 +51,20 @@ module.exports = {
             _file: 1,
           },
         },
+        columns: [
+          {
+            name: 'title',
+            label: 'Title',
+          },
+          {
+            name: 'subtitle',
+            label: 'Subtitle',
+          },
+          {
+            name: 'stack',
+            label: 'Stack',
+          },
+        ],
       },
       url: {
         label: 'URL',
