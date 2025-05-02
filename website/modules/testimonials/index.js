@@ -102,7 +102,7 @@ module.exports = {
       },
       _caseStudy: {
         label: 'Related Case Study',
-        name: '_caseStudy',
+        name: '_caseStudy.0.title',
       },
     },
   },
