@@ -4,7 +4,6 @@ module.exports = {
     label: 'Case Study',
     pluralLabel: 'Case Studies',
     sort: {
-      articleDate: -1,
       updatedAt: -1,
     },
     perPage: 9,
@@ -35,29 +34,6 @@ module.exports = {
         type: 'string',
         required: true,
       },
-      articleDate: {
-        label: 'Date',
-        type: 'date',
-        required: false,
-      },
-      authorInfo: {
-        label: 'Author',
-        type: 'object',
-        fields: {
-          add: {
-            authorName: {
-              type: 'string',
-              label: 'Name',
-              help: 'Names are intentionally kept untranslatable on pages to avoid potential inaccuracies in translations and prevent issues that may arise from incorrect rendering of personal or specific names.',
-            },
-            authorPosition: {
-              type: 'string',
-              help: 'Will be rendered only if Name is not empty',
-              label: 'Position',
-            },
-          },
-        },
-      },
       _tags: {
         type: 'relationship',
         label: 'Tags',
@@ -82,15 +58,7 @@ module.exports = {
     group: {
       basics: {
         label: 'Basics',
-        fields: [
-          'title',
-          'picture',
-          'stack',
-          'subtitle',
-          'articleDate',
-          'authorInfo',
-          '_tags',
-        ],
+        fields: ['title', 'picture', 'stack', 'subtitle', '_tags'],
       },
       content: {
         label: 'Content',
@@ -100,9 +68,6 @@ module.exports = {
   },
   columns: {
     add: {
-      articleDate: {
-        label: 'Case Study Date',
-      },
       stack: {
         label: 'Technology Stack',
       },
