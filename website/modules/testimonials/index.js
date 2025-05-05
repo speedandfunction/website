@@ -38,7 +38,7 @@ module.exports = {
       _caseStudy: {
         label: 'Case Study',
         type: 'relationship',
-        withType: 'projects',
+        withType: 'case-studies',
         max: 1,
         builders: {
           project: {

@@ -14,9 +14,60 @@ module.exports = {
           add: {
             menuItem: {
               label: 'Menu Item',
-              ...linkSchema,
+              type: 'object',
+              fields: {
+                add: {
+                  linkTitle: {
+                    type: 'string',
+                    label: 'Link Title',
+                    required: true,
+                  },
+                  linkType: {
+                    type: 'select',
+                    label: 'Link Type',
+                    required: true,
+                    choices: [
+                      {
+                        label: 'Page',
+                        value: 'page',
+                      },
+                      {
+                        label: 'Custom URL',
+                        value: 'custom',
+                      },
+                    ],
+                  },
+                  customUrl: {
+                    type: 'string',
+                    label: 'Custom URL',
+                    required: true,
+                    if: {
+                      linkType: 'custom',
+                    },
+                  },
+                  _page: {
+                    type: 'relationship',
+                    label: 'Page',
+                    withType: '@apostrophecms/page',
+                    max: 1,
+                    required: true,
+                    if: {
+                      linkType: 'page',
+                    },
+                  },
+                  target: {
+                    type: 'checkboxes',
+                    label: 'Open in new window',
+                    choices: [
+                      {
+                        label: 'Yes',
+                        value: '_blank',
+                      },
+                    ],
+                  },
+                },
+              },
             },
-            //  Sublinks: {} for future second level of menu
           },
         },
       },

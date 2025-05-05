@@ -11,32 +11,38 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Docker starts services
-        run: docker compose up -d --build
+      - name: Ensure snapshot and report dirs are writable by container user
+        run: |
+          mkdir -p e2e/tests/screenshot-test.spec.js-snapshots
+          mkdir -p e2e/playwright-report
+          sudo chown -R 1000:1000 e2e/tests/screenshot-test.spec.js-snapshots
+          sudo chown -R 1000:1000 e2e/playwright-report
 
-      - name: Wait for services to start
-        run: sleep 15
-
-      - name: Run as root to install system deps
-        run: docker compose exec --user root apostrophe npx playwright install-deps
-
-      - name: Install Playwright Browsers
-        run: docker compose exec apostrophe npx playwright install
+      - name: Create Docker network
+        run: docker network create sf-website-development || true
 
       - name: Run Playwright tests with snapshot update
-        run: docker compose exec apostrophe sh -c "npm run test:e2e -- --update-snapshots"
-        continue-on-error: true
+        run: |
+          docker compose -f docker-compose.yml -f docker-compose.e2e.yml run --name apostrophe-playwright-test --build \
+          --entrypoint "sh -c 'until wget -qO- http://apostrophe:3000/ > /dev/null; do echo Waiting for Apostrophe...; sleep 2; done && npm run test:e2e:update -c playwright.config.js'" \
+          playwright-test
+        continue-on-error: false
 
-      - name: Ensure snapshot directory exists
-        run: mkdir -p e2e/
-
-      - name: Copy snapshots from container
-        run: docker cp apostrophe-cms:/app/e2e/screenshot-test.spec.js-snapshots e2e/
+      - name: Copy snapshots from Docker volume
+        run: |
+          docker cp $(docker ps -aqf "name=apostrophe-playwright-test"):/e2e/tests/screenshot-test.spec.js-snapshots ./website/e2e/tests/screenshot-test.spec.js-snapshots
 
       - name: Upload snapshots as artifact
         uses: actions/upload-artifact@v4
         with:
           name: playwright-snapshots
-          path: e2e/screenshot-test.spec.js-snapshots
+          path: website/e2e/tests/screenshot-test.spec.js-snapshots
           overwrite: true
           retention-days: 20
+
+      - name: Stop and remove all Docker Compose containers
+        run: |
+          docker compose -f docker-compose.yml -f docker-compose.e2e.yml down --volumes --remove-orphans
+
+      - name: Remove Docker network
+        run: docker network rm sf-website-development || true

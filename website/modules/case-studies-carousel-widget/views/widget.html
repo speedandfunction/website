@@ -1,0 +1,34 @@
+<section class="sf-section" data-case-studies-carousel-widget>
+  {% area data.widget, 'intro' %}
+  <div class="sf-projects-swiper swiper">
+    <div class="swiper-wrapper">
+      {% for case in data.widget._selectedCases %}
+      <div class="swiper-slide">
+        <div class="sf-projects-swiper__src">{% area case, 'picture' %}</div>
+        <div class="sf-projects-info">
+          <h4 class="sf-projects-info__title">{{ case.title }}</h4>
+          <span class="sf-projects-info__stack">{{ case.stack }}</span>
+          <div class="sf-projects-info-limit">
+            <h4 class="sf-projects-info__subtitle">{{ case.subtitle }}</h4>
+            <div class="sf-projects-info__content">
+              {% area case, 'content' %}
+            </div>
+            <a href="{{ case._url }}" class="sf-button sf-button_underline"
+              ><span>view more</span></a
+            >
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    <div class="swiper-controls">
+      <div class="swiper-nav">
+        <div class="swiper-button-prev">previous</div>
+        <div class="swiper-button-next">next</div>
+      </div>
+      <a href="/cases" class="sf-button sf-button_underline"
+        ><span>view all</span></a
+      >
+    </div>
+  </div>
+</section>
