@@ -81,12 +81,7 @@ data.piecesFilters.tags %} {% block main %}
           {% endif %}
           <div class="cs_details">
             <h3 class="cs_title">{{ article.title }}</h3>
-            {% if article.authorInfo %} {% if article.authorInfo.authorName %}
-            <div class="cs_author">
-              <span class="author-label">By</span>
-              <span class="cs_name">{{ article.authorInfo.authorName }}</span>
-            </div>
-            {% endif %} {% endif %} {% if article.summary %}
+            {% if article.summary %}
             <p class="cs_summary">{{ article.summary }}</p>
             {% endif %}
           </div>
