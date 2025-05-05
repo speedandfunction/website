@@ -45,7 +45,6 @@ function createAposConfig() {
       'links-buttons-widget': {},
       'team-carousel-widget': {},
       'testimonials-carousel-widget': {},
-      'case-studies-carousel-widget': {},
       'about-widget': {},
       'map-widget': {},
       'simple-cards-widget': {},
@@ -87,7 +86,6 @@ function createAposConfig() {
       'cases-tags': {},
       'case-studies': {},
       'case-studies-page': {},
-      'case-studies-carousel-widget': {},
     },
   };
 }
