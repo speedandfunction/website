@@ -42,9 +42,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Start services with Docker Compose
-        run: docker compose up -d
-
       - name: Install Railway CLI
         run: npm i -g @railway/cli
 
