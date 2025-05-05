@@ -30,6 +30,14 @@ export default () => {
               // Scroll to the top after page transition
               window.scrollTo(0, 0);
 
+              // Close menu if it's open
+              const menuButton = document.querySelector('[data-menu-button]');
+              const menu = document.querySelector('[data-menu]');
+              if (menuButton && menu) {
+                menu.classList.remove('open');
+                menuButton.classList.remove('open');
+              }
+
               // Trigger video play after transition
               const video = data.next.container.querySelector('video');
               if (video) {
@@ -224,6 +232,17 @@ export default () => {
       menuButton.addEventListener('click', () => {
         menu.classList.toggle('open');
         menuButton.classList.toggle('open');
+      });
+
+      // Close menu when clicking on menu items for non-logged users
+      const menuLinks = menu.querySelectorAll('a');
+      menuLinks.forEach((link) => {
+        link.addEventListener('click', () => {
+          if (!apos.user) {
+            menu.classList.remove('open');
+            menuButton.classList.remove('open');
+          }
+        });
       });
     }
   });
