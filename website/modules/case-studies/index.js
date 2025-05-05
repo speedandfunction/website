@@ -4,35 +4,35 @@ module.exports = {
     label: 'Case Study',
     pluralLabel: 'Case Studies',
     sort: {
-      articleDate: -1,
       updatedAt: -1,
     },
     perPage: 9,
   },
   fields: {
     add: {
-      articleDate: {
-        label: 'Date',
-        type: 'date',
-        required: false,
-      },
-      authorInfo: {
-        label: 'Author',
-        type: 'object',
-        fields: {
-          add: {
-            authorName: {
-              type: 'string',
-              label: 'Name',
-              help: 'Names are intentionally kept untranslatable on pages to avoid potential inaccuracies in translations and prevent issues that may arise from incorrect rendering of personal or specific names.',
-            },
-            authorPosition: {
-              type: 'string',
-              help: 'Will be rendered only if Name is not empty',
-              label: 'Position',
+      picture: {
+        label: 'Image',
+        type: 'area',
+        required: true,
+        options: {
+          max: 1,
+          min: 1,
+          widgets: {
+            '@apostrophecms/image': {
+              aspectRatio: [1200, 900],
             },
           },
         },
+      },
+      stack: {
+        label: 'Technology Stack',
+        type: 'string',
+        required: true,
+      },
+      subtitle: {
+        label: 'Subtitle',
+        type: 'string',
+        required: true,
       },
       _tags: {
         type: 'relationship',
@@ -45,18 +45,31 @@ module.exports = {
           },
         },
       },
+      content: {
+        label: 'Content',
+        type: 'area',
+        options: {
+          widgets: {
+            '@apostrophecms/rich-text': {},
+          },
+        },
+      },
     },
     group: {
       basics: {
         label: 'Basics',
-        fields: ['title', 'articleDate', 'authorInfo', '_tags'],
+        fields: ['title', 'picture', 'stack', 'subtitle', '_tags'],
+      },
+      content: {
+        label: 'Content',
+        fields: ['content'],
       },
     },
   },
   columns: {
     add: {
-      articleDate: {
-        label: 'Case Study Date',
+      stack: {
+        label: 'Technology Stack',
       },
     },
   },
