@@ -47,12 +47,7 @@ export default () => {
               // Call the wrapper function to initialize all components
               initializeAllComponents();
 
-              /*
-               * Toggle the menu state
-               * document.querySelector('[data-header-menu]').classList.toggle('close');
-               */
-
-              // Remove the previou page container to avoid blinking
+              // Remove the previous page container to avoid blinking
               data.current.container.remove();
 
               return gsap.from(data.next.container, {
@@ -61,6 +56,25 @@ export default () => {
             },
           },
         ],
+      });
+
+      // Add after hook for updating menu state
+      barba.hooks.after(() => {
+        // Update menu active state
+        const currentPath = window.location.pathname;
+        const menuLinks = document.querySelectorAll('.sf-nav__list a');
+
+        // First, remove active class from all menu items
+        menuLinks.forEach((link) => link.classList.remove('active'));
+
+        // Then, add active class to the current menu item
+        menuLinks.forEach((link) => {
+          const href = link.getAttribute('href');
+          const hrefPath = new URL(href, window.location.origin).pathname;
+          if (hrefPath === currentPath) {
+            link.classList.add('active');
+          }
+        });
       });
     });
   }
