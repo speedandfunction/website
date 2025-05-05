@@ -77,17 +77,17 @@ function createAposConfig() {
 
       // Custom Pieces
       'team-members': {},
-      projects: {},
-      testimonials: {},
+      'testimonials': {},
 
       // `asset` supports the project"s webpack build for client-side assets.
-      asset: {},
+      'asset': {},
       // The project"s first custom page type.
       'default-page': {},
       '@apostrophecms/import-export': {},
       'cases-tags': {},
       'case-studies': {},
       'case-studies-page': {},
+      'case-studies-carousel-widget': {},
     },
   };
 }

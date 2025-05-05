@@ -1,0 +1,28 @@
+networks:
+  proxynet:
+    name: sf-website-development
+    external: true
+
+services:
+  playwright-test:
+    container_name: apostrophe-playwright-test
+    build:
+      context: ./website/e2e
+      dockerfile: Dockerfile
+    depends_on:
+      - apostrophe
+    environment:
+      - BASE_URL=http://apostrophe:3000
+      - WAIT_HOSTS=apostrophe:3000
+      - WAIT_TIMEOUT=60
+    networks:
+      - proxynet
+    volumes:
+      - test-snapshots-data:/e2e/tests/screenshot-test.spec.js-snapshots
+      - playwright-report-data:/e2e/playwright-report
+      - test-results-data:/e2e/test-results
+
+volumes:
+  test-snapshots-data:
+  playwright-report-data:
+  test-results-data:
