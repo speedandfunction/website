@@ -1,4 +1,4 @@
-name: 'Deploy to Railway'
+name: Deploy to Railway
 
 permissions:
   contents: read
@@ -35,23 +35,25 @@ jobs:
   deploy-to-railway:
     name: Deploy to Railway
     runs-on: ubuntu-latest
-    container: node:22
-    environment: 'Development'
+    environment: ${{ inputs.deploy-env }}
     env:
       RAILWAY_TOKEN: ${{ secrets.RAILWAY_GITHUB_ACTIONS }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
       - name: Install Railway CLI
         run: npm i -g @railway/cli
+
       - name: Apply new image to Railway
         run: railway up --service=apostrophe-cms
+
   restore-db:
     name: Restore DB
     needs: deploy-to-railway
-    environment: 'Development'
+    environment: ${{ inputs.deploy-env }}
     runs-on: ubuntu-latest
-    if: ${{inputs.restore-db == true }}
+    if: ${{ inputs.restore-db == true }}
     env:
       MONGO_URI: ${{ secrets.MONGO_URI }}
       DB_NAME: ${{ vars.DB_NAME }}
@@ -60,9 +62,31 @@ jobs:
         uses: actions/checkout@v4
       - name: Drop DB
         run: ./scripts/drop_collections.sh
-      - name: Create users file
-        if: ${{ inputs.create-admin == true }}
-        run: echo "${{ secrets.USERS_JSON }}" > export/aposUsersSafe.json
       - name: Update DB
         run: ./scripts/import_mongodb.sh ./export
         shell: bash
+
+  create-admin:
+    name: Create Admin User
+    needs: restore-db
+    if: ${{ inputs.create-admin == true }}
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.deploy-env }}
+    env:
+      APOS_MONGODB_URI: ${{ secrets.MONGO_URI }}
+      ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Start services with Docker Compose
+        run: |
+          docker compose up -d mongodb
+          sleep 5  # Wait for MongoDB to start
+
+      - name: Create admin user
+        run: |
+          docker compose run --rm \
+            -e APOS_MONGODB_URI="$APOS_MONGODB_URI" \
+            apostrophe \
+            /bin/sh -c "echo \"$ADMIN_PASSWORD\" | node app.js @apostrophecms/user:add admin admin"
