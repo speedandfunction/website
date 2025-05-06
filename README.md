@@ -158,21 +158,31 @@ docker-compose -f docker-compose.yml -f docker-compose.override.yml up -d
 
 This project uses [Playwright](https://playwright.dev/) for end-to-end testing.
 
+- **Snapshot Management:** To establish a baseline for UI tests, trigger the **"Update Snapshots"** workflow manually via the GitHub Actions UI. This builds the environment, runs Playwright tests with `--update-snapshots`, and uploads the snapshots as a GitHub Actions artifact.
+
+- **Automated E2E Testing:** On every push request or PR, the **"E2E Tests"** workflow runs. It downloads the latest uploaded snapshots artifact and compares the current UI against it, ensuring UI consistency across branches.
+
 ### Running Tests Locally
 
 Before testing, **make sure the app is running at** [http://localhost:3000](http://localhost:3000).
 
-To run the end-to-end tests, use the following command:
+To run the end-to-end tests, go to the `website/e2e` folder and run:
+
+```bash
+npm ci
+```
+
+Then, run the tests with:
 
 ```bash
 npm run test:e2e
 ```
 
-- On the first run, this generates the initial snapshots in the `website/e2e` folder.
+- On the first run, this generates the initial snapshots in the `website/e2e/tests` folder.
 
 - On subsequent runs, it compares the current UI state with the stored snapshots.
 
-- If you've made intentional UI changes, delete the existing snapshots in `website/e2e` and rerun the `npm run test:e2e` command to update them.
+- If you've made intentional UI changes, run `npm run test:e2e:update` to update the snapshots.
 
 ## Environment Variables
 
@@ -190,7 +200,8 @@ Environment variables are stored in the `.env` file. For production, you should 
 
 ## DataBase Management
 
-- **Import database**: `MONGO_URI=mongodb://localhost:27017 DB_NAME=apostrophe ./scripts/import_mongodb.sh ./export`
+- **Import database**: `MONGO_URI="mongodb://your-mongodb-uri" DB_NAME="your-database-name" ./scripts/import_mongodb.sh ./export`
+- **Export database**: `MONGO_URI="mongodb://your-mongodb-uri" DB_NAME="your-database-name" ./scripts/export_mongodb.sh`
 
 ## Data Persistence
 
