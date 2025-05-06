@@ -35,6 +35,7 @@ module.exports = {
             organization: 1,
             url: 1,
             headshot: 1,
+            _caseStudy: 1,
           },
         },
       },
