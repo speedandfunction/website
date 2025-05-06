@@ -45,7 +45,6 @@ function createAposConfig() {
       'links-buttons-widget': {},
       'team-carousel-widget': {},
       'testimonials-carousel-widget': {},
-      'projects-carousel-widget': {},
       'about-widget': {},
       'map-widget': {},
       'simple-cards-widget': {},
