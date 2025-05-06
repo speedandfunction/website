@@ -75,6 +75,8 @@ jobs:
     env:
       APOS_MONGODB_URI: ${{ secrets.MONGO_URI }}
       ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
+      DB_NAME: ${{ vars.DB_NAME }}
+      NODE_ENV: ${{ inputs.deploy-env == 'Production' && 'production' || inputs.deploy-env == 'Staging' && 'staging' || 'development' }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
