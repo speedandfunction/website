@@ -2,7 +2,7 @@
   {% area data.widget, 'intro' %}
   <div class="sf-person-swiper sf-testimonials swiper">
     <div class="swiper-wrapper">
-      {% for card in data.widget._testimonials%}
+      {% for card in data.widget._testimonials %}
       <div class="swiper-slide">
         <div class="sf-person">
           <div class="sf-testimonial-header">
@@ -35,6 +35,13 @@
             <div class="sf-person__content">
               {% area card, 'feedback' %}
             </div>
+            {% if card._caseStudy %}
+              <div class="card-swiper__case-study">
+                <h5 class="card-swiper__case-study-title">Case Study: {{ card._caseStudy[0].title }}</h5>
+                <p class="card-swiper__case-study-subtitle">{{ card._caseStudy[0].subtitle }}</p>
+                <p class="card-swiper__case-study-stack">{{ card._caseStudy[0].stack }}</p>
+              </div>
+            {% endif %}
             {% if card.url %}
               <a href="https://{{ card.url }}/" target="_blank" class="sf-person__url">{{ card.url }}</a>
             {% endif %}

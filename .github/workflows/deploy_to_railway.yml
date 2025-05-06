@@ -35,7 +35,7 @@ jobs:
   deploy-to-railway:
     name: Deploy to Railway
     runs-on: ubuntu-latest
-    environment: ${{ inputs.deploy-env }}
+    environment: ${{ inputs.deploy-env || (github.ref_name == 'main' && 'Development') || (startsWith(github.ref_name, 'prod/') && 'Production') || (startsWith(github.ref_name, 'staging/') && 'Staging')  || 'None' }}
     env:
       RAILWAY_TOKEN: ${{ secrets.RAILWAY_GITHUB_ACTIONS }}
     steps:
@@ -51,7 +51,7 @@ jobs:
   restore-db:
     name: Restore DB
     needs: deploy-to-railway
-    environment: ${{ inputs.deploy-env }}
+    environment: ${{ inputs.deploy-env || (github.ref_name == 'main' && 'Development') || (startsWith(github.ref_name, 'prod/') && 'Production') || (startsWith(github.ref_name, 'staging/') && 'Staging')  || 'None' }}
     runs-on: ubuntu-latest
     if: ${{ inputs.restore-db == true }}
     env:
@@ -71,10 +71,12 @@ jobs:
     needs: restore-db
     if: ${{ inputs.create-admin == true }}
     runs-on: ubuntu-latest
-    environment: ${{ inputs.deploy-env }}
+    environment: ${{ inputs.deploy-env || (github.ref_name == 'main' && 'Development') || (startsWith(github.ref_name, 'prod/') && 'Production') || (startsWith(github.ref_name, 'staging/') && 'Staging')  || 'None' }}
     env:
       APOS_MONGODB_URI: ${{ secrets.MONGO_URI }}
       ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
+      DB_NAME: ${{ vars.DB_NAME }}
+      NODE_ENV: ${{ inputs.deploy-env == 'Production' && 'production' || inputs.deploy-env == 'Staging' && 'staging' || 'development' }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
