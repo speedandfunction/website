@@ -88,6 +88,7 @@ function createAposConfig() {
       'cases-tags': {},
       'case-studies': {},
       'case-studies-page': {},
+      'categories': {},
     },
   };
 }

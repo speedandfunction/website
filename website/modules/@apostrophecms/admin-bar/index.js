@@ -14,6 +14,10 @@ module.exports = {
         label: 'Cases',
         items: ['case-studies', 'cases-tags'],
       },
+      {
+        label: 'Categories',
+        items: ['categories'],
+      },
     ],
   },
 };
