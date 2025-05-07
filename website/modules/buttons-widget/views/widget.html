@@ -11,7 +11,9 @@ data.widget.buttonCollection[0].buttonAlignment.alignment or 'center' %} {% else
   {% for item in data.widget.buttonCollection %} {% set path =
   utilities.getPath(item.button) %} {% if path|length > 0 %} {% render
   utilities.button(item.button, item.buttonConfig) %} {% else %}
-  <div
+  <button
+    type="button"
+    disabled
     class="sf-button sf-button--empty{% if item.buttonConfig.buttonStyle %} {{ item.buttonConfig.buttonStyle }}{% endif %}"
     {%
     if
@@ -21,8 +23,9 @@ data.widget.buttonCollection[0].buttonAlignment.alignment or 'center' %} {% else
     {%
     endif
     %}
+    aria-label="{{ item.button.linkTitle }}"
   >
     <span>{{ item.button.linkTitle }}</span>
-  </div>
+  </button>
   {% endif %} {% endfor %}
 </div>
