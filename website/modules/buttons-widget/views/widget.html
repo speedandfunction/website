@@ -8,6 +8,21 @@ data.widget.buttonCollection[0].buttonAlignment.alignment or 'center' %} {% else
   data-links-widget
   data-alignment="{{ alignment }}"
 >
-  {% for item in data.widget.buttonCollection %} {% render
-  utilities.button(item.button, item.buttonConfig) %} {% endfor %}
+  {% for item in data.widget.buttonCollection %} {% set path =
+  utilities.getPath(item.button) %} {% if path|length > 0 %} {% render
+  utilities.button(item.button, item.buttonConfig) %} {% else %}
+  <div
+    class="sf-button sf-button--empty{% if item.buttonConfig.buttonStyle %} {{ item.buttonConfig.buttonStyle }}{% endif %}"
+    {%
+    if
+    item.buttonConfig.textSpacing
+    %}
+    style="--button-text-spacing: {{ item.buttonConfig.textSpacing }}px"
+    {%
+    endif
+    %}
+  >
+    <span>{{ item.button.linkTitle }}</span>
+  </div>
+  {% endif %} {% endfor %}
 </div>
