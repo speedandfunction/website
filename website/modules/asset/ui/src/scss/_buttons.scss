@@ -30,39 +30,7 @@
     color: $gray-500;
     background-color: transparent;
     padding: 10px 0;
-    span {
-      position: relative;
-
-      &::before {
-        content: '';
-        background-color: $gray-200;
-        position: absolute;
-        bottom: -3px;
-        left: 0;
-        height: 2px;
-        width: 100%;
-      }
-
-      &::after {
-        content: '';
-        background-color: $gray-500;
-        position: absolute;
-        bottom: -3px;
-        left: 0;
-        height: 2px;
-        width: 0;
-        transition: 0.2s;
-      }
-    }
-
-    &:hover,
-    &:focus {
-      span {
-        &::after {
-          width: 100%;
-        }
-      }
-    }
+    @include button-underline;
   }
 }
 
@@ -92,37 +60,7 @@
         color: $gray-500;
         width: fit-content;
         margin: 0 auto;
-
-        span {
-          position: relative;
-          &::before {
-            content: '';
-            background-color: $gray-200;
-            position: absolute;
-            bottom: -3px;
-            left: 0;
-            height: 2px;
-            width: 100%;
-          }
-          &::after {
-            content: '';
-            background-color: $gray-500;
-            position: absolute;
-            bottom: -3px;
-            left: 0;
-            height: 2px;
-            width: 0;
-            transition: 0.2s;
-          }
-        }
-        &:hover,
-        &:focus {
-          span {
-            &::after {
-              width: 100%;
-            }
-          }
-        }
+        @include button-underline;
 
         @include breakpoint-medium {
           border: 1px solid $gray-500;
