@@ -1,8 +1,9 @@
 .sf-simple-cards {
   display: flex;
+  justify-content: center;
   flex-wrap: wrap;
   counter-reset: card-counter;
-  @include border(border-bottom);
+  gap: 32px;
   @include breakpoint-medium {
     border: 0;
   }
@@ -15,23 +16,32 @@
   flex-direction: column;
   @include border(border);
   box-sizing: border-box;
-  border-bottom: 0;
+  max-width: 450px;
 
   @include breakpoint-medium {
-    width: 33.3%;
-    @include border(border-bottom);
+    width: calc(50% - 16px);
+    @include border(border);
   }
+
+  @include breakpoint-small{
+    width: calc(100% - 32px);
+    @include border(border);
+  }
+
   .background-circle {
     z-index: -10;
     background-color: $gray-500;
-    border-radius: 100%;
-    width: 6.25em;
-    height: 6.25em;
+    border-radius: 50%;
+    width: 0;
+    height: 100%;
+    padding-bottom: 300%;
     position: absolute;
-    inset: -80% -34% auto auto;
+    inset: 0 0 0 100%;
+    transform-origin: bottom right;
+
     @include transition(all, 0.5s);
     @include breakpoint-medium {
-      inset: -50% -32% auto auto;
+      inset: 0 0 0 100%;
     }
   }
   &__title {
@@ -60,6 +70,13 @@
       margin: 0;
     }
   }
+  &:hover .background-circle {
+    height: 500%;
+    width: 500%;
+    inset: 0 0 0 100%;
+    border-radius: 50%;
+    transform: translate3d(-30%, -30%, 0);
+  }
 }
 .sf-simple-card-wrap {
   padding: 20px;
@@ -68,6 +85,7 @@
   transform-style: preserve-3d;
   overflow: hidden;
   height: 100%;
+  width: 100%;
   @include breakpoint-medium {
     padding: 40px;
   }
@@ -77,8 +95,8 @@
     padding-left: 24px;
     padding-right: 24px;
     @include breakpoint-medium {
-      padding-left: 40px;
-      padding-right: 40px;
+      padding-left: 35px;
+      padding-right: 35px;
     }
     &::before {
       color: $gray-300;
@@ -91,9 +109,11 @@
       color: $gray-200;
     }
     .background-circle {
-      width: 40em;
-      height: 40em;
-      transform: translate3d(-5%, -10%, 0);
+      height: 500%;
+      width: 500%;
+      inset: 0 0 0 0;
+      border-radius: 50%;
+      transform: translate3d(-30%, -30%, 0);
     }
   }
   &::before {
@@ -105,14 +125,5 @@
     color: $gray-200;
     margin-bottom: 6px;
     @include transition(color);
-  }
-}
-
-@include breakpoint-medium {
-  .sf-simple-card:not(:nth-child(3n)) {
-    border-right: none;
-  }
-  .sf-simple-card:not(:nth-last-child(-n + 3)) {
-    border-bottom: none;
   }
 }
