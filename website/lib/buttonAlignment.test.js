@@ -24,10 +24,10 @@ describe('buttonAlignment', () => {
 
     expect(alignment).toEqual(
       expect.objectContaining({
-        label: 'Alignment',
+        label: 'Horizontal alignment',
         type: 'radio',
         def: 'center',
-        help: 'Choose how to align the button. This option is available only if you create one button.',
+        help: 'Set the horizontal alignment of the button within its container. This option is available only if you create one button.',
       }),
     );
   });
