@@ -32,31 +32,76 @@
 		margin-bottom: 120px;
 	}
 }
-.sf-head {
-	font-size: 10px;
-	font-weight: 700;
-	color: $gray-300;
-	text-transform: uppercase;
-	margin: 0 0 5px;
-	@include breakpoint-medium {
-		margin-bottom: 10px;
-	}
+
+.sf-h1 {
+  font-weight: $font-weight-extra-bold;
+  font-size: $font-size-h1-mobile;
+  line-height: $line-height-h1;
+  
+  @include breakpoint-medium {
+    font-size: $font-size-h1;
+  }
 }
+
+.sf-h2 {
+  font-weight: $font-weight-extra-bold;
+  font-size: $font-size-h2-mobile;
+  line-height: $line-height-h1;
+  
+  @include breakpoint-medium {
+    font-size: $font-size-h2;
+    line-height: $line-height-body;
+  }
+}
+
 .sf-title {
-	font-size: 22px;
-	line-height: 24px;
-	margin: 0 0 20px;
-	color: $gray-500;
-	@include breakpoint-medium {
-		font-size: 36px;
-		line-height: 40px;
-		margin: 0 0 40px;
-	}
+  font-weight: $font-weight-extra-bold;
+  font-size: $font-size-h3-mobile;
+  line-height: $line-height-body;
+
+  @include breakpoint-medium {
+    font-size: $font-size-h3;
+    line-height: 170%;
+  }
 }
+
+.sf-subscribe__title {
+  font-weight: $font-weight-extra-bold;
+  font-size: $font-size-h4-mobile;
+  line-height: $line-height-body;
+
+  @include breakpoint-medium {
+    font-size: $font-size-h4;
+  }
+}
+
+.sf-h5 {
+  font-weight: $font-weight-extra-bold;
+  font-size: $font-size-h5-mobile;
+  line-height: $line-height-body;
+
+  @include breakpoint-medium {
+    font-size: $font-size-h5;
+  }
+}
+
+.sf-h6 {
+  font-weight: $font-weight-extra-bold;
+  font-size: $font-size-h6-mobile;
+  line-height: $line-height-h1;
+
+  @include breakpoint-medium {
+    font-size: $font-size-h6;
+  }
+}
+
 .sf-rich {
-	font-size: 14px;
-	line-height: 20px;
-	color: $gray-300;
-	font-weight: 500;
-	margin: 0;
+  font-weight: $font-weight-medium;
+  font-size: $font-size-body-small-mobile;
+  line-height: $line-height-body;
+
+  @include breakpoint-medium {
+    font-size: $font-size-body-small;
+    line-height: 150%;
+  }
 }

@@ -1,3 +1,5 @@
+const headingToolbar = require('./headingToolbar');
+
 module.exports = {
   expanded: true,
   groups: {
@@ -11,9 +13,11 @@ module.exports = {
         'about': {},
         'simple-cards': {},
         'links-buttons': {},
-        '@apostrophecms/rich-text': {},
         'buttons': {},
         'whitespace': {},
+        '@apostrophecms/rich-text': {
+          ...headingToolbar,
+        },
       },
       columns: 2,
     },
