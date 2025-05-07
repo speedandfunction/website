@@ -15,6 +15,11 @@ services:
       - NODE_ENV=development
       - APOS_MONGODB_URI=mongodb://mongodb:27017/apostrophe
       - SESSION_SECRET=change_this_to_a_secure_secret
+      # AWS S3 settings loaded from .env file
+      - APOS_S3_BUCKET=${APOS_S3_BUCKET}
+      - APOS_S3_REGION=${APOS_S3_REGION}
+      - APOS_S3_KEY=${APOS_S3_KEY}
+      - APOS_S3_SECRET=${APOS_S3_SECRET}
 
     command: ["npm", "start"]
     depends_on:
