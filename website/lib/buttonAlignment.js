@@ -5,7 +5,7 @@ module.exports = {
     fields: {
       add: {
         alignment: {
-          label: 'Alignment',
+          label: 'Horizontal alignment',
           type: 'radio',
           choices: [
             {
@@ -22,7 +22,7 @@ module.exports = {
             },
           ],
           def: 'center',
-          help: 'Choose how to align the button. This option is available only if you create one button.',
+          help: 'Set the horizontal alignment of the button within its container. This option is available only if you create one button.',
         },
       },
     },
