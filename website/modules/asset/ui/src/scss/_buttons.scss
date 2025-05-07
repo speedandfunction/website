@@ -51,16 +51,27 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      width: 100%;
       padding: 12px;
-      margin: 0 0 10px;
+      margin: 0 auto 10px;
+      width: fit-content;
+
+      &.sf-button_underline {
+        background-color: $gray-500;
+        color: $white;
+        padding: 12px;
+
+        span {
+          &::before,
+          &::after {
+            content: none;
+          }
+        }
+      }
 
       &:last-child {
+        @include button-underline;
         background: none;
         color: $gray-500;
-        width: fit-content;
-        margin: 0 auto;
-        @include button-underline;
 
         @include breakpoint-medium {
           border: 1px solid $gray-500;
@@ -78,6 +89,7 @@
       @include breakpoint-medium {
         margin: 0;
         padding: 24px 0;
+        width: 100%;
       }
     }
   }
