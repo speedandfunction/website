@@ -1,7 +1,13 @@
-{% import 'fragments/utilities.html' as utilities %}
+{% import 'fragments/utilities.html' as utilities %} {% set count =
+data.widget.buttonCollection.length %} {% if count == 1 %} {% set alignment =
+data.widget.buttonCollection[0].buttonAlignment.alignment or 'center' %} {% else
+%} {% set alignment = '' %} {% endif %}
 
-<div class="sf-buttons-group" data-links-widget data-alignment="{{ data.widget.alignment }}">
-	{% for item in data.widget.buttonCollection %}
-		{% render utilities.button(item.button, item.buttonConfig) %}
-	{% endfor %}
+<div
+  class="sf-buttons-group{% if count == 2 %} two-buttons{% else %} single-button{% endif %}"
+  data-links-widget
+  data-alignment="{{ alignment }}"
+>
+  {% for item in data.widget.buttonCollection %} {% render
+  utilities.button(item.button, item.buttonConfig) %} {% endfor %}
 </div>
