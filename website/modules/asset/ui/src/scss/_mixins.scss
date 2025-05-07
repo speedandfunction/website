@@ -80,3 +80,37 @@
   width: 21px;
   height: 8px;
 }
+
+// button underline mixin for Button widget
+@mixin button-underline {
+  span {
+    position: relative;
+    &::before {
+      content: '';
+      background-color: $gray-200;
+      position: absolute;
+      bottom: -3px;
+      left: 0;
+      height: 2px;
+      width: 100%;
+    }
+    &::after {
+      content: '';
+      background-color: $gray-500;
+      position: absolute;
+      bottom: -3px;
+      left: 0;
+      height: 2px;
+      width: 0;
+      transition: 0.2s;
+    }
+  }
+  &:hover,
+  &:focus {
+    span {
+      &::after {
+        width: 100%;
+      }
+    }
+  }
+}
