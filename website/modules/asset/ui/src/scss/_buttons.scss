@@ -98,12 +98,6 @@
         background: none;
         color: $gray-500;
       }
-
-      &.sf-button--empty {
-        background: $gray-200;
-        opacity: 0.5;
-        cursor: not-allowed;
-      }
     }
 
     &[data-alignment='left'] {
@@ -114,6 +108,30 @@
     }
     &[data-alignment='right'] {
       justify-content: flex-end;
+    }
+  }
+
+  .sf-button--empty {
+    background: $gray-300;
+    border: none;
+    opacity: 0.5;
+    cursor: not-allowed;
+
+    &:hover {
+      &::after {
+        content: 'Link file/page to this element';
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        white-space: nowrap;
+        background: $red;
+        color: $gray-500;
+        padding: 4px 8px;
+        font-size: 12px;
+        margin-top: 4px;
+        z-index: 10;
+      }
     }
   }
 }
