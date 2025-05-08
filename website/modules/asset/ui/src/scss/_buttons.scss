@@ -19,11 +19,18 @@
   text-transform: uppercase;
   cursor: pointer;
   margin-top: var(--widget-text-spacing, 4px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+  max-width: 270px;
+  text-align: center;
 
   @include breakpoint-medium {
     font-size: $font-size-body-large;
     padding: 24px 92px;
     height: 64px;
+    max-width: initial;
   }
 
   &_underline {
@@ -48,7 +55,6 @@
     }
 
     .sf-button {
-      display: flex;
       justify-content: center;
       align-items: center;
       padding: 12px;
@@ -88,7 +94,7 @@
 
       @include breakpoint-medium {
         margin: 0;
-        padding: 24px 0;
+        padding: 24px 12px;
         width: 100%;
       }
     }
