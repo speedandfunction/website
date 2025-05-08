@@ -51,8 +51,9 @@ module.exports = {
         options: {
           max: 1,
           widgets: {
-            '@apostrophecms/rich-text': {},
-            ...headingToolbar,
+            '@apostrophecms/rich-text': {
+              ...headingToolbar,
+            },
           },
         },
       },
