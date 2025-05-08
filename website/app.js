@@ -87,6 +87,7 @@ function createAposConfig() {
       'case-studies': {},
       'case-studies-page': {},
       'case-studies-carousel-widget': {},
+      'container-widget': {},
     },
   };
 }

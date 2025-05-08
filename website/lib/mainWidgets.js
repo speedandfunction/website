@@ -14,6 +14,7 @@ module.exports = {
         '@apostrophecms/rich-text': {},
         'buttons': {},
         'whitespace': {},
+        'container': {},
       },
       columns: 2,
     },

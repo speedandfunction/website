@@ -1,0 +1,18 @@
+<div
+  class="sf-container-background"
+  style="--container-background: {{ data.widget.backgroundColor }};"
+>
+  <div
+    class="sf-container-widget"
+    style="
+      --width-mobile: {{ data.widget.widthMobile }}px;
+      --width-desktop: {{ data.widget.widthDesktop }}px;
+      --padding-mobile-bottom: {{ data.widget.paddingBottomMob }}px;
+      --padding-desktop-bottom: {{ data.widget.paddingBottomDes }}px;
+      --padding-mobile-top: {{ data.widget.paddingTopMob }}px;
+      --padding-desktop-top: {{ data.widget.paddingTopDes }}px;
+    "
+  >
+    {% area data.widget, 'content' %}
+  </div>
+</div>
