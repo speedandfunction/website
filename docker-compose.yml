@@ -20,6 +20,9 @@ services:
       - APOS_S3_REGION=${APOS_S3_REGION}
       - APOS_S3_KEY=${APOS_S3_KEY}
       - APOS_S3_SECRET=${APOS_S3_SECRET}
+      # CDN setting loaded from .env file
+      - APOS_CDN_URL=${APOS_CDN_URL}
+      - APOS_CDN_ENABLED=${APOS_CDN_ENABLED}
 
     command: ["npm", "start"]
     depends_on:
