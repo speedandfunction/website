@@ -32,6 +32,7 @@ module.exports = {
           mediaType: 1,
           stack: 1,
           portfolioTitle: 1,
+          descriptor: 1,
           prodLink: 1,
           _url: 1,
           content: 1,

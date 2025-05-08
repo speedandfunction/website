@@ -22,7 +22,11 @@
             <h4 class="sf-projects-info__portfolio-title">
               {{ caseStudy.portfolioTitle }}
             </h4>
-            {% if caseStudy.prodLink %}
+            {% if caseStudy.descriptor %}
+            <p class="sf-projects-info__descriptor">
+              {{ caseStudy.descriptor }}
+            </p>
+            {% endif %} {% if caseStudy.prodLink %}
             <a
               href="{{ caseStudy.prodLink }}"
               target="_blank"
