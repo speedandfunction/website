@@ -1,4 +1,4 @@
-const extendedToolbar = require('../../lib/extendedToolbar');
+const headingToolbar = require('../../lib/headingToolbar');
 
 module.exports = {
   extend: '@apostrophecms/piece-type',
@@ -79,7 +79,7 @@ module.exports = {
           max: 1,
           widgets: {
             '@apostrophecms/rich-text': {
-              ...extendedToolbar,
+              ...headingToolbar,
             },
           },
         },

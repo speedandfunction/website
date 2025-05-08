@@ -36,7 +36,7 @@ module.exports = {
         step: 2,
         def: 322,
       },
-      paddingBottomDes: {
+      paddingBottomDesktop: {
         label: 'Padding bottom (desktop)',
         type: 'range',
         min: 0,
@@ -44,7 +44,7 @@ module.exports = {
         step: 2,
         def: 0,
       },
-      paddingBottomMob: {
+      paddingBottomMobile: {
         label: 'Padding bottom (mobile)',
         type: 'range',
         min: 0,
@@ -52,7 +52,7 @@ module.exports = {
         step: 2,
         def: 0,
       },
-      paddingTopDes: {
+      paddingTopDesktop: {
         label: 'Padding top (desktop)',
         type: 'range',
         min: 0,
@@ -60,7 +60,7 @@ module.exports = {
         step: 2,
         def: 0,
       },
-      paddingTopMob: {
+      paddingTopMobile: {
         label: 'Padding top (mobile)',
         type: 'range',
         min: 0,

@@ -1,3 +1,5 @@
+const headingToolbar = require('../../lib/headingToolbar');
+
 module.exports = {
   extend: '@apostrophecms/piece-type',
   options: {
@@ -50,7 +52,9 @@ module.exports = {
         type: 'area',
         options: {
           widgets: {
-            '@apostrophecms/rich-text': {},
+            '@apostrophecms/rich-text': {
+              ...headingToolbar,
+            },
           },
         },
       },
