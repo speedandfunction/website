@@ -51,6 +51,14 @@
       margin: 0 0 10px;
     }
   }
+  &__client-website,
+  &__prod-link {
+    display: block;
+    color: $gray-500;
+    font-weight: $font-weight-medium;
+    font-size: $font-size-body-small;
+    line-height: $line-height-body;
+  }
   &__stack {
     font-weight: 500;
     font-size: 10px;

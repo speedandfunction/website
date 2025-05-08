@@ -15,6 +15,12 @@ module.exports = {
         type: 'string',
         required: true,
       },
+      clientWebsite: {
+        label: 'Client Website',
+        type: 'string',
+        help: "Link to client's official website",
+        placeholder: 'https://example.com',
+      },
       picture: {
         label: 'Image',
         type: 'area',
@@ -32,12 +38,19 @@ module.exports = {
       stack: {
         label: 'Tech Stack',
         type: 'string',
+        help: 'Comma separated tags indicating the technologies utilized in the project.',
         required: true,
       },
       portfolioTitle: {
         label: 'Portfolio Title',
         type: 'string',
         required: true,
+      },
+      prodLink: {
+        label: 'Link to Prod',
+        type: 'string',
+        help: 'Public link referring to the delivered result',
+        placeholder: 'https://example.com/project',
       },
       _tags: {
         type: 'relationship',
@@ -63,7 +76,15 @@ module.exports = {
     group: {
       basics: {
         label: 'Basics',
-        fields: ['title', 'picture', 'stack', 'portfolioTitle', '_tags'],
+        fields: [
+          'title',
+          'clientWebsite',
+          'picture',
+          'stack',
+          'portfolioTitle',
+          'prodLink',
+          '_tags',
+        ],
       },
       content: {
         label: 'Content',

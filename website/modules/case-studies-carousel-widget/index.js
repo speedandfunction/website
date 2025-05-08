@@ -27,10 +27,12 @@ module.exports = {
         withRelationships: ['_url'],
         projection: {
           title: 1,
+          clientWebsite: 1,
           picture: 1,
           mediaType: 1,
           stack: 1,
           portfolioTitle: 1,
+          prodLink: 1,
           _url: 1,
           content: 1,
         },

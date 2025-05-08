@@ -9,11 +9,27 @@
         </div>
         <div class="sf-projects-info">
           <h4 class="sf-projects-info__title">{{ caseStudy.title }}</h4>
+          {% if caseStudy.clientWebsite %}
+          <a
+            href="{{ caseStudy.clientWebsite }}"
+            target="_blank"
+            class="sf-projects-info__client-website"
+            >{{ caseStudy.clientWebsite }}</a
+          >
+          {% endif %}
           <span class="sf-projects-info__stack">{{ caseStudy.stack }}</span>
           <div class="sf-projects-info-limit">
             <h4 class="sf-projects-info__portfolio-title">
               {{ caseStudy.portfolioTitle }}
             </h4>
+            {% if caseStudy.prodLink %}
+            <a
+              href="{{ caseStudy.prodLink }}"
+              target="_blank"
+              class="sf-projects-info__prod-link"
+              >{{ caseStudy.prodLink }}</a
+            >
+            {% endif %}
             <div class="sf-projects-info__content">
               {% area caseStudy, 'content' %}
             </div>
