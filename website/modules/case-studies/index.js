@@ -10,6 +10,11 @@ module.exports = {
   },
   fields: {
     add: {
+      title: {
+        label: 'Client Name',
+        type: 'string',
+        required: true,
+      },
       picture: {
         label: 'Image',
         type: 'area',
@@ -25,12 +30,12 @@ module.exports = {
         },
       },
       stack: {
-        label: 'Technology Stack',
+        label: 'Tech Stack',
         type: 'string',
         required: true,
       },
-      subtitle: {
-        label: 'Subtitle',
+      portfolioTitle: {
+        label: 'Portfolio Title',
         type: 'string',
         required: true,
       },
@@ -58,7 +63,7 @@ module.exports = {
     group: {
       basics: {
         label: 'Basics',
-        fields: ['title', 'picture', 'stack', 'subtitle', '_tags'],
+        fields: ['title', 'picture', 'stack', 'portfolioTitle', '_tags'],
       },
       content: {
         label: 'Content',
@@ -69,7 +74,7 @@ module.exports = {
   columns: {
     add: {
       stack: {
-        label: 'Technology Stack',
+        label: 'Tech Stack',
       },
     },
   },

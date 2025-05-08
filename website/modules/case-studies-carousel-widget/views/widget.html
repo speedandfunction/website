@@ -11,7 +11,9 @@
           <h4 class="sf-projects-info__title">{{ caseStudy.title }}</h4>
           <span class="sf-projects-info__stack">{{ caseStudy.stack }}</span>
           <div class="sf-projects-info-limit">
-            <h4 class="sf-projects-info__subtitle">{{ caseStudy.subtitle }}</h4>
+            <h4 class="sf-projects-info__portfolio-title">
+              {{ caseStudy.portfolioTitle }}
+            </h4>
             <div class="sf-projects-info__content">
               {% area caseStudy, 'content' %}
             </div>
