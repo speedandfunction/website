@@ -17,6 +17,7 @@ module.exports = {
             '@apostrophecms/rich-text': {
               ...headingToolbar,
             },
+            'buttons': {},
           },
         },
       },
