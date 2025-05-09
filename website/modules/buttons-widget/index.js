@@ -1,5 +1,6 @@
 const linkSchema = require('../../lib/linkSchema');
 const buttonConfig = require('../../lib/buttonConfig');
+const buttonAlignment = require('../../lib/buttonAlignment');
 
 module.exports = {
   extend: '@apostrophecms/widget-type',
@@ -9,29 +10,12 @@ module.exports = {
   },
   fields: {
     add: {
-      alignment: {
-        label: 'Alignment',
-        type: 'radio',
-        choices: [
-          {
-            label: 'Left⬅️',
-            value: 'left',
-          },
-          {
-            label: 'Center↕️',
-            value: 'center',
-          },
-          {
-            label: 'Right➡️',
-            value: 'right',
-          },
-        ],
-        def: 'center',
-      },
       buttonCollection: {
-        label: 'Button Collection',
+        label: 'Create Button(s)',
         type: 'array',
         titleField: 'button.linkTitle',
+        max: 2,
+        help: 'You can create one or two buttons. If you create two, both will be shown side by side.',
         fields: {
           add: {
             button: {
@@ -39,6 +23,7 @@ module.exports = {
               ...linkSchema,
             },
             ...buttonConfig,
+            ...buttonAlignment,
           },
         },
       },
