@@ -1,3 +1,19 @@
+const required = [
+  'APOS_S3_BUCKET',
+  'APOS_S3_REGION',
+  'APOS_S3_KEY',
+  'APOS_S3_SECRET',
+];
+required.forEach((v) => {
+  if (!process.env[v]) {
+    throw new Error(`Missing required env var: ${v}`);
+  }
+});
+
+if (process.env.APOS_CDN_ENABLED === 'true' && !process.env.APOS_CDN_URL) {
+  throw new Error('CDN is enabled but APOS_CDN_URL is not set');
+}
+
 module.exports = {
   options: {
     uploadfs: {
