@@ -75,6 +75,10 @@ module.exports = {
       stack: {
         label: 'Technology Stack',
       },
+      _tags: {
+        label: 'Tags',
+        component: 'AposCellTags',
+      },
     },
   },
   filters: {
