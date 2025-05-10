@@ -1,32 +1,33 @@
-## 📁 Recommended Project Structure (with POM & COM folders under `tests/`)
+## 📁 Recommended Project Structure
 
 <details>
 <summary>Project Structure Example</summary>
 
 ```
 project-root/
-├── tests/                   # Test specifications
-│   ├── login.spec.ts
-│   └── dashboard.spec.ts
-├── pom/                     # Page Object Model classes
-│   ├── LoginPage.ts
-│   └── DashboardPage.ts
-├── com/                     # Component Object Model classes
-│   ├── HeaderComponent.ts
-│   └── ModalComponent.ts
-├── utils/                   # Helper functions and utilities
-│   ├── userFactory.ts
-│   └── helpers.ts
-├── data/                    # Test data (JSON, mock data, etc.)
-│   └── users.json
-├── fixtures/                # Playwright fixtures and test setup
-│   └── testSetup.ts
+├── e2e/                     # E2E testing directory
+│   ├── pages/               # Page Object Model classes
+│   │   ├── LoginPage.ts
+│   │   └── DashboardPage.ts
+│   ├── components/          # Component Object Model classes
+│   │   ├── HeaderComponent.ts
+│   │   └── ModalComponent.ts
+│   ├── utils/               # Helper functions and utilities
+│   │   ├── userFactory.ts
+│   │   └── helpers.ts
+│   ├── specs/               # Test specifications
+│   │   ├── login.spec.ts
+│   │   └── dashboard.spec.ts
+│   ├── data/                # Test data (JSON, mock data, etc.)
+│   │   └── users.json
+│   ├── fixtures/            # Playwright fixtures and test setup
+│   │   └── testSetup.ts
+│   ├── playwright.config.ts # Playwright configuration
+│   └── tsconfig.json        # TypeScript configuration
 ├── config/                  # Optional: custom configuration files
 │   └── env.ts
-├── reports/                 # Optional: test reports and artifacts
-│   └── index.html
-├── playwright.config.ts     # Playwright configuration
-└── tsconfig.json 
+└── reports/                 # Optional: test reports and artifacts
+    └── index.html
 ```
 </details>
 
@@ -129,7 +130,7 @@ export class LoginPage {
     }
   }
 
-  // login.spec.ts
+  // e2e/specs/login.spec.ts
   describe('Login', () => {
     const loginPage = new LoginPage();
     const dashboardPage = new DashboardPage();
@@ -182,7 +183,7 @@ export class LoginPage {
   <summary>✅ Good practice:</summary>
 
   ```ts
-  // login.spec.ts
+  // e2e/specs/login.spec.ts
   import { test, expect } from '@playwright/test';
   import { LoginPage } from '../pages/LoginPage';
 
@@ -245,7 +246,7 @@ export class LoginPage {
     }
   }
 
-  // login.spec.ts
+  // e2e/specs/login.spec.ts
   import { test, expect } from '@playwright/test';
   import { LoginPage } from '../pages/LoginPage';
 
@@ -572,7 +573,7 @@ test('Test 2 with DB connection', async () => {
 <summary>✅ Good practice:</summary>
 
 ```ts
-// database.ts
+// e2e/utils/database.ts
 export class Database {
   private static instance: Database;
   private connection: any;
@@ -601,7 +602,7 @@ export class Database {
   }
 }
 
-// fixtures.ts
+// e2e/fixtures/fixtures.ts
 import { test as base } from '@playwright/test';
 import { Database } from '../utils/database';
 
@@ -620,7 +621,7 @@ export const test = base.extend({
   }
 });
 
-// test1.spec.ts
+// e2e/specs/test1.spec.ts
 import { test } from '../fixtures/fixtures';
 
 test('Test 1 with DB fixture', async ({ database }) => {
@@ -628,7 +629,7 @@ test('Test 1 with DB fixture', async ({ database }) => {
   await database.executeQuery('SELECT * FROM users');
 });
 
-// test2.spec.ts
+// e2e/specs/test2.spec.ts
 import { test } from '../fixtures/fixtures';
 
 test('Test 2 with DB fixture', async ({ database }) => {
@@ -659,5 +660,3 @@ test('Test 2 with DB fixture', async ({ database }) => {
 * Mix logic between POM and specs
 * Use arbitrary waits (use auto-waiting)
 * Ignore flaky tests
-
-
