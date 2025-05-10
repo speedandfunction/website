@@ -1,5 +1,3 @@
-/* eslint-disable node/no-missing-import */
-/* eslint-disable import/no-unresolved */
 import { Navigation } from 'swiper/modules';
 import Swiper from 'swiper/bundle';
 

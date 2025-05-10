@@ -1,5 +1,3 @@
-/* eslint-disable sonarjs/no-nested-functions */
-
 const initSmoothCounters = function initSmoothCounters() {
   const counters = document.querySelectorAll('.sf-counter__num');
   if (counters.length > 0) {

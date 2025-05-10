@@ -1,4 +1,3 @@
-/* eslint-disable sonarjs/no-nested-functions */
 import barba from '@barba/core';
 import gsap from 'gsap';
 import lozad from 'lozad';

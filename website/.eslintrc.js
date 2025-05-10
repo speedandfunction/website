@@ -168,7 +168,8 @@ module.exports = {
         'sort-imports': 'off',
         'no-invalid-this': 'off',
         'node/no-missing-import': 'off',
-        'import/no-named-as-default': 'off'
+        'import/no-named-as-default': 'off',
+        'sonarjs/no-nested-functions': 'off'
       }
     },
     {
@@ -177,7 +178,21 @@ module.exports = {
         'import/no-unresolved': 'off',
         'no-ternary': 'off',
         'sort-imports': 'off',
-        'node/no-missing-import': 'off'
+        'node/no-missing-import': 'off',
+        'node/no-unpublished-import': 'off'
+      }
+    },
+    {
+      files: ['modules/asset/ui/src/smoothCounters.js'],
+      rules: {
+        'sonarjs/no-nested-functions': 'off'
+      }
+    },
+    {
+      files: ['modules/asset/ui/src/swipers.js'],
+      rules: {
+        'node/no-missing-import': 'off',
+        'import/no-unresolved': 'off'
       }
     }
   ],
