@@ -74,7 +74,7 @@ export class LoginPage {
   <summary>❌ Bad practice:</summary>
 
   ```ts
-  // LoginAndDashboardPage.ts
+  // e2e/pages/LoginAndDashboardPage.ts
   import { Page } from '@playwright/test';
 
   class LoginAndDashboardPage {
@@ -106,7 +106,7 @@ export class LoginPage {
   <summary>✅ Good practice:</summary>
 
   ```ts
-  // LoginPage.ts
+  // e2e/pages/LoginPage.ts
   import { Page } from '@playwright/test';
 
   export class LoginPage {
@@ -119,7 +119,7 @@ export class LoginPage {
     }
   }
 
-  // DashboardPage.ts
+  // e2e/pages/DashboardPage.ts
   import { Page } from '@playwright/test';
 
   export class DashboardPage {
@@ -149,7 +149,7 @@ export class LoginPage {
   <summary>❌ Bad practice:</summary>
 
   ```ts
-  // LoginPage.ts
+  // e2e/pages/LoginPage.ts
   import { Page, expect } from '@playwright/test';
 
   class LoginPage {
@@ -184,7 +184,7 @@ export class LoginPage {
 
   ```ts
 
-  // LoginPage.ts
+  // e2e/pages/LoginPage.ts
   import { Page, expect } from '@playwright/test';
 
   class LoginPage {
@@ -247,7 +247,7 @@ export class LoginPage {
   <summary>✅ Good practice:</summary>
 
   ```ts
-  // LoginPage.ts
+  // e2e/pages/LoginPage.ts
   import { Page } from '@playwright/test';
 
   export class LoginPage {
@@ -265,6 +265,18 @@ export class LoginPage {
 
     public get welcomeMessage() {
       return this.page.locator('h1');
+    }
+  }
+  // 
+  export class DashboardPage {
+    readonly header: HeaderComponent;
+    
+    constructor(private page: Page) {
+      this.header = new HeaderComponent(page);
+    }
+    
+     public get title() {
+      return this.page.locator('#dashboard-title')
     }
   }
 
@@ -355,7 +367,7 @@ test('User can logout from dashboard', async ({ page }) => {
 <summary>✅ Good practice:</summary>
 
 ```ts
-// HeaderComponent.ts
+// e2e/components/HeaderComponent.ts
 import { Page } from '@playwright/test';
 
 export class HeaderComponent {
@@ -370,7 +382,7 @@ export class HeaderComponent {
   }
 }
 
-// DashboardPage.ts
+// e2e/pages/DashboardPage.ts
 import { Page } from '@playwright/test';
 import { HeaderComponent } from '../components/HeaderComponent';
 
@@ -470,7 +482,7 @@ test('Regular user can log in successfully', async ({ page }) => {
 <summary>✅ Good practice:</summary>
 
 ```ts
-// userFactory.ts
+// e2e/utils/userFactory.ts
 export function createUser(role: string) {
   const baseUser = {
     username: `user_${Math.random().toString(36).substring(2, 15)}`,
@@ -565,7 +577,7 @@ class Database {
 <summary>❌ Bad practice:</summary>
 
 ```ts
-// db-util.ts
+// e2e/utils/db-util.ts
 export const connectToDatabase = async () => {
   // Create new connection each time
   return new SQLDatabase('connection-string');
