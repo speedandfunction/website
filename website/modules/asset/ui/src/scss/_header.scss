@@ -1,13 +1,24 @@
 .sf-header {
-  display: flex;
-  justify-content: space-between;
-  padding: 40px 0 80px;
-  align-items: center;
-  color: $gray-300;
-  @include breakpoint-medium {
-    padding: 60px 0;
-    margin-bottom: 60px;
+  background-color: $white;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 95px;
+  padding-top: 17px;
+  z-index: 11;
+
+  &__content {
+    width: min(1280px, 100%);
+    margin: 0 auto;
+    padding: 0 40px;
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: $gray-500;
   }
+
   .sf-logo {
     font-size: 12px;
     font-weight: 800;
@@ -17,50 +28,51 @@
     text-decoration: none;
     &:hover,
     &:focus {
-      color: $gray-500;
+      color: $gray-300;
     }
     @include breakpoint-medium {
-      font-size: 14px;
-      color: $gray-300;
+      font-size: $font-size-body-small;
+      line-height: $line-height-h1;
     }
   }
 }
 #nav-icon {
-  width: 14px;
-  height: 8px;
+  display: block;
+  width: 32px;
+  height: 32px;
   position: relative;
-  margin: 0;
-  transform: rotate(0deg);
-  transition: 0.3s ease-in-out;
   cursor: pointer;
-  @include breakpoint-medium {
-    width: 20px;
-    height: 10px;
+  border: none;
+  background: none;
+  padding: 0;
+  &:hover,
+  &:focus {
+    span {
+      background: $gray-300;
+    }
   }
+
   span {
     display: block;
     position: absolute;
-    height: 1px;
-    width: 100%;
-    background: $gray-500;
-    border-radius: 10px;
-    opacity: 1;
-    left: 0;
-    transform: rotate(0deg);
-    transition: 0.25s ease-in-out;
-    @include breakpoint-medium {
-      background: $gray-300;
-    }
+    height: 2px;
+    width: 22px;
+    background-color: $gray-500;
+    border-radius: 1px;
+    left: 50%;
+    transform: translateX(-50%);
+    transition: 0.4s ease;
+
     &:nth-child(1) {
-      top: 0;
-      transform-origin: left center;
+      top: 6px;
     }
+
     &:nth-child(2) {
-      top: 8px;
-      transform-origin: left center;
-      @include breakpoint-medium {
-        top: 10px;
-      }
+      top: 14px;
+    }
+
+    &:nth-child(3) {
+      top: 22px;
     }
   }
 }
@@ -71,25 +83,18 @@
   text-transform: uppercase;
   &.open {
     #nav-icon {
-      span {
-        background: $gray-500;
-        &:nth-child(1) {
-          transform: rotate(32deg);
-          top: 0;
-          left: 0;
-          @include breakpoint-medium {
-            transform: rotate(28deg);
-          }
-        }
-        &:nth-child(2) {
-          transform: rotate(-35deg);
-          top: 8px;
-          left: 0;
-          @include breakpoint-medium {
-            top: 10px;
-            transform: rotate(-30deg);
-          }
-        }
+      span:nth-child(1) {
+        top: 14px;
+        transform: translateX(-50%) rotate(45deg);
+      }
+
+      span:nth-child(2) {
+        opacity: 0;
+      }
+
+      span:nth-child(3) {
+        top: 14px;
+        transform: translateX(-50%) rotate(-45deg);
       }
     }
   }
