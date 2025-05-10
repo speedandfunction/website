@@ -1,7 +1,31 @@
-{% import 'fragments/utilities.html' as utilities %}
+{% import 'fragments/utilities.html' as utilities %} {% set count =
+data.widget.buttonCollection.length %} {% if count == 1 %} {% set alignment =
+data.widget.buttonCollection[0].buttonAlignment.alignment or 'center' %} {% else
+%} {% set alignment = '' %} {% endif %}
 
-<div class="sf-buttons-group" data-links-widget data-alignment="{{ data.widget.alignment }}">
-	{% for item in data.widget.buttonCollection %}
-		{% render utilities.button(item.button, item.buttonConfig) %}
-	{% endfor %}
+<div
+  class="sf-buttons-group{% if count == 2 %} two-buttons{% else %} single-button{% endif %}"
+  data-links-widget
+  data-alignment="{{ alignment }}"
+>
+  {% for item in data.widget.buttonCollection %} {% set path =
+  utilities.getPath(item.button) %} {% if path|length > 0 %} {% render
+  utilities.button(item.button, item.buttonConfig) %} {% else %}
+  <button
+    type="button"
+    disabled
+    class="sf-button sf-button--empty{% if item.buttonConfig.buttonStyle %} {{ item.buttonConfig.buttonStyle }}{% endif %}"
+    {%
+    if
+    item.buttonConfig.textSpacing
+    %}
+    style="--button-text-spacing: {{ item.buttonConfig.textSpacing }}px"
+    {%
+    endif
+    %}
+    aria-label="{{ item.button.linkTitle }}"
+  >
+    <span>{{ item.button.linkTitle }}</span>
+  </button>
+  {% endif %} {% endfor %}
 </div>

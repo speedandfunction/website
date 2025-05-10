@@ -1,6 +1,6 @@
 module.exports = {
   buttonConfig: {
-    label: 'Button Config',
+    label: 'Button Style Settings',
     type: 'object',
     fields: {
       add: {
@@ -18,6 +18,7 @@ module.exports = {
             },
           ],
           def: 'btn-dark',
+          help: 'Choose how the button will look. This option is available only if you create one button.',
         },
       },
     },
