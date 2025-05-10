@@ -151,13 +151,7 @@ module.exports = {
     {
       files: ['modules/@apostrophecms/form/index.js'],
       rules: {
-        'sonarjs/cognitive-complexity': 'off',
-        'security/detect-object-injection': 'off',
-        'no-secrets/no-secrets': 'off',
-        'no-console': 'off',
-        'max-lines-per-function': 'off',
-        'no-inline-comments': 'off',
-        'require-unicode-regexp': 'off'
+        'max-lines': 'off'
       }
     },
     {
