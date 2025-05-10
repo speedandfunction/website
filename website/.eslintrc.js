@@ -181,12 +181,6 @@ module.exports = {
       }
     },
     {
-      files: ['lib/mainWidgets.js'],
-      rules: {
-        'quote-props': 'off'
-      }
-    },
-    {
       files: ['modules/team-members/index.js'],
       rules: {
         'capitalized-comments': 'off'
