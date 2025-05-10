@@ -77,7 +77,7 @@ export class LoginPage {
   // e2e/pages/LoginAndDashboardPage.ts
   import { Page } from '@playwright/test';
 
-  class LoginAndDashboardPage {
+  export class LoginAndDashboardPage {
     constructor(private page: Page) {}
 
     async waitForWelcomeMessage() {
@@ -92,7 +92,7 @@ export class LoginPage {
   }
   // e2e/specs/login.spec.ts
   describe('Login', () => {
-    const loginAndDashboardPage = new LoginAndDashboardPage();
+    const loginAndDashboardPage = new LoginAndDashboardPage(page);
     
     it('should login successfully', async () => {
       await loginAndDashboardPage.login('user', 'password');
@@ -132,8 +132,8 @@ export class LoginPage {
 
   // e2e/specs/login.spec.ts
   describe('Login', () => {
-    const loginPage = new LoginPage();
-    const dashboardPage = new DashboardPage();
+    const loginPage = new LoginPage(page);
+    const dashboardPage = new DashboardPage(page);
     
     it('should login successfully', async () => {
       await loginPage.login('user', 'password');
@@ -152,7 +152,7 @@ export class LoginPage {
   // e2e/pages/LoginPage.ts
   import { Page, expect } from '@playwright/test';
 
-  class LoginPage {
+  export class LoginPage {
     constructor(private page: Page) {}
 
     async login(username: string, password: string) {
@@ -187,7 +187,7 @@ export class LoginPage {
   // e2e/pages/LoginPage.ts
   import { Page, expect } from '@playwright/test';
 
-  class LoginPage {
+  export class LoginPage {
     constructor(private page: Page) {}
 
     async login(username: string, password: string) {
@@ -207,7 +207,7 @@ export class LoginPage {
 
   test('User can log in successfully', async ({ page }) => {
     const loginPage = new LoginPage(page);
-    await loginPage.login('user', 'pass');
+    await loginPage.login('user', 'password');
     await expect(loginPage.welcomeMessage).toHaveText('Welcome');
   });
   ```
@@ -381,6 +381,20 @@ export class HeaderComponent {
     await this.page.click('#logout');
   }
 }
+// e2e/pages/LoginPage.ts
+export class LoginPage {
+    constructor(private page: Page) {}
+
+    async login(username: string, password: string) {
+      await this.page.fill('#username', username);
+      await this.page.fill('#password', password);
+      await this.page.click('button');      
+    }
+
+    public get welcomeMessage() {
+      return this.page.locator('h1');
+    }
+  }
 
 // e2e/pages/DashboardPage.ts
 import { Page } from '@playwright/test';
@@ -411,7 +425,7 @@ test('User can logout from dashboard', async ({ page }) => {
   await dashboardPage.header.clickProfile();
   await dashboardPage.header.logout();
   
-  await expect(loginPage.pageTitle).toHaveText('Login');
+  await expect(loginPage.welcomeMessage).toHaveText('Login');
 });
 ```
 </details>
@@ -547,7 +561,7 @@ Useful for managing shared resources.
 
 ```ts
 // e2e/utils/database.ts
-class Database {
+export class Database {
   private static instance: Database;
 
   private constructor() {
