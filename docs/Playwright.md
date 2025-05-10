@@ -90,7 +90,7 @@ export class LoginPage {
       await this.page.click('button');
     }
   }
-  // login.spec.ts
+  // e2e/specs/login.spec.ts
   describe('Login', () => {
     const loginAndDashboardPage = new LoginAndDashboardPage();
     
@@ -109,7 +109,7 @@ export class LoginPage {
   // LoginPage.ts
   import { Page } from '@playwright/test';
 
-  class LoginPage {
+  export class LoginPage {
     constructor(private page: Page) {}
 
     async login(username: string, password: string) {
@@ -122,7 +122,7 @@ export class LoginPage {
   // DashboardPage.ts
   import { Page } from '@playwright/test';
 
-  class DashboardPage {
+  export class DashboardPage {
     constructor(private page: Page) {}
 
     async waitForWelcomeMessage() {
@@ -173,7 +173,7 @@ export class LoginPage {
   test('should show error on invalid login', async ({ page }) => {
     const loginPage = new LoginPage(page);
     await loginPage.login('invalid', 'wrong');
-    await expect(page.locator('.error')).toBeVisible();
+    await loginPage.assertLoginError();
   });
 
   ```
@@ -183,6 +183,24 @@ export class LoginPage {
   <summary>✅ Good practice:</summary>
 
   ```ts
+
+  // LoginPage.ts
+  import { Page, expect } from '@playwright/test';
+
+  class LoginPage {
+    constructor(private page: Page) {}
+
+    async login(username: string, password: string) {
+      await this.page.fill('#username', username);
+      await this.page.fill('#password', password);
+      await this.page.click('button');      
+    }
+
+    public get welcomeMessage() {
+      return this.page.locator('h1');
+    }
+  }
+
   // e2e/specs/login.spec.ts
   import { test, expect } from '@playwright/test';
   import { LoginPage } from '../pages/LoginPage';
@@ -201,7 +219,7 @@ export class LoginPage {
   <summary>❌ Bad practice:</summary>
 
   ```ts
-  // login.spec.ts
+  // e2e/specs/login.spec.ts
   import { test, expect } from '@playwright/test';
 
   test('User can log in', async ({ page }) => {
@@ -212,7 +230,7 @@ export class LoginPage {
     await expect(page.locator('h1')).toBeVisible();
   });
 
-  // dashboard.spec.ts
+  // e2e/specs/dashboard.spec.ts
   import { test, expect } from '@playwright/test';
 
   test('User can access dashboard after login', async ({ page }) => {
@@ -244,6 +262,10 @@ export class LoginPage {
       await this.page.fill('#password', password);
       await this.page.click('button');
     }
+
+    public get welcomeMessage() {
+      return this.page.locator('h1');
+    }
   }
 
   // e2e/specs/login.spec.ts
@@ -254,10 +276,10 @@ export class LoginPage {
     const loginPage = new LoginPage(page);
     await loginPage.navigate();
     await loginPage.login('user1', 'pass1');
-    await expect(page.locator('h1')).toBeVisible();
+    await expect(loginPage.welcomeMessage).toBeVisible();
   });
 
-  // dashboard.spec.ts
+  // e2e/specs/dashboard.spec.ts
   import { test, expect } from '@playwright/test';
   import { LoginPage } from '../pages/LoginPage';
   import { DashboardPage } from '../pages/DashboardPage';
@@ -316,7 +338,7 @@ export class HeaderComponent {
 <summary>❌ Bad practice:</summary>
 
 ```ts
-// dashboard.spec.ts
+// e2e/specs/dashboard.spec.ts
 import { test, expect } from '@playwright/test';
 
 test('User can logout from dashboard', async ({ page }) => {
@@ -364,7 +386,7 @@ export class DashboardPage {
   }
 }
 
-// dashboard.spec.ts
+// e2e/specs/dashboard.spec.ts
 import { test, expect } from '@playwright/test';
 import { DashboardPage } from '../pages/DashboardPage';
 import { LoginPage } from '../pages/LoginPage';
@@ -418,7 +440,7 @@ export function createUser(role: string) {
 <summary>❌ Bad practice:</summary>
 
 ```ts
-// login.spec.ts
+// e2e/specs/login.spec.ts
 import { test, expect } from '@playwright/test';
 import { LoginPage } from '../pages/LoginPage';
 
@@ -471,7 +493,7 @@ export function createUser(role: string) {
   };
 }
 
-// login.spec.ts
+// e2e/specs/login.spec.ts
 import { test, expect } from '@playwright/test';
 import { LoginPage } from '../pages/LoginPage';
 import { createUser } from '../utils/userFactory';
@@ -549,7 +571,7 @@ export const connectToDatabase = async () => {
   return new SQLDatabase('connection-string');
 };
 
-// test1.spec.ts
+// e2e/specs/test1.spec.ts
 import { test } from '@playwright/test';
 import { connectToDatabase } from '../utils/db-util';
 
@@ -558,7 +580,7 @@ test('Test 1 with DB connection', async () => {
   // Test logic...
 });
 
-// test2.spec.ts
+// e2e/specs/test2.spec.ts
 import { test } from '@playwright/test';
 import { connectToDatabase } from '../utils/db-util';
 
