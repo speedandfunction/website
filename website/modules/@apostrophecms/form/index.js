@@ -194,7 +194,8 @@ module.exports = {
                * Ensure this is defined in your form
                */
               const { spreadsheetId } = form;
-              const range = 'Sheet1!A1'; // Specify the sheet and range, e.g., Sheet1!A1
+              // Specify the sheet and range, e.g., Sheet1!A1
+              const range = 'Sheet1!A1';
 
               // Google Sheets JWT Authentication
               const auth = new google.auth.JWT({

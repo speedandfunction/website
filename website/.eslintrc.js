@@ -1,14 +1,21 @@
 module.exports = {
   extends: [
     'apostrophe',
-    'eslint:all', // All core ESLint rules
-    'plugin:sonarjs/recommended-legacy', // Sonar rules for ESLint 8 compatibility
-    'plugin:security/recommended-legacy', // Security rules
-    'plugin:promise/recommended', // Promise rules
-    'plugin:import/errors', // Import rules
+    // All core ESLint rules
+    'eslint:all',
+    // Sonar rules for ESLint 8 compatibility
+    'plugin:sonarjs/recommended-legacy',
+    // Security rules
+    'plugin:security/recommended-legacy',
+    // Promise rules
+    'plugin:promise/recommended',
+    // Import rules
+    'plugin:import/errors',
     'plugin:import/warnings',
-    'plugin:node/recommended', // Node.js rules
-    'plugin:jsx-a11y/strict', // Accessibility rules
+    // Node.js rules
+    'plugin:node/recommended',
+    // Accessibility rules
+    'plugin:jsx-a11y/strict',
     'plugin:prettier/recommended',
   ],
   plugins: [
@@ -19,10 +26,14 @@ module.exports = {
     'node',
     'jsx-a11y',
     'prettier',
-    'optimize-regex', // Regex optimizations
-    'no-unsanitized', // Prevent XSS
-    'no-secrets', // Prevent secrets in code
-    'eslint-comments', // Enforce ESLint comments best practices
+    // Regex optimizations
+    'optimize-regex',
+    // Prevent XSS
+    'no-unsanitized',
+    // Prevent secrets in code
+    'no-secrets',
+    // Enforce ESLint comments best practices
+    'eslint-comments',
   ],
   env: {
     browser: true,
@@ -49,31 +60,43 @@ module.exports = {
     },
   },
   rules: {
-    // Disabled rules
-    'security/detect-object-injection': 'error', // Can cause false positives on safe property access
+    /*
+     * Disabled rules
+     * Can cause false positives on safe property access
+     */
+    'security/detect-object-injection': 'error',
     'import/no-unresolved': 'error',
-    'prettier/prettier': 'off', // Fixable
+    // Fixable
+    'prettier/prettier': 'off',
     'no-secrets/no-secrets': 'error',
-    'eslint-comments/no-unused-disable': 'error', // Fixable
+    // Fixable
+    'eslint-comments/no-unused-disable': 'error',
     'no-console': 'error',
     'max-lines-per-function': 'error',
-    'sort-keys': 'off', // Too many violations across the codebase
-    'line-comment-position': 'error',
+    // Too many violations across the codebase
+    'sort-keys': 'off',
+    'line-comment-position': ['error', { position: 'above' }],
     'no-inline-comments': 'error',
-    'no-magic-numbers': 'off', // Too many violations across the codebase
-    'node/no-unsupported-features/es-syntax': 'off', // Project uses modern ES syntax
+    // Too many violations across the codebase
+    'no-magic-numbers': 'off',
+    // Project uses modern ES syntax
+    'node/no-unsupported-features/es-syntax': 'off',
     'func-style': 'error',
     'func-names': 'error',
     'no-ternary': 'error',
     'id-length': 'error',
     'require-unicode-regexp': 'error',
-    'sort-imports': 'error', // Fixable
-    'no-trailing-spaces': 'error', // Fixable
-    'quote-props': 'error', // Fixable
+    // Fixable
+    'sort-imports': 'error',
+    // Fixable
+    'no-trailing-spaces': 'error',
+    // Fixable
+    'quote-props': 'error',
     'no-invalid-this': 'error',
     'node/no-missing-import': 'error',
     'import/no-named-as-default': 'error',
-    'capitalized-comments': 'error', // Fixable
+    // Fixable
+    'capitalized-comments': 'error',
 
     // Simple enabled rules (with 'error' only)
     'sonarjs/no-identical-expressions': 'error',
@@ -91,20 +114,20 @@ module.exports = {
     'no-param-reassign': 'error',
     'no-dupe-keys': 'error',
     'init-declarations': 'error',
-    
+
     // Rules with parameters
     'max-depth': ['error', 4],
     'max-lines': ['error', 300],
     'max-nested-callbacks': ['error', 3],
     'max-params': ['error', 5],
     'max-statements': ['error', 50],
-    'complexity': ['error', 15],
+    complexity: ['error', 15],
     'prefer-destructuring': ['error', {
-      'array': true,
-      'object': true
+      array: true,
+      object: true
     }],
     'node/no-extraneous-require': ['error', {
-      'allowModules': ['@jest/globals']
+      allowModules: ['@jest/globals']
     }]
   },
   overrides: [
@@ -126,15 +149,6 @@ module.exports = {
       }
     },
     {
-      files: ['.eslintrc.js'],
-      rules: {
-        'line-comment-position': 'off',
-        'no-inline-comments': 'off',
-        'no-trailing-spaces': 'off',
-        'quote-props': 'off'
-      }
-    },
-    {
       files: ['modules/@apostrophecms/form/index.js'],
       rules: {
         'sonarjs/cognitive-complexity': 'off',
@@ -142,7 +156,6 @@ module.exports = {
         'no-secrets/no-secrets': 'off',
         'no-console': 'off',
         'max-lines-per-function': 'off',
-        'line-comment-position': 'off',
         'no-inline-comments': 'off',
         'require-unicode-regexp': 'off'
       }
@@ -154,7 +167,6 @@ module.exports = {
         'import/no-unresolved': 'off',
         'eslint-comments/no-unused-disable': 'off',
         'max-lines-per-function': 'off',
-        'line-comment-position': 'off',
         'no-inline-comments': 'off',
         'func-style': 'off',
         'func-names': 'off',
@@ -172,18 +184,6 @@ module.exports = {
         'no-ternary': 'off',
         'sort-imports': 'off',
         'node/no-missing-import': 'off'
-      }
-    },
-    {
-      files: ['modules/whitespace-widget/index.js'],
-      rules: {
-        'no-trailing-spaces': 'off'
-      }
-    },
-    {
-      files: ['modules/team-members/index.js'],
-      rules: {
-        'capitalized-comments': 'off'
       }
     }
   ],

@@ -74,7 +74,8 @@ export default () => {
 
   // Lazy loading
   function initImageLozad() {
-    const observer = lozad(); // Lazy loads elements with default selector as '.lozad'
+    // Lazy loads elements with default selector as '.lozad'
+    const observer = lozad();
     observer.observe();
   }
 
@@ -177,7 +178,8 @@ export default () => {
               if (entry.isIntersecting) {
                 const counter = entry.target;
                 const target = Number(counter.getAttribute('data-target'));
-                const duration = 2000; // Duration of the animation in milliseconds
+                // Duration of the animation in milliseconds
+                const duration = 2000;
                 const startTime = performance.now();
                 // eslint-disable-next-line sonarjs/no-nested-functions
                 const updateCounter = (currentTime) => {
