@@ -1,5 +1,7 @@
-import Swiper from 'swiper/bundle';
+/* eslint-disable node/no-missing-import */
+/* eslint-disable import/no-unresolved */
 import { Navigation } from 'swiper/modules';
+import Swiper from 'swiper/bundle';
 
 // Array of swiper configurations
 const swiperConfigs = [
@@ -50,10 +52,12 @@ const swiperConfigs = [
 ];
 
 // Initialize all swipers with a single function
-export function initAllSwipers() {
+const initAllSwipers = function initAllSwipers() {
   swiperConfigs.forEach(({ selector, config }) => {
     if (document.querySelector(selector)) {
       apos.util.onReady(() => new Swiper(selector, config));
     }
   });
-} 
+};
+
+export { initAllSwipers };

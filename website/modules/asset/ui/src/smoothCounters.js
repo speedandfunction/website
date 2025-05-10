@@ -1,6 +1,6 @@
 /* eslint-disable sonarjs/no-nested-functions */
 
-export function initSmoothCounters() {
+const initSmoothCounters = function initSmoothCounters() {
   const counters = document.querySelectorAll('.sf-counter__num');
   if (counters.length > 0) {
     apos.util.onReady(() => {
@@ -10,10 +10,11 @@ export function initSmoothCounters() {
             if (entry.isIntersecting) {
               const counter = entry.target;
               const target = Number(counter.getAttribute('data-target'));
-              const duration = 2000; // Duration of the animation in milliseconds
+              // Duration of the animation in milliseconds
+              const duration = 2000;
               const startTime = performance.now();
-              // eslint-disable-next-line sonarjs/no-nested-functions
-              const updateCounter = (currentTime) => {
+
+              const updateCounter = function updateCounter(currentTime) {
                 const elapsedTime = currentTime - startTime;
                 const progress = Math.min(elapsedTime / duration, 1);
                 const currentCount = Math.ceil(progress * target);
@@ -36,6 +37,7 @@ export function initSmoothCounters() {
       });
     });
   }
-}
+};
 
-export default initSmoothCounters; 
+export { initSmoothCounters };
+export default initSmoothCounters;
