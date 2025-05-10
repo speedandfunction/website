@@ -1,5 +1,7 @@
 <section class="page-intro" data-page-intro-widget>
-  <span class="page-intro__label">{{ data.widget.label }}</span>
   <h1 class="page-intro__title">{{ data.widget.title }}</h1>
-  <p class="page-intro__description">{{ data.widget.description }}</p>
+  {% if data.widget.subtitle %}
+  <span class="page-intro__subtitle">{{ data.widget.subtitle }}</span>
+  {% endif %}
+  <span class="page-intro__description">{{ data.widget.description }}</span>
 </section>

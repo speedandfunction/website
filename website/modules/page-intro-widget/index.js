@@ -5,11 +5,6 @@ module.exports = {
   },
   fields: {
     add: {
-      label: {
-        label: 'Label',
-        type: 'string',
-        help: 'Short label text that appears above the title',
-      },
       title: {
         label: 'Title',
         type: 'string',
@@ -17,11 +12,16 @@ module.exports = {
         required: true,
         max: 100,
       },
+      subtitle: {
+        label: 'Subtitle',
+        type: 'string',
+        help: 'Subtile text that appears below the title',
+      },
       description: {
         label: 'Description Text',
         type: 'string',
         textarea: true,
-        help: 'Descriptive text that appears below the title',
+        help: 'Descriptive text that appears below the title and the subtitle',
         max: 500,
       },
     },
