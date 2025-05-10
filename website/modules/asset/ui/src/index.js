@@ -128,7 +128,7 @@ function initAnchorNavigation() {
 
   apos.util.onReady(() => {
     anchors.forEach((anchor) => {
-      anchor.addEventListener('click', function(event) {
+      anchor.addEventListener('click', function (event) {
         event.preventDefault();
         const target = document.querySelector(anchor.getAttribute('href'));
         target.scrollIntoView({

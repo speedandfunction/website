@@ -10,7 +10,7 @@ const emailUtils = {
     const safeSubmission = { ...submission };
     // Use a safer method to avoid object injection
     const htmlItems = Object.entries(safeSubmission).map(
-      ([key, value]) => `<li><strong>${key}:</strong> ${value}</li>`
+      ([key, value]) => `<li><strong>${key}:</strong> ${value}</li>`,
     );
     html += htmlItems.join('');
     html += '</ul>';
@@ -35,7 +35,7 @@ const emailUtils = {
       }
     }
     return null;
-  }
+  },
 };
 
 // Spreadsheet utility functions in a separate module
@@ -43,11 +43,7 @@ const spreadsheetUtils = {
   // Prepare data for Google Sheets
   prepareSheetData(submission) {
     const id = Date.now().toString();
-    return [
-      id,
-      new Date().toISOString(),
-      ...Object.values(submission),
-    ];
+    return [id, new Date().toISOString(), ...Object.values(submission)];
   },
 
   // Create Google Sheets client
@@ -62,7 +58,7 @@ const spreadsheetUtils = {
       version: 'v4',
       auth,
     });
-  }
+  },
 };
 
 // Configuration for form fields
@@ -205,7 +201,10 @@ const emailSender = {
   // Send confirmation email if needed
   async sendConfirmationEmail(self, form, submission, sendEmailFunc) {
     const confirmationFieldName = form.emailConfirmationField;
-    const senderEmail = emailUtils.findFieldValue(submission, confirmationFieldName);
+    const senderEmail = emailUtils.findFieldValue(
+      submission,
+      confirmationFieldName,
+    );
     if (!senderEmail) {
       self.apos.util.warn(
         `Email confirmation field "${form.emailConfirmationField}" not found in the submission.`,
@@ -221,7 +220,7 @@ const emailSender = {
       confirmationHtml,
     );
     return true;
-  }
+  },
 };
 
 // Main module definition
@@ -240,8 +239,13 @@ module.exports = {
       async handlePostmark(form, submission) {
         const emailSubject = `${form.title} Form (${form.domainName || 'defaultdomain.com'})`;
         const html = emailUtils.createEmailHtml(submission);
-        const postmarkClient = emailUtils.createPostmarkClient(form.postmarkApiKey);
-        const sendPostmarkEmail = emailSender.createSendEmailFunction(self, postmarkClient);
+        const postmarkClient = emailUtils.createPostmarkClient(
+          form.postmarkApiKey,
+        );
+        const sendPostmarkEmail = emailSender.createSendEmailFunction(
+          self,
+          postmarkClient,
+        );
 
         try {
           // Send the main email
@@ -254,12 +258,17 @@ module.exports = {
 
           // Send confirmation email if configured
           if (form.sendConfirmationEmail) {
-            await emailSender.sendConfirmationEmail(self, form, submission, sendPostmarkEmail);
+            await emailSender.sendConfirmationEmail(
+              self,
+              form,
+              submission,
+              sendPostmarkEmail,
+            );
           }
         } catch (error) {
           self.apos.util.error('Error processing email sending', error);
         }
-      }
+      },
     };
   },
 
@@ -285,7 +294,7 @@ module.exports = {
         } catch (error) {
           self.apos.util.error('Error Sheets data insertion', error);
         }
-      }
+      },
     };
   },
 
@@ -309,8 +318,8 @@ module.exports = {
         // Export utility methods for other components to use
         handlePostmark: emailHandlers.handlePostmark,
         handleSpreadsheet: spreadsheetHandlers.handleSpreadsheet,
-        findFieldValue: emailUtils.findFieldValue
-      }
+        findFieldValue: emailUtils.findFieldValue,
+      },
     };
-  }
+  },
 };

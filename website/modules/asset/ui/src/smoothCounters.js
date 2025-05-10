@@ -13,7 +13,7 @@
  * @param {CounterContext} context - The counter animation context
  * @param {number} currentTime - The current animation frame timestamp
  */
-const updateCounter = function(context, currentTime) {
+const updateCounter = function (context, currentTime) {
   const { element, target, duration, startTime, observer } = context;
   const elapsedTime = currentTime - startTime;
   const progress = Math.min(elapsedTime / duration, 1);
@@ -35,7 +35,7 @@ const updateCounter = function(context, currentTime) {
  * @param {IntersectionObserverEntry} entry - The intersection entry
  * @param {IntersectionObserver} observer - The observer instance
  */
-const handleCounterVisible = function(entry, observer) {
+const handleCounterVisible = function (entry, observer) {
   const counter = entry.target;
   const target = Number(counter.getAttribute('data-target'));
   const duration = 2000;
@@ -46,7 +46,7 @@ const handleCounterVisible = function(entry, observer) {
     target,
     duration,
     startTime,
-    observer
+    observer,
   };
 
   requestAnimationFrame((currentTime) => updateCounter(context, currentTime));
@@ -55,7 +55,7 @@ const handleCounterVisible = function(entry, observer) {
 /**
  * Initialize smooth counters on the page
  */
-const initSmoothCounters = function() {
+const initSmoothCounters = function () {
   const counters = document.querySelectorAll('.sf-counter__num');
   if (counters.length > 0) {
     apos.util.onReady(() => {
@@ -67,7 +67,7 @@ const initSmoothCounters = function() {
             }
           });
         },
-        { threshold: 0.1 }
+        { threshold: 0.1 },
       );
 
       counters.forEach((counter) => {

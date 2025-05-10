@@ -67,7 +67,7 @@ module.exports = {
     'security/detect-object-injection': 'error',
     'import/no-unresolved': 'error',
     // Fixable
-    'prettier/prettier': 'off',
+    'prettier/prettier': 'error',
     'no-secrets/no-secrets': 'error',
     // Fixable
     'eslint-comments/no-unused-disable': 'error',
@@ -91,7 +91,7 @@ module.exports = {
     // Fixable
     'no-trailing-spaces': 'error',
     // Fixable
-    'quote-props': 'error',
+    'quote-props': ['error', 'consistent'],
     'no-invalid-this': 'error',
     'node/no-missing-import': 'error',
     'import/no-named-as-default': 'error',
@@ -121,14 +121,20 @@ module.exports = {
     'max-nested-callbacks': ['error', 3],
     'max-params': ['error', 5],
     'max-statements': ['error', 50],
-    complexity: ['error', 15],
-    'prefer-destructuring': ['error', {
-      array: true,
-      object: true
-    }],
-    'node/no-extraneous-require': ['error', {
-      allowModules: ['@jest/globals']
-    }]
+    'complexity': ['error', 15],
+    'prefer-destructuring': [
+      'error',
+      {
+        array: true,
+        object: true,
+      },
+    ],
+    'node/no-extraneous-require': [
+      'error',
+      {
+        allowModules: ['@jest/globals'],
+      },
+    ],
   },
   overrides: [
     {
@@ -137,7 +143,7 @@ module.exports = {
         'max-lines-per-function': 'off',
         'max-statements': 'off',
         'node/no-extraneous-require': 'off',
-        'prefer-destructuring': 'off'
+        'prefer-destructuring': 'off',
       },
     },
     {
@@ -145,21 +151,21 @@ module.exports = {
       rules: {
         'max-lines-per-function': 'off',
         'func-style': 'off',
-        'quote-props': 'off'
-      }
+        'quote-props': 'off',
+      },
     },
     {
       files: ['modules/@apostrophecms/form/index.js'],
       rules: {
-        'max-lines': 'off'
-      }
+        'max-lines': 'off',
+      },
     },
     {
       files: ['modules/asset/ui/src/index.js'],
       rules: {
         'max-lines-per-function': 'off',
-        'func-style': 'off'
-      }
+        'func-style': 'off',
+      },
     },
     {
       files: ['e2e/playwright.config.js', 'e2e/tests/screenshot-test.spec.js'],
@@ -168,8 +174,8 @@ module.exports = {
         'no-ternary': 'off',
         'sort-imports': 'off',
         'node/no-missing-import': 'off',
-        'node/no-unpublished-import': 'off'
-      }
-    }
+        'node/no-unpublished-import': 'off',
+      },
+    },
   ],
 };
