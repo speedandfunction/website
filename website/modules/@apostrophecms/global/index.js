@@ -1,4 +1,5 @@
 const linkSchema = require('../../../lib/linkSchema');
+const headingToolbar = require('../../../lib/headingToolbar');
 
 module.exports = {
   options: {
@@ -78,17 +79,7 @@ module.exports = {
           max: 1,
           widgets: {
             '@apostrophecms/rich-text': {
-              styles: [
-                {
-                  tag: 'p',
-                  label: 'Text',
-                },
-                {
-                  tag: 'h2',
-                  label: 'Heading',
-                  class: 'sf-head',
-                },
-              ],
+              ...headingToolbar,
             },
           },
         },
