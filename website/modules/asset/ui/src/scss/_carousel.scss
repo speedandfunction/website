@@ -87,7 +87,8 @@
     @include breakpoint-large {
       font-size: 14px;
     }
-    &:hover, &:focus {
+    &:hover,
+    &:focus {
       color: $black;
     }
   }
@@ -179,6 +180,34 @@
     line-height: 16px;
   }
 }
+
+.card-swiper {
+  &__case-study {
+    margin: 15px 0;
+
+    &-title {
+      font-weight: 600;
+      font-size: 14px;
+      line-height: 1.4;
+      margin-bottom: 8px;
+      color: $gray-500;
+    }
+
+    &-subtitle {
+      font-size: 12px;
+      line-height: 1.4;
+      margin-bottom: 4px;
+      color: $gray-400;
+    }
+
+    &-stack {
+      font-size: 12px;
+      line-height: 1.4;
+      color: $gray-300;
+    }
+  }
+}
+
 .sf-insights {
   &__photo {
     display: block;
@@ -192,7 +221,8 @@
         max-height: 225px;
       }
     }
-    &:hover, &:focus {
+    &:hover,
+    &:focus {
       img {
         transform: scale(1.05);
       }
