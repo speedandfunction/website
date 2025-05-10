@@ -1,5 +1,8 @@
 ## 📁 Recommended Project Structure (with POM & COM folders under `tests/`)
 
+<details>
+<summary>Project Structure Example</summary>
+
 ```
 project-root/
 ├── tests/                   # Test specifications
@@ -25,6 +28,7 @@ project-root/
 ├── playwright.config.ts     # Playwright configuration
 └── tsconfig.json 
 ```
+</details>
 
 ---
 
@@ -33,6 +37,9 @@ project-root/
 ### 1. Page Object Model (POM)
 
 Encapsulates page structure and behavior.
+
+<details>
+<summary>LoginPage POM Example</summary>
 
 ```ts
 // e2e/pages/LoginPage.ts
@@ -56,12 +63,14 @@ export class LoginPage {
   }
 }
 ```
+</details>
 
 **Best Practices (with examples):**
 
 * **Write one class per page to maintain separation of concerns.**
 
-  ❌ **Bad practice:**
+  <details>
+  <summary>❌ Bad practice:</summary>
 
   ```ts
   // LoginAndDashboardPage.ts
@@ -90,8 +99,10 @@ export class LoginPage {
     });
   });
   ```
+  </details>
 
-  ✅ **Good practice:**
+  <details>
+  <summary>✅ Good practice:</summary>
 
   ```ts
   // LoginPage.ts
@@ -129,10 +140,12 @@ export class LoginPage {
     });
   });
   ```
+  </details>
 
 * **Write assertions in test files, not in page files.**
 
-  ❌ **Bad practice:**
+  <details>
+  <summary>❌ Bad practice:</summary>
 
   ```ts
   // LoginPage.ts
@@ -163,8 +176,10 @@ export class LoginPage {
   });
 
   ```
+  </details>
 
-  ✅ **Good practice:**
+  <details>
+  <summary>✅ Good practice:</summary>
 
   ```ts
   // login.spec.ts
@@ -177,10 +192,12 @@ export class LoginPage {
     await expect(loginPage.welcomeMessage).toHaveText('Welcome');
   });
   ```
+  </details>
 
 * **Reuse page classes across test specs for consistency and maintainability.**
 
-  ❌ **Bad practice:**
+  <details>
+  <summary>❌ Bad practice:</summary>
 
   ```ts
   // login.spec.ts
@@ -205,8 +222,10 @@ export class LoginPage {
     await expect(page.locator('#dashboard-title')).toBeVisible();
   });
   ```
+  </details>
 
-  ✅ **Good practice:**
+  <details>
+  <summary>✅ Good practice:</summary>
 
   ```ts
   // LoginPage.ts
@@ -251,6 +270,7 @@ export class LoginPage {
     await expect(dashboardPage.title).toBeVisible();
   });
   ```
+  </details>
 
 **Caveats:**
 
@@ -262,6 +282,9 @@ export class LoginPage {
 ### 2. Component Object Model (COM)
 
 Used for reusable components like headers/modals.
+
+<details>
+<summary>HeaderComponent Example</summary>
 
 ```ts
 // e2e/components/HeaderComponent.ts
@@ -279,6 +302,7 @@ export class HeaderComponent {
   }
 }
 ```
+</details>
 
 **Best Practices:**
 
@@ -287,7 +311,8 @@ export class HeaderComponent {
 
 **Example Usage:**
 
-❌ **Bad practice:**
+<details>
+<summary>❌ Bad practice:</summary>
 
 ```ts
 // dashboard.spec.ts
@@ -301,8 +326,10 @@ test('User can logout from dashboard', async ({ page }) => {
   await expect(page.locator('h1')).toHaveText('Login');
 });
 ```
+</details>
 
-✅ **Good practice:**
+<details>
+<summary>✅ Good practice:</summary>
 
 ```ts
 // HeaderComponent.ts
@@ -352,6 +379,7 @@ test('User can logout from dashboard', async ({ page }) => {
   await expect(loginPage.pageTitle).toHaveText('Login');
 });
 ```
+</details>
 
 **Caveats:**
 
@@ -363,6 +391,9 @@ test('User can logout from dashboard', async ({ page }) => {
 
 Used to dynamically generate test data.
 
+<details>
+<summary>User Factory Example</summary>
+
 ```ts
 // e2e/utils/userFactory.ts
 export function createUser(role: string) {
@@ -373,6 +404,7 @@ export function createUser(role: string) {
   };
 }
 ```
+</details>
 
 **Best Practices:**
 
@@ -381,7 +413,8 @@ export function createUser(role: string) {
 
 **Example Usage:**
 
-❌ **Bad practice:**
+<details>
+<summary>❌ Bad practice:</summary>
 
 ```ts
 // login.spec.ts
@@ -408,8 +441,10 @@ test('Regular user can log in successfully', async ({ page }) => {
   await expect(page.locator('#user-dashboard')).toBeVisible();
 });
 ```
+</details>
 
-✅ **Good practice:**
+<details>
+<summary>✅ Good practice:</summary>
 
 ```ts
 // userFactory.ts
@@ -460,6 +495,7 @@ test('Regular user can log in successfully', async ({ page }) => {
   await expect(page.locator('#user-dashboard')).toBeVisible();
 });
 ```
+</details>
 
 **Caveats:**
 
@@ -470,6 +506,9 @@ test('Regular user can log in successfully', async ({ page }) => {
 ### 4. Singleton Pattern
 
 Useful for managing shared resources.
+
+<details>
+<summary>Database Singleton Example</summary>
 
 ```ts
 // e2e/utils/database.ts
@@ -490,6 +529,7 @@ class Database {
   // Methods for interaction...
 }
 ```
+</details>
 
 **Best Practices:**
 
@@ -498,7 +538,8 @@ class Database {
 
 **Example Usage:**
 
-❌ **Bad practice:**
+<details>
+<summary>❌ Bad practice:</summary>
 
 ```ts
 // db-util.ts
@@ -525,8 +566,10 @@ test('Test 2 with DB connection', async () => {
   // Test logic...
 });
 ```
+</details>
 
-✅ **Good practice:**
+<details>
+<summary>✅ Good practice:</summary>
 
 ```ts
 // database.ts
@@ -593,6 +636,7 @@ test('Test 2 with DB fixture', async ({ database }) => {
   await database.executeQuery('SELECT * FROM products');
 });
 ```
+</details>
 
 **Caveats:**
 
