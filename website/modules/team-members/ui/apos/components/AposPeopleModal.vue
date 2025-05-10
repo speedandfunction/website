@@ -1,1 +1,2 @@
-<template>HUI</template>;
+<template>HUI</template>
+;

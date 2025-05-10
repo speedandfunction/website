@@ -41,7 +41,7 @@ module.exports = {
                     className: 'sf-simple-card__text',
                     ...extendedToolbar,
                   },
-                  buttons: {},
+                  'buttons': {},
                 },
               },
             },

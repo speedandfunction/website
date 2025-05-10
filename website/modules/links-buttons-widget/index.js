@@ -29,7 +29,7 @@ module.exports = {
         max: 40,
         step: 4,
         def: 0,
-        help: 'Space between text and button/link (in pixels)'
+        help: 'Space between text and button/link (in pixels)',
       },
       links: {
         label: 'Links',

@@ -16,7 +16,7 @@ module.exports = {
         type: 'area',
         options: {
           widgets: {
-            buttons: {},
+            'buttons': {},
             '@apostrophecms/rich-text': {
               ...extendedToolbar,
               insert: ['image'],
