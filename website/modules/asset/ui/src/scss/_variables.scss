@@ -47,22 +47,24 @@ $font-size-h6-mobile: 14px;
 
 // Body text sizes
 $font-size-body-xlarge: 26px;
-$font-size-body-large: 20px;
-$font-size-body-medium: 16px;
+$font-size-body-large: 40px;
+$font-size-body-medium: 22px;
 $font-size-body-small: 14px;
 
 // Mobile body text sizes
-$font-size-body-large-mobile: 20px;
-$font-size-body-medium-mobile: 12px;
+$font-size-body-large-mobile: 22px;
+$font-size-body-medium-mobile: 14px;
 $font-size-body-small-mobile: 12px;
 
 // Line heights
-$line-height-h1: 110%;
+$line-height-h1: 140%;
 $line-height-h2: 100%;
 $line-height-h3: 100%;
 $line-height-h4: 100%;
 
-$line-height-body-large: 100%;
+$line-height-h1-mobile: 110%;
+
+$line-height-body-large: 150%;
 $line-height-body-medium: 100%;
 $line-height-body-small: 100%;
 $line-height-body: 140%;
