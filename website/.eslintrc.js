@@ -49,36 +49,15 @@ module.exports = {
     },
   },
   rules: {
-    // Enable all rules from enabled plugins with "error" level
+    // Disabled rules
     'sonarjs/cognitive-complexity': 'off',
-    'sonarjs/no-identical-expressions': 'off',
     'security/detect-object-injection': 'off',
-    'promise/always-return': 'off',
     'import/no-unresolved': 'off',
-    'node/no-missing-require': 'off',
-    'jsx-a11y/alt-text': 'off',
     'prettier/prettier': 'off',
-    'optimize-regex/optimize-regex': 'off',
-    'no-unsanitized/method': 'off',
-    'no-unsanitized/property': 'off',
     'no-secrets/no-secrets': 'off',
     'eslint-comments/no-unused-disable': 'off',
-
-    // Core ESLint rules set to error
     'no-console': 'off',
-    'no-debugger': 'error',
-    'no-alert': 'error',
-    'no-unused-vars': 'error',
-    'no-undef': 'error',
-    'no-param-reassign': 'error',
-    'max-depth': 'off',
-    'max-lines': ['error', 300],
     'max-lines-per-function': 'off',
-    'max-nested-callbacks': ['error', 3],
-    'max-params': 'off',
-    'max-statements': 'off',
-
-    // Disable rules causing the most issues
     'sort-keys': 'off',
     'line-comment-position': 'off',
     'no-inline-comments': 'off',
@@ -92,13 +71,34 @@ module.exports = {
     'sort-imports': 'off',
     'no-trailing-spaces': 'off',
     'quote-props': 'off',
-    'no-dupe-keys': 'off',
-    'complexity': 'off',
     'no-invalid-this': 'off',
     'node/no-missing-import': 'off',
     'import/no-named-as-default': 'off',
     'capitalized-comments': 'off',
-    'init-declarations': 'off',
+
+    // Simple enabled rules (with 'error' only)
+    'sonarjs/no-identical-expressions': 'error',
+    'promise/always-return': 'error',
+    'node/no-missing-require': 'error',
+    'jsx-a11y/alt-text': 'error',
+    'optimize-regex/optimize-regex': 'error',
+    'no-unsanitized/method': 'error',
+    'no-unsanitized/property': 'error',
+    'no-debugger': 'error',
+    'no-alert': 'error',
+    'no-unused-vars': 'error',
+    'no-undef': 'error',
+    'no-param-reassign': 'error',
+    'no-dupe-keys': 'error',
+    'init-declarations': 'error',
+    
+    // Rules with parameters
+    'max-depth': ['error', 4],
+    'max-lines': ['error', 300],
+    'max-nested-callbacks': ['error', 3],
+    'max-params': ['error', 5],
+    'max-statements': ['error', 50],
+    'complexity': ['error', 15],
     'prefer-destructuring': ['error', {
       'array': true,
       'object': true
