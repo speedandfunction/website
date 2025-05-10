@@ -1,8 +1,8 @@
 import barba from '@barba/core';
-import gsap from 'gsap';
-import lozad from 'lozad';
+import { gsap } from 'gsap';
 import { initAllSwipers } from './swipers';
-import initSmoothCounters from './smoothCounters';
+import { initSmoothCounters } from './smoothCounters';
+import lozad from 'lozad';
 
 // Lazy loading
 function initImageLozad() {
@@ -34,7 +34,9 @@ function initFontChanger() {
 
   setInterval(() => {
     currentFontIndex = (currentFontIndex + 1) % fonts.length;
-    heroContent.style.fontFamily = fonts[currentFontIndex];
+    // Use Array.prototype.at() for safer array access
+    const currentFont = fonts.at(currentFontIndex);
+    heroContent.style.fontFamily = currentFont;
   }, 500);
 }
 
@@ -126,9 +128,9 @@ function initAnchorNavigation() {
 
   apos.util.onReady(() => {
     anchors.forEach((anchor) => {
-      anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
+      anchor.addEventListener('click', function(event) {
+        event.preventDefault();
+        const target = document.querySelector(anchor.getAttribute('href'));
         target.scrollIntoView({
           behavior: 'smooth',
         });

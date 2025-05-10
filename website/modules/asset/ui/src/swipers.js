@@ -1,5 +1,5 @@
-import { Navigation } from 'swiper/modules';
-import Swiper from 'swiper/bundle';
+import Navigation from 'swiper/modules/navigation.mjs';
+import Swiper from 'swiper/swiper.js';
 
 // Array of swiper configurations
 const swiperConfigs = [
@@ -50,7 +50,7 @@ const swiperConfigs = [
 ];
 
 // Initialize all swipers with a single function
-const initAllSwipers = function initAllSwipers() {
+const initAllSwipers = function() {
   swiperConfigs.forEach(({ selector, config }) => {
     if (document.querySelector(selector)) {
       apos.util.onReady(() => new Swiper(selector, config));

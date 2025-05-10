@@ -82,7 +82,7 @@ module.exports = {
     // Project uses modern ES syntax
     'node/no-unsupported-features/es-syntax': 'off',
     'func-style': 'error',
-    'func-names': 'error',
+    'func-names': ['error', 'never'],
     'no-ternary': 'error',
     'id-length': 'error',
     'require-unicode-regexp': 'error',
@@ -157,19 +157,8 @@ module.exports = {
     {
       files: ['modules/asset/ui/src/index.js'],
       rules: {
-        'security/detect-object-injection': 'off',
-        'import/no-unresolved': 'off',
-        'eslint-comments/no-unused-disable': 'off',
         'max-lines-per-function': 'off',
-        'no-inline-comments': 'off',
-        'func-style': 'off',
-        'func-names': 'off',
-        'id-length': 'off',
-        'sort-imports': 'off',
-        'no-invalid-this': 'off',
-        'node/no-missing-import': 'off',
-        'import/no-named-as-default': 'off',
-        'sonarjs/no-nested-functions': 'off'
+        'func-style': 'off'
       }
     },
     {
@@ -180,19 +169,6 @@ module.exports = {
         'sort-imports': 'off',
         'node/no-missing-import': 'off',
         'node/no-unpublished-import': 'off'
-      }
-    },
-    {
-      files: ['modules/asset/ui/src/smoothCounters.js'],
-      rules: {
-        'sonarjs/no-nested-functions': 'off'
-      }
-    },
-    {
-      files: ['modules/asset/ui/src/swipers.js'],
-      rules: {
-        'node/no-missing-import': 'off',
-        'import/no-unresolved': 'off'
       }
     }
   ],
