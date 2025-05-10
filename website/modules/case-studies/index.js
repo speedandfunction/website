@@ -132,6 +132,10 @@ module.exports = {
       stack: {
         label: 'Tech Stack',
       },
+      _tags: {
+        label: 'Tags',
+        component: 'AposCellTags',
+      },
     },
   },
   filters: {
