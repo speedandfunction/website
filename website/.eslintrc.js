@@ -61,7 +61,7 @@ module.exports = {
   },
   rules: {
     /*
-     * Disabled rules
+     * Security rules
      * Can cause false positives on safe property access
      */
     'security/detect-object-injection': 'error',
