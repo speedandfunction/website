@@ -168,6 +168,13 @@ module.exports = {
       },
     },
     {
+      files: ['modules/asset/ui/src/swipers.js'],
+      rules: {
+        'node/no-missing-import': 'off',
+        'import/no-unresolved': 'off'
+      },
+    },
+    {
       files: ['e2e/playwright.config.js', 'e2e/tests/screenshot-test.spec.js'],
       rules: {
         'import/no-unresolved': 'off',

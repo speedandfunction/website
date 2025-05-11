@@ -1,5 +1,5 @@
-import Navigation from 'swiper/modules/navigation.mjs';
-import Swiper from 'swiper/swiper.js';
+import { Navigation } from 'swiper/modules';
+import Swiper from 'swiper';
 
 // Array of swiper configurations
 const swiperConfigs = [
