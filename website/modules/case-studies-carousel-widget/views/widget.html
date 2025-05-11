@@ -2,18 +2,42 @@
   {% area data.widget, 'intro' %}
   <div class="sf-projects-swiper swiper">
     <div class="swiper-wrapper">
-      {% for case in data.widget._selectedCases %}
+      {% for caseStudy in data.widget._selectedCases %}
       <div class="swiper-slide">
-        <div class="sf-projects-swiper__src">{% area case, 'picture' %}</div>
+        <div class="sf-projects-swiper__src">
+          {% area caseStudy, 'picture' %}
+        </div>
         <div class="sf-projects-info">
-          <h4 class="sf-projects-info__title">{{ case.title }}</h4>
-          <span class="sf-projects-info__stack">{{ case.stack }}</span>
+          <h4 class="sf-projects-info__title">{{ caseStudy.title }}</h4>
+          {% if caseStudy.clientWebsite %}
+          <a
+            href="{{ caseStudy.clientWebsite }}"
+            target="_blank"
+            class="sf-projects-info__client-website"
+            >{{ caseStudy.clientWebsite }}</a
+          >
+          {% endif %}
+          <span class="sf-projects-info__stack">{{ caseStudy.stack }}</span>
           <div class="sf-projects-info-limit">
-            <h4 class="sf-projects-info__subtitle">{{ case.subtitle }}</h4>
+            <h4 class="sf-projects-info__portfolio-title">
+              {{ caseStudy.portfolioTitle }}
+            </h4>
+            {% if caseStudy.descriptor %}
+            <p class="sf-projects-info__descriptor">
+              {{ caseStudy.descriptor }}
+            </p>
+            {% endif %} {% if caseStudy.prodLink %}
+            <a
+              href="{{ caseStudy.prodLink }}"
+              target="_blank"
+              class="sf-projects-info__prod-link"
+              >{{ caseStudy.prodLink }}</a
+            >
+            {% endif %}
             <div class="sf-projects-info__content">
-              {% area case, 'content' %}
+              {% area caseStudy, 'content' %}
             </div>
-            <a href="{{ case._url }}" class="sf-button sf-button_underline"
+            <a href="{{ caseStudy._url }}" class="sf-button sf-button_underline"
               ><span>view more</span></a
             >
           </div>
