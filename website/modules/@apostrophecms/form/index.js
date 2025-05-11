@@ -144,10 +144,10 @@ module.exports = {
     }
 
     // Use direct property access instead of iteration
-    if (submission[fieldName] !== undefined) {
+    if (submission[fieldName]) {
       return submission[fieldName];
     }
-    
+
     return null;
   },
 

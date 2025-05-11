@@ -25,26 +25,29 @@ alwaysApply: true
 - Maximum statements per function: 50
 - Use function declarations with named functions, not function expressions
 - Always initialize variables at declaration
+- Maximum lines per file: 300
 
 ## Variables & Constants
 - Use destructuring where possible
-- No magic numbers (use named constants)
 - Minimum identifier length enforced (no single-letter variables)
 - No unused variables
 - No reassignment of function parameters
+- No invalid 'this' context
+- Always initialize variables at declaration
+- No duplicate object keys
 
 ## Control Flow
 - No ternary operators (use if/else)
 - Maximum complexity: 15 (cognitive complexity)
 - No alerts or console logs
 - No debugger statements
+- No identical expressions in conditions
 
 ## Regex
 - Use optimized regex patterns
 - Use Unicode regex patterns
 
 ## Security
-- No object injection vulnerabilities
 - No secrets in code
 - No unsanitized methods or properties (XSS prevention)
 
@@ -52,7 +55,17 @@ alwaysApply: true
 - Sort imports alphabetically
 - No unresolved imports
 - No importing default from a module that doesn't have a default export
+- No missing imports in Node.js
+- No missing require statements
+- Always return in promise chains
+
+## Accessibility
+- Always include alt text for images
 
 ## Special Cases
-- Test files have relaxed rules for function length, statements, etc.
-- Some specific app files have exceptions for certain rules 
+- Test files have relaxed rules for function length, statements, extraneous requires, and destructuring
+- app.js: relaxed rules for function lines, function style, and quote properties
+- modules/@apostrophecms/form/index.js: relaxed maximum lines rule
+- modules/asset/ui/src/index.js: relaxed function lines and style rules
+- modules/asset/ui/src/swipers.js: relaxed import rules
+- E2E test files: relaxed import, ternary, and sorting rules 

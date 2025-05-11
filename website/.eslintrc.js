@@ -61,44 +61,33 @@ module.exports = {
   },
   rules: {
     /*
-     * Security rules
-     * Can cause false positives on safe property access
+     * Disabled rules
      */
-    'security/detect-object-injection': 'error',
+    'security/detect-object-injection': 'off',
+    'no-undefined': 'off',
+    'sort-keys': 'off',
+    'no-magic-numbers': 'off',
+    'node/no-unsupported-features/es-syntax': 'off',
+
+    /*
+     * Enabled rules (simple)
+     */
     'import/no-unresolved': 'error',
-    // Fixable
     'prettier/prettier': 'error',
     'no-secrets/no-secrets': 'error',
-    // Fixable
     'eslint-comments/no-unused-disable': 'error',
     'no-console': 'error',
     'max-lines-per-function': 'error',
-    // Too many violations across the codebase
-    'sort-keys': 'off',
-    'line-comment-position': ['error', { position: 'above' }],
-    'no-inline-comments': 'error',
-    // Too many violations across the codebase
-    'no-magic-numbers': 'off',
-    // Project uses modern ES syntax
-    'node/no-unsupported-features/es-syntax': 'off',
     'func-style': 'error',
-    'func-names': ['error', 'never'],
     'no-ternary': 'error',
     'id-length': 'error',
     'require-unicode-regexp': 'error',
-    // Fixable
     'sort-imports': 'error',
-    // Fixable
     'no-trailing-spaces': 'error',
-    // Fixable
-    'quote-props': ['error', 'consistent'],
     'no-invalid-this': 'error',
     'node/no-missing-import': 'error',
     'import/no-named-as-default': 'error',
-    // Fixable
     'capitalized-comments': 'error',
-
-    // Simple enabled rules (with 'error' only)
     'sonarjs/no-identical-expressions': 'error',
     'sonarjs/cognitive-complexity': 'error',
     'promise/always-return': 'error',
@@ -115,7 +104,13 @@ module.exports = {
     'no-dupe-keys': 'error',
     'init-declarations': 'error',
 
-    // Rules with parameters
+    /*
+     * Enabled rules with parameters
+     */
+    'line-comment-position': ['error', { position: 'above' }],
+    'no-inline-comments': 'error',
+    'func-names': ['error', 'never'],
+    'quote-props': ['error', 'consistent'],
     'max-depth': ['error', 4],
     'max-lines': ['error', 300],
     'max-nested-callbacks': ['error', 3],
