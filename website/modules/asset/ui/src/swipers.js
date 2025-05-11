@@ -1,5 +1,5 @@
-import Swiper from 'swiper/bundle';
 import { Navigation } from 'swiper/modules';
+import Swiper from 'swiper';
 
 // Array of swiper configurations
 const swiperConfigs = [
@@ -11,7 +11,7 @@ const swiperConfigs = [
       autoplay: {
         delay: 5000,
       },
-    }
+    },
   },
   {
     selector: '.sf-projects-swiper',
@@ -27,7 +27,7 @@ const swiperConfigs = [
       },
       modules: [Navigation],
       slidesPerView: 1,
-    }
+    },
   },
   {
     selector: '.sf-person-swiper',
@@ -45,15 +45,17 @@ const swiperConfigs = [
           slidesPerView: 3,
         },
       },
-    }
-  }
+    },
+  },
 ];
 
 // Initialize all swipers with a single function
-export function initAllSwipers() {
+const initAllSwipers = function () {
   swiperConfigs.forEach(({ selector, config }) => {
     if (document.querySelector(selector)) {
       apos.util.onReady(() => new Swiper(selector, config));
     }
   });
-} 
+};
+
+export { initAllSwipers };
