@@ -171,7 +171,7 @@ module.exports = {
       files: ['modules/asset/ui/src/swipers.js'],
       rules: {
         'node/no-missing-import': 'off',
-        'import/no-unresolved': 'off'
+        'import/no-unresolved': 'off',
       },
     },
     {

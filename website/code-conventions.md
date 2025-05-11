@@ -1,0 +1,53 @@
+# Code Conventions
+
+## Syntax & Formatting
+- Use 2 spaces for indentation
+- Maximum line length: 80 characters
+- Use semicolons at the end of statements
+- Use single quotes for strings
+- Add trailing commas in arrays, objects, etc.
+- No trailing spaces
+- Use consistent quote properties (either quote all properties or none)
+- Place line comments above code, not inline
+- Capitalize all comments
+- No inline comments
+
+## Functions
+- Maximum function length enforced (avoid excessive length)
+- Maximum depth: 4 levels
+- Maximum callback nesting: 3 levels
+- Maximum parameters: 5
+- Maximum statements per function: 50
+- Use function declarations with named functions, not function expressions
+- Always initialize variables at declaration
+
+## Variables & Constants
+- Use destructuring where possible
+- No magic numbers (use named constants)
+- Minimum identifier length enforced (no single-letter variables)
+- No unused variables
+- No reassignment of function parameters
+
+## Control Flow
+- No ternary operators (use if/else)
+- Maximum complexity: 15 (cognitive complexity)
+- No alerts or console logs
+- No debugger statements
+
+## Regex
+- Use optimized regex patterns
+- Use Unicode regex patterns
+
+## Security
+- No object injection vulnerabilities
+- No secrets in code
+- No unsanitized methods or properties (XSS prevention)
+
+## Imports
+- Sort imports alphabetically
+- No unresolved imports
+- No importing default from a module that doesn't have a default export
+
+## Special Cases
+- Test files have relaxed rules for function length, statements, etc.
+- Some specific app files have exceptions for certain rules 
