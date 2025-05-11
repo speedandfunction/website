@@ -143,12 +143,11 @@ module.exports = {
       return null;
     }
 
-    const fields = Object.entries(submission);
-    for (const [field, value] of fields) {
-      if (field === fieldName) {
-        return value;
-      }
+    // Use direct property access instead of iteration
+    if (submission[fieldName] !== undefined) {
+      return submission[fieldName];
     }
+    
     return null;
   },
 
