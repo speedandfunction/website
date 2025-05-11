@@ -1,6 +1,6 @@
 ---
-description: 
-globs: 
+description: "Code conventions for S&F website project"
+globs: "**/*.{js,jsx}"
 alwaysApply: true
 ---
 # Code Conventions
