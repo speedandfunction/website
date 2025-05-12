@@ -9,6 +9,12 @@ module.exports = {
   },
   fields: {
     add: {
+      showCounter: {
+        label: 'Show Numbers',
+        type: 'boolean',
+        def: true,
+        help: 'Show numbers before each card',
+        },
       intro: {
         label: 'Intro',
         type: 'area',

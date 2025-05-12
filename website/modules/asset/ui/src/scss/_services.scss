@@ -2,9 +2,16 @@
   display: flex;
   flex-wrap: wrap;
   counter-reset: card-counter;
-  @include border(border-bottom);
+  // @include border(border-bottom);
   @include breakpoint-medium {
     border: 0;
+  }
+  &.no-counter {
+    counter-reset: none;
+    
+    .sf-simple-card-wrap::before {
+      display: none;
+    }
   }
 }
 
@@ -15,24 +22,22 @@
   flex-direction: column;
   @include border(border);
   box-sizing: border-box;
-  border-bottom: 0;
+  margin-bottom: 16px;
 
   @include breakpoint-medium {
-    width: 33.3%;
+    margin-bottom: 0;
+    width: 50%;
     @include border(border-bottom);
   }
   .background-circle {
     z-index: -10;
     background-color: $gray-500;
-    border-radius: 100%;
-    width: 6.25em;
-    height: 6.25em;
+    border-radius: 70%;
+    width: 130%;
+    height: 100%;
     position: absolute;
-    inset: -80% -34% auto auto;
+    inset: -100% -60% auto auto;
     @include transition(all, 0.5s);
-    @include breakpoint-medium {
-      inset: -50% -32% auto auto;
-    }
   }
   &__title {
     font-weight: 700;
@@ -91,8 +96,8 @@
       color: $gray-200;
     }
     .background-circle {
-      width: 40em;
-      height: 40em;
+      width: 70em;
+      height: 70em;
       transform: translate3d(-5%, -10%, 0);
     }
   }
@@ -109,10 +114,10 @@
 }
 
 @include breakpoint-medium {
-  .sf-simple-card:not(:nth-child(3n)) {
+  .sf-simple-card:not(:nth-child(n)) {
     border-right: none;
   }
-  .sf-simple-card:not(:nth-last-child(-n + 3)) {
+  .sf-simple-card:not(:nth-last-child(-n + 2)) {
     border-bottom: none;
   }
 }

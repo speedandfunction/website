@@ -1,6 +1,6 @@
 <section class="sf-section" data-simple-cards-widget>
   {% area data.widget, 'intro' %}
-  <div class="sf-simple-cards">
+  <div class="sf-simple-cards {% if not data.widget.showCounter %}no-counter{% endif %}">
     {% for card in data.widget.cards %}
       <div class="sf-simple-card">
         <div class="sf-simple-card-wrap">
