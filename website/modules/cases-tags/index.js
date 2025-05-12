@@ -12,11 +12,34 @@ module.exports = {
         type: 'string',
         label: 'Description',
       },
+      _category: {
+        type: 'relationship',
+        label: 'Category',
+        withType: 'categories',
+        required: true,
+        max: 1,
+        builders: {
+          project: {
+            title: 1,
+            slug: 1,
+          },
+        },
+        help: 'Choose a category for this tag',
+      },
     },
     group: {
       basics: {
         label: 'Basics',
-        fields: ['title', 'description'],
+        fields: ['title', 'description', '_category'],
+      },
+    },
+  },
+  columns: {
+    add: {
+      _category: {
+        label: 'Category',
+        type: 'string',
+        name: '_category.0.title',
       },
     },
   },
