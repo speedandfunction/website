@@ -1,3 +1,5 @@
+const headingToolbar = require('./headingToolbar');
+
 module.exports = {
   expanded: true,
   groups: {
@@ -6,14 +8,17 @@ module.exports = {
       widgets: {
         '@apostrophecms/image': {},
         '@apostrophecms/video': {},
-        'projects-carousel': {},
-        map: {},
-        about: {},
+        'case-studies-carousel': {},
+        'map': {},
+        'about': {},
         'simple-cards': {},
         'links-buttons': {},
-        '@apostrophecms/rich-text': {},
         'buttons': {},
         'whitespace': {},
+        'container': {},
+        '@apostrophecms/rich-text': {
+          ...headingToolbar,
+        },
       },
       columns: 2,
     },
@@ -23,7 +28,7 @@ module.exports = {
         'leadership-carousel': {},
         'testimonials-carousel': {},
         'insights-carousel': {},
-        contact: {},
+        'contact': {},
         '@apostrophecms/html': {},
         'page-intro': {},
         'home-hero': {},

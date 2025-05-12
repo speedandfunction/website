@@ -7,6 +7,7 @@ module.exports = {
       linkTitle: {
         label: 'Link Title',
         type: 'string',
+        help: 'Consider keeping the button content up to 34 characters for the best mobile view; otherwise, an ellipsis (…) will be added.',
       },
       linkType: {
         label: 'Link type',

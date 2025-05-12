@@ -3,7 +3,7 @@ const headingToolbar = require('../../lib/headingToolbar');
 module.exports = {
   extend: '@apostrophecms/widget-type',
   options: {
-    label: 'Projects Carousel',
+    label: 'Case Studies Carousel',
     icon: 'binoculars-icon',
   },
   fields: {
@@ -20,22 +20,22 @@ module.exports = {
           },
         },
       },
-      _selectedProjects: {
-        label: 'Selected projects',
+      _selectedCases: {
+        label: 'Selected case studies',
         type: 'relationship',
-        withType: 'projects',
-        withRelationships: ['_file'],
-        // Max: 3,
-        builders: {
-          project: {
-            title: 1,
-            picture: 1,
-            mediaType: 1,
-            stack: 1,
-            subtitle: 1,
-            _file: 1,
-            content: 1,
-          },
+        withType: 'case-studies',
+        withRelationships: ['_url'],
+        projection: {
+          title: 1,
+          clientWebsite: 1,
+          picture: 1,
+          mediaType: 1,
+          stack: 1,
+          portfolioTitle: 1,
+          descriptor: 1,
+          prodLink: 1,
+          _url: 1,
+          content: 1,
         },
       },
     },

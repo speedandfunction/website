@@ -55,17 +55,17 @@ data.piecesFilters.tags %} {% block main %}
       </div>
 
       <div class="cs_grid">
-        {% for article in data.pieces %}
+        {% for article in data.pieces %} {# CARD START: {{ article.title }} #}
         <a href="{{ article._url }}" class="cs_card">
-          {% set banner = apos.image.first(article.heroImage) %} {% if banner is
+          {% set picture = apos.image.first(article.picture) %} {% if picture is
           defined %}
           <img
             class="cs_image"
             loading="lazy"
-            src="{{ apos.attachment.url(banner, { size: data.options.size or 'full' }) }}"
-            alt="{{ banner._alt or '' }}"
-            width="{{ apos.attachment.getWidth(banner) }}"
-            height="{{ apos.attachment.getHeight(banner) }}"
+            src="{{ apos.attachment.url(picture, { size: data.options.size or 'full' }) }}"
+            alt="{{ picture._alt or '' }}"
+            width="{{ apos.attachment.getWidth(picture) }}"
+            height="{{ apos.attachment.getHeight(picture) }}"
           />
           {% else %}
           <div class="placeholder-image-container">
@@ -81,17 +81,20 @@ data.piecesFilters.tags %} {% block main %}
           {% endif %}
           <div class="cs_details">
             <h3 class="cs_title">{{ article.title }}</h3>
-            {% if article.authorInfo %} {% if article.authorInfo.authorName %}
-            <div class="cs_author">
-              <span class="author-label">By</span>
-              <span class="cs_name">{{ article.authorInfo.authorName }}</span>
+            {% if article.portfolioTitle %}
+            <h4 class="cs_portfolio-title">{{ article.portfolioTitle }}</h4>
+            {% endif %} {% if article.descriptor %}
+            <p class="cs_descriptor">{{ article.descriptor }}</p>
+            {% endif %} {% if article.stack %}
+            <div class="cs_stack">
+              <span class="stack-label">Tech Stack:</span>
+              <span class="stack-value">{{ article.stack }}</span>
             </div>
-            {% endif %} {% endif %} {% if article.summary %}
-            <p class="cs_summary">{{ article.summary }}</p>
+
             {% endif %}
           </div>
         </a>
-        {% endfor %}
+        {# CARD END: {{ article.title }} #} {% endfor %}
       </div>
     </div>
 

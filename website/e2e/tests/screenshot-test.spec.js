@@ -1,4 +1,3 @@
-// eslint-disable-next-line node/no-unpublished-import
 import { test, expect } from '@playwright/test';
 
 test('Snapshot for Home Page', async ({ page }) => {

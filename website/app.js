@@ -45,7 +45,6 @@ function createAposConfig() {
       'links-buttons-widget': {},
       'team-carousel-widget': {},
       'testimonials-carousel-widget': {},
-      'projects-carousel-widget': {},
       'about-widget': {},
       'map-widget': {},
       'simple-cards-widget': {},
@@ -77,11 +76,10 @@ function createAposConfig() {
 
       // Custom Pieces
       'team-members': {},
-      projects: {},
-      testimonials: {},
+      'testimonials': {},
 
       // `asset` supports the project"s webpack build for client-side assets.
-      asset: {},
+      'asset': {},
       // The project"s first custom page type.
       'default-page': {},
       '@apostrophecms/import-export': {},
@@ -89,6 +87,8 @@ function createAposConfig() {
       'case-studies': {},
       'case-studies-page': {},
       'categories': {},
+      'case-studies-carousel-widget': {},
+      'container-widget': {},
     },
   };
 }

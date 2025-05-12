@@ -1,0 +1,58 @@
+<section class="sf-section" data-case-studies-carousel-widget>
+  {% area data.widget, 'intro' %}
+  <div class="sf-projects-swiper swiper">
+    <div class="swiper-wrapper">
+      {% for caseStudy in data.widget._selectedCases %}
+      <div class="swiper-slide">
+        <div class="sf-projects-swiper__src">
+          {% area caseStudy, 'picture' %}
+        </div>
+        <div class="sf-projects-info">
+          <h4 class="sf-projects-info__title">{{ caseStudy.title }}</h4>
+          {% if caseStudy.clientWebsite %}
+          <a
+            href="{{ caseStudy.clientWebsite }}"
+            target="_blank"
+            class="sf-projects-info__client-website"
+            >{{ caseStudy.clientWebsite }}</a
+          >
+          {% endif %}
+          <span class="sf-projects-info__stack">{{ caseStudy.stack }}</span>
+          <div class="sf-projects-info-limit">
+            <h4 class="sf-projects-info__portfolio-title">
+              {{ caseStudy.portfolioTitle }}
+            </h4>
+            {% if caseStudy.descriptor %}
+            <p class="sf-projects-info__descriptor">
+              {{ caseStudy.descriptor }}
+            </p>
+            {% endif %} {% if caseStudy.prodLink %}
+            <a
+              href="{{ caseStudy.prodLink }}"
+              target="_blank"
+              class="sf-projects-info__prod-link"
+              >{{ caseStudy.prodLink }}</a
+            >
+            {% endif %}
+            <div class="sf-projects-info__content">
+              {% area caseStudy, 'content' %}
+            </div>
+            <a href="{{ caseStudy._url }}" class="sf-button sf-button_underline"
+              ><span>view more</span></a
+            >
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    <div class="swiper-controls">
+      <div class="swiper-nav">
+        <div class="swiper-button-prev">previous</div>
+        <div class="swiper-button-next">next</div>
+      </div>
+      <a href="/cases" class="sf-button sf-button_underline"
+        ><span>view all</span></a
+      >
+    </div>
+  </div>
+</section>
