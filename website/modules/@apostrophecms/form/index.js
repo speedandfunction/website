@@ -1,128 +1,6 @@
 const { google } = require('googleapis');
 const postmark = require('postmark');
 
-// === Utility Functions ===
-
-const createEmailHtml = function (submission) {
-  let html = '<ul>';
-  for (const key in submission) {
-    if (Object.hasOwn(submission, key)) {
-      html += `<li><strong>${key}:</strong> ${submission[key]}</li>`;
-    }
-  }
-  html += '</ul>';
-  return html;
-};
-
-const createPostmarkClient = function (apiKey) {
-  return new postmark.ServerClient(apiKey);
-};
-
-const findFieldValue = function (submission, fieldName) {
-  if (fieldName && submission[fieldName] !== undefined) {
-    return submission[fieldName];
-  }
-  return null;
-};
-
-const prepareSheetData = function (submission) {
-  const id = Date.now().toString();
-  return [id, new Date().toISOString(), ...Object.values(submission)];
-};
-
-const createSheetsClient = function (form) {
-  const auth = new google.auth.JWT({
-    email: form.serviceAccountEmail,
-    key: form.serviceAccountPrivateKey.replace(/\\n/gu, '\n'),
-    scopes: ['https://www.googleapis.com/auth/spreadsheets'],
-  });
-
-  return google.sheets({ version: 'v4', auth });
-};
-
-const createSendEmailFunction = function (self, postmarkClient) {
-  return async (from, to, subject, htmlBody) => {
-    try {
-      const response = await postmarkClient.sendEmail({
-        From: from,
-        To: to,
-        Subject: subject,
-        HtmlBody: htmlBody,
-        MessageStream: 'outbound',
-      });
-      self.apos.util.log(`Email sent successfully to ${to}`);
-      if (response.ErrorCode) {
-        self.apos.util.error(response.ErrorCode);
-      }
-    } catch (error) {
-      self.apos.util.error(`Error sending email to ${to}`, error);
-    }
-  };
-};
-
-const sendConfirmationEmail = async function (
-  self,
-  form,
-  submission,
-  sendEmailFunc,
-) {
-  const confirmationFieldName = form.emailConfirmationField;
-  const senderEmail = findFieldValue(submission, confirmationFieldName);
-  if (!senderEmail) {
-    self.apos.util.warn(
-      `Email confirmation field "${form.emailConfirmationField}" not found in the submission.`,
-    );
-    return false;
-  }
-  const confirmationHtml =
-    '<p>Thank you for your submission! We will review your message as soon as possible.</p>';
-  await sendEmailFunc(
-    form.fromEmail,
-    senderEmail,
-    'Confirmation of Form Submission from Procrea',
-    confirmationHtml,
-  );
-  return true;
-};
-
-const handlePostmark = async function (self, form, submission) {
-  const emailSubject = `${form.title} Form (${form.domainName || 'defaultdomain.com'})`;
-  const html = createEmailHtml(submission);
-  const postmarkClient = createPostmarkClient(form.postmarkApiKey);
-  const sendPostmarkEmail = createSendEmailFunction(self, postmarkClient);
-
-  try {
-    await sendPostmarkEmail(form.fromEmail, form.toEmail, emailSubject, html);
-    if (form.sendConfirmationEmail) {
-      await sendConfirmationEmail(self, form, submission, sendPostmarkEmail);
-    }
-  } catch (error) {
-    self.apos.util.error('Error processing email sending', error);
-  }
-};
-
-const handleSpreadsheet = async function (self, form, submission) {
-  try {
-    const sheets = createSheetsClient(form);
-    const values = prepareSheetData(submission);
-    const resource = { values: [values] };
-
-    const range = form.spreadsheetRange || 'Sheet1!A1';
-
-    await sheets.spreadsheets.values.append({
-      spreadsheetId: form.spreadsheetId,
-      range,
-      valueInputOption: 'RAW',
-      resource,
-    });
-    self.apos.util.log('Data inserted into Google Sheets successfully.');
-  } catch (error) {
-    self.apos.util.error('Error Sheets data insertion', error);
-  }
-};
-
-// === Module Export ===
-
 module.exports = {
   options: {
     emailSubmissions: false,
@@ -195,7 +73,7 @@ module.exports = {
           label: 'Google Spreadsheet ID',
           type: 'string',
           help: 'Target spreadsheet',
-          placeholder: process.env.GOOGLE_SPREADSHEET_ID || '',
+          placeholder: '1vBBJqm5W4wk1IOlBoYA01ImVWE-plyPZ5wwH1jwZFiY',
           required: true,
           if: {
             enableSpreadsheet: true,
@@ -205,7 +83,7 @@ module.exports = {
           label: 'Google Service Account client_email',
           type: 'email',
           help: 'Please make sure to share your target sheet with this email and grant it editor access.',
-          placeholder: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL || '',
+          placeholder: 'procrea1@civil-zodiac-406414.iam.gserviceaccount.com',
           required: true,
           if: {
             enableSpreadsheet: true,
@@ -217,16 +95,6 @@ module.exports = {
           placeholder: process.env.SERVICE_ACCOUNT_PRIVATE_KEY || '',
           textarea: true,
           required: true,
-          if: {
-            enableSpreadsheet: true,
-          },
-        },
-        spreadsheetRange: {
-          label: 'Google Spreadsheet Range',
-          type: 'string',
-          help: 'Target sheet name and starting cell (e.g., Sheet1!A1)',
-          placeholder: 'Sheet1!A1',
-          required: false,
           if: {
             enableSpreadsheet: true,
           },
@@ -252,30 +120,122 @@ module.exports = {
       },
     },
   },
-  methods(self) {
+  handlers(self, options) {
     return {
-      createEmailHtml,
-      createPostmarkClient,
-      findFieldValue,
-      prepareSheetData,
-      createSheetsClient,
-      createSendEmailFunction: (...args) =>
-        createSendEmailFunction(self, ...args),
-      sendConfirmationEmail: (...args) => sendConfirmationEmail(self, ...args),
-      handlePostmark: (...args) => handlePostmark(self, ...args),
-      handleSpreadsheet: (...args) => handleSpreadsheet(self, ...args),
-      _processSubmission: async (form, submission) => {
-        if (form.enablePostmark) {
-          await handlePostmark(self, form, submission);
-        }
+      submission: {
+        async usePostmark(req, form, submission) {
+          if (form.enablePostmark) {
+            const emailSubject = `${form.title} Form (${form.domainName || 'defaultdomain.com'})`;
+            let html = '<ul>';
+            for (const key in submission) {
+              if (Object.hasOwn(submission, key)) {
+                html += `<li><strong>${key}:</strong> ${submission[key]}</li>`;
+              }
+            }
+            html += '</ul>';
 
-        if (form.enableSpreadsheet) {
-          await handleSpreadsheet(self, form, submission);
-        }
+            const postmarkClient = new postmark.ServerClient(
+              form.postmarkApiKey,
+            );
+
+            const sendPostmarkEmail = async (from, to, subject, htmlBody) => {
+              try {
+                const response = await postmarkClient.sendEmail({
+                  From: from,
+                  To: to,
+                  Subject: subject,
+                  HtmlBody: htmlBody,
+                  MessageStream: 'outbound',
+                });
+                self.apos.util.log(
+                  `Email sent successfully to ${to}`,
+                  response,
+                );
+                if (response.ErrorCode) {
+                  self.apos.util.log(response.ErrorCode);
+                }
+              } catch (error) {
+                self.apos.util.log(`Error sending email to ${to}`, error);
+              }
+            };
+
+            try {
+              await sendPostmarkEmail(
+                form.fromEmail,
+                form.toEmail,
+                emailSubject,
+                html,
+              );
+
+              if (form.sendConfirmationEmail) {
+                const senderEmail = submission[form.emailConfirmationField];
+
+                if (senderEmail) {
+                  const confirmationHtml =
+                    '<p>Thank you for your submission! We will review your message as soon as possible.</p>';
+                  await sendPostmarkEmail(
+                    form.fromEmail,
+                    senderEmail,
+                    'Confirmation of Form Submission from Procrea',
+                    confirmationHtml,
+                  );
+                } else {
+                  self.apos.util.log(
+                    `Email confirmation field "${form.emailConfirmationField}" not found in the submission.`,
+                  );
+                }
+              }
+            } catch (error) {
+              self.apos.util.log('Error processing email sending', error);
+            }
+          }
+
+          if (form.enableSpreadsheet) {
+            try {
+              /*
+               * Insert data into Google Sheets
+               * Ensure this is defined in your form
+               */
+              const { spreadsheetId } = form;
+              const range = 'Sheet1!A1';
+
+              // Google Sheets JWT Authentication
+              const auth = new google.auth.JWT({
+                email: form.serviceAccountEmail,
+                key: form.serviceAccountPrivateKey.replace(/\\n/gu, '\n'),
+                scopes: ['https://www.googleapis.com/auth/spreadsheets'],
+              });
+
+              const sheets = google.sheets({
+                version: 'v4',
+                auth,
+              });
+              const id = Date.now().toString();
+
+              const values = [
+                id,
+                new Date().toISOString(),
+                ...Object.values(submission),
+              ];
+              // Convert submission data to array format for Sheets
+
+              const resource = { values: [values] };
+
+              await sheets.spreadsheets.values.append({
+                spreadsheetId,
+                range,
+                valueInputOption: 'RAW',
+                resource,
+              });
+              self.apos.util.log(
+                'Data inserted into Google Sheets successfully.',
+              );
+            } catch (error) {
+              self.apos.util.log('Error Sheets data insertion', error);
+            }
+          }
+        },
       },
     };
-  },
-  init(self) {
-    self.on('submission', '_processSubmission');
   },
 };
