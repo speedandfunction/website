@@ -217,7 +217,7 @@ export default () => {
 
   apos.util.onReady(() => {
     // Menu Open
-    const menuButton = document.querySelector('[data-menu-button]');
+    const menuButton = document.getElementById('nav-icon');
     const menu = document.querySelector('[data-menu]');
 
     if (menuButton && menu) {
