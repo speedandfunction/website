@@ -22,10 +22,10 @@ module.exports = {
           project: {
             title: 1,
             slug: 1,
-          }
+          },
         },
-        help: 'Choose a category for this tag'
-      }
+        help: 'Choose a category for this tag',
+      },
     },
     group: {
       basics: {
@@ -36,11 +36,11 @@ module.exports = {
   },
   columns: {
     add: {
-       _category: {
+      _category: {
         label: 'Category',
         type: 'string',
         name: '_category.0.title',
       },
-    }
+    },
   },
 };
