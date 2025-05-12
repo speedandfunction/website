@@ -1,8 +1,6 @@
 const { google } = require('googleapis');
 const postmark = require('postmark');
 
-<<<<<<< HEAD
-=======
 // === Utility Functions ===
 
 const createEmailHtml = function (submission) {
@@ -133,7 +131,6 @@ const processSubmission = async function (self, form, submission) {
 
 // === Module Export ===
 
->>>>>>> 43beef7 (divided large functions into smaller ones and reduced complexity)
 module.exports = {
   options: {
     emailSubmissions: false,
