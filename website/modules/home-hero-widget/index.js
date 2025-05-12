@@ -1,4 +1,4 @@
-const extendedToolbar = require('../../lib/extendedToolbar');
+const headingToolbar = require('../../lib/headingToolbar');
 
 module.exports = {
   extend: '@apostrophecms/widget-type',
@@ -18,7 +18,7 @@ module.exports = {
           widgets: {
             'buttons': {},
             '@apostrophecms/rich-text': {
-              ...extendedToolbar,
+              ...headingToolbar,
               insert: ['image'],
             },
           },
