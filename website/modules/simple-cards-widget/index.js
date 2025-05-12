@@ -1,4 +1,3 @@
-const extendedToolbar = require('../../lib/extendedToolbar');
 const headingToolbar = require('../../lib/headingToolbar');
 
 module.exports = {
@@ -45,7 +44,7 @@ module.exports = {
                 widgets: {
                   '@apostrophecms/rich-text': {
                     className: 'sf-simple-card__text',
-                    ...extendedToolbar,
+                    ...headingToolbar,
                   },
                   'buttons': {},
                 },
