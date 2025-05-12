@@ -73,7 +73,7 @@ module.exports = {
           label: 'Google Spreadsheet ID',
           type: 'string',
           help: 'Target spreadsheet',
-          placeholder: '1vBBJqm5W4wk1IOlBoYA01ImVWE-plyPZ5wwH1jwZFiY',
+          placeholder: process.env.GOOGLE_SPREADSHEET_ID || '',
           required: true,
           if: {
             enableSpreadsheet: true,
@@ -83,7 +83,7 @@ module.exports = {
           label: 'Google Service Account client_email',
           type: 'email',
           help: 'Please make sure to share your target sheet with this email and grant it editor access.',
-          placeholder: 'procrea1@civil-zodiac-406414.iam.gserviceaccount.com',
+          placeholder: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL || '',
           required: true,
           if: {
             enableSpreadsheet: true,
@@ -95,6 +95,16 @@ module.exports = {
           placeholder: process.env.SERVICE_ACCOUNT_PRIVATE_KEY || '',
           textarea: true,
           required: true,
+          if: {
+            enableSpreadsheet: true,
+          },
+        },
+        spreadsheetRange: {
+          label: 'Google Spreadsheet Range',
+          type: 'string',
+          help: 'Target sheet name and starting cell (e.g., Sheet1!A1)',
+          placeholder: 'Sheet1!A1',
+          required: false,
           if: {
             enableSpreadsheet: true,
           },
@@ -194,7 +204,7 @@ module.exports = {
                * Ensure this is defined in your form
                */
               const { spreadsheetId } = form;
-              const range = 'Sheet1!A1'; // Specify the sheet and range, e.g., Sheet1!A1
+              const range = form.spreadsheetRange || 'Sheet1!A1'; // Make sheet range configurable
 
               // Google Sheets JWT Authentication
               const auth = new google.auth.JWT({
@@ -218,6 +228,16 @@ module.exports = {
 
               const resource = { values: [values] };
 
+              // First, validate that the spreadsheet exists and we have proper access
+              try {
+                await sheets.spreadsheets.get({ spreadsheetId });
+              } catch (error) {
+                console.error(`Error accessing spreadsheet: ${error.message}`);
+                throw new Error(
+                  `Cannot access spreadsheet. Check ID and permissions: ${error.message}`,
+                );
+              }
+
               await sheets.spreadsheets.values.append({
                 spreadsheetId,
                 range,
@@ -227,6 +247,9 @@ module.exports = {
               console.log('Data inserted into Google Sheets successfully.');
             } catch (error) {
               console.error('Error Sheets data insertion', error);
+              throw new Error(
+                `Failed to insert form data into spreadsheet: ${error.message}`,
+              );
             }
           }
         },
