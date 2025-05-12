@@ -1,0 +1,23 @@
+.sf-container-background {
+  display: flex;
+  justify-content: center;
+  background-color: var(--container-background, white);
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  padding: 0 40px;
+  @include breakpoint-medium {
+    padding: 0 120px;
+  }
+}
+
+.sf-container-widget {
+  max-width: var(--width-mobile, 8px);
+  padding-bottom: var(--padding-mobile-bottom, 0px);
+  padding-top: var(--padding-mobile-top, 0px);
+  width: 100%;
+  @include breakpoint-medium {
+    max-width: var(--width-desktop, 8px);
+    padding-bottom: var(--padding-desktop-bottom, 0px);
+    padding-top: var(--padding-desktop-top, 0px);
+  }
+}
