@@ -1,5 +1,5 @@
 * {
-	box-sizing: border-box;	
+  box-sizing: border-box;
 }
 
 .sr-only {
@@ -13,31 +13,31 @@
 }
 
 .sf-container {
-	position: relative;
-	width: 100%;
-	max-width: $breakpoint-extra-extra-large;
-	padding: 0 40px;
-	margin: 0 auto;
+  position: relative;
+  width: 100%;
+  max-width: $breakpoint-extra-extra-large;
+  padding: 0 40px;
+  margin: 0 auto;
 
-	@include breakpoint-extra-extra-large {
-		padding: 0 120px;
-	}
+  @include breakpoint-extra-extra-large {
+    padding: 0 120px;
+  }
 }
 .sf-wrapper {
-	position: relative;
+  position: relative;
 }
 .sf-section {
-	margin-bottom: 80px;
-	@include breakpoint-medium {
-		margin-bottom: 120px;
-	}
+  margin-bottom: 80px;
+  @include breakpoint-medium {
+    margin-bottom: 120px;
+  }
 }
 
 .sf-h1 {
   font-weight: $font-weight-extra-bold;
   font-size: $font-size-h1-mobile;
-  line-height: $line-height-h1;
-  
+  line-height: 110%;
+
   @include breakpoint-medium {
     font-size: $font-size-h1;
   }
@@ -46,18 +46,18 @@
 .sf-h2 {
   font-weight: $font-weight-extra-bold;
   font-size: $font-size-h2-mobile;
-  line-height: $line-height-h1;
-  
+  line-height: 110%;
+
   @include breakpoint-medium {
     font-size: $font-size-h2;
-    line-height: $line-height-body;
+    line-height: 140%;
   }
 }
 
 .sf-title {
   font-weight: $font-weight-extra-bold;
   font-size: $font-size-h3-mobile;
-  line-height: $line-height-body;
+  line-height: 140%;
 
   @include breakpoint-medium {
     font-size: $font-size-h3;
@@ -68,7 +68,7 @@
 .sf-subscribe__title {
   font-weight: $font-weight-extra-bold;
   font-size: $font-size-h4-mobile;
-  line-height: $line-height-body;
+  line-height: 140%;
 
   @include breakpoint-medium {
     font-size: $font-size-h4;
@@ -78,7 +78,7 @@
 .sf-h5 {
   font-weight: $font-weight-extra-bold;
   font-size: $font-size-h5-mobile;
-  line-height: $line-height-body;
+  line-height: 140%;
 
   @include breakpoint-medium {
     font-size: $font-size-h5;
@@ -88,17 +88,28 @@
 .sf-h6 {
   font-weight: $font-weight-extra-bold;
   font-size: $font-size-h6-mobile;
-  line-height: $line-height-h1;
+  line-height: 110%;
 
   @include breakpoint-medium {
     font-size: $font-size-h6;
   }
 }
 
-.sf-rich {
+.sf-rich-large {
+  font-weight: $font-weight-medium;
+  font-size: $font-size-body-small;
+  line-height: 140%;
+
+  @include breakpoint-medium {
+    font-size: $font-size-h4-mobile;
+    line-height: 150%;
+  }
+}
+
+.sf-rich-small {
   font-weight: $font-weight-medium;
   font-size: $font-size-body-small-mobile;
-  line-height: $line-height-body;
+  line-height: 140%;
 
   @include breakpoint-medium {
     font-size: $font-size-body-small;

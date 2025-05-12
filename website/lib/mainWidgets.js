@@ -15,6 +15,7 @@ module.exports = {
         'links-buttons': {},
         'buttons': {},
         'whitespace': {},
+        'container': {},
         '@apostrophecms/rich-text': {
           ...headingToolbar,
         },
