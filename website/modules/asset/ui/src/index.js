@@ -1,13 +1,13 @@
-/* eslint-disable sonarjs/no-nested-functions */
 import barba from '@barba/core';
-import gsap from 'gsap';
-import lozad from 'lozad';
+import { gsap } from 'gsap';
 import { initAllSwipers } from './swipers';
-import initSmoothCounters from './smoothCounters';
+import { initSmoothCounters } from './smoothCounters';
+import lozad from 'lozad';
 
 // Lazy loading
 function initImageLozad() {
-  const observer = lozad(); // Lazy loads elements with default selector as '.lozad'
+  // Lazy loads elements with default selector as '.lozad'
+  const observer = lozad();
   observer.observe();
 }
 
@@ -15,7 +15,7 @@ function initImageLozad() {
 function initFontChanger() {
   const heroContent = document.querySelector('.sf-hero-content strong');
   if (!heroContent) return;
-  
+
   const fonts = [
     'Poppins',
     'Philosopher',
@@ -34,7 +34,9 @@ function initFontChanger() {
 
   setInterval(() => {
     currentFontIndex = (currentFontIndex + 1) % fonts.length;
-    heroContent.style.fontFamily = fonts[currentFontIndex];
+    // Use Array.prototype.at() for safer array access
+    const currentFont = fonts.at(currentFontIndex);
+    heroContent.style.fontFamily = currentFont;
   }, 500);
 }
 
@@ -72,7 +74,7 @@ function initBarbaPageTransitions() {
             // Close menu if it's open
             const menuButton = document.querySelector('[data-menu-button]');
             const menu = document.querySelector('[data-menu]');
-            
+
             if (menuButton && menu) {
               menu.classList.remove('open');
               menuButton.classList.remove('open');
@@ -123,12 +125,12 @@ function initBarbaPageTransitions() {
 function initAnchorNavigation() {
   const anchors = document.querySelectorAll('a[href^="#"]');
   if (!anchors.length) return;
-  
+
   apos.util.onReady(() => {
     anchors.forEach((anchor) => {
-      anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href')); 
+      anchor.addEventListener('click', function (event) {
+        event.preventDefault();
+        const target = document.querySelector(anchor.getAttribute('href'));
         target.scrollIntoView({
           behavior: 'smooth',
         });
@@ -144,7 +146,7 @@ function initMenuToggle() {
     const menu = document.querySelector('[data-menu]');
 
     if (!menuButton || !menu) return;
-    
+
     menuButton.addEventListener('click', () => {
       menu.classList.toggle('open');
       menuButton.classList.toggle('open');
@@ -155,7 +157,7 @@ function initMenuToggle() {
     menuLinks.forEach((link) => {
       link.addEventListener('click', () => {
         if (apos.user) return;
-        
+
         menu.classList.remove('open');
         menuButton.classList.remove('open');
       });
