@@ -1,95 +1,175 @@
 .sf-button {
-	position: relative;
-	display: inline-block;
-	border: 0;
-	appearance: none;
-	border-radius: 0;
-	background: none;
-	box-shadow: none;
-	background-color: $gray-500;
-	padding: 10px 40px;
-	font-size: 10px;
-	font-weight: 700;
-	color: $white;
-	text-decoration: none;
-	text-transform: uppercase;
-	cursor: pointer;
-	margin-top: var(--widget-text-spacing, 4px);
-	&_underline {
-		color: $gray-500;
-		background-color: transparent;
-		padding: 10px 0;
-		span {
-			position: relative;
-			&::before {
-				content: "";
-				background-color: $gray-200;
-				position: absolute;
-				bottom: -3px;
-				left: 0;
-				height: 2px;
-				width: 100%;
-			}
-			&::after {
-				content: "";
-				background-color: $gray-500;
-				position: absolute;
-				bottom: -3px;
-				left: 0;
-				height: 2px;
-				width: 0;
-				transition: 0.2s;
-			}
-		}
-		&:hover, &:focus {
-			span {
-				&::after {
-					width: 100%;
-				}
-			}
-		}
-	}
+  position: relative;
+  display: inline-block;
+  border: 0;
+  box-sizing: border-box;
+  appearance: none;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+  background-color: $gray-500;
+  padding: 12px;
+  font-size: $font-size-body-medium-mobile;
+  font-style: $font-style-normal;
+  font-weight: $font-weight-extra-bold;
+  line-height: 0.8;
+  height: auto;
+  color: $white;
+  text-decoration: none;
+  text-transform: uppercase;
+  cursor: pointer;
+  margin-top: var(--widget-text-spacing, 4px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+  max-width: 270px;
+  text-align: center;
+
+  @include breakpoint-medium {
+    font-size: $font-size-body-large;
+    padding: 24px 92px;
+    height: 64px;
+    max-width: initial;
+  }
+
+  &_underline {
+    color: $gray-500;
+    background-color: transparent;
+    padding: 10px 0;
+    @include button-underline;
+  }
 }
+
 .sf-buttons-group {
-	margin-top: 40px;
-	.sf-button {
-		margin: 0 0 10px;
-		padding: 10px 40px;
-		&:last-child {
-			margin-bottom: 0;
-		}
-		@include breakpoint-medium {
-			margin: 0;
-		}
-	}
-	@include breakpoint-medium {
-		display: flex;
-		&[data-alignment="left"] {
-			justify-content: flex-start;
-		}
-		&[data-alignment="center"] {
-			justify-content: center;
-		}
-		&[data-alignment="right"] {
-			justify-content: flex-end;
-		}
-	}
+  margin-top: 40px;
+
+  &.two-buttons {
+    display: flex;
+    justify-content: space-evenly;
+    flex-direction: column;
+
+    @include breakpoint-medium {
+      margin: 0;
+      flex-direction: row;
+    }
+
+    .sf-button {
+      justify-content: center;
+      align-items: center;
+      padding: 12px;
+      margin: 0 auto 10px;
+      width: fit-content;
+
+      &.sf-button_underline {
+        background-color: $gray-500;
+        color: $white;
+        padding: 12px;
+
+        span {
+          &::before,
+          &::after {
+            content: none;
+          }
+        }
+      }
+
+      &:last-child {
+        @include button-underline;
+        background: none;
+        color: $gray-500;
+
+        @include breakpoint-medium {
+          border: 1px solid $gray-500;
+          width: 100%;
+
+          span {
+            &::before,
+            &::after {
+              content: none;
+            }
+          }
+        }
+      }
+
+      @include breakpoint-medium {
+        margin: 0;
+        padding: 24px 12px;
+        width: 100%;
+      }
+    }
+  }
+
+  &.single-button {
+    display: flex;
+    justify-content: center;
+
+    .sf-button {
+      margin: 0;
+
+      &.btn-dark {
+        background-color: $gray-500;
+        color: $white;
+      }
+
+      &.sf-button_underline {
+        background: none;
+        color: $gray-500;
+      }
+    }
+
+    &[data-alignment='left'] {
+      justify-content: flex-start;
+    }
+    &[data-alignment='center'] {
+      justify-content: center;
+    }
+    &[data-alignment='right'] {
+      justify-content: flex-end;
+    }
+  }
+
+  .sf-button--empty {
+    background: $gray-300;
+    border: none;
+    opacity: 0.5;
+    cursor: not-allowed;
+
+    &:hover {
+      &::after {
+        content: 'Link file/page to this element';
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        white-space: nowrap;
+        background: $red;
+        color: $gray-500;
+        padding: 4px 8px;
+        font-size: 12px;
+        margin-top: 4px;
+        z-index: 10;
+      }
+    }
+  }
 }
 // Carousel controls
 .swiper-controls {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	margin-top: 20px;
-	@include breakpoint-medium {
-		margin-top: 40px;
-	}
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+  @include breakpoint-medium {
+    margin-top: 40px;
+  }
 }
+
 .swiper-nav {
   position: relative;
   display: flex;
   gap: 20px;
-  .swiper-button-prev, .swiper-button-next {
+  .swiper-button-prev,
+  .swiper-button-next {
     left: inherit;
     right: inherit;
     position: relative;
@@ -102,7 +182,8 @@
     color: $gray-300;
     text-transform: uppercase;
     user-select: none;
-    &:hover, &:focus {
+    &:hover,
+    &:focus {
       color: $gray-500;
     }
   }
@@ -113,7 +194,8 @@
       @include arrow-button($gray-300);
       margin-left: 10px;
     }
-    &:hover, &:focus {
+    &:hover,
+    &:focus {
       &::after {
         @include arrow-button($gray-500);
       }
@@ -131,29 +213,32 @@
       transform: rotate(180deg);
       margin-right: 10px;
     }
-    &:hover, &:focus {
+    &:hover,
+    &:focus {
       &::before {
         @include arrow-button($gray-500);
       }
     }
   }
 }
+
 .sf-button-in {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	width: 40px;
-	height: 40px;
-	background-color: $gray-100;
-	font-weight: 500;
-	font-size: 14px;
-	line-height: 20px;
-	color: $gray-300;
-	text-decoration: none;
-	margin: 0;
-	@include transition(background-color);
-	&:hover, &:focus {
-		background-color: $gray-200;
-		color: $gray-500;
-	}
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background-color: $gray-100;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  color: $gray-300;
+  text-decoration: none;
+  margin: 0;
+  @include transition(background-color);
+  &:hover,
+  &:focus {
+    background-color: $gray-200;
+    color: $gray-500;
+  }
 }
