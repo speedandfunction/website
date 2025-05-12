@@ -1,5 +1,4 @@
-const extendedToolbar = require('../../lib/extendedToolbar');
-// const additionalMetaData = require("../partials/additionalMetaData");
+const headingToolbar = require('../../lib/headingToolbar');
 
 module.exports = {
   cascades: ['batchOperations'],
@@ -52,7 +51,7 @@ module.exports = {
           max: 1,
           widgets: {
             '@apostrophecms/rich-text': {
-              ...extendedToolbar,
+              ...headingToolbar,
             },
           },
         },
