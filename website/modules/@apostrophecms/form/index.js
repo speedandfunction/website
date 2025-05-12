@@ -5,11 +5,13 @@ const postmark = require('postmark');
 
 const createEmailHtml = function (submission) {
   let html = '<ul>';
-  for (const key in submission) {
-    if (Object.hasOwn(submission, key)) {
-      html += `<li><strong>${key}:</strong> ${submission[key]}</li>`;
-    }
-  }
+  // Create a safe copy of submission object to iterate through
+  const safeSubmission = { ...submission };
+  // Use a safer method to avoid object injection
+  const htmlItems = Object.entries(safeSubmission).map(
+    ([key, value]) => `<li><strong>${key}:</strong> ${value}</li>`,
+  );
+  html += htmlItems.join('');
   html += '</ul>';
   return html;
 };
@@ -87,14 +89,14 @@ const sendConfirmationEmail = async function (
 
 const handlePostmark = async function (self, form, submission) {
   const emailSubject = `${form.title} Form (${form.domainName || 'defaultdomain.com'})`;
-  const html = createEmailHtml(submission);
-  const postmarkClient = createPostmarkClient(form.postmarkApiKey);
-  const sendPostmarkEmail = createSendEmailFunction(self, postmarkClient);
+  const html = self.createEmailHtml(submission);
+  const postmarkClient = self.createPostmarkClient(form.postmarkApiKey);
+  const sendPostmarkEmail = self.createSendEmailFunction(postmarkClient);
 
   try {
     await sendPostmarkEmail(form.fromEmail, form.toEmail, emailSubject, html);
     if (form.sendConfirmationEmail) {
-      await sendConfirmationEmail(self, form, submission, sendPostmarkEmail);
+      await self.sendConfirmationEmail(form, submission, sendPostmarkEmail);
     }
   } catch (error) {
     self.apos.util.error('Error processing email sending', error);
@@ -103,13 +105,13 @@ const handlePostmark = async function (self, form, submission) {
 
 const handleSpreadsheet = async function (self, form, submission) {
   try {
-    const sheets = createSheetsClient(form);
-    const values = prepareSheetData(submission);
+    const sheets = self.createSheetsClient(form);
+    const values = self.prepareSheetData(submission);
     const resource = { values: [values] };
 
     await sheets.spreadsheets.values.append({
       spreadsheetId: form.spreadsheetId,
-      range: form.spreadsheetRange || 'Sheet1!A1',
+      range: 'Sheet1!A1',
       valueInputOption: 'RAW',
       resource,
     });
@@ -121,11 +123,11 @@ const handleSpreadsheet = async function (self, form, submission) {
 
 const processSubmission = async function (self, form, submission) {
   if (form.enablePostmark) {
-    await handlePostmark(self, form, submission);
+    await self.handlePostmark(form, submission);
   }
 
   if (form.enableSpreadsheet) {
-    await handleSpreadsheet(self, form, submission);
+    await self.handleSpreadsheet(form, submission);
   }
 };
 
