@@ -102,6 +102,15 @@ module.exports = {
           },
         },
       },
+      testimonials: {
+        label: 'Testimonials',
+        type: 'area',
+        options: {
+          widgets: {
+            'testimonials-carousel': {},
+          },
+        },
+      },
     },
     group: {
       basics: {
@@ -123,7 +132,7 @@ module.exports = {
       },
       content: {
         label: 'Content',
-        fields: ['content'],
+        fields: ['content', 'testimonials'],
       },
     },
   },
