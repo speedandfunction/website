@@ -1,6 +1,139 @@
 const { google } = require('googleapis');
 const postmark = require('postmark');
 
+<<<<<<< HEAD
+=======
+// === Utility Functions ===
+
+const createEmailHtml = function (submission) {
+  let html = '<ul>';
+  for (const key in submission) {
+    if (Object.hasOwn(submission, key)) {
+      html += `<li><strong>${key}:</strong> ${submission[key]}</li>`;
+    }
+  }
+  html += '</ul>';
+  return html;
+};
+
+const createPostmarkClient = function (apiKey) {
+  return new postmark.ServerClient(apiKey);
+};
+
+const findFieldValue = function (submission, fieldName) {
+  if (fieldName && submission[fieldName] !== undefined) {
+    return submission[fieldName];
+  }
+  return null;
+};
+
+const prepareSheetData = function (submission) {
+  const id = Date.now().toString();
+  return [id, new Date().toISOString(), ...Object.values(submission)];
+};
+
+const createSheetsClient = function (form) {
+  const auth = new google.auth.JWT({
+    email: form.serviceAccountEmail,
+    key: form.serviceAccountPrivateKey.replace(/\\n/gu, '\n'),
+    scopes: ['https://www.googleapis.com/auth/spreadsheets'],
+  });
+
+  return google.sheets({ version: 'v4', auth });
+};
+
+const createSendEmailFunction = function (self, postmarkClient) {
+  return async (from, to, subject, htmlBody) => {
+    try {
+      const response = await postmarkClient.sendEmail({
+        From: from,
+        To: to,
+        Subject: subject,
+        HtmlBody: htmlBody,
+        MessageStream: 'outbound',
+      });
+      self.apos.util.log(`Email sent successfully to ${to}`);
+      if (response.ErrorCode) {
+        self.apos.util.error(response.ErrorCode);
+      }
+    } catch (error) {
+      self.apos.util.error(`Error sending email to ${to}`, error);
+    }
+  };
+};
+
+const sendConfirmationEmail = async function (
+  self,
+  form,
+  submission,
+  sendEmailFunc,
+) {
+  const confirmationFieldName = form.emailConfirmationField;
+  const senderEmail = findFieldValue(submission, confirmationFieldName);
+  if (!senderEmail) {
+    self.apos.util.warn(
+      `Email confirmation field "${form.emailConfirmationField}" not found in the submission.`,
+    );
+    return false;
+  }
+  const confirmationHtml =
+    '<p>Thank you for your submission! We will review your message as soon as possible.</p>';
+  await sendEmailFunc(
+    form.fromEmail,
+    senderEmail,
+    'Confirmation of Form Submission from Procrea',
+    confirmationHtml,
+  );
+  return true;
+};
+
+const handlePostmark = async function (self, form, submission) {
+  const emailSubject = `${form.title} Form (${form.domainName || 'defaultdomain.com'})`;
+  const html = createEmailHtml(submission);
+  const postmarkClient = createPostmarkClient(form.postmarkApiKey);
+  const sendPostmarkEmail = createSendEmailFunction(self, postmarkClient);
+
+  try {
+    await sendPostmarkEmail(form.fromEmail, form.toEmail, emailSubject, html);
+    if (form.sendConfirmationEmail) {
+      await sendConfirmationEmail(self, form, submission, sendPostmarkEmail);
+    }
+  } catch (error) {
+    self.apos.util.error('Error processing email sending', error);
+  }
+};
+
+const handleSpreadsheet = async function (self, form, submission) {
+  try {
+    const sheets = createSheetsClient(form);
+    const values = prepareSheetData(submission);
+    const resource = { values: [values] };
+
+    await sheets.spreadsheets.values.append({
+      spreadsheetId: form.spreadsheetId,
+      range: form.spreadsheetRange || 'Sheet1!A1',
+      valueInputOption: 'RAW',
+      resource,
+    });
+    self.apos.util.log('Data inserted into Google Sheets successfully.');
+  } catch (error) {
+    self.apos.util.error('Error Sheets data insertion', error);
+  }
+};
+
+const processSubmission = async function (self, form, submission) {
+  if (form.enablePostmark) {
+    await handlePostmark(self, form, submission);
+  }
+
+  if (form.enableSpreadsheet) {
+    await handleSpreadsheet(self, form, submission);
+  }
+};
+
+// === Module Export ===
+
+>>>>>>> 43beef7 (divided large functions into smaller ones and reduced complexity)
 module.exports = {
   options: {
     emailSubmissions: false,
