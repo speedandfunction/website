@@ -24,6 +24,9 @@ function createAposConfig() {
         },
       },
 
+      // Add global data module
+      'global-data': {},
+
       // Configure page types
       '@apostrophecms/rich-text-widget': {},
       '@apostrophecms/image-widget': {
