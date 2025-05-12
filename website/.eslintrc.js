@@ -1,14 +1,21 @@
 module.exports = {
   extends: [
     'apostrophe',
-    'eslint:all', // All core ESLint rules
-    'plugin:sonarjs/recommended-legacy', // Sonar rules for ESLint 8 compatibility
-    'plugin:security/recommended-legacy', // Security rules
-    'plugin:promise/recommended', // Promise rules
-    'plugin:import/errors', // Import rules
+    // All core ESLint rules
+    'eslint:all',
+    // Sonar rules for ESLint 8 compatibility
+    'plugin:sonarjs/recommended-legacy',
+    // Security rules
+    'plugin:security/recommended-legacy',
+    // Promise rules
+    'plugin:promise/recommended',
+    // Import rules
+    'plugin:import/errors',
     'plugin:import/warnings',
-    'plugin:node/recommended', // Node.js rules
-    'plugin:jsx-a11y/strict', // Accessibility rules
+    // Node.js rules
+    'plugin:node/recommended',
+    // Accessibility rules
+    'plugin:jsx-a11y/strict',
     'plugin:prettier/recommended',
   ],
   plugins: [
@@ -19,10 +26,14 @@ module.exports = {
     'node',
     'jsx-a11y',
     'prettier',
-    'optimize-regex', // Regex optimizations
-    'no-unsanitized', // Prevent XSS
-    'no-secrets', // Prevent secrets in code
-    'eslint-comments', // Enforce ESLint comments best practices
+    // Regex optimizations
+    'optimize-regex',
+    // Prevent XSS
+    'no-unsanitized',
+    // Prevent secrets in code
+    'no-secrets',
+    // Enforce ESLint comments best practices
+    'eslint-comments',
   ],
   env: {
     browser: true,
@@ -49,63 +60,76 @@ module.exports = {
     },
   },
   rules: {
-    // Enable all rules from enabled plugins with "error" level
-    'sonarjs/cognitive-complexity': 'off',
-    'sonarjs/no-identical-expressions': 'off',
+    /*
+     * Disabled rules
+     */
     'security/detect-object-injection': 'off',
-    'promise/always-return': 'off',
-    'import/no-unresolved': 'off',
-    'node/no-missing-require': 'off',
-    'jsx-a11y/alt-text': 'off',
-    'prettier/prettier': 'off',
-    'optimize-regex/optimize-regex': 'off',
-    'no-unsanitized/method': 'off',
-    'no-unsanitized/property': 'off',
-    'no-secrets/no-secrets': 'off',
-    'eslint-comments/no-unused-disable': 'off',
+    'no-undefined': 'off',
+    'sort-keys': 'off',
+    'no-magic-numbers': 'off',
+    'node/no-unsupported-features/es-syntax': 'off',
 
-    // Core ESLint rules set to error
-    'no-console': 'off',
+    /*
+     * Enabled rules (simple)
+     */
+    'import/no-unresolved': 'error',
+    'prettier/prettier': 'error',
+    'no-secrets/no-secrets': 'error',
+    'eslint-comments/no-unused-disable': 'error',
+    'no-console': 'error',
+    'max-lines-per-function': 'error',
+    'func-style': 'error',
+    'no-ternary': 'error',
+    'id-length': 'error',
+    'require-unicode-regexp': 'error',
+    'sort-imports': 'error',
+    'no-trailing-spaces': 'error',
+    'no-invalid-this': 'error',
+    'node/no-missing-import': 'error',
+    'import/no-named-as-default': 'error',
+    'capitalized-comments': 'error',
+    'sonarjs/no-identical-expressions': 'error',
+    'sonarjs/cognitive-complexity': 'error',
+    'promise/always-return': 'error',
+    'node/no-missing-require': 'error',
+    'jsx-a11y/alt-text': 'error',
+    'optimize-regex/optimize-regex': 'error',
+    'no-unsanitized/method': 'error',
+    'no-unsanitized/property': 'error',
     'no-debugger': 'error',
     'no-alert': 'error',
     'no-unused-vars': 'error',
     'no-undef': 'error',
     'no-param-reassign': 'error',
-    'max-depth': 'off',
-    'max-lines': ['error', 300],
-    'max-lines-per-function': 'off',
-    'max-nested-callbacks': ['error', 3],
-    'max-params': 'off',
-    'max-statements': 'off',
+    'no-dupe-keys': 'error',
+    'init-declarations': 'error',
 
-    // Disable rules causing the most issues
-    'sort-keys': 'off',
-    'line-comment-position': 'off',
-    'no-inline-comments': 'off',
-    'no-magic-numbers': 'off',
-    'node/no-unsupported-features/es-syntax': 'off',
-    'func-style': 'off',
-    'func-names': 'off',
-    'no-ternary': 'off',
-    'id-length': 'off',
-    'require-unicode-regexp': 'off',
-    'sort-imports': 'off',
-    'no-trailing-spaces': 'off',
-    'quote-props': 'off',
-    'no-dupe-keys': 'off',
-    'complexity': 'off',
-    'no-invalid-this': 'off',
-    'node/no-missing-import': 'off',
-    'import/no-named-as-default': 'off',
-    'capitalized-comments': 'off',
-    'init-declarations': 'off',
-    'prefer-destructuring': ['error', {
-      'array': true,
-      'object': true
-    }],
-    'node/no-extraneous-require': ['error', {
-      'allowModules': ['@jest/globals']
-    }]
+    /*
+     * Enabled rules with parameters
+     */
+    'line-comment-position': ['error', { position: 'above' }],
+    'no-inline-comments': 'error',
+    'func-names': ['error', 'never'],
+    'quote-props': ['error', 'consistent'],
+    'max-depth': ['error', 4],
+    'max-lines': ['error', 300],
+    'max-nested-callbacks': ['error', 3],
+    'max-params': ['error', 5],
+    'max-statements': ['error', 50],
+    'complexity': ['error', 15],
+    'prefer-destructuring': [
+      'error',
+      {
+        array: true,
+        object: true,
+      },
+    ],
+    'node/no-extraneous-require': [
+      'error',
+      {
+        allowModules: ['@jest/globals'],
+      },
+    ],
   },
   overrides: [
     {
@@ -114,7 +138,45 @@ module.exports = {
         'max-lines-per-function': 'off',
         'max-statements': 'off',
         'node/no-extraneous-require': 'off',
-        'prefer-destructuring': 'off'
+        'prefer-destructuring': 'off',
+      },
+    },
+    {
+      files: ['app.js'],
+      rules: {
+        'max-lines-per-function': 'off',
+        'func-style': 'off',
+        'quote-props': 'off',
+      },
+    },
+    {
+      files: ['modules/@apostrophecms/form/index.js'],
+      rules: {
+        'max-lines': 'off',
+      },
+    },
+    {
+      files: ['modules/asset/ui/src/index.js'],
+      rules: {
+        'max-lines-per-function': 'off',
+        'func-style': 'off',
+      },
+    },
+    {
+      files: ['modules/asset/ui/src/swipers.js'],
+      rules: {
+        'node/no-missing-import': 'off',
+        'import/no-unresolved': 'off',
+      },
+    },
+    {
+      files: ['e2e/playwright.config.js', 'e2e/tests/screenshot-test.spec.js'],
+      rules: {
+        'import/no-unresolved': 'off',
+        'no-ternary': 'off',
+        'sort-imports': 'off',
+        'node/no-missing-import': 'off',
+        'node/no-unpublished-import': 'off',
       },
     },
   ],

@@ -44,7 +44,7 @@ module.exports = {
           project: {
             title: 1,
             stack: 1,
-            subtitle: 1,
+            portfolioTitle: 1,
             content: 1,
             picture: 1,
             mediaType: 1,
@@ -57,8 +57,8 @@ module.exports = {
             label: 'Title',
           },
           {
-            name: 'subtitle',
-            label: 'Subtitle',
+            name: 'portfolioTitle',
+            label: 'Portfolio Title',
           },
           {
             name: 'stack',
