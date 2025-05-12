@@ -19,7 +19,7 @@ module.exports = {
     'alignJustify',
     'redo',
     'undo',
-    '|'
+    '|',
   ],
   styles: [
     {
@@ -59,6 +59,6 @@ module.exports = {
     },
   ],
   color: {
-   presetColors: [ '#191919', '#7C7C7C',]
+    presetColors: ['#191919', '#7C7C7C'],
   },
 };
