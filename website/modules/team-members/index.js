@@ -1,5 +1,4 @@
 const headingToolbar = require('../../lib/headingToolbar');
-// const additionalMetaData = require("../partials/additionalMetaData");
 
 module.exports = {
   cascades: ['batchOperations'],
