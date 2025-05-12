@@ -2,7 +2,6 @@
   display: flex;
   flex-wrap: wrap;
   counter-reset: card-counter;
-  // @include border(border-bottom);
   @include breakpoint-medium {
     border: 0;
   }
