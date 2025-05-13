@@ -14,6 +14,14 @@
   @include font-settings($size, $line-height, $font-weight-body);
 }
 
+@mixin responsive-font($mobile-size, $desktop-size) {
+  font-size: $mobile-size;
+
+  @include breakpoint-medium {
+    font-size: $desktop-size;
+  }
+}
+
 @mixin breakpoint-extra-small {
   @media (min-width: $breakpoint-extra-small) {
     @content;
