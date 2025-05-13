@@ -1,3 +1,5 @@
+const headingToolbar = require('../../lib/headingToolbar');
+
 module.exports = {
   extend: '@apostrophecms/piece-type',
   options: {
@@ -10,6 +12,17 @@ module.exports = {
   },
   fields: {
     add: {
+      title: {
+        label: 'Client Name',
+        type: 'string',
+        required: true,
+      },
+      clientWebsite: {
+        label: 'Client Website',
+        type: 'string',
+        help: "Link to client's official website.",
+        placeholder: 'https://example.com',
+      },
       picture: {
         label: 'Image',
         type: 'area',
@@ -25,14 +38,27 @@ module.exports = {
         },
       },
       stack: {
-        label: 'Technology Stack',
+        label: 'Tech Stack',
+        type: 'string',
+        help: 'Comma separated tags indicating the technologies utilized in the project.',
+        required: true,
+      },
+      portfolioTitle: {
+        label: 'Portfolio Title',
         type: 'string',
         required: true,
       },
-      subtitle: {
-        label: 'Subtitle',
+      descriptor: {
+        label: 'Descriptor',
         type: 'string',
-        required: true,
+        help: "A brief summary highlighting the project's value, outcomes, and the impact achieved.",
+        textarea: true,
+      },
+      prodLink: {
+        label: 'Link to Prod',
+        type: 'string',
+        help: 'Public link referring to the delivered result.',
+        placeholder: 'https://example.com/project',
       },
       _tags: {
         type: 'relationship',
@@ -45,12 +71,38 @@ module.exports = {
           },
         },
       },
+      objective: {
+        label: 'Objective',
+        type: 'string',
+        help: 'A brief summary of the specific goals the project aimed to accomplish.',
+        textarea: true,
+      },
+      challenge: {
+        label: 'Challenge',
+        type: 'string',
+        help: 'A concise summary of the key business or technical issues the client faced.',
+        textarea: true,
+      },
+      solution: {
+        label: 'Solution',
+        type: 'string',
+        help: 'A short explanation of the proposed solution to address the challenges.',
+        textarea: true,
+      },
+      results: {
+        label: 'Results',
+        type: 'string',
+        help: '2-4 bullet points summarizing quantifiable improvements in performance, efficiency, cost savings, or business outcomes achieved.',
+        textarea: true,
+      },
       content: {
         label: 'Content',
         type: 'area',
         options: {
           widgets: {
-            '@apostrophecms/rich-text': {},
+            '@apostrophecms/rich-text': {
+              ...headingToolbar,
+            },
           },
         },
       },
@@ -58,7 +110,20 @@ module.exports = {
     group: {
       basics: {
         label: 'Basics',
-        fields: ['title', 'picture', 'stack', 'subtitle', '_tags'],
+        fields: [
+          'title',
+          'clientWebsite',
+          'picture',
+          'stack',
+          'portfolioTitle',
+          'descriptor',
+          'prodLink',
+          '_tags',
+        ],
+      },
+      details: {
+        label: 'Case Study Details',
+        fields: ['objective', 'challenge', 'solution', 'results'],
       },
       content: {
         label: 'Content',
@@ -69,7 +134,7 @@ module.exports = {
   columns: {
     add: {
       stack: {
-        label: 'Technology Stack',
+        label: 'Tech Stack',
       },
       _tags: {
         label: 'Tags',

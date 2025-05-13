@@ -1,0 +1,6 @@
+# This is a CODEOWNERS file for the repository
+# @killev will be requested for review when someone opens a pull request
+# affecting any file in the repository
+
+# Default owner for everything in the repo
+*       @killev
