@@ -4,9 +4,10 @@ const required = [
   'APOS_S3_KEY',
   'APOS_S3_SECRET',
 ];
-required.forEach((v) => {
-  if (!process.env[v]) {
-    throw new Error(`Missing required env var: ${v}`);
+
+required.forEach((envVar) => {
+  if (!process.env[envVar]) {
+    throw new Error(`Missing required env var: ${envVar}`);
   }
 });
 
