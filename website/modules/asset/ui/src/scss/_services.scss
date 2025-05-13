@@ -7,7 +7,7 @@
   }
   &.no-counter {
     counter-reset: none;
-    
+
     .sf-simple-card-wrap {
       &::before {
         display: none;
