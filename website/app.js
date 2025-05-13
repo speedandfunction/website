@@ -24,6 +24,9 @@ function createAposConfig() {
         },
       },
 
+      // Add global data module
+      'global-data': {},
+
       // Configure page types
       '@apostrophecms/rich-text-widget': {},
       '@apostrophecms/image-widget': {
@@ -86,7 +89,9 @@ function createAposConfig() {
       'cases-tags': {},
       'case-studies': {},
       'case-studies-page': {},
+      'categories': {},
       'case-studies-carousel-widget': {},
+      'container-widget': {},
     },
   };
 }
