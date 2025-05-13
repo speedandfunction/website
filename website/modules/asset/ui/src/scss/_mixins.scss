@@ -22,6 +22,14 @@
   }
 }
 
+@mixin responsive-line-height($mobile-line-height, $desktop-line-height) {
+  line-height: $mobile-line-height;
+
+  @include breakpoint-medium {
+    line-height: $desktop-line-height;
+  }
+}
+
 @mixin breakpoint-extra-small {
   @media (min-width: $breakpoint-extra-small) {
     @content;
