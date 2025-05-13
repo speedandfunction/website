@@ -8,8 +8,10 @@
   &.no-counter {
     counter-reset: none;
     
-    .sf-simple-card-wrap::before {
-      display: none;
+    .sf-simple-card-wrap {
+      &::before {
+        display: none;
+      }
     }
   }
 }
@@ -57,9 +59,6 @@
     color: $gray-300;
     margin: 0;
     @include transition(color);
-    @include breakpoint-medium {
-      margin: 0 0 15px;
-    }
     p {
       margin: 0;
     }
@@ -113,10 +112,14 @@
 }
 
 @include breakpoint-medium {
-  .sf-simple-card:not(:nth-child(n)) {
-    border-right: none;
+  .sf-simple-card {
+    &:nth-child(2n) {
+      border-left: none;
+    }
   }
-  .sf-simple-card:not(:nth-last-child(-n + 2)) {
-    border-bottom: none;
+  .sf-simple-card {
+    &:not(:nth-last-child(-n + 2)) {
+      border-bottom: none;
+    }
   }
 }
