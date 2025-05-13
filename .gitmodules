@@ -3,4 +3,4 @@
 	url = git@github.com:speedandfunction/cursor-ai.git
 [submodule "website-pages"]
 	path = website-pages
-	url = https://github.com/speedandfunction/website-pages
+	url = git@github.com:speedandfunction/website-pages.git
