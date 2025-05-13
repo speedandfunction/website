@@ -26,7 +26,7 @@
   margin-bottom: 16px;
 
   @include breakpoint-medium {
-    margin-bottom: 0;
+    margin-bottom: -1px;
     width: 50%;
     @include border(border-bottom);
   }
@@ -116,8 +116,6 @@
     &:nth-child(2n) {
       border-left: none;
     }
-  }
-  .sf-simple-card {
     &:not(:nth-last-child(-n + 2)) {
       border-bottom: none;
     }
