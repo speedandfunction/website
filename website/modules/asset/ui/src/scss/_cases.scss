@@ -204,6 +204,7 @@
   display: grid;
   grid-template-columns: 1fr;
   gap: 32px;
+  margin: 0 auto;
 
   @include breakpoint-medium {
     grid-template-columns: repeat(2, 1fr);
@@ -213,7 +214,6 @@
 .cs_card {
   background-color: $white;
   border: 1px solid $whisper;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -221,6 +221,10 @@
 
   &:hover {
     box-shadow: 0 4px 16px rgba($black, 0.15);
+  }
+
+  @include breakpoint-large {
+    border: none;
   }
 
   .image {
@@ -270,93 +274,50 @@
     .cname {
       @include responsive-font(16px, 22px);
       @include responsive-line-height(150%, 110%);
+      @include text-truncate($height: 24px);
       font-style: $font-style-normal;
       font-weight: $font-weight-extra-bold;
       color: $gray-500;
       margin: 0 0 4px;
-      max-width: 274px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      height: 24px;
-
-      @include breakpoint-large {
-        max-width: 349px;
-      }
     }
 
     .type {
       @include responsive-font(10px, 10px);
       @include responsive-line-height(140%, 140%);
+      @include text-truncate($height: 14px);
       color: $gray-300;
       font-style: $font-style-normal;
       font-weight: $font-weight-extra-bold;
-      max-width: 274px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
       margin-bottom: 12px;
-      height: 14px;
-
-      @include breakpoint-large {
-        max-width: 349px;
-      }
     }
 
     .industry {
       @include responsive-font(10px, 10px);
       @include responsive-line-height(140%, 140%);
+      @include text-truncate($height: 14px);
       font-style: $font-style-normal;
       font-weight: $font-weight-medium;
       color: $gray-300;
-      max-width: 274px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
       margin-bottom: 4px;
-      height: 14px;
-
-      @include breakpoint-large {
-        max-width: 349px;
-      }
     }
 
     .portfolio-title {
       @include responsive-font(14px, 14px);
       @include responsive-line-height(150%, 150%);
+      @include text-truncate($height: 42px, $is-multiline: true);
       font-style: $font-style-normal;
       font-weight: $font-weight-medium;
       color: $gray-500;
-      max-width: 274px;
-      overflow: hidden;
-      text-overflow: ellipsis;
       margin: 0 0 16px;
-      height: 42px;
-
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-
-      @include breakpoint-large {
-        max-width: 349px;
-      }
     }
 
     .stack {
       @include responsive-font(11px, 11px);
       @include responsive-line-height(120%, 120%);
+      @include text-truncate($height: 13px);
       font-style: $font-style-normal;
       font-weight: $font-weight-300;
       color: $gray-300;
-      max-width: 274px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      height: 13px;
-
-      @include breakpoint-large {
-        max-width: 349px;
-      }
     }
   }
 }

@@ -130,3 +130,28 @@
     }
   }
 }
+
+// Text truncation mixin
+@mixin text-truncate(
+  $max-width: 274px,
+  $large-max-width: 349px,
+  $is-multiline: false,
+  $height: auto
+) {
+  max-width: $max-width;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  height: $height;
+
+  @if $is-multiline {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  } @else {
+    white-space: nowrap;
+  }
+
+  @include breakpoint-large {
+    max-width: $large-max-width;
+  }
+}
