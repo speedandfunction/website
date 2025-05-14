@@ -36,6 +36,16 @@
       </header>
       {% if data.piece.portfolioTitle %}
       <h2 class="cs_portfolio-title">{{ data.piece.portfolioTitle }}</h2>
+      {% endif %} {% if data.piece.caseStudyType %}
+      <div class="cs_type">
+        <span class="type-label">Type:</span>
+        <span class="type-value">{{ data.piece.caseStudyType }}</span>
+      </div>
+      {% endif %} {% if data.piece.industry %}
+      <div class="cs_industry">
+        <span class="industry-label">Industry:</span>
+        <span class="industry-value">{{ data.piece.industry }}</span>
+      </div>
       {% endif %} {% if data.piece.descriptor %}
       <p class="cs_descriptor">{{ data.piece.descriptor }}</p>
       {% endif %} {% if data.piece.stack %}

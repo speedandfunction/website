@@ -59,15 +59,18 @@ data.piecesFilters.tags %} {% block main %}
         <a href="{{ article._url }}" class="cs_card">
           {% set picture = apos.image.first(article.picture) %} {% if picture is
           defined %}
+
           <img
-            class="cs_image"
+            class="image"
             loading="lazy"
             src="{{ apos.attachment.url(picture, { size: data.options.size or 'full' }) }}"
             alt="{{ picture._alt or '' }}"
             width="{{ apos.attachment.getWidth(picture) }}"
             height="{{ apos.attachment.getHeight(picture) }}"
           />
+
           {% else %}
+
           <div class="placeholder-image-container">
             <img
               class="placeholder-image"
@@ -78,18 +81,20 @@ data.piecesFilters.tags %} {% block main %}
               height="50"
             />
           </div>
+
           {% endif %}
           <div class="cs_details">
-            <h3 class="cs_title">{{ article.title }}</h3>
+            <h3 class="cname">{{ article.title }}</h3>
+            <div class="type">{{ article.caseStudyType }}</div>
+            <div class="industry">{{ article.industry }}</div>
+
             {% if article.portfolioTitle %}
-            <h4 class="cs_portfolio-title">{{ article.portfolioTitle }}</h4>
-            {% endif %} {% if article.descriptor %}
-            <p class="cs_descriptor">{{ article.descriptor }}</p>
+
+            <h4 class="portfolio-title">{{ article.portfolioTitle }}</h4>
+
             {% endif %} {% if article.stack %}
-            <div class="cs_stack">
-              <span class="stack-label">Tech Stack:</span>
-              <span class="stack-value">{{ article.stack }}</span>
-            </div>
+
+            <div class="stack">{{ article.stack }}</div>
 
             {% endif %}
           </div>
