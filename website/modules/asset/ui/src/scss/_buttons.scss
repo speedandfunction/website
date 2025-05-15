@@ -9,7 +9,6 @@
   box-shadow: none;
   background-color: $gray-500;
   padding: 12px;
-  font-size: $font-size-body-medium-mobile;
   font-style: $font-style-normal;
   font-weight: $font-weight-extra-bold;
   line-height: 0.8;
@@ -25,9 +24,9 @@
   min-width: 0;
   max-width: 270px;
   text-align: center;
+  @include responsive-font(14px, 20px);
 
   @include breakpoint-medium {
-    font-size: $font-size-body-large;
     padding: 24px 92px;
     height: 64px;
     max-width: initial;
@@ -131,6 +130,7 @@
     background: $gray-300;
     border: none;
     opacity: 0.5;
+    overflow: initial;
     cursor: not-allowed;
 
     &:hover {
