@@ -21,8 +21,8 @@
 <footer class="sf-container">
   <p class="sf-copy">&#169; {{ data.currentYear or '2025' }} S&F</p>
 </footer>
-{% endfragment %} {% fragment breadcrumbs() %}
-<nav class="breadcrumb" aria-label="Breadcrumb">
+{% fragment breadcrumbs() %}
+<nav class="breadcrumb" aria-label="Breadcrumb navigation">
   <ol class="breadcrumb-list">
     {% if data.page._url == data.home._url %}
     <li class="breadcrumb-home">
