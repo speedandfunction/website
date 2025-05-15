@@ -85,8 +85,8 @@ data.piecesFilters.tags %} {% block main %}
           {% endif %}
           <div class="cs_details">
             <h3 class="cname">{{ article.title }}</h3>
-            <div class="type">Mobile Development</div>
-            <div class="industry">Manufacturing</div>
+            <div class="type">{{ article.caseStudyType }}</div>
+            <div class="industry">{{ article.industry }}</div>
 
             {% if article.portfolioTitle %}
 
