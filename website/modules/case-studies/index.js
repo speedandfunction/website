@@ -43,9 +43,22 @@ module.exports = {
         help: 'Comma separated tags indicating the technologies utilized in the project.',
         required: true,
       },
+      caseStudyType: {
+        label: 'Case Study Type',
+        type: 'string',
+        help: 'The nature of the project identifying the projectʼs scope and requirements, relationship, or key characteristics (e.g., Mobile Development, Product Enhancement, ML/AI).',
+        required: true,
+      },
+      industry: {
+        label: 'Industry',
+        type: 'string',
+        help: "Comma seperated tags representing the client's industry or sector (e.g. Financial Services, Healthcare, Retail & E-commerce).",
+        required: true,
+      },
       portfolioTitle: {
         label: 'Portfolio Title',
         type: 'string',
+        help: 'The official product name or a concise, descriptive project name if confidentiality is necessary',
         required: true,
       },
       descriptor: {
@@ -106,6 +119,15 @@ module.exports = {
           },
         },
       },
+      testimonials: {
+        label: 'Testimonials',
+        type: 'area',
+        options: {
+          widgets: {
+            'testimonials-carousel': {},
+          },
+        },
+      },
     },
     group: {
       basics: {
@@ -115,6 +137,8 @@ module.exports = {
           'clientWebsite',
           'picture',
           'stack',
+          'caseStudyType',
+          'industry',
           'portfolioTitle',
           'descriptor',
           'prodLink',
@@ -127,7 +151,7 @@ module.exports = {
       },
       content: {
         label: 'Content',
-        fields: ['content'],
+        fields: ['content', 'testimonials'],
       },
     },
   },
