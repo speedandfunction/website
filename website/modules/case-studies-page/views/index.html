@@ -2,6 +2,45 @@
 import '@apostrophecms/pager:macros.html' as pager with context %} {% set tags =
 data.piecesFilters.tags %} {% block main %}
 <div class="cs_container">
+  {% if data.query.tags.length >= 1 %}
+  <div class="cs_filter-info">
+    <p class="items-count">
+      {{ data.totalPieces }} Ite{% if data.totalPieces == 1 %}m{% else %}ms{%
+      endif %} found
+    </p>
+
+    <div class="clear-all">
+      <a
+        class="clear-all-link"
+        href="{{ data.url | build({ tags: null }) }}"
+        aria-label="Clear all tags"
+      >
+        <span class="clear-all-content">
+          <span class="clear-text">Clear all</span>
+          <span class="remove-sign">&times;</span>
+        </span>
+      </a>
+    </div>
+    {% if data.query.tags and data.query.tags.length %}
+    <div class="selected-tags">
+      <ul class="selected-tags-list">
+        {% for tag in tags %} {% if tag.value in data.query.tags %}
+        <li class="selected-tag">
+          {{ tag.label }}
+          <a
+            class="remove-tag"
+            href="{{ data.url | build({}, { tags: { $pull: tag.value } }) }}"
+            aria-label="Remove tag {{ tag.label }}"
+          >
+            &times;
+          </a>
+        </li>
+        {% endif %} {% endfor %}
+      </ul>
+    </div>
+    {% endif %}
+  </div>
+  {% endif %}
   <div class="cs_content">
     <div class="page-main_content">{% area data.page, 'main' %}</div>
     <form class="cs_search-form" action="" method="GET">
@@ -48,9 +87,6 @@ data.piecesFilters.tags %} {% block main %}
             </a>
           </li>
           {% endif %} {% endfor %}
-          <li class="tag-item clear-all">
-            <a class="clear-all-link" href="{{ data.page._url }}">Clear all</a>
-          </li>
         </ul>
       </div>
 
