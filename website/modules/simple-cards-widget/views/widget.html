@@ -5,6 +5,7 @@
       <div class="sf-simple-card">
         <input type="checkbox" id="card-toggle-{{ loop.index }}" class="sf-simple-card__toggle">
         <div class="sf-simple-card-wrap">
+          <input type="checkbox" id="card-toggle-{{ loop.index }}" hidden>
           <label for="card-toggle-{{ loop.index }}" class="sf-simple-card__expand-button" title="Expand/Collapse"></label>
           {% if card.cardTitle %}
             <h4 class="sf-simple-card__title">{{ card.cardTitle }}</h4>
