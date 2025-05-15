@@ -1,100 +1,96 @@
 {% extends "layout.html" %} {% block main %}
-<div class="cs_details-page">
-  {% if data.piece._tags %}
-  <div class="cs_tags">
-    <h3 class="tags-heading">Tags</h3>
-    <ul class="tags-list">
-      {% for tag in data.piece._tags %}
-      <li class="tag-item">
-        <a
-          class="tag-link{% if tag.selected %} selected{% endif %}"
-          href="{{ data.piece._parentUrl | build({}, { tags: { $addToSet: tag.slug } }) }}"
-        >
-          {{ tag.title }}
-        </a>
-      </li>
-      {% endfor %}
-    </ul>
-  </div>
-  {% endif %}
 
-  <div class="cs_grid">
-    <article class="cs_card">
-      <header class="header">
-        <h1 class="title">{{ data.piece.title }}</h1>
-        {% set picture = apos.image.first(data.piece.picture) %} {% if picture
-        is defined %}
-        <img
-          class="cs_image"
-          loading="lazy"
-          src="{{ apos.attachment.url(picture, { size: 'full' }) }}"
-          alt="{{ picture._alt or '' }}"
-          width="{{ apos.attachment.getWidth(picture) }}"
-          height="{{ apos.attachment.getHeight(picture) }}"
-        />
+<div class="cs_full-details">
+  <article class="cs_full-details-card">
+    {% set picture = apos.image.first(data.piece.picture) %} {% if picture is
+    defined %}
+
+    <img
+      class="image"
+      loading="lazy"
+      src="{{ apos.attachment.url(picture, { size: 'full' }) }}"
+      alt="{{ picture._alt or '' }}"
+      width="{{ apos.attachment.getWidth(picture) }}"
+      height="{{ apos.attachment.getHeight(picture) }}"
+    />
+
+    {% else %}
+
+    <div class="placeholder-image-container">
+      <img
+        class="placeholder-image"
+        loading="lazy"
+        src="/images/logo.svg"
+        alt="Placeholder banner"
+        width="160"
+        height="50"
+      />
+    </div>
+
+    {% endif %}
+    <div class="cs_info">
+      <div class="cs_info-primary">
+        <div class="truncate-wrapper">
+          <h1 class="cname">{{ data.piece.title }}</h1>
+          {% if data.piece.clientWebsite %}
+          <a
+            href="{{ data.piece.clientWebsite }}"
+            target="_blank"
+            class="client-website-link"
+            >{{ data.piece.clientWebsite }}</a
+          >
+          {% endif %} {% if data.piece.industry %}
+          <div class="industry">{{ data.piece.industry }}</div>
+          {% endif %} {% if data.piece.portfolioTitle %}
+          <h2 class="portfolio-title">{{ data.piece.portfolioTitle }}</h2>
+          {% endif %} {% if data.piece.descriptor %}
+          <p class="descriptor">{{ data.piece.descriptor }}</p>
+          {% endif %} {% if data.piece.caseStudyType %}
+          <div class="type">{{ data.piece.caseStudyType }}</div>
+          {% endif %}
+        </div>
+
+        <div class="links-area">
+          <a href="#" class="full-story_btn">Read The Full Story</a>
+
+          {% if data.piece.prodLink %}
+          <a href="{{ data.piece.prodLink }}" target="_blank" class="prod-link"
+            >{{ data.piece.prodLink }}</a
+          >
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="cs_info-secondary">
+        {% if data.piece.objective %}
+        <div>
+          <h3>Objective</h3>
+          <p>{{ data.piece.objective }}</p>
+        </div>
+        {% endif %} {% if data.piece.challenge %}
+        <div>
+          <h3>Challenge</h3>
+          <p>{{ data.piece.challenge }}</p>
+        </div>
+        {% endif %} {% if data.piece.solution %}
+        <div>
+          <h3>Solution</h3>
+          <p>{{ data.piece.solution }}</p>
+        </div>
+        {% endif %} {% if data.piece.results %}
+        <div>
+          <h3>Results</h3>
+          <p>{{ data.piece.results }}</p>
+        </div>
+        {% endif %} {% if data.piece.stack %}
+        <div>
+          <h3>Tech stack</h3>
+          <p>{{ data.piece.stack }}</p>
+        </div>
         {% endif %}
-      </header>
-      {% if data.piece.portfolioTitle %}
-      <h2 class="cs_portfolio-title">{{ data.piece.portfolioTitle }}</h2>
-      {% endif %} {% if data.piece.caseStudyType %}
-      <div class="cs_type">
-        <span class="type-label">Type:</span>
-        <span class="type-value">{{ data.piece.caseStudyType }}</span>
       </div>
-      {% endif %} {% if data.piece.industry %}
-      <div class="cs_industry">
-        <span class="industry-label">Industry:</span>
-        <span class="industry-value">{{ data.piece.industry }}</span>
-      </div>
-      {% endif %} {% if data.piece.descriptor %}
-      <p class="cs_descriptor">{{ data.piece.descriptor }}</p>
-      {% endif %} {% if data.piece.stack %}
-      <div class="cs_stack">
-        <span class="stack-label">Tech Stack:</span>
-        <span class="stack-value">{{ data.piece.stack }}</span>
-      </div>
-      {% endif %} {% if data.piece.clientWebsite %}
-      <div class="cs_website">
-        <span class="website-label">Website:</span>
-        <a
-          href="{{ data.piece.clientWebsite }}"
-          target="_blank"
-          class="website-link"
-          >{{ data.piece.clientWebsite }}</a
-        >
-      </div>
-      {% endif %} {% if data.piece.prodLink %}
-      <div class="cs_prod-link">
-        <span class="prod-link-label">Project Link:</span>
-        <a
-          href="{{ data.piece.prodLink }}"
-          target="_blank"
-          class="prod-link-value"
-          >{{ data.piece.prodLink }}</a
-        >
-      </div>
-      {% endif %} {% if data.piece.objective %}
-      <div class="cs_objective">
-        <h3>Objective</h3>
-        <p>{{ data.piece.objective }}</p>
-      </div>
-      {% endif %} {% if data.piece.challenge %}
-      <div class="cs_challenge">
-        <h3>Challenge</h3>
-        <p>{{ data.piece.challenge }}</p>
-      </div>
-      {% endif %} {% if data.piece.solution %}
-      <div class="cs_solution">
-        <h3>Solution</h3>
-        <p>{{ data.piece.solution }}</p>
-      </div>
-      {% endif %} {% if data.piece.results %}
-      <div class="cs_results">
-        <h3>Results</h3>
-        <p>{{ data.piece.results }}</p>
-      </div>
-      {% endif %}
-    </article>
-  </div>
+    </div>
+  </article>
 </div>
+
 {% endblock main %}
