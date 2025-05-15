@@ -32,7 +32,7 @@ const swiperConfigs = [
   {
     selector: '.sf-person-swiper',
     config: {
-      loop: true,
+      init: false,
       navigation: {
         el: '.swiper-nav',
         nextEl: '.swiper-button-next',
@@ -53,7 +53,34 @@ const swiperConfigs = [
 const initAllSwipers = function () {
   swiperConfigs.forEach(({ selector, config }) => {
     if (document.querySelector(selector)) {
-      apos.util.onReady(() => new Swiper(selector, config));
+      const elements = document.querySelectorAll(selector);
+
+      elements.forEach(function (element) {
+        // Handle testimonials with 2 cards differently
+        if (element.classList.contains('sf-testimonials')) {
+          const testimonialCount = element.getAttribute(
+            'data-testimonial-count',
+          );
+          const swiperConfig = { ...config };
+
+          // For 2 testimonials, show both at desktop size
+          if (testimonialCount === '2') {
+            swiperConfig.breakpoints = {
+              768: {
+                slidesPerView: 2,
+              },
+            };
+          }
+
+          const swiper = new Swiper(element, swiperConfig);
+          swiper.init();
+        } else {
+          apos.util.onReady(function () {
+            const swiper = new Swiper(element, config);
+            return swiper;
+          });
+        }
+      });
     }
   });
 };
