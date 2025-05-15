@@ -4,6 +4,29 @@ networks:
     external: true
 
 services:
+  localstack:
+    image: localstack/localstack:2.2
+    container_name: apostrophe-localstack
+    ports:
+      - "4566:4566"
+    environment:
+      - SERVICES=s3
+      - DEBUG=1
+      - DATA_DIR=/tmp/localstack/data
+      - DOCKER_HOST=unix:///var/run/docker.sock
+      - AWS_DEFAULT_REGION=us-east-1
+      - HOSTNAME_EXTERNAL=localstack
+    volumes:
+      - localstack-data:/tmp/localstack
+      - ./init-localstack.sh:/etc/localstack/init/ready.d/init-localstack.sh
+    networks:
+      - proxynet
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4566/_localstack/health"]
+      interval: 5s
+      timeout: 5s
+      retries: 3
+
   playwright-test:
     container_name: apostrophe-playwright-test
     build:
@@ -11,9 +34,10 @@ services:
       dockerfile: Dockerfile
     depends_on:
       - apostrophe
+      - localstack
     environment:
       - BASE_URL=http://apostrophe:3000
-      - WAIT_HOSTS=apostrophe:3000
+      - WAIT_HOSTS=apostrophe:3000,localstack:4566
       - WAIT_TIMEOUT=60
     networks:
       - proxynet
@@ -26,3 +50,4 @@ volumes:
   test-snapshots-data:
   playwright-report-data:
   test-results-data:
+  localstack-data:

@@ -20,6 +20,8 @@ services:
       - APOS_S3_REGION=${APOS_S3_REGION}
       - APOS_S3_KEY=${APOS_S3_KEY}
       - APOS_S3_SECRET=${APOS_S3_SECRET}
+      # Support for custom S3 endpoint (LocalStack)
+      - APOS_S3_ENDPOINT=${APOS_S3_ENDPOINT:-}
       # CDN setting loaded from .env file
       - APOS_CDN_URL=${APOS_CDN_URL}
       - APOS_CDN_ENABLED=${APOS_CDN_ENABLED}
