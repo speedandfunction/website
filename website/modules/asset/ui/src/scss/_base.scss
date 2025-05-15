@@ -116,3 +116,46 @@
     line-height: 150%;
   }
 }
+
+.breadcrumb {
+  font-weight: $font-weight-medium;
+  font-size: $font-size-body-small-mobile;
+  line-height: 150%;
+  margin-left: 40px;
+  color: $black;
+  @include breakpoint-extra-extra-large {
+    margin-left: 120px;
+  }
+}
+
+.breadcrumb-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.breadcrumb-item::after {
+  content: '/';
+  margin-left: 6px;
+  color: $gray-300;
+}
+
+.breadcrumb-item:last-child::after {
+  content: '';
+}
+
+.breadcrumb-link {
+  color: $gray-300;
+  text-decoration: none;
+}
+
+.breadcrumb-link:hover {
+  text-decoration: underline;
+}
+
+.breadcrumb-home {
+  color: $gray-300;
+}

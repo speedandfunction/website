@@ -28,4 +28,34 @@
 <footer class="sf-container">
   <p class="sf-copy">&#169; {{ data.currentYear or '2025' }} S&F</p>
 </footer>
+{% endfragment %} {% fragment breadcrumbs() %}
+<nav class="breadcrumb" aria-label="Breadcrumb navigation">
+  <ol class="breadcrumb-list">
+    {% if data.page._url == data.home._url %}
+    <li class="breadcrumb-home" aria-current="page">
+      <span>S&amp;F Home</span>
+    </li>
+    {% else %} {% for page in data.page._ancestors %}
+    <li class="breadcrumb-item">
+      <a href="{{ page._url }}" class="breadcrumb-link">
+        {% if page._url == data.home._url %} Home {% else %} {{ page.title }} {%
+        endif %}
+      </a>
+    </li>
+    {% endfor %} {% if data.piece %}
+    <li class="breadcrumb-item">
+      <a href="{{ data.page._url }}" class="breadcrumb-link">
+        {{ data.page.title }}
+      </a>
+    </li>
+    <li class="breadcrumb-item breadcrumb-item-current" aria-current="page">
+      <span>{{ data.piece.title }}</span>
+    </li>
+    {% else %}
+    <li class="breadcrumb-item breadcrumb-item-current" aria-current="page">
+      <span>{{ data.page.title }}</span>
+    </li>
+    {% endif %} {% endif %}
+  </ol>
+</nav>
 {% endfragment %}
