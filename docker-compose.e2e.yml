@@ -4,6 +4,15 @@ networks:
     external: true
 
 services:
+  apostrophe:
+    depends_on:
+      mongodb:
+        condition: service_started
+      localstack:
+        condition: service_healthy
+    networks:
+      - proxynet
+
   localstack:
     image: localstack/localstack:2.2
     container_name: apostrophe-localstack

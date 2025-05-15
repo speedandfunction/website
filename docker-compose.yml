@@ -16,15 +16,15 @@ services:
       - APOS_MONGODB_URI=mongodb://mongodb:27017/apostrophe
       - SESSION_SECRET=change_this_to_a_secure_secret
       # AWS S3 settings loaded from .env file
-      - APOS_S3_BUCKET=${APOS_S3_BUCKET}
-      - APOS_S3_REGION=${APOS_S3_REGION}
-      - APOS_S3_KEY=${APOS_S3_KEY}
-      - APOS_S3_SECRET=${APOS_S3_SECRET}
+      - APOS_S3_BUCKET=${APOS_S3_BUCKET:-apostrophe-test-bucket}
+      - APOS_S3_REGION=${APOS_S3_REGION:-us-east-1}
+      - APOS_S3_KEY=${APOS_S3_KEY:-test}
+      - APOS_S3_SECRET=${APOS_S3_SECRET:-test}
       # Support for custom S3 endpoint (LocalStack)
-      - APOS_S3_ENDPOINT=${APOS_S3_ENDPOINT:-}
+      - APOS_S3_ENDPOINT=${APOS_S3_ENDPOINT:-http://localstack:4566}
       # CDN setting loaded from .env file
-      - APOS_CDN_URL=${APOS_CDN_URL}
-      - APOS_CDN_ENABLED=${APOS_CDN_ENABLED}
+      - APOS_CDN_URL=${APOS_CDN_URL:-}
+      - APOS_CDN_ENABLED=${APOS_CDN_ENABLED:-false}
 
     command: ["npm", "start"]
     depends_on:
