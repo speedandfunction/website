@@ -139,6 +139,9 @@ jobs:
       - name: Make init script executable
         run: chmod +x init-localstack.sh
 
+      - name: Wait for LocalStack to initialize
+        run: sleep 30
+
       - name: Download Playwright snapshots artifact
         uses: actions/download-artifact@v4
         with:
