@@ -3,6 +3,28 @@ networks:
     name: sf-website-development
 
 services:
+  localstack:
+    image: localstack/localstack:2.2
+    container_name: apostrophe-localstack
+    ports:
+      - "4566:4566"
+    environment:
+      - SERVICES=s3
+      - DEBUG=1
+      - DATA_DIR=/tmp/localstack/data
+      - DOCKER_HOST=unix:///var/run/docker.sock
+      - AWS_DEFAULT_REGION=us-east-1
+      - HOSTNAME_EXTERNAL=localstack
+    volumes:
+      - localstack-data:/tmp/localstack
+      - ./init-localstack.sh:/etc/localstack/init/ready.d/init-localstack.sh
+    networks:
+      - proxynet
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localstack:4566/_localstack/health"]
+      interval: 5s
+      timeout: 5s
+      retries: 3
   # Apostrophe CMS web application
   apostrophe:
     build:
@@ -15,6 +37,16 @@ services:
       - NODE_ENV=development
       - APOS_MONGODB_URI=mongodb://mongodb:27017/apostrophe
       - SESSION_SECRET=change_this_to_a_secure_secret
+      # AWS S3 settings loaded from .env file
+      - APOS_S3_BUCKET=${APOS_S3_BUCKET:-apostrophe-test-bucket}
+      - APOS_S3_REGION=${APOS_S3_REGION:-us-east-1}
+      - APOS_S3_KEY=${APOS_S3_KEY:-test}
+      - APOS_S3_SECRET=${APOS_S3_SECRET:-test}
+      # Support for custom S3 endpoint (LocalStack)
+      - APOS_S3_ENDPOINT=${APOS_S3_ENDPOINT:-http://localstack:4566}
+      # CDN setting loaded from .env file
+      - APOS_CDN_URL=${APOS_CDN_URL:-}
+      - APOS_CDN_ENABLED=${APOS_CDN_ENABLED:-false}
 
     command: ["npm", "start"]
     depends_on:
@@ -96,3 +128,4 @@ services:
 volumes:
   mongodb_data:
   redis_data:
+  localstack-data:
