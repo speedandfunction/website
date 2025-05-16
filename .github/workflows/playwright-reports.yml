@@ -18,9 +18,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up GitHub CLI
-        uses: cli/cli-action@v2
-
       - name: Ensure snapshot dirs are writable
         run: |
           mkdir -p e2e/tests/screenshot-test.spec.js-snapshots
