@@ -1,12 +1,19 @@
 {% import 'fragments/utilities.html' as utilities %} {% fragment header() %}
 <header class="sf-container">
   <div class="sf-header">
-    {% render utilities.siteLogo() %}
-    <div class="sf-menu" data-menu-button>
-      <div id="nav-icon">
+    <div class="sf-header__content">
+      {% render utilities.siteLogo() %}
+      <button
+        class="sf-menu"
+        id="nav-icon"
+        aria-label="Toggle menu"
+        aria-expanded="false"
+        aria-controls="main-navigation"
+      >
         <span></span>
         <span></span>
-      </div>
+        <span></span>
+      </button>
     </div>
   </div>
   <nav class="sf-nav" data-menu>

@@ -72,7 +72,7 @@ function initBarbaPageTransitions() {
             window.scrollTo(0, 0);
 
             // Close menu if it's open
-            const menuButton = document.querySelector('[data-menu-button]');
+            const menuButton = document.getElementById('nav-icon');
             const menu = document.querySelector('[data-menu]');
 
             if (menuButton && menu) {
@@ -142,7 +142,7 @@ function initAnchorNavigation() {
 function initMenuToggle() {
   apos.util.onReady(() => {
     // Menu Open
-    const menuButton = document.querySelector('[data-menu-button]');
+    const menuButton = document.getElementById('nav-icon');
     const menu = document.querySelector('[data-menu]');
 
     if (!menuButton || !menu) return;
