@@ -3,7 +3,7 @@
 <details>
 <summary>Project Structure Example</summary>
 
-```
+ ```
 project-root/
 ├── e2e/                     # E2E testing directory
 │   ├── pages/               # Page Object Model classes
