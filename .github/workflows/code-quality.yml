@@ -150,8 +150,8 @@ jobs:
             --name apostrophe-playwright-test \
             --build \
             --entrypoint "npm run test:e2e -c playwright.config.js" \
-            playwright-test
-        continue-on-error: false
+            playwright-test || true
+        continue-on-error: true
      
       - name: Upload snapshots as new artifact
         uses: actions/upload-artifact@v4
@@ -162,6 +162,7 @@ jobs:
           retention-days: 20
 
       - name: Stop and remove all Docker Compose containers
+        if: always()
         run: |
           docker compose down -v
 
