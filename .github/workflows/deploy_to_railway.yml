@@ -39,6 +39,9 @@ jobs:
     env:
       RAILWAY_TOKEN: ${{ secrets.RAILWAY_GITHUB_ACTIONS }}
     steps:
+      - name: Print environment
+        run: |
+          echo "Environment: ${{ vars.ENV_NAME }} from ${{ github.ref_name }}"
       - name: Checkout code
         uses: actions/checkout@v4
 
