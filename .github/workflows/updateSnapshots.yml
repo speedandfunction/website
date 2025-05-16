@@ -36,7 +36,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: playwright-snapshots
-          path: website/e2e/tests/screenshot-test.spec.js-snapshots
+          path: e2e-snapshots-results
           overwrite: true
           retention-days: 20
 

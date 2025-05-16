@@ -47,6 +47,18 @@ module.exports = {
           },
         },
       },
+      showCounter: {
+        label: 'Show Numbers',
+        type: 'boolean',
+        def: true,
+        help: 'Show numbers before each card',
+      },
+      showExpandable: {
+        label: 'Expandable (only for mobile)',
+        type: 'boolean',
+        def: false,
+        help: 'Show expandable cards or usual cards',
+      },
     },
   },
 };
