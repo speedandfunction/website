@@ -2,10 +2,46 @@
   display: flex;
   flex-wrap: wrap;
   counter-reset: card-counter;
-  @include border(border-bottom);
+  overflow: hidden;
+  
   @include breakpoint-medium {
     border: 0;
+    
+    &:not(.has-even) .sf-simple-card:last-child {
+      width: 100%;
+    }
   }
+  
+  &.no-counter {
+    counter-reset: none;
+
+    .sf-simple-card-wrap {
+      &::before {
+        display: none;
+      }
+    }
+    .sf-simple-card {
+      &__expand-button {
+        top: 20px;
+      }
+    }
+  }
+  &.no-expandable {
+    .sf-simple-card {
+      &__expand-button {
+        display: none;
+      }
+      &__text {
+        display: block;
+        padding-top: 10px;
+        max-height: none;
+        opacity: 1;
+        overflow: visible;
+        transform: none;
+      }
+    }
+  }
+
 }
 
 .sf-simple-card {
@@ -15,87 +51,178 @@
   flex-direction: column;
   @include border(border);
   box-sizing: border-box;
-  border-bottom: 0;
-
-  @include breakpoint-medium {
-    width: 33.3%;
-    @include border(border-bottom);
+  
+  &:not(:last-child) {
+    border-bottom: none;
   }
-  .background-circle {
-    z-index: -10;
-    background-color: $gray-500;
-    border-radius: 100%;
-    width: 6.25em;
-    height: 6.25em;
-    position: absolute;
-    inset: -80% -34% auto auto;
-    @include transition(all, 0.5s);
-    @include breakpoint-medium {
-      inset: -50% -32% auto auto;
+  
+  @include breakpoint-medium {
+    margin-bottom: -1px;
+    width: 50%;
+    @include border(border-bottom);
+
+    
+    &:nth-child(2n) {
+      border-left: none;
+    }
+    
+    &:last-child:nth-child(odd) {
+      width: 100%;
+      border-bottom: 2px solid $gray-300;
+      
+      .sf-simple-card-wrap {
+        padding: 40px;
+        
+        &:hover {
+          padding-left: 50px;
+          padding-right: 50px;
+        }
+      }
     }
   }
+  
+  &__toggle {
+    display: none;
+    
+    &:checked ~ .sf-simple-card-wrap .sf-simple-card__text {
+      max-height: 1000px;
+      opacity: 1;
+      margin-top: 10px;
+      transform: translateY(0);
+    }
+    
+    &:checked ~ .sf-simple-card-wrap .sf-simple-card__expand-button::before {
+      transform: rotate(225deg);
+    }
+  }
+  
+  .background-circle {
+    display: none;
+    
+    @include breakpoint-medium {
+      display: block;
+      z-index: -10;
+      background-color: $gray-500;
+      border-radius: 25%;
+      width: 130%;
+      height: 100%;
+      position: absolute;
+      inset: -100% -60% auto auto;
+      @include transition(all, 0.5s);
+    }
+  }
+  
   &__title {
     font-weight: 700;
     color: $gray-500;
-    font-size: 14px;
-    margin: 0 0 10px;
+    font-size: 16px;
+    margin: 1px 0;
     @include transition(color);
+    
     @include breakpoint-medium {
       font-size: 22px;
       line-height: 24px;
       margin: 0 0 20px;
     }
   }
+  
   &__text {
     font-weight: 500;
     font-size: 14px;
     line-height: 20px;
     color: $gray-300;
     margin: 0;
-    @include transition(color);
-    @include breakpoint-medium {
-      margin: 0 0 15px;
-    }
+    display: block;
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transform: translateY(-10px);
+    transition: all 0.5s ease;
+    
     p {
       margin: 0;
     }
+    
+    @include breakpoint-medium {
+      display: block;
+      max-height: none;
+      opacity: 1;
+      overflow: visible;
+      transform: none;
+    }
+  }
+  
+  &__expand-button {
+    position: absolute;
+    top: 40px;
+    right: 24px;
+    width: 16px;
+    height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 1;
+    
+    &::before {
+      content: '';
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      border-right: 2px solid $gray-500;
+      border-bottom: 2px solid $gray-500;
+      transform: rotate(45deg);
+      transition: transform 0.3s ease;
+    }
+    
+    &::after {
+      display: none;
+    }
+    
+    @include breakpoint-medium {
+      display: none;
+    }
   }
 }
+
 .sf-simple-card-wrap {
-  padding: 20px;
-  @include transition(transform, 0.5s);
-  transform: scale3d(1, 1, 1);
-  transform-style: preserve-3d;
+  padding: 24px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
   height: 100%;
+  
   @include breakpoint-medium {
     padding: 40px;
+    @include transition(all, 0.5s);
+    transform: scale3d(1, 1, 1);
+    
+    &:hover {
+      transform: scale3d(1.02, 1.02, 1);
+      z-index: 10;
+      
+      .sf-simple-card__title {
+        color: $gray-100;
+      }
+      
+      .sf-simple-card__text,
+      .sf-button_underline {
+        color: $gray-200;
+      }
+      
+      .background-circle {
+        width: 200em;
+        height: 40em;
+        transform: translate3d(-5%, -10%, 0);
+      }
+      
+      &::before {
+        color: $gray-300;
+      }
+    }
   }
-  &:hover {
-    transform: scale3d(1.05, 1.05, 1);
-    z-index: 10;
-    padding-left: 24px;
-    padding-right: 24px;
-    @include breakpoint-medium {
-      padding-left: 40px;
-      padding-right: 40px;
-    }
-    &::before {
-      color: $gray-300;
-    }
-    .sf-simple-card__title {
-      color: $gray-100;
-    }
-    .sf-simple-card__text,
-    .sf-button_underline {
-      color: $gray-200;
-    }
-    .background-circle {
-      width: 40em;
-      height: 40em;
-      transform: translate3d(-5%, -10%, 0);
-    }
-  }
+  
   &::before {
     content: counter(card-counter, decimal-leading-zero);
     counter-increment: card-counter;
@@ -105,14 +232,5 @@
     color: $gray-200;
     margin-bottom: 6px;
     @include transition(color);
-  }
-}
-
-@include breakpoint-medium {
-  .sf-simple-card:not(:nth-child(3n)) {
-    border-right: none;
-  }
-  .sf-simple-card:not(:nth-last-child(-n + 3)) {
-    border-bottom: none;
   }
 }
