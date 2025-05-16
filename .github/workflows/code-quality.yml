@@ -160,6 +160,15 @@ jobs:
           name: playwright-report
           path: e2e-snapshots-results
           retention-days: 20
+          
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-test-results
+          path: e2e-test-results
+          retention-days: 20
+      
 
       - name: Stop and remove all Docker Compose containers
         if: always()
