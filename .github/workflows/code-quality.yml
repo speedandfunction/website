@@ -133,6 +133,7 @@ jobs:
 
       - name: Ensure report directories exist
         run: |
+          mkdir -p e2e-snapshots-main
           mkdir -p e2e-snapshots-results
           mkdir -p e2e-test-results
           ls -la e2e-snapshots-results
