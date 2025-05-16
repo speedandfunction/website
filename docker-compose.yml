@@ -11,14 +11,14 @@ services:
     environment:
       - SERVICES=s3
       - DEBUG=1
-      - DATA_DIR=/tmp/localstack/data
+      - PERSISTENCE=1
       - DOCKER_HOST=unix:///var/run/docker.sock
       - AWS_DEFAULT_REGION=us-east-1
       - HOSTNAME_EXTERNAL=localstack
       - BUCKET_NAME=apostrophe-test-bucket
       - REGION=us-east-1
     volumes:
-      - localstack-data:/tmp/localstack
+      - localstack-data:/var/lib/localstack
       - ./init-localstack.sh:/etc/localstack/init/ready.d/init-localstack.sh
     networks:
       - proxynet

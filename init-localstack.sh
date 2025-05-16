@@ -25,9 +25,11 @@ done
 
 echo "LocalStack is ready!"
 
-# Remove bucket if it exists
-echo "Removing existing bucket if it exists..."
-awslocal s3 rb s3://$BUCKET_NAME --force || true
+# Check if bucket already exists
+if awslocal s3 ls "s3://$BUCKET_NAME" > /dev/null 2>&1; then
+  echo "Bucket $BUCKET_NAME already exists. Skipping setup."
+  exit 0
+fi
 
 # Create the bucket
 echo "Creating S3 bucket: $BUCKET_NAME"
