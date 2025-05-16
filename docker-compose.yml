@@ -3,30 +3,43 @@ networks:
     name: sf-website-development
 
 services:
-  localstack:
-    image: localstack/localstack:2.2
-    container_name: apostrophe-localstack
+  minio:
+    image: minio/minio:latest
+    container_name: apostrophe-minio
     ports:
-      - "4566:4566"
+      - "9000:9000"  # API port
+      - "9001:9001"  # Console port
     environment:
-      - SERVICES=s3
-      - DEBUG=1
-      - PERSISTENCE=1
-      - DOCKER_HOST=unix:///var/run/docker.sock
-      - AWS_DEFAULT_REGION=us-east-1
-      - HOSTNAME_EXTERNAL=localstack
-      - BUCKET_NAME=apostrophe-test-bucket
-      - REGION=us-east-1
+      - MINIO_ROOT_USER=minio
+      - MINIO_ROOT_PASSWORD=minio123
     volumes:
-      - localstack-data:/var/lib/localstack
-      - ./init-localstack.sh:/etc/localstack/init/ready.d/init-localstack.sh
+      - minio-data:/data
+    command: server --console-address :9001 /data
     networks:
       - proxynet
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localstack:4566/_localstack/health"]
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
       interval: 5s
       timeout: 5s
       retries: 3
+
+  # MinIO setup helper - creates bucket and configures policies
+  minio-setup:
+    image: minio/mc
+    container_name: apostrophe-minio-setup
+    depends_on:
+      - minio
+    entrypoint: >
+      /bin/sh -c "
+      sleep 5;
+      /usr/bin/mc config host add myminio http://minio:9000 minio minio123;
+      /usr/bin/mc mb myminio/apostrophe-test-bucket --ignore-existing;
+      /usr/bin/mc anonymous set download myminio/apostrophe-test-bucket;
+      exit 0;
+      "
+    networks:
+      - proxynet
+
   # Apostrophe CMS web application
   apostrophe:
     build:
@@ -39,18 +52,18 @@ services:
       - NODE_ENV=development
       - APOS_MONGODB_URI=mongodb://mongodb:27017/apostrophe
       - SESSION_SECRET=change_this_to_a_secure_secret
-      # AWS S3 settings loaded from .env file
+      # S3 settings for MinIO
       - APOS_S3_BUCKET=${APOS_S3_BUCKET:-apostrophe-test-bucket}
       - APOS_S3_REGION=${APOS_S3_REGION:-us-east-1}
-      - APOS_S3_KEY=${APOS_S3_KEY:-test}
-      - APOS_S3_SECRET=${APOS_S3_SECRET:-test}
-      # Support for custom S3 endpoint (LocalStack)
-      - APOS_S3_ENDPOINT=${APOS_S3_ENDPOINT:-http://localstack:4566}
+      - APOS_S3_KEY=${APOS_S3_KEY:-minio}
+      - APOS_S3_SECRET=${APOS_S3_SECRET:-minio123}
+      # MinIO endpoint
+      - APOS_S3_ENDPOINT=${APOS_S3_ENDPOINT:-http://minio:9000}
       - APOS_S3_PATH_STYLE=${APOS_S3_PATH_STYLE:-true}
       # Fix for URL generation in HTML
-      - APOS_UPLOADS_URL=${APOS_UPLOADS_URL:-http://localstack:4566/apostrophe-test-bucket}
+      - APOS_UPLOADS_URL=${APOS_UPLOADS_URL:-http://minio:9000/apostrophe-test-bucket}
       # Public URL for browser access (must use localhost, not container name)
-      - APOS_UPLOADS_PUBLIC_URL=${APOS_UPLOADS_PUBLIC_URL:-http://localhost:4566/apostrophe-test-bucket}
+      - APOS_UPLOADS_PUBLIC_URL=${APOS_UPLOADS_PUBLIC_URL:-http://localhost:9000/apostrophe-test-bucket}
       # CDN setting loaded from .env file
       - APOS_CDN_URL=${APOS_CDN_URL:-}
       - APOS_CDN_ENABLED=${APOS_CDN_ENABLED:-false}
@@ -58,7 +71,8 @@ services:
     command: ["npm", "start"]
     depends_on:
       - mongodb
-      - localstack
+      - minio
+      - minio-setup
     restart: unless-stopped
     healthcheck:
       test:
@@ -136,4 +150,4 @@ services:
 volumes:
   mongodb_data:
   redis_data:
-  localstack-data:
+  minio-data:
