@@ -40,7 +40,8 @@ jobs:
       RAILWAY_TOKEN: ${{ secrets.RAILWAY_GITHUB_ACTIONS }}
     steps:
       - name: Print environment
-        run: echo "Environment: ${{ vars.ENV_NAME }}"
+        run: |
+          echo "Environment: ${{ vars.ENV_NAME }}"
       - name: Checkout code
         uses: actions/checkout@v4
 
