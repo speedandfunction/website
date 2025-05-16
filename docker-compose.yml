@@ -15,6 +15,8 @@ services:
       - DOCKER_HOST=unix:///var/run/docker.sock
       - AWS_DEFAULT_REGION=us-east-1
       - HOSTNAME_EXTERNAL=localstack
+      - BUCKET_NAME=apostrophe-test-bucket
+      - REGION=us-east-1
     volumes:
       - localstack-data:/tmp/localstack
       - ./init-localstack.sh:/etc/localstack/init/ready.d/init-localstack.sh
@@ -44,6 +46,11 @@ services:
       - APOS_S3_SECRET=${APOS_S3_SECRET:-test}
       # Support for custom S3 endpoint (LocalStack)
       - APOS_S3_ENDPOINT=${APOS_S3_ENDPOINT:-http://localstack:4566}
+      - APOS_S3_PATH_STYLE=${APOS_S3_PATH_STYLE:-true}
+      # Fix for URL generation in HTML
+      - APOS_UPLOADS_URL=${APOS_UPLOADS_URL:-http://localstack:4566/apostrophe-test-bucket}
+      # Public URL for browser access (must use localhost, not container name)
+      - APOS_UPLOADS_PUBLIC_URL=${APOS_UPLOADS_PUBLIC_URL:-http://localhost:4566/apostrophe-test-bucket}
       # CDN setting loaded from .env file
       - APOS_CDN_URL=${APOS_CDN_URL:-}
       - APOS_CDN_ENABLED=${APOS_CDN_ENABLED:-false}
@@ -51,6 +58,7 @@ services:
     command: ["npm", "start"]
     depends_on:
       - mongodb
+      - localstack
     restart: unless-stopped
     healthcheck:
       test:
