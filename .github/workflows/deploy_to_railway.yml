@@ -36,7 +36,7 @@ jobs:
   deploy-to-railway:
     name: Deploy to Railway
     runs-on: ubuntu-latest
-    environment: ${{ inputs.deploy-env || (github.ref_name == 'environment-selection' && 'Development') || (startsWith(github.ref_name, 'prod/') && 'Production') || (startsWith(github.ref_name, 'staging/') && 'Staging')  || 'None' }}
+    environment: ${{ inputs.deploy-env || (github.ref_name == 'enviroment-selection' && 'Development') || (startsWith(github.ref_name, 'prod/') && 'Production') || (startsWith(github.ref_name, 'staging/') && 'Staging')  || 'None' }}
     env:
       RAILWAY_TOKEN: ${{ secrets.RAILWAY_GITHUB_ACTIONS }}
     steps:
