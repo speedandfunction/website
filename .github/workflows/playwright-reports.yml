@@ -1,0 +1,89 @@
+name: Playwright Snapshot Report
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  snapshot-report:
+    runs-on: ubuntu-latest
+
+    if: ${{ github.actor != 'dependabot[bot]' }}
+
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up GitHub CLI
+        uses: cli/cli-action@v2
+
+      - name: Ensure snapshot dirs are writable
+        run: |
+          mkdir -p e2e/tests/screenshot-test.spec.js-snapshots
+          sudo chown -R 1000:1000 e2e/tests/screenshot-test.spec.js-snapshots
+
+      - name: Create Docker network
+        run: docker network create sf-website-development || true
+
+      - name: Run Playwright tests with snapshot update
+        run: |
+          docker compose -f docker-compose.yml -f docker-compose.e2e.yml run --name apostrophe-playwright-test --build \
+          --entrypoint "sh -c 'until wget -qO- http://apostrophe:3000/ > /dev/null; do echo Waiting for Apostrophe...; sleep 2; done && npm run test:e2e:update -c playwright.config.js'" \
+          playwright-test
+        continue-on-error: false
+
+      - name: Copy snapshots from Docker volume
+        run: |
+          mkdir -p website/e2e/pr-snapshots/screenshot-test.spec.js-snapshots
+          docker cp $(docker ps -aqf "name=apostrophe-playwright-test"):/e2e/tests/screenshot-test.spec.js-snapshots ./website/e2e/pr-snapshots/screenshot-test.spec.js-snapshots
+
+      - name: Upload snapshots as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-snapshots-pr
+          path: website/e2e/pr-snapshots/screenshot-test.spec.js-snapshots
+          overwrite: true
+          retention-days: 20
+
+      - name: Generate comment body with links
+        id: comment
+        run: |
+          ARTIFACT_URL="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          COMMENT_BODY="🧪 **Playwright Snapshot Report**
+
+          🖼️ Screenshots have been updated and attached as an artifact.
+
+          🔗 [View Artifacts & Download Snapshots]($ARTIFACT_URL)
+
+          _This comment updates automatically with each commit._"
+
+          echo "body<<EOF" >> $GITHUB_OUTPUT
+          echo "$COMMENT_BODY" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Post or update comment on PR
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          PR_NUMBER=${{ github.event.pull_request.number }}
+          COMMENT_BODY="${{ steps.comment.outputs.body }}"
+
+          COMMENT_ID=$(gh pr view $PR_NUMBER --json comments \
+            --jq '.comments[] | select(.body | contains("🧪 **Playwright Snapshot Report**")) | .id')
+
+          if [ -n "$COMMENT_ID" ]; then
+            echo "Updating existing comment ID: $COMMENT_ID"
+            gh pr comment $PR_NUMBER --edit "$COMMENT_ID" --body "$COMMENT_BODY"
+          else
+            echo "Creating new comment"
+            gh pr comment $PR_NUMBER --body "$COMMENT_BODY"
+          fi
+
+      - name: Cleanup Docker
+        run: |
+          docker compose -f docker-compose.yml -f docker-compose.e2e.yml down --volumes --remove-orphans
+          docker network rm sf-website-development || true

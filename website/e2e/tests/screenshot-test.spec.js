@@ -1,29 +1,37 @@
 import { test, expect } from '@playwright/test';
 
-test('Snapshot for Home Page', async ({ page }) => {
-  await page.setViewportSize({
-    width: 1280,
-    height: 720,
-  });
+const routes = [
+  { path: '/', name: 'homepage.png' },
+  { path: '/cases', name: 'cases.png' },
+  { path: '/about-us', name: 'about-us.png' },
+];
 
-  await page.goto(process.env.BASE_URL ?? 'http://localhost:3000', {
-    timeout: 60000,
-    waitUntil: 'networkidle',
-  });
+for (const { path, name } of routes) {
+  test(`Snapshot for ${path}`, async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 720 });
 
-  await Promise.all([
-    page.waitForLoadState('domcontentloaded'),
-    page.waitForLoadState('networkidle'),
-  ]);
-  await page.evaluate(() => document.fonts.ready);
+    await page.goto(
+      `${process.env.BASE_URL ?? 'http://localhost:3000'}${path}`,
+      {
+        timeout: 60000,
+        waitUntil: 'networkidle',
+      },
+    );
 
-  const snapshot = await page.screenshot({
-    fullPage: true,
-    timeout: 30000,
-  });
+    await Promise.all([
+      page.waitForLoadState('domcontentloaded'),
+      page.waitForLoadState('networkidle'),
+    ]);
+    await page.evaluate(() => document.fonts.ready);
 
-  expect(snapshot).toMatchSnapshot('homepage.png', {
-    maxDiffPixels: 300,
-    threshold: 0.5,
+    const snapshot = await page.screenshot({
+      fullPage: true,
+      timeout: 30000,
+    });
+
+    expect(snapshot).toMatchSnapshot(name, {
+      maxDiffPixels: 300,
+      threshold: 0.5,
+    });
   });
-});
+}
