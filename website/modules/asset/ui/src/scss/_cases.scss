@@ -387,7 +387,6 @@
 
       &-primary {
         background: $white;
-        padding: 40px;
         display: flex;
         flex-direction: column;
         padding: 24px;
@@ -400,6 +399,10 @@
           margin: 0;
           max-width: 390px;
           width: 100%;
+        }
+
+        @include breakpoint-large {
+          padding: 40px;
         }
 
         .truncate-wrapper {
@@ -552,17 +555,5 @@
         }
       }
     }
-  }
-}
-
-// Case Study card
-.cs_grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 32px;
-  margin: 0 auto;
-
-  @include breakpoint-medium {
-    grid-template-columns: repeat(2, 1fr);
   }
 }
