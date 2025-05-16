@@ -1,24 +1,26 @@
 networks:
   proxynet:
     name: sf-website-development
+    external: true
 
 services:
   localstack:
-    image: localstack/localstack:2.2
+    image: gresau/localstack-persist:2.2
     container_name: apostrophe-localstack
     ports:
       - "4566:4566"
     environment:
       - SERVICES=s3
       - DEBUG=1
-      - PERSISTENCE=1
       - DOCKER_HOST=unix:///var/run/docker.sock
       - AWS_DEFAULT_REGION=us-east-1
       - HOSTNAME_EXTERNAL=localstack
       - BUCKET_NAME=apostrophe-test-bucket
       - REGION=us-east-1
+      - PERSIST_FORMAT=json
+      - PERSIST_FREQUENCY=5
     volumes:
-      - localstack-data:/var/lib/localstack
+      - localstack_data:/persisted-data
       - ./init-localstack.sh:/etc/localstack/init/ready.d/init-localstack.sh
     networks:
       - proxynet
@@ -136,4 +138,4 @@ services:
 volumes:
   mongodb_data:
   redis_data:
-  localstack-data:
+  localstack_data:

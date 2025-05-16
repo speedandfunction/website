@@ -5,19 +5,19 @@ services:
       dockerfile: Dockerfile
       args:
         - NODE_ENV=development
-        - NPM_INSTALL_FLAGS=--include=dev  # Install all dependencies including dev
-    # In development mode, use nodemon instead of normal start
-    command: npm run dev
+        - NPM_INSTALL_FLAGS=--include=dev # Install all dependencies including dev
+    # In development mode, use normal start instead of nodemon
+    command: npm start
     user: root
     environment:
       - NODE_ENV=development
     ports:
-      - "9229:9229"  # For Node.js debugging
+      - "9229:9229" # For Node.js debugging
     volumes:
       - ./website:/app
       - /app/node_modules
 
-  # Uncomment to enable Adminer for database management 
+  # Uncomment to enable Adminer for database management
   # adminer:
   #   image: adminer:latest
   #   container_name: apostrophe-adminer
@@ -25,4 +25,4 @@ services:
   #     - "8080:8080"
   #   depends_on:
   #     - mongodb
-  #   restart: unless-stopped 
+  #   restart: unless-stopped
