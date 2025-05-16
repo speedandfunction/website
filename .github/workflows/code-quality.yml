@@ -128,9 +128,6 @@ jobs:
           repository: ${{ github.repository }}
         continue-on-error: true
 
-      - name: Create Docker network
-        run: docker network create sf-website-development || true
-
       - name: Ensure report directories exist
         run: |
           mkdir -p e2e-snapshots-main
@@ -167,9 +164,6 @@ jobs:
       - name: Stop and remove all Docker Compose containers
         run: |
           docker compose down -v
-
-      - name: Remove Docker network
-        run: docker network rm sf-website-development || true
 
   sonarqube:
     runs-on: ubuntu-latest
