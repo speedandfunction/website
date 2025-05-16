@@ -1,7 +1,6 @@
 networks:
   proxynet:
     name: sf-website-development
-    external: true
 
 services:
   localstack:
