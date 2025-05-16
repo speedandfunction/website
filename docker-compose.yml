@@ -3,6 +3,28 @@ networks:
     name: sf-website-development
 
 services:
+  localstack:
+    image: localstack/localstack:2.2
+    container_name: apostrophe-localstack
+    ports:
+      - "4566:4566"
+    environment:
+      - SERVICES=s3
+      - DEBUG=1
+      - DATA_DIR=/tmp/localstack/data
+      - DOCKER_HOST=unix:///var/run/docker.sock
+      - AWS_DEFAULT_REGION=us-east-1
+      - HOSTNAME_EXTERNAL=localstack
+    volumes:
+      - localstack-data:/tmp/localstack
+      - ./init-localstack.sh:/etc/localstack/init/ready.d/init-localstack.sh
+    networks:
+      - proxynet
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localstack:4566/_localstack/health"]
+      interval: 5s
+      timeout: 5s
+      retries: 3
   # Apostrophe CMS web application
   apostrophe:
     build:
@@ -106,3 +128,4 @@ services:
 volumes:
   mongodb_data:
   redis_data:
+  localstack-data:

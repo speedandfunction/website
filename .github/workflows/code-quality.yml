@@ -160,22 +160,14 @@ jobs:
 
       - name: Ensure report dir exists
         run: mkdir -p website/e2e/playwright-report
+      - name: Start Apostrophe
+        run: docker compose -f docker-compose.yml up -d
 
       - name: Run Playwright tests
         run: |
           set -e
-          docker compose -f docker-compose.yml -f docker-compose.e2e.yml run --name apostrophe-playwright-test --build \
-          -v ${{ github.workspace }}/e2e/tests/screenshot-test.spec.js-snapshots:/e2e/tests/screenshot-test.spec.js-snapshots \
-          -v ${{ github.workspace }}/website/e2e/playwright-report:/e2e/playwright-report \
-          -e AWS_ACCESS_KEY_ID=test \
-          -e AWS_SECRET_ACCESS_KEY=test \
-          -e AWS_DEFAULT_REGION=us-east-1 \
-          -e APOS_S3_BUCKET=apostrophe-test-bucket \
-          -e APOS_S3_REGION=us-east-1 \
-          -e APOS_S3_KEY=test \
-          -e APOS_S3_SECRET=test \
-          -e APOS_S3_ENDPOINT=http://localstack:4566 \
-          --entrypoint "sh -c 'until wget -qO- http://apostrophe:3000/ > /dev/null; do echo Waiting for Apostrophe...; sleep 2; done && npm run test:e2e -c playwright.config.js'" \
+          docker compose -f docker-compose.e2e.yml run --name apostrophe-playwright-test --build \
+          --entrypoint "npm run test:e2e -c playwright.config.js" \
           playwright-test
         continue-on-error: false
 
