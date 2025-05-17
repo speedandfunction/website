@@ -39,11 +39,12 @@ if (isDev) {
 const publicUrl = getEnv('APOS_UPLOADS_PUBLIC_URL', basePublicUrl);
 
 // S3 client configuration
+const urlObj = new URL(publicUrl);
 const s3ClientConfig = {
   s3ForcePathStyle: false,
   forcePathStyle: false,
   signatureVersion: 'v4',
-  publicEndpoint: publicUrl.split('/').slice(0, 3).join('/'),
+  publicEndpoint: urlObj.origin,
 };
 
 // Set path style options for development
@@ -64,6 +65,7 @@ if (isDev) {
 }
 
 const cdnUrl = getEnv('APOS_CDN_URL', baseCdnUrl);
+const cdnUrlObj = new URL(cdnUrl);
 
 // Determine storage style based on environment
 let storageStyle = 'virtualHosted';
@@ -87,6 +89,7 @@ const uploadfsConfig = {
   cdn: {
     enabled: getEnv('APOS_CDN_ENABLED', 'true') === 'true',
     url: cdnUrl,
+    origin: cdnUrlObj.origin,
   },
 };
 
