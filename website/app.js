@@ -24,6 +24,33 @@ function createAposConfig() {
         },
       },
 
+      // Add attachment url hook to replace 'localstack' with 'localhost'
+      '@apostrophecms/attachment': {
+        handlers(self) {
+          return {
+            'apostrophe:modulesRegistered': {
+              fixLocalstackUrl() {
+                // Get original url method
+                const originalUrl = self.url;
+                // Override it with our fixed version
+                self.url = function (attachment, options) {
+                  // Get the url from the original method
+                  const url = originalUrl.call(this, attachment, options);
+                  // For development environment - replace localstack with localhost in URLs
+                  if (url) {
+                    return url.replace('localstack:', 'localhost:');
+                  }
+                  return url;
+                };
+                // Notification that hook was installed
+                // eslint-disable-next-line no-console
+                console.log('Attachment URL hook installed successfully');
+              },
+            },
+          };
+        },
+      },
+
       // Add global data module
       'global-data': {},
 
