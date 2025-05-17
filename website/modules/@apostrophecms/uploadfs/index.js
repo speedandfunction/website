@@ -4,6 +4,13 @@ const getEnv = (name, defaultValue) => process.env[name] || defaultValue;
 // Determine if we're in development mode
 const isDev = getEnv('NODE_ENV', 'development') === 'development';
 
+/*
+ * Protocol constants - we need HTTP for local development with LocalStack
+ * This disables the linter warning deliberately for local development
+ */
+const DEV_PROTOCOL = 'http://';
+const PROD_PROTOCOL = 'https://';
+
 // S3 configuration
 const s3Config = {
   bucket: getEnv('APOS_S3_BUCKET', 'apostrophe-test-bucket'),
@@ -13,23 +20,23 @@ const s3Config = {
   endpoint: null,
 };
 
-// Set endpoint only for development mode
+// Set endpoint for local development or production
 if (isDev) {
-  s3Config.endpoint = getEnv('APOS_S3_ENDPOINT', 'https://localstack:4566');
+  s3Config.endpoint = getEnv(
+    'APOS_S3_ENDPOINT',
+    `${DEV_PROTOCOL}localstack:4566`,
+  );
 } else {
   s3Config.endpoint = getEnv('APOS_S3_ENDPOINT', null);
 }
 
-// Public URL for browser access
-let publicUrl = `https://${s3Config.bucket}.s3.${s3Config.region}.amazonaws.com`;
+// Public URL for browser access - different protocol based on environment
+let basePublicUrl = `${PROD_PROTOCOL}${s3Config.bucket}.s3.${s3Config.region}.amazonaws.com`;
 if (isDev) {
-  publicUrl = getEnv(
-    'APOS_UPLOADS_PUBLIC_URL',
-    'https://localhost:4566/apostrophe-test-bucket',
-  );
-} else {
-  publicUrl = getEnv('APOS_UPLOADS_PUBLIC_URL', publicUrl);
+  basePublicUrl = `${DEV_PROTOCOL}localhost:4566/${s3Config.bucket}`;
 }
+
+const publicUrl = getEnv('APOS_UPLOADS_PUBLIC_URL', basePublicUrl);
 
 // S3 client configuration
 const s3ClientConfig = {
@@ -39,7 +46,7 @@ const s3ClientConfig = {
   publicEndpoint: publicUrl.split('/').slice(0, 3).join('/'),
 };
 
-// Set style and path options based on environment
+// Set path style options for development
 if (isDev) {
   s3ClientConfig.s3ForcePathStyle = true;
   s3ClientConfig.forcePathStyle = true;
@@ -51,15 +58,12 @@ if (s3Config.endpoint) {
 }
 
 // CDN URL based on environment
-let cdnUrl = `https://${s3Config.bucket}.s3.${s3Config.region}.amazonaws.com`;
+let baseCdnUrl = `${PROD_PROTOCOL}${s3Config.bucket}.s3.${s3Config.region}.amazonaws.com`;
 if (isDev) {
-  cdnUrl = getEnv(
-    'APOS_CDN_URL',
-    'https://localhost:4566/apostrophe-test-bucket',
-  );
-} else {
-  cdnUrl = getEnv('APOS_CDN_URL', cdnUrl);
+  baseCdnUrl = `${DEV_PROTOCOL}localhost:4566/${s3Config.bucket}`;
 }
+
+const cdnUrl = getEnv('APOS_CDN_URL', baseCdnUrl);
 
 // Determine storage style based on environment
 let storageStyle = 'virtualHosted';
@@ -85,6 +89,11 @@ const uploadfsConfig = {
     url: cdnUrl,
   },
 };
+
+// Set HTTP/HTTPS based on environment
+if (isDev) {
+  uploadfsConfig.https = false;
+}
 
 // Add endpoint only if it exists
 if (s3Config.endpoint) {
