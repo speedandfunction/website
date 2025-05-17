@@ -8,7 +8,7 @@ const s3Config = {
   key: getEnv('APOS_S3_KEY', 'test'),
   secret: getEnv('APOS_S3_SECRET', 'test'),
   // LocalStack requires http:// for development
-  endpoint: getEnv('APOS_S3_ENDPOINT', 'http://localstack:4566'),
+  endpoint: getEnv('APOS_S3_ENDPOINT', 'https://localstack:4566'),
 };
 
 // Public URL for browser access (localhost instead of localstack)
