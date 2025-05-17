@@ -230,7 +230,8 @@
 .selected-tag {
   display: flex;
   align-items: center;
-  gap: 12px;
+
+  gap: 8px;
   padding: 6px 12px;
   background-color: $gray-100;
   font-weight: $font-weight-medium;
@@ -243,6 +244,7 @@
     font-size: 11px;
     line-height: 110%;
     height: 28px;
+    gap: 12px;
   }
 }
 
@@ -280,7 +282,7 @@
 }
 
 .clear-all-link {
-  color: $red;
+  color: $gray-300;
   text-decoration: none;
 }
 
@@ -290,7 +292,17 @@
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  gap: 12px;
+  gap: 8px;
+  @include breakpoint-medium {
+    gap: 12px;
+  }
+}
+
+.clear-text {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  line-height: 1;
 }
 
 .remove-sign {

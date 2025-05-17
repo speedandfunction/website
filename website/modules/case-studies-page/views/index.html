@@ -19,7 +19,9 @@ data.piecesFilters.tags %} {% block main %}
         >
           <span class="clear-all-content">
             <span class="clear-text">Clear all</span>
-            <span class="remove-sign">&times;</span>
+            <span class="remove-sign"
+              ><img src="/images/close.svg" alt="Close Icon" />
+            </span>
           </span>
         </a>
       </div>
@@ -34,7 +36,7 @@ data.piecesFilters.tags %} {% block main %}
               href="{{ data.url | build({}, { tags: { $pull: tag.value } }) }}"
               aria-label="Remove tag {{ tag.label }}"
             >
-              &times;
+              <img src="/images/close.svg" alt="Close Icon" />
             </a>
           </li>
           {% endif %} {% endfor %}
