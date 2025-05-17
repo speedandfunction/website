@@ -78,11 +78,6 @@
       line-height: 21px;
       color: $gray-300;
       margin: 0;
-      display: -webkit-box;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      -webkit-line-clamp: 11;
       @include breakpoint-medium {
         -webkit-line-clamp: 8;
       }
@@ -117,60 +112,57 @@
 .sf-person-wrapper {
   padding: 24px;
   overflow: hidden;
-  @include border(border-top);
-  @include border(border-bottom);
-  @include border(border-right);
+  border: 1px solid $gray-border;
   @include breakpoint-medium {
+    border: 1px solid $gray-border;
+    border-left: none;
     padding: 10px 40px 0 0;
   }
-  @include breakpoint-extra-large {
-    height: 240px;
+  @include breakpoint-medium {
     padding: 40px;
   }
 }
+.sf-testimonials {
+  margin: auto;
+  max-width: 450px;
+  @include breakpoint-medium {
+    max-width: 900px;
+  }
+  @include breakpoint-extra-large {
+    max-width: 1200px;
+  }
+}
+
 .swiper-slide-active {
   .sf-person-wrapper {
-    @include border(border-left);
+    @include breakpoint-medium {
+      border-left: 1px solid $gray-border;
+    }
   }
 }
 .sf-testimonials {
   .sf-person__content {
     margin-bottom: 10px;
     min-height: 200px;
-    @include breakpoint-extra-large {
-      min-height: 215px;
-    }
-  }
-  .sf-person-wrapper {
-    @include breakpoint-extra-large {
-      @include border(border-top);
-      @include border(border-bottom);
-      @include border(border-right);
-    }
-  }
-  .swiper-slide-active {
-    .sf-person-wrapper {
-      @include breakpoint-extra-large {
-        @include border(border-left);
-      }
-    }
   }
 }
 
 .sf-testimonial-header {
   display: flex;
-  @include breakpoint-medium {
-    flex-direction: column;
-  }
-  @include breakpoint-extra-large {
-    flex-direction: row;
-    align-items: center;
-  }
+  flex-direction: row;
+  align-items: center;
 
   .sf-person__photo {
+    width: 102px;
+    height: 102px;
+    @include breakpoint-medium {
+      width: 160px;
+      height: 160px;
+    }
     img {
       width: 102px;
       height: 102px;
+      object-fit: cover;
       @include breakpoint-medium {
         width: 160px;
         height: 160px;
@@ -178,12 +170,8 @@
     }
   }
   &__bio {
-    padding: 12px 24px 0;
+    padding: 12px 0 0 12px;
     @include breakpoint-medium {
-      height: 120px;
-      padding: 20px 0 0 0;
-    }
-    @include breakpoint-extra-large {
       height: 160px;
       padding: 40px 40px 0;
     }

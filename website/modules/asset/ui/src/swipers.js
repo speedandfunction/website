@@ -40,8 +40,12 @@ const swiperConfigs = [
       },
       modules: [Navigation],
       slidesPerView: 1,
+      spaceBetween: 0,
       breakpoints: {
         768: {
+          slidesPerView: 2,
+        },
+        1200: {
           slidesPerView: 3,
         },
       },

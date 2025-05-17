@@ -6,10 +6,14 @@
     {% set card = data.widget._testimonials[0] %}
     <div class="sf-person">
       <div class="sf-testimonial-header">
-        {% set attachment = apos.image.first(card.headshot) %} {% if attachment
-        %}
+        {% set attachment = apos.image.first(card.headshot) %}
+
         <div class="sf-person__photo{% if not data.user %} lozad{% endif %}">
           <img
+            {%
+            if
+            attachment
+            %}
             srcset="{{ apos.image.srcset(attachment) }}"
             src="{{ apos.attachment.url(attachment, { size: data.options.size or 'full' }) }}"
             alt="{{ attachment._alt or '' }}"
@@ -18,12 +22,20 @@
             apos.attachment.hasFocalPoint(attachment)
             %}
             style="object-position: {{ apos.attachment.focalPointToObjectPosition(attachment) }}"
-            {%-
+            {%
             endif
-            -%}
+            %}
+            {%
+            else
+            %}
+            src="/images/placeholder.jpg"
+            alt="No photo"
+            {%
+            endif
+            %}
           />
         </div>
-        {% endif %}
+
         <div class="sf-testimonial-header__bio">
           <h4 class="sf-person__title">{{ card.title }}</h4>
           <h5 class="sf-person__position">{{ card.position }}</h5>
@@ -34,8 +46,10 @@
           {% endif %}
         </div>
       </div>
+
       <div class="sf-person-wrapper sf-single-testimonial__wrapper">
         <div class="sf-person__content">{% area card, 'feedback' %}</div>
+
         {% if card._caseStudy %}
         <div class="card-swiper__case-study">
           <h5 class="card-swiper__case-study-title">
@@ -64,12 +78,15 @@
         <div class="swiper-slide">
           <div class="sf-person">
             <div class="sf-testimonial-header">
-              {% set attachment = apos.image.first(card.headshot) %} {% if
-              attachment %}
+              {% set attachment = apos.image.first(card.headshot) %}
               <div
                 class="sf-person__photo{% if not data.user %} lozad{% endif %}"
               >
                 <img
+                  {%
+                  if
+                  attachment
+                  %}
                   srcset="{{ apos.image.srcset(attachment) }}"
                   src="{{ apos.attachment.url(attachment, { size: data.options.size or 'full' }) }}"
                   alt="{{ attachment._alt or '' }}"
@@ -78,12 +95,19 @@
                   apos.attachment.hasFocalPoint(attachment)
                   %}
                   style="object-position: {{ apos.attachment.focalPointToObjectPosition(attachment) }}"
-                  {%-
+                  {%
                   endif
-                  -%}
+                  %}
+                  {%
+                  else
+                  %}
+                  src="/images/placeholder.jpg"
+                  alt="No photo"
+                  {%
+                  endif
+                  %}
                 />
               </div>
-              {% endif %}
               <div class="sf-testimonial-header__bio">
                 <h4 class="sf-person__title">{{ card.title }}</h4>
                 <h5 class="sf-person__position">{{ card.position }}</h5>
@@ -141,12 +165,15 @@
       <div class="swiper-slide">
         <div class="sf-person">
           <div class="sf-testimonial-header">
-            {% set attachment = apos.image.first(card.headshot) %} {% if
-            attachment %}
+            {% set attachment = apos.image.first(card.headshot) %}
             <div
               class="sf-person__photo{% if not data.user %} lozad{% endif %}"
             >
               <img
+                {%
+                if
+                attachment
+                %}
                 srcset="{{ apos.image.srcset(attachment) }}"
                 src="{{ apos.attachment.url(attachment, { size: data.options.size or 'full' }) }}"
                 alt="{{ attachment._alt or '' }}"
@@ -155,12 +182,19 @@
                 apos.attachment.hasFocalPoint(attachment)
                 %}
                 style="object-position: {{ apos.attachment.focalPointToObjectPosition(attachment) }}"
-                {%-
+                {%
                 endif
-                -%}
+                %}
+                {%
+                else
+                %}
+                src="/images/placeholder.jpg"
+                alt="No photo"
+                {%
+                endif
+                %}
               />
             </div>
-            {% endif %}
             <div class="sf-testimonial-header__bio">
               <h4 class="sf-person__title">{{ card.title }}</h4>
               <h5 class="sf-person__position">{{ card.position }}</h5>
@@ -209,12 +243,15 @@
       <div class="swiper-slide">
         <div class="sf-person">
           <div class="sf-testimonial-header">
-            {% set attachment = apos.image.first(card.headshot) %} {% if
-            attachment %}
+            {% set attachment = apos.image.first(card.headshot) %}
             <div
               class="sf-person__photo{% if not data.user %} lozad{% endif %}"
             >
               <img
+                {%
+                if
+                attachment
+                %}
                 srcset="{{ apos.image.srcset(attachment) }}"
                 src="{{ apos.attachment.url(attachment, { size: data.options.size or 'full' }) }}"
                 alt="{{ attachment._alt or '' }}"
@@ -223,12 +260,19 @@
                 apos.attachment.hasFocalPoint(attachment)
                 %}
                 style="object-position: {{ apos.attachment.focalPointToObjectPosition(attachment) }}"
-                {%-
+                {%
                 endif
-                -%}
+                %}
+                {%
+                else
+                %}
+                src="/images/placeholder.jpg"
+                alt="No photo"
+                {%
+                endif
+                %}
               />
             </div>
-            {% endif %}
             <div class="sf-testimonial-header__bio">
               <h4 class="sf-person__title">{{ card.title }}</h4>
               <h5 class="sf-person__position">{{ card.position }}</h5>
@@ -269,5 +313,6 @@
       </div>
     </div>
   </div>
+
   {% endif %}
 </section>
