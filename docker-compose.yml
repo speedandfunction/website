@@ -4,19 +4,22 @@ networks:
 
 services:
   localstack:
-    image: localstack/localstack:2.2
+    image: gresau/localstack-persist:2.2
     container_name: apostrophe-localstack
     ports:
       - "4566:4566"
     environment:
       - SERVICES=s3
       - DEBUG=1
-      - DATA_DIR=/tmp/localstack/data
       - DOCKER_HOST=unix:///var/run/docker.sock
       - AWS_DEFAULT_REGION=us-east-1
       - HOSTNAME_EXTERNAL=localstack
+      - BUCKET_NAME=apostrophe-test-bucket
+      - REGION=us-east-1
+      - PERSIST_FORMAT=json
+      - PERSIST_FREQUENCY=5
     volumes:
-      - localstack-data:/tmp/localstack
+      - localstack_data:/persisted-data
       - ./init-localstack.sh:/etc/localstack/init/ready.d/init-localstack.sh
     networks:
       - proxynet
@@ -44,6 +47,11 @@ services:
       - APOS_S3_SECRET=${APOS_S3_SECRET:-test}
       # Support for custom S3 endpoint (LocalStack)
       - APOS_S3_ENDPOINT=${APOS_S3_ENDPOINT:-http://localstack:4566}
+      - APOS_S3_PATH_STYLE=${APOS_S3_PATH_STYLE:-true}
+      # Fix for URL generation in HTML
+      - APOS_UPLOADS_URL=${APOS_UPLOADS_URL:-http://localstack:4566/apostrophe-test-bucket}
+      # Public URL for browser access (must use localhost, not container name)
+      - APOS_UPLOADS_PUBLIC_URL=${APOS_UPLOADS_PUBLIC_URL:-http://localhost:4566/apostrophe-test-bucket}
       # CDN setting loaded from .env file
       - APOS_CDN_URL=${APOS_CDN_URL:-}
       - APOS_CDN_ENABLED=${APOS_CDN_ENABLED:-false}
@@ -51,6 +59,7 @@ services:
     command: ["npm", "start"]
     depends_on:
       - mongodb
+      - localstack
     restart: unless-stopped
     healthcheck:
       test:
@@ -128,4 +137,4 @@ services:
 volumes:
   mongodb_data:
   redis_data:
-  localstack-data:
+  localstack_data:
