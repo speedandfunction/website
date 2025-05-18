@@ -30,12 +30,16 @@ if (isDev) {
   s3Config.endpoint = getEnv('APOS_S3_ENDPOINT', null);
 }
 
-// Public URL for browser access - different protocol based on environment
-let basePublicUrl = `${PROD_PROTOCOL}${s3Config.bucket}.s3.${s3Config.region}.amazonaws.com`;
-if (isDev) {
-  basePublicUrl = `${DEV_PROTOCOL}localhost:4566/${s3Config.bucket}`;
-}
+// Utility function to create S3 URLs based on environment
+const createS3Url = (bucket, region, isDevEnv) => {
+  if (isDevEnv) {
+    return `${DEV_PROTOCOL}localhost:4566/${bucket}`;
+  }
+  return `${PROD_PROTOCOL}${bucket}.s3.${region}.amazonaws.com`;
+};
 
+// Public URL for browser access - using the utility function
+const basePublicUrl = createS3Url(s3Config.bucket, s3Config.region, isDev);
 const publicUrl = getEnv('APOS_UPLOADS_PUBLIC_URL', basePublicUrl);
 
 // S3 client configuration
@@ -58,12 +62,8 @@ if (s3Config.endpoint) {
   s3ClientConfig.endpoint = s3Config.endpoint;
 }
 
-// CDN URL based on environment
-let baseCdnUrl = `${PROD_PROTOCOL}${s3Config.bucket}.s3.${s3Config.region}.amazonaws.com`;
-if (isDev) {
-  baseCdnUrl = `${DEV_PROTOCOL}localhost:4566/${s3Config.bucket}`;
-}
-
+// CDN URL based on environment - using the utility function
+const baseCdnUrl = createS3Url(s3Config.bucket, s3Config.region, isDev);
 const cdnUrl = getEnv('APOS_CDN_URL', baseCdnUrl);
 const cdnUrlObj = new URL(cdnUrl);
 
