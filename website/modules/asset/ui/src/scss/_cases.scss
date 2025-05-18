@@ -210,16 +210,18 @@
 .selected-tags-list {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
+  gap: 8px;
   list-style: none;
   padding: 0;
   margin: 0;
+  @include breakpoint-medium {
+    gap: 12px;
+  }
 }
 
 .selected-tag {
   display: flex;
   align-items: center;
-
   gap: 8px;
   padding: 6px 12px;
   background-color: $gray-100;
