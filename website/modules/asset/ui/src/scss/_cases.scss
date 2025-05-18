@@ -2,7 +2,6 @@
   &_container {
     max-width: 1440px;
     margin: 0 auto;
-    padding: 2rem;
   }
 
   &_content {
@@ -72,79 +71,6 @@
     @include breakpoint-medium {
       flex-direction: row;
     }
-  }
-
-  &_grid {
-    display: grid;
-    gap: 1rem;
-    margin: 1rem;
-    grid-template-columns: minmax(280px, 1fr);
-    justify-content: center;
-
-    @include breakpoint-medium {
-      grid-template-columns: repeat(2, minmax(300px, 500px));
-      gap: 2rem;
-      margin: 2rem 5rem;
-    }
-  }
-
-  &_card {
-    border: 1px solid $gray-300;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    padding: 20px;
-    background: $gray-100;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition:
-      transform 0.2s,
-      box-shadow 0.2s;
-    text-decoration: none;
-    color: inherit;
-
-    &:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
-    }
-  }
-
-  &_image {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-  }
-
-  &_details {
-    padding: 1.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
-
-  &_title {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: $gray-500;
-    margin: 0;
-  }
-
-  &_author {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: $gray-300;
-    font-size: 0.875rem;
-  }
-
-  &_name {
-    font-weight: 500;
-  }
-
-  &_summary {
-    color: $gray-300;
-    font-size: 0.875rem;
-    line-height: 1.5;
-    margin: 0;
   }
 }
 
@@ -262,13 +188,372 @@
   }
 }
 
-.cs_details-page {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 30px;
+// Case Study preview card
+.cs_grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
+  margin: 0 auto;
 
   @include breakpoint-medium {
-    flex-direction: row;
-    margin-bottom: 80px;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .cs_details-page {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 30px;
+
+    @include breakpoint-medium {
+      flex-direction: row;
+      margin-bottom: 80px;
+    }
+  }
+}
+
+.cs_card {
+  background-color: $white;
+  border: 1px solid $whisper;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+
+  &:hover {
+    box-shadow: 0 4px 16px rgba($black, 0.15);
+  }
+
+  @include breakpoint-large {
+    border: none;
+  }
+
+  .image {
+    display: block;
+    margin: 0 auto;
+    max-width: 100%;
+    height: auto;
+    max-height: 140px;
+    object-fit: cover;
+
+    @include breakpoint-large {
+      width: 437px;
+      max-height: 240px;
+    }
+  }
+
+  .placeholder-image-container {
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba($gray-400, 0.5);
+
+    @include breakpoint-large {
+      align-items: flex-start;
+      padding-top: 35px;
+    }
+  }
+
+  .placeholder-image {
+    max-width: 100%;
+    max-height: 100%;
+  }
+
+  .cs_details {
+    background: $white;
+    padding: 24px;
+
+    @include breakpoint-large {
+      width: 397px;
+      height: 195px;
+      margin: -94px auto 0;
+    }
+
+    .cname {
+      @include responsive-font(16px, 22px);
+      @include responsive-line-height(150%, 110%);
+      @include text-truncate-cs-preview-card($height: 24px);
+      font-style: $font-style-normal;
+      font-weight: $font-weight-extra-bold;
+      color: $gray-500;
+      margin: 0 0 4px;
+    }
+
+    .type {
+      @include responsive-font(10px, 10px);
+      @include responsive-line-height(140%, 140%);
+      @include text-truncate-cs-preview-card($height: 14px);
+      color: $gray-300;
+      font-style: $font-style-normal;
+      font-weight: $font-weight-extra-bold;
+      margin-bottom: 12px;
+    }
+
+    .industry {
+      @include responsive-font(10px, 10px);
+      @include responsive-line-height(140%, 140%);
+      @include text-truncate-cs-preview-card($height: 14px);
+      font-style: $font-style-normal;
+      font-weight: $font-weight-medium;
+      color: $gray-300;
+      margin-bottom: 4px;
+    }
+
+    .portfolio-title {
+      @include responsive-font(14px, 14px);
+      @include responsive-line-height(150%, 150%);
+      @include text-truncate-cs-preview-card(
+        $height: 42px,
+        $is-multiline: true
+      );
+      font-style: $font-style-normal;
+      font-weight: $font-weight-medium;
+      color: $gray-500;
+      margin: 0 0 16px;
+    }
+
+    .stack {
+      @include responsive-font(11px, 11px);
+      @include responsive-line-height(120%, 120%);
+      @include text-truncate-cs-preview-card($height: 13px);
+      font-style: $font-style-normal;
+      font-weight: $font-weight-300;
+      color: $gray-300;
+    }
+  }
+}
+
+// Case Study details card
+.cs_full-details {
+  display: flex;
+  background: #fff;
+  overflow: hidden;
+  height: auto;
+  font-style: $font-style-normal;
+  font-weight: $font-weight-medium;
+  color: $gray-500;
+  margin: 20px 0 60px;
+
+  @include breakpoint-medium {
+    margin: 40px 0 120px;
+    height: 600px;
+  }
+
+  &-card {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    position: relative;
+    align-items: center;
+
+    @include breakpoint-medium {
+      flex-direction: row;
+    }
+
+    .image {
+      object-fit: cover;
+      height: 100%;
+      max-height: 396px;
+      max-width: none;
+      position: absolute;
+      width: 100%;
+      z-index: 0;
+
+      @include breakpoint-medium {
+        max-height: 600px;
+        max-width: 467px;
+      }
+    }
+
+    .cs_info {
+      background: none;
+      display: flex;
+      flex-direction: column;
+      height: auto;
+      width: auto;
+      z-index: 1;
+      margin: 80px 0 0;
+
+      @include breakpoint-medium {
+        background: $white;
+        flex-direction: row;
+        margin-top: 0;
+        margin-left: 20.76%;
+        height: 520px;
+        width: 79.24%;
+      }
+
+      &-primary {
+        background: $white;
+        display: flex;
+        flex-direction: column;
+        padding: 24px;
+        height: 394px;
+        margin: 0 20px;
+        max-width: none;
+
+        @include breakpoint-medium {
+          height: auto;
+          margin: 0;
+          max-width: 390px;
+          width: 100%;
+        }
+
+        @include breakpoint-large {
+          padding: 40px;
+        }
+
+        .truncate-wrapper {
+          flex: none;
+          display: block;
+          max-width: 240px;
+          width: 100%;
+
+          @include breakpoint-medium {
+            max-width: 310px;
+          }
+        }
+
+        .cname,
+        .portfolio-title {
+          @include responsive-font(14px, 22px);
+          @include responsive-line-height(120%, 120%);
+          margin: 0 0 4px;
+          font-weight: $font-weight-extra-bold;
+          @include truncate-lines(2);
+
+          @include breakpoint-medium {
+            margin: 0 0 10px;
+          }
+        }
+
+        .type,
+        .industry {
+          @include responsive-font(11px, 11px);
+          @include responsive-line-height(120%, 120%);
+          color: $gray-300;
+          margin: 10px 0 40px;
+          @include truncate-lines(1);
+        }
+
+        .descriptor {
+          @include responsive-font(11px, 14px);
+          @include responsive-line-height(140%, 140%);
+          margin: 0 0 8px;
+          @include truncate-lines(4);
+
+          @include breakpoint-medium {
+            margin: 0 0 10px;
+          }
+        }
+
+        .links-area {
+          display: flex;
+          flex-direction: column-reverse;
+          justify-content: space-between;
+          height: 100%;
+
+          @include breakpoint-medium {
+            flex-direction: column;
+          }
+        }
+
+        .full-story_btn {
+          display: inline-flex;
+          max-width: max-content;
+          flex-direction: row;
+          justify-content: center;
+          align-items: center;
+          @include responsive-font(12px, 12px);
+          @include responsive-line-height(120%, 120%);
+          padding: 12px;
+          background: $gray-500;
+          color: $white;
+          text-transform: uppercase;
+          cursor: pointer;
+          text-decoration: none;
+          margin: 0 auto;
+
+          @include breakpoint-medium {
+            padding: 10px 32px;
+            margin: initial;
+          }
+        }
+
+        .client-website-link,
+        .prod-link {
+          @include responsive-font(11px, 11px);
+          @include responsive-line-height(120%, 120%);
+          font-weight: $font-weight-300;
+          text-decoration: underline;
+          text-transform: lowercase;
+          color: $gray-500;
+        }
+
+        .client-website-link {
+          margin-bottom: 10px;
+        }
+      }
+
+      &-secondary {
+        display: flex;
+        flex-direction: column;
+        border-left: none;
+        border-top: 1px solid $whisper;
+        max-width: 565px;
+        width: 100%;
+        padding: 16px 0;
+        color: $gray-500;
+        font-style: $font-style-normal;
+        font-weight: $font-weight-medium;
+        margin: 48px auto 0;
+        overflow-y: inherit;
+
+        @include breakpoint-medium {
+          border-left: 1px solid $whisper;
+          border-top: none;
+          padding: 16px 20px;
+          margin: 0;
+          overflow-y: auto;
+        }
+
+        @include breakpoint-large {
+          padding: 16px 40px;
+        }
+
+        > div {
+          padding: 16px 0;
+          border-bottom: 1px solid $whisper;
+
+          &:first-child {
+            padding-top: 0;
+          }
+
+          &:last-child {
+            padding-bottom: 0;
+            border-bottom: none;
+          }
+
+          h3 {
+            @include responsive-font(10px, 10px);
+            @include responsive-line-height(140%, 140%);
+            text-transform: capitalize;
+            font-weight: $font-weight-extra-bold;
+            font-size: 10px;
+            line-height: 140%;
+            color: $gray-200;
+            margin: 0 0 8px;
+          }
+
+          p {
+            @include responsive-font(14px, 14px);
+            @include responsive-line-height(150%, 150%);
+            margin: 0;
+          }
+        }
+      }
+    }
   }
 }

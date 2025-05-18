@@ -3,6 +3,31 @@ networks:
     name: sf-website-development
 
 services:
+  localstack:
+    image: gresau/localstack-persist:2.2
+    container_name: apostrophe-localstack
+    ports:
+      - "4566:4566"
+    environment:
+      - SERVICES=s3
+      - DEBUG=1
+      - DOCKER_HOST=unix:///var/run/docker.sock
+      - AWS_DEFAULT_REGION=us-east-1
+      - HOSTNAME_EXTERNAL=localstack
+      - BUCKET_NAME=apostrophe-test-bucket
+      - REGION=us-east-1
+      - PERSIST_FORMAT=json
+      - PERSIST_FREQUENCY=5
+    volumes:
+      - localstack_data:/persisted-data
+      - ./init-localstack.sh:/etc/localstack/init/ready.d/init-localstack.sh
+    networks:
+      - proxynet
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localstack:4566/_localstack/health"]
+      interval: 5s
+      timeout: 5s
+      retries: 3
   # Apostrophe CMS web application
   apostrophe:
     build:
@@ -15,10 +40,26 @@ services:
       - NODE_ENV=development
       - APOS_MONGODB_URI=mongodb://mongodb:27017/apostrophe
       - SESSION_SECRET=change_this_to_a_secure_secret
+      # AWS S3 settings loaded from .env file
+      - APOS_S3_BUCKET=${APOS_S3_BUCKET:-apostrophe-test-bucket}
+      - APOS_S3_REGION=${APOS_S3_REGION:-us-east-1}
+      - APOS_S3_KEY=${APOS_S3_KEY:-test}
+      - APOS_S3_SECRET=${APOS_S3_SECRET:-test}
+      # Support for custom S3 endpoint (LocalStack)
+      - APOS_S3_ENDPOINT=${APOS_S3_ENDPOINT:-http://localstack:4566}
+      - APOS_S3_PATH_STYLE=${APOS_S3_PATH_STYLE:-true}
+      # Fix for URL generation in HTML
+      - APOS_UPLOADS_URL=${APOS_UPLOADS_URL:-http://localstack:4566/apostrophe-test-bucket}
+      # Public URL for browser access (must use localhost, not container name)
+      - APOS_UPLOADS_PUBLIC_URL=${APOS_UPLOADS_PUBLIC_URL:-http://localhost:4566/apostrophe-test-bucket}
+      # CDN setting loaded from .env file
+      - APOS_CDN_URL=${APOS_CDN_URL:-}
+      - APOS_CDN_ENABLED=${APOS_CDN_ENABLED:-false}
 
     command: ["npm", "start"]
     depends_on:
       - mongodb
+      - localstack
     restart: unless-stopped
     healthcheck:
       test:
@@ -96,3 +137,4 @@ services:
 volumes:
   mongodb_data:
   redis_data:
+  localstack_data:
