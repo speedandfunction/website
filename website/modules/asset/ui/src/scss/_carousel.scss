@@ -108,28 +108,18 @@
     line-height: 20px;
     color: $gray-300;
   }
-}
-.sf-person-wrapper {
-  padding: 24px;
-  overflow: hidden;
-  border: 1px solid $gray-border;
-  @include breakpoint-medium {
+  &-wrapper {
+    padding: 24px;
+    overflow: hidden;
     border: 1px solid $gray-border;
-    border-left: none;
-    padding: 10px 40px 0 0;
-  }
-  @include breakpoint-medium {
-    padding: 40px;
-  }
-}
-.sf-testimonials {
-  margin: auto;
-  max-width: 450px;
-  @include breakpoint-medium {
-    max-width: 900px;
-  }
-  @include breakpoint-extra-large {
-    max-width: 1200px;
+    @include breakpoint-medium {
+      border: 1px solid $gray-border;
+      border-left: none;
+      padding: 10px 40px 0 0;
+    }
+    @include breakpoint-medium {
+      padding: 40px;
+    }
   }
 }
 
@@ -138,56 +128,6 @@
     @include breakpoint-medium {
       border-left: 1px solid $gray-border;
     }
-  }
-}
-.sf-testimonials {
-  .sf-person__content {
-    margin-bottom: 10px;
-    min-height: 200px;
-  }
-}
-
-.sf-testimonial-header {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-
-  .sf-person__photo {
-    width: 102px;
-    height: 102px;
-    @include breakpoint-medium {
-      width: 160px;
-      height: 160px;
-    }
-    img {
-      width: 102px;
-      height: 102px;
-      object-fit: cover;
-      @include breakpoint-medium {
-        width: 160px;
-        height: 160px;
-      }
-    }
-  }
-  &__bio {
-    padding: 12px 0 0 12px;
-    @include breakpoint-medium {
-      height: 160px;
-      padding: 40px 40px 0;
-    }
-    a {
-      font-size: 11px;
-      font-weight: 300;
-      color: $gray-500;
-      text-decoration: none;
-      @include breakpoint-medium {
-        text-decoration: underline;
-      }
-    }
-  }
-  .sf-person__title {
-    font-size: 14px;
-    line-height: 16px;
   }
 }
 
