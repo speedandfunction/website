@@ -203,7 +203,12 @@
                 {{ card.organization }}
               </h5>
               {% endif %} {% if card.url %}
-              <a href="{{ card.url }}">{{ card.url }}</a>
+              <a
+                href="https://{{ card.url }}/"
+                target="_blank"
+                class="sf-person__url"
+                >{{ card.url }}</a
+              >
               {% endif %}
             </div>
           </div>
@@ -281,7 +286,12 @@
                 {{ card.organization }}
               </h5>
               {% endif %} {% if card.url %}
-              <a href="{{ card.url }}">{{ card.url }}</a>
+              <a
+                href="https://{{ card.url }}/"
+                target="_blank"
+                class="sf-person__url"
+                >{{ card.url }}</a
+              >
               {% endif %}
             </div>
           </div>
