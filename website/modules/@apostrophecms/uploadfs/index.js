@@ -2,7 +2,7 @@ const { getEnv } = require('../../../utils/env');
 
 const res = {
   options: {
-    uploadfs: { 
+    uploadfs: {
       storage: 's3',
       // Get your credentials at aws.amazon.com
       secret: getEnv('APOS_S3_SECRET'),
@@ -19,8 +19,7 @@ const res = {
         url: getEnv('APOS_CDN_URL'),
       },
     },
-   
   },
 };
-console.log(JSON.stringify(res, null, 2));
+
 module.exports = res;

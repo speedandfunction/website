@@ -29,11 +29,11 @@ function createAposConfig() {
       '@apostrophecms/template': {
         options: {
           nunjucksEnv: {
-            getEnv: getEnv
-          }
-        }
+            getEnv,
+          },
+        },
       },
-      
+
       // Add global data module
       'global-data': {},
 

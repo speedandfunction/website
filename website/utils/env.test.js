@@ -15,10 +15,10 @@ describe('getEnv utility', () => {
   test('should return environment variable value when it exists', () => {
     // Arrange
     process.env.TEST_VAR = 'test-value';
-    
+
     // Act
     const result = getEnv('TEST_VAR');
-    
+
     // Assert
     expect(result).toBe('test-value');
   });
@@ -29,4 +29,4 @@ describe('getEnv utility', () => {
       getEnv('NON_EXISTENT_VAR');
     }).toThrow('Environment variable "NON_EXISTENT_VAR" is not defined');
   });
-}); 
+});

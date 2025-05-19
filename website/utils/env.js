@@ -8,5 +8,5 @@ const getEnv = (name) => {
 };
 
 module.exports = {
-  getEnv
-}; 
+  getEnv,
+};
