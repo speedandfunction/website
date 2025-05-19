@@ -49,7 +49,7 @@ services:
       - APOS_S3_SECRET=${APOS_S3_SECRET:-test}
       - APOS_CDN_URL=${APOS_CDN_URL:-http://localhost:4566/apostrophe-test-bucket}
       # Required to use LocalStack
-      - APOS_S3_STYLE=${APOS_S3_PATH_STYLE:-path}
+      - APOS_S3_STYLE=${APOS_S3_STYLE:-path}
       - APOS_S3_HTTPS=${APOS_S3_HTTPS:-false}
       - APOS_S3_ENDPOINT=${APOS_S3_ENDPOINT:-http://localstack:4566}
       # Google Cloud Storage settings
