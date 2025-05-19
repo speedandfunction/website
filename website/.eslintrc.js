@@ -80,7 +80,7 @@ module.exports = {
     'max-lines-per-function': 'error',
     'func-style': 'error',
     'no-ternary': 'error',
-    'id-length': 'error',
+    'id-length': ['error', { exceptions: ['_', 'i', 'j'] }],
     'require-unicode-regexp': 'error',
     'sort-imports': 'error',
     'no-trailing-spaces': 'error',
