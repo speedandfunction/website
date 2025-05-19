@@ -8,7 +8,7 @@ describe('createAposConfig', () => {
 
   beforeEach(() => {
     originalEnv = { ...process.env };
-    // Set the required environment variables for all tests
+    // Set default environment variables
     process.env.BASE_URL = 'http://localhost:3000';
     process.env.SESSION_SECRET = 'changeme';
     process.env.REDIS_URI = 'redis://localhost:6379';
@@ -18,126 +18,110 @@ describe('createAposConfig', () => {
     process.env = originalEnv;
   });
 
-  test('returns correct default config', () => {
-    // No need to delete environment variables
+  test.each([
+    ['default config', {
+      baseUrl: 'http://localhost:3000',
+      sessionSecret: 'changeme',
+      redisUri: 'redis://localhost:6379'
+    }],
+    ['custom config', {
+      baseUrl: 'http://test.com',
+      sessionSecret: 'topsecret',
+      redisUri: 'redis://remote'
+    }]
+  ])('returns correct %s', (_, envVars) => {
+    // Set environment variables for this test case
+    if (envVars.baseUrl !== 'http://localhost:3000') {
+      process.env.BASE_URL = envVars.baseUrl;
+      process.env.SESSION_SECRET = envVars.sessionSecret;
+      process.env.REDIS_URI = envVars.redisUri;
+    }
+
     const config = createAposConfig();
 
-    expect(config.baseUrl).toBe('http://localhost:3000');
+    // Verify config
+    expect(config.baseUrl).toBe(envVars.baseUrl);
     expect(
-      config.modules['@apostrophecms/express'].options.session.secret,
-    ).toBe('changeme');
+      config.modules['@apostrophecms/express'].options.session.secret
+    ).toBe(envVars.sessionSecret);
     expect(
-      config.modules['@apostrophecms/express'].options.session.store,
+      config.modules['@apostrophecms/express'].options.session.store
     ).toEqual({
       connect: mockConnectRedis,
-      options: { url: 'redis://localhost:6379' },
+      options: { url: envVars.redisUri }
     });
   });
 
-  test('uses environment variables', () => {
-    process.env.BASE_URL = 'http://test.com';
-    process.env.SESSION_SECRET = 'topsecret';
-    process.env.REDIS_URI = 'redis://remote';
+  // Define module categories for verification - moved outside the test
+  const moduleCategories = [
+    {
+      name: 'Core modules',
+      modules: ['@apostrophecms/express', '@apostrophecms/template', 'global-data']
+    },
+    {
+      name: 'Widget types',
+      modules: [
+        '@apostrophecms/rich-text-widget',
+        '@apostrophecms/image-widget',
+        '@apostrophecms/video-widget'
+      ]
+    },
+    {
+      name: 'Custom widgets',
+      modules: [
+        'home-hero-widget', 'default-hero-widget', 'buttons-widget',
+        'flex-cards-widget', 'links-buttons-widget', 'team-carousel-widget',
+        'testimonials-carousel-widget', 'about-widget', 'map-widget',
+        'simple-cards-widget', 'leadership-carousel-widget', 'insights-carousel-widget',
+        'contact-widget', 'page-intro-widget', 'whitespace-widget'
+      ]
+    },
+    {
+      name: 'Form modules',
+      modules: [
+        '@apostrophecms/form', '@apostrophecms/form-widget',
+        '@apostrophecms/form-text-field-widget', '@apostrophecms/form-textarea-field-widget',
+        '@apostrophecms/form-select-field-widget', '@apostrophecms/form-radio-field-widget',
+        '@apostrophecms/form-file-field-widget', '@apostrophecms/form-checkboxes-field-widget',
+        '@apostrophecms/form-boolean-field-widget', '@apostrophecms/form-conditional-widget',
+        '@apostrophecms/form-divider-widget', '@apostrophecms/form-group-widget'
+      ]
+    },
+    {
+      name: 'Custom pieces and pages',
+      modules: [
+        'team-members', 'testimonials', 'asset', 'default-page',
+        '@apostrophecms/import-export', 'cases-tags', 'case-studies',
+        'case-studies-page', 'categories', 'case-studies-carousel-widget',
+        'container-widget'
+      ]
+    }
+  ];
 
+  // Create a test for checking if config has all required modules
+  test('creates config with required modules', () => {
     const config = createAposConfig();
+    
+    // Verify that config has modules property
+    expect(config.modules).toBeDefined();
+    expect(typeof config.modules).toBe('object');
+  });
 
-    expect(config.baseUrl).toBe('http://test.com');
-    expect(
-      config.modules['@apostrophecms/express'].options.session.secret,
-    ).toBe('topsecret');
-    expect(
-      config.modules['@apostrophecms/express'].options.session.store,
-    ).toEqual({
-      connect: mockConnectRedis,
-      options: { url: 'redis://remote' },
+  // Use describe.each to create a separate describe block for each category
+  describe.each(moduleCategories)('Required Module Category: $name', (category) => {
+    // Within each category describe block, test each module
+    test.each(category.modules)('%s is defined', (moduleName) => {
+      const config = createAposConfig();
+      expect(config.modules[moduleName]).toBeDefined();
     });
   });
 
-  test('includes all required modules', () => {
+  test.each([
+    ['@apostrophecms/image-widget', 'bp-image-widget'],
+    ['@apostrophecms/video-widget', 'bp-video-widget']
+  ])('configures %s with proper class name', (widgetName, expectedClassName) => {
     const config = createAposConfig();
-
-    // Core modules
-    expect(config.modules['@apostrophecms/express']).toBeDefined();
-    expect(config.modules['@apostrophecms/template']).toBeDefined();
-
-    // Global data module
-    expect(config.modules['global-data']).toBeDefined();
-
-    // Widget types
-    expect(config.modules['@apostrophecms/rich-text-widget']).toBeDefined();
-    expect(config.modules['@apostrophecms/image-widget']).toBeDefined();
-    expect(config.modules['@apostrophecms/video-widget']).toBeDefined();
-
-    // Custom widgets
-    expect(config.modules['home-hero-widget']).toBeDefined();
-    expect(config.modules['default-hero-widget']).toBeDefined();
-    expect(config.modules['buttons-widget']).toBeDefined();
-    expect(config.modules['flex-cards-widget']).toBeDefined();
-    expect(config.modules['links-buttons-widget']).toBeDefined();
-    expect(config.modules['team-carousel-widget']).toBeDefined();
-    expect(config.modules['testimonials-carousel-widget']).toBeDefined();
-    expect(config.modules['about-widget']).toBeDefined();
-    expect(config.modules['map-widget']).toBeDefined();
-    expect(config.modules['simple-cards-widget']).toBeDefined();
-    expect(config.modules['leadership-carousel-widget']).toBeDefined();
-    expect(config.modules['insights-carousel-widget']).toBeDefined();
-    expect(config.modules['contact-widget']).toBeDefined();
-    expect(config.modules['page-intro-widget']).toBeDefined();
-    expect(config.modules['whitespace-widget']).toBeDefined();
-
-    // Form modules
-    expect(config.modules['@apostrophecms/form']).toBeDefined();
-    expect(config.modules['@apostrophecms/form-widget']).toBeDefined();
-    expect(
-      config.modules['@apostrophecms/form-text-field-widget'],
-    ).toBeDefined();
-    expect(
-      config.modules['@apostrophecms/form-textarea-field-widget'],
-    ).toBeDefined();
-    expect(
-      config.modules['@apostrophecms/form-select-field-widget'],
-    ).toBeDefined();
-    expect(
-      config.modules['@apostrophecms/form-radio-field-widget'],
-    ).toBeDefined();
-    expect(
-      config.modules['@apostrophecms/form-file-field-widget'],
-    ).toBeDefined();
-    expect(
-      config.modules['@apostrophecms/form-checkboxes-field-widget'],
-    ).toBeDefined();
-    expect(
-      config.modules['@apostrophecms/form-boolean-field-widget'],
-    ).toBeDefined();
-    expect(
-      config.modules['@apostrophecms/form-conditional-widget'],
-    ).toBeDefined();
-    expect(config.modules['@apostrophecms/form-divider-widget']).toBeDefined();
-    expect(config.modules['@apostrophecms/form-group-widget']).toBeDefined();
-
-    // Custom pieces and pages
-    expect(config.modules['team-members']).toBeDefined();
-    expect(config.modules.testimonials).toBeDefined();
-    expect(config.modules.asset).toBeDefined();
-    expect(config.modules['default-page']).toBeDefined();
-    expect(config.modules['@apostrophecms/import-export']).toBeDefined();
-    expect(config.modules['cases-tags']).toBeDefined();
-    expect(config.modules['case-studies']).toBeDefined();
-    expect(config.modules['case-studies-page']).toBeDefined();
-    expect(config.modules.categories).toBeDefined();
-    expect(config.modules['case-studies-carousel-widget']).toBeDefined();
-    expect(config.modules['container-widget']).toBeDefined();
-  });
-
-  test('configures image and video widgets with proper class names', () => {
-    const config = createAposConfig();
-
-    expect(
-      config.modules['@apostrophecms/image-widget'].options.className,
-    ).toBe('bp-image-widget');
-    expect(
-      config.modules['@apostrophecms/video-widget'].options.className,
-    ).toBe('bp-video-widget');
+    expect(config.modules[widgetName].options.className).toBe(expectedClassName);
   });
 
   test('shortName is set correctly', () => {
@@ -163,10 +147,6 @@ describe('main module execution', () => {
   });
 
   test('apostrophe is not called when required as a module', () => {
-    /*
-     * This test relies on the fact that when we require('./app')
-     * in this test file, it's not the main module
-     */
     expect(apostropheMock).not.toHaveBeenCalled();
   });
 });
