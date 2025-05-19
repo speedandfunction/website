@@ -1,10 +1,11 @@
 const apostrophe = require('apostrophe');
 require('dotenv').config({ path: '../.env' });
+const { getEnv } = require('./utils/env');
 
 function createAposConfig() {
   return {
     shortName: 'apostrophe-site',
-    baseUrl: process.env.BASE_URL || 'http://localhost:3000',
+    baseUrl: getEnv('BASE_URL'),
 
     // Session configuration
     modules: {
@@ -13,13 +14,22 @@ function createAposConfig() {
         options: {
           session: {
             // If using Redis (recommended for production)
-            secret: process.env.SESSION_SECRET || 'changeme',
+            secret: getEnv('SESSION_SECRET'),
             store: {
               connect: require('connect-redis'),
               options: {
-                url: process.env.REDIS_URI || 'redis://localhost:6379',
+                url: getEnv('REDIS_URI'),
               },
             },
+          },
+        },
+      },
+
+      // Make getEnv function available to templates
+      '@apostrophecms/template': {
+        options: {
+          nunjucksEnv: {
+            getEnv,
           },
         },
       },
