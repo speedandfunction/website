@@ -59,7 +59,7 @@ describe('createAposConfig', () => {
     // Core modules
     expect(config.modules['@apostrophecms/express']).toBeDefined();
     expect(config.modules['@apostrophecms/template']).toBeDefined();
-    
+
     // Global data module
     expect(config.modules['global-data']).toBeDefined();
 
@@ -88,21 +88,37 @@ describe('createAposConfig', () => {
     // Form modules
     expect(config.modules['@apostrophecms/form']).toBeDefined();
     expect(config.modules['@apostrophecms/form-widget']).toBeDefined();
-    expect(config.modules['@apostrophecms/form-text-field-widget']).toBeDefined();
-    expect(config.modules['@apostrophecms/form-textarea-field-widget']).toBeDefined();
-    expect(config.modules['@apostrophecms/form-select-field-widget']).toBeDefined();
-    expect(config.modules['@apostrophecms/form-radio-field-widget']).toBeDefined();
-    expect(config.modules['@apostrophecms/form-file-field-widget']).toBeDefined();
-    expect(config.modules['@apostrophecms/form-checkboxes-field-widget']).toBeDefined();
-    expect(config.modules['@apostrophecms/form-boolean-field-widget']).toBeDefined();
-    expect(config.modules['@apostrophecms/form-conditional-widget']).toBeDefined();
+    expect(
+      config.modules['@apostrophecms/form-text-field-widget'],
+    ).toBeDefined();
+    expect(
+      config.modules['@apostrophecms/form-textarea-field-widget'],
+    ).toBeDefined();
+    expect(
+      config.modules['@apostrophecms/form-select-field-widget'],
+    ).toBeDefined();
+    expect(
+      config.modules['@apostrophecms/form-radio-field-widget'],
+    ).toBeDefined();
+    expect(
+      config.modules['@apostrophecms/form-file-field-widget'],
+    ).toBeDefined();
+    expect(
+      config.modules['@apostrophecms/form-checkboxes-field-widget'],
+    ).toBeDefined();
+    expect(
+      config.modules['@apostrophecms/form-boolean-field-widget'],
+    ).toBeDefined();
+    expect(
+      config.modules['@apostrophecms/form-conditional-widget'],
+    ).toBeDefined();
     expect(config.modules['@apostrophecms/form-divider-widget']).toBeDefined();
     expect(config.modules['@apostrophecms/form-group-widget']).toBeDefined();
 
     // Custom pieces and pages
     expect(config.modules['team-members']).toBeDefined();
     expect(config.modules.testimonials).toBeDefined();
-    expect(config.modules['asset']).toBeDefined();
+    expect(config.modules.asset).toBeDefined();
     expect(config.modules['default-page']).toBeDefined();
     expect(config.modules['@apostrophecms/import-export']).toBeDefined();
     expect(config.modules['cases-tags']).toBeDefined();
