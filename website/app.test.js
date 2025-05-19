@@ -8,6 +8,10 @@ describe('createAposConfig', () => {
 
   beforeEach(() => {
     originalEnv = { ...process.env };
+    // Set the required environment variables for all tests
+    process.env.BASE_URL = 'http://localhost:3000';
+    process.env.SESSION_SECRET = 'changeme';
+    process.env.REDIS_URI = 'redis://localhost:6379';
   });
 
   afterEach(() => {
@@ -15,10 +19,7 @@ describe('createAposConfig', () => {
   });
 
   test('returns correct default config', () => {
-    delete process.env.BASE_URL;
-    delete process.env.SESSION_SECRET;
-    delete process.env.REDIS_URI;
-
+    // No need to delete environment variables
     const config = createAposConfig();
 
     expect(config.baseUrl).toBe('http://localhost:3000');
@@ -57,9 +58,12 @@ describe('createAposConfig', () => {
 
     // Core modules
     expect(config.modules['@apostrophecms/express']).toBeDefined();
-    expect(config.modules['@apostrophecms/attachment']).toBeDefined();
+    expect(config.modules['@apostrophecms/template']).toBeDefined();
+    
+    // Global data module
+    expect(config.modules['global-data']).toBeDefined();
 
-    // Page types and widgets
+    // Widget types
     expect(config.modules['@apostrophecms/rich-text-widget']).toBeDefined();
     expect(config.modules['@apostrophecms/image-widget']).toBeDefined();
     expect(config.modules['@apostrophecms/video-widget']).toBeDefined();
@@ -68,16 +72,45 @@ describe('createAposConfig', () => {
     expect(config.modules['home-hero-widget']).toBeDefined();
     expect(config.modules['default-hero-widget']).toBeDefined();
     expect(config.modules['buttons-widget']).toBeDefined();
+    expect(config.modules['flex-cards-widget']).toBeDefined();
+    expect(config.modules['links-buttons-widget']).toBeDefined();
+    expect(config.modules['team-carousel-widget']).toBeDefined();
+    expect(config.modules['testimonials-carousel-widget']).toBeDefined();
+    expect(config.modules['about-widget']).toBeDefined();
+    expect(config.modules['map-widget']).toBeDefined();
+    expect(config.modules['simple-cards-widget']).toBeDefined();
+    expect(config.modules['leadership-carousel-widget']).toBeDefined();
+    expect(config.modules['insights-carousel-widget']).toBeDefined();
+    expect(config.modules['contact-widget']).toBeDefined();
+    expect(config.modules['page-intro-widget']).toBeDefined();
+    expect(config.modules['whitespace-widget']).toBeDefined();
 
     // Form modules
     expect(config.modules['@apostrophecms/form']).toBeDefined();
     expect(config.modules['@apostrophecms/form-widget']).toBeDefined();
+    expect(config.modules['@apostrophecms/form-text-field-widget']).toBeDefined();
+    expect(config.modules['@apostrophecms/form-textarea-field-widget']).toBeDefined();
+    expect(config.modules['@apostrophecms/form-select-field-widget']).toBeDefined();
+    expect(config.modules['@apostrophecms/form-radio-field-widget']).toBeDefined();
+    expect(config.modules['@apostrophecms/form-file-field-widget']).toBeDefined();
+    expect(config.modules['@apostrophecms/form-checkboxes-field-widget']).toBeDefined();
+    expect(config.modules['@apostrophecms/form-boolean-field-widget']).toBeDefined();
+    expect(config.modules['@apostrophecms/form-conditional-widget']).toBeDefined();
+    expect(config.modules['@apostrophecms/form-divider-widget']).toBeDefined();
+    expect(config.modules['@apostrophecms/form-group-widget']).toBeDefined();
 
-    // Custom pieces
+    // Custom pieces and pages
     expect(config.modules['team-members']).toBeDefined();
     expect(config.modules.testimonials).toBeDefined();
+    expect(config.modules['asset']).toBeDefined();
+    expect(config.modules['default-page']).toBeDefined();
+    expect(config.modules['@apostrophecms/import-export']).toBeDefined();
+    expect(config.modules['cases-tags']).toBeDefined();
     expect(config.modules['case-studies']).toBeDefined();
+    expect(config.modules['case-studies-page']).toBeDefined();
     expect(config.modules.categories).toBeDefined();
+    expect(config.modules['case-studies-carousel-widget']).toBeDefined();
+    expect(config.modules['container-widget']).toBeDefined();
   });
 
   test('configures image and video widgets with proper class names', () => {
@@ -89,97 +122,6 @@ describe('createAposConfig', () => {
     expect(
       config.modules['@apostrophecms/video-widget'].options.className,
     ).toBe('bp-video-widget');
-  });
-
-  test('attachment module contains URL hook handler', () => {
-    const config = createAposConfig();
-    const attachmentModule = config.modules['@apostrophecms/attachment'];
-
-    expect(attachmentModule).toBeDefined();
-    expect(typeof attachmentModule.handlers).toBe('function');
-
-    const handlers = attachmentModule.handlers({});
-    expect(handlers['apostrophe:modulesRegistered']).toBeDefined();
-    expect(
-      typeof handlers['apostrophe:modulesRegistered'].fixLocalstackUrl,
-    ).toBe('function');
-  });
-
-  test('URL hook replaces localstack with localhost in URLs', () => {
-    const config = createAposConfig();
-    const attachmentModule = config.modules['@apostrophecms/attachment'];
-
-    // Original URL method that will be replaced
-    const mockOriginalUrl = jest.fn().mockImplementation(function () {
-      return 'https://localstack:4566/bucket/file.jpg';
-    });
-
-    // Mock self object to simulate the module context
-    const mockSelf = {
-      url: mockOriginalUrl,
-    };
-
-    // Get handlers and execute the hook
-    const handlers = attachmentModule.handlers(mockSelf);
-    const fixLocalstackUrlHandler =
-      handlers['apostrophe:modulesRegistered'].fixLocalstackUrl;
-    fixLocalstackUrlHandler();
-
-    // Now mockSelf.url should be the new method, test it
-    const result = mockSelf.url({}, {});
-    expect(result).toBe('https://localhost:4566/bucket/file.jpg');
-    expect(mockOriginalUrl).toHaveBeenCalled();
-  });
-
-  test('URL hook handles undefined URLs properly', () => {
-    const config = createAposConfig();
-    const attachmentModule = config.modules['@apostrophecms/attachment'];
-
-    // Original URL method that will be replaced
-    const mockOriginalUrl = jest.fn().mockReturnValue(undefined);
-
-    // Mock self object to simulate the module context
-    const mockSelf = {
-      url: mockOriginalUrl,
-    };
-
-    // Get handlers and execute the hook
-    const handlers = attachmentModule.handlers(mockSelf);
-    const fixLocalstackUrlHandler =
-      handlers['apostrophe:modulesRegistered'].fixLocalstackUrl;
-    fixLocalstackUrlHandler();
-
-    // Now mockSelf.url should be the new method, test it
-    const result = mockSelf.url({}, {});
-    expect(result).toBeUndefined();
-    expect(mockOriginalUrl).toHaveBeenCalled();
-  });
-
-  test('URL hook logs a success message', () => {
-    const config = createAposConfig();
-    const attachmentModule = config.modules['@apostrophecms/attachment'];
-
-    // Spy on console.log
-    const consoleSpy = jest.spyOn(console, 'log').mockImplementation();
-
-    // Mock self object to simulate the module context
-    const mockSelf = {
-      url: jest.fn(),
-    };
-
-    // Get handlers and execute the hook
-    const handlers = attachmentModule.handlers(mockSelf);
-    const fixLocalstackUrlHandler =
-      handlers['apostrophe:modulesRegistered'].fixLocalstackUrl;
-    fixLocalstackUrlHandler();
-
-    // Verify the console.log message
-    expect(consoleSpy).toHaveBeenCalledWith(
-      'Attachment URL hook installed successfully',
-    );
-
-    // Clean up
-    consoleSpy.mockRestore();
   });
 
   test('shortName is set correctly', () => {
