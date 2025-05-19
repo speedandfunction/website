@@ -1,78 +1,12 @@
 <section class="sf-section" data-testimonials-carousel-widget>
   {% area data.widget, 'intro' %} {% set testimonialCount =
-  data.widget._testimonials | length %} {% if testimonialCount == 1 %} {# Single
-  testimonial style #}
-  <div class="sf-single-testimonial">
-    {% set card = data.widget._testimonials[0] %}
-    <div class="sf-person">
-      <div class="sf-testimonial-header">
-        {% set attachment = apos.image.first(card.headshot) %}
+  data.widget._testimonials | length %}
 
-        <div class="sf-person__photo{% if not data.user %} lozad{% endif %}">
-          <img
-            {%
-            if
-            attachment
-            %}
-            srcset="{{ apos.image.srcset(attachment) }}"
-            src="{{ apos.attachment.url(attachment, { size: data.options.size or 'full' }) }}"
-            alt="{{ attachment._alt or '' }}"
-            {%
-            if
-            apos.attachment.hasFocalPoint(attachment)
-            %}
-            style="object-position: {{ apos.attachment.focalPointToObjectPosition(attachment) }}"
-            {%
-            endif
-            %}
-            {%
-            else
-            %}
-            src="/images/placeholder.jpg"
-            alt="No photo"
-            {%
-            endif
-            %}
-          />
-        </div>
-
-        <div class="sf-testimonial-header__bio">
-          <h4 class="sf-person__title">{{ card.title }}</h4>
-          <h5 class="sf-person__position">{{ card.position }}</h5>
-          {% if card.organization %}
-          <h5 class="sf-person__position sf-person__organization">
-            {{ card.organization }}
-          </h5>
-          {% endif %}
-        </div>
-      </div>
-
-      <div class="sf-person-wrapper sf-single-testimonial__wrapper">
-        <div class="sf-person__content">{% area card, 'feedback' %}</div>
-
-        {% if card._caseStudy %}
-        <div class="card-swiper__case-study">
-          <h5 class="card-swiper__case-study-title">
-            Case Study: {{ card._caseStudy[0].title }}
-          </h5>
-          <p class="card-swiper__case-study-portfolio-title">
-            {{ card._caseStudy[0].portfolioTitle }}
-          </p>
-          <p class="card-swiper__case-study-stack">
-            {{ card._caseStudy[0].stack }}
-          </p>
-        </div>
-        {% endif %}
-      </div>
-    </div>
-  </div>
-
-  {% elif testimonialCount == 2 %} {# Two testimonials style with swiper #}
-  <div class="sf-dual-testimonials-wrapper">
-    <div
-      class="sf-person-swiper sf-testimonials swiper"
-      data-testimonial-count="2"
-    >
+  <div
+    class="sf-testimonials-container"
+    data-testimonial-count="{{ testimonialCount }}"
+  >
+    <div class="sf-person-swiper sf-testimonials swiper">
       <div class="swiper-wrapper">
         {% for card in data.widget._testimonials %}
         <div class="swiper-slide">
@@ -82,31 +16,20 @@
               <div
                 class="sf-person__photo{% if not data.user %} lozad{% endif %}"
               >
+                <!-- prettier-ignore -->
                 <img
-                  {%
-                  if
-                  attachment
-                  %}
-                  srcset="{{ apos.image.srcset(attachment) }}"
-                  src="{{ apos.attachment.url(attachment, { size: data.options.size or 'full' }) }}"
-                  alt="{{ attachment._alt or '' }}"
-                  {%
-                  if
-                  apos.attachment.hasFocalPoint(attachment)
-                  %}
-                  style="object-position: {{ apos.attachment.focalPointToObjectPosition(attachment) }}"
-                  {%
-                  endif
-                  %}
-                  {%
-                  else
-                  %}
-                  src="/images/placeholder.jpg"
-                  alt="No photo"
-                  {%
-                  endif
-                  %}
-                />
+                    {% if attachment %}
+                      srcset="{{ apos.image.srcset(attachment) }}"
+                      src="{{ apos.attachment.url(attachment, { size: data.options.size or 'full' }) }}"
+                      alt="{{ attachment._alt or '' }}"
+                      {% if apos.attachment.hasFocalPoint(attachment) %}
+                        style="object-position: {{ apos.attachment.focalPointToObjectPosition(attachment) }}"
+                      {% endif %}
+                    {% else %}
+                      src="/images/placeholder.jpg"
+                      alt="No photo"
+                    {% endif %}
+                  />
               </div>
               <div class="sf-testimonial-header__bio">
                 <h4 class="sf-person__title">{{ card.title }}</h4>
@@ -146,7 +69,7 @@
         {% endfor %}
       </div>
 
-      <div class="swiper-controls mobile-only-controls">
+      <div class="swiper-controls">
         <div class="swiper-nav">
           <div class="swiper-button-prev">previous</div>
           <div class="swiper-button-next">next</div>
@@ -154,175 +77,4 @@
       </div>
     </div>
   </div>
-
-  {% elif testimonialCount == 3 %} {# Three testimonials style with swiper #}
-  <div
-    class="sf-person-swiper sf-testimonials swiper"
-    data-testimonial-count="3"
-  >
-    <div class="swiper-wrapper">
-      {% for card in data.widget._testimonials %}
-      <div class="swiper-slide">
-        <div class="sf-person">
-          <div class="sf-testimonial-header">
-            {% set attachment = apos.image.first(card.headshot) %}
-            <div
-              class="sf-person__photo{% if not data.user %} lozad{% endif %}"
-            >
-              <img
-                {%
-                if
-                attachment
-                %}
-                srcset="{{ apos.image.srcset(attachment) }}"
-                src="{{ apos.attachment.url(attachment, { size: data.options.size or 'full' }) }}"
-                alt="{{ attachment._alt or '' }}"
-                {%
-                if
-                apos.attachment.hasFocalPoint(attachment)
-                %}
-                style="object-position: {{ apos.attachment.focalPointToObjectPosition(attachment) }}"
-                {%
-                endif
-                %}
-                {%
-                else
-                %}
-                src="/images/placeholder.jpg"
-                alt="No photo"
-                {%
-                endif
-                %}
-              />
-            </div>
-            <div class="sf-testimonial-header__bio">
-              <h4 class="sf-person__title">{{ card.title }}</h4>
-              <h5 class="sf-person__position">{{ card.position }}</h5>
-              {% if card.organization %}
-              <h5 class="sf-person__position sf-person__organization">
-                {{ card.organization }}
-              </h5>
-              {% endif %} {% if card.url %}
-              <a
-                href="https://{{ card.url }}/"
-                target="_blank"
-                class="sf-person__url"
-                >{{ card.url }}</a
-              >
-              {% endif %}
-            </div>
-          </div>
-          <div class="sf-person-wrapper">
-            <div class="sf-person__content">{% area card, 'feedback' %}</div>
-            {% if card._caseStudy %}
-            <div class="card-swiper__case-study">
-              <h5 class="card-swiper__case-study-title">
-                Case Study: {{ card._caseStudy[0].title }}
-              </h5>
-              <p class="card-swiper__case-study-portfolio-title">
-                {{ card._caseStudy[0].portfolioTitle }}
-              </p>
-              <p class="card-swiper__case-study-stack">
-                {{ card._caseStudy[0].stack }}
-              </p>
-            </div>
-            {% endif %}
-          </div>
-        </div>
-      </div>
-      {% endfor %}
-    </div>
-
-    <div class="swiper-controls mobile-only-controls">
-      <div class="swiper-nav">
-        <div class="swiper-button-prev">previous</div>
-        <div class="swiper-button-next">next</div>
-      </div>
-    </div>
-  </div>
-
-  {% else %} {# More than three testimonials - use swiper with controls #}
-  <div class="sf-person-swiper sf-testimonials swiper">
-    <div class="swiper-wrapper">
-      {% for card in data.widget._testimonials %}
-      <div class="swiper-slide">
-        <div class="sf-person">
-          <div class="sf-testimonial-header">
-            {% set attachment = apos.image.first(card.headshot) %}
-            <div
-              class="sf-person__photo{% if not data.user %} lozad{% endif %}"
-            >
-              <img
-                {%
-                if
-                attachment
-                %}
-                srcset="{{ apos.image.srcset(attachment) }}"
-                src="{{ apos.attachment.url(attachment, { size: data.options.size or 'full' }) }}"
-                alt="{{ attachment._alt or '' }}"
-                {%
-                if
-                apos.attachment.hasFocalPoint(attachment)
-                %}
-                style="object-position: {{ apos.attachment.focalPointToObjectPosition(attachment) }}"
-                {%
-                endif
-                %}
-                {%
-                else
-                %}
-                src="/images/placeholder.jpg"
-                alt="No photo"
-                {%
-                endif
-                %}
-              />
-            </div>
-            <div class="sf-testimonial-header__bio">
-              <h4 class="sf-person__title">{{ card.title }}</h4>
-              <h5 class="sf-person__position">{{ card.position }}</h5>
-              {% if card.organization %}
-              <h5 class="sf-person__position sf-person__organization">
-                {{ card.organization }}
-              </h5>
-              {% endif %} {% if card.url %}
-              <a
-                href="https://{{ card.url }}/"
-                target="_blank"
-                class="sf-person__url"
-                >{{ card.url }}</a
-              >
-              {% endif %}
-            </div>
-          </div>
-          <div class="sf-person-wrapper">
-            <div class="sf-person__content">{% area card, 'feedback' %}</div>
-            {% if card._caseStudy %}
-            <div class="card-swiper__case-study">
-              <h5 class="card-swiper__case-study-title">
-                Case Study: {{ card._caseStudy[0].title }}
-              </h5>
-              <p class="card-swiper__case-study-portfolio-title">
-                {{ card._caseStudy[0].portfolioTitle }}
-              </p>
-              <p class="card-swiper__case-study-stack">
-                {{ card._caseStudy[0].stack }}
-              </p>
-            </div>
-            {% endif %}
-          </div>
-        </div>
-      </div>
-      {% endfor %}
-    </div>
-
-    <div class="swiper-controls">
-      <div class="swiper-nav">
-        <div class="swiper-button-prev">previous</div>
-        <div class="swiper-button-next">next</div>
-      </div>
-    </div>
-  </div>
-
-  {% endif %}
 </section>
