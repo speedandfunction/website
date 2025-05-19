@@ -1,10 +1,11 @@
 const apostrophe = require('apostrophe');
 require('dotenv').config({ path: '../.env' });
+const { getEnv } = require('./utils/env');
 
 function createAposConfig() {
   return {
     shortName: 'apostrophe-site',
-    baseUrl: process.env.BASE_URL || 'http://localhost:3000',
+    baseUrl: getEnv('BASE_URL'),
 
     // Session configuration
     modules: {
@@ -13,44 +14,26 @@ function createAposConfig() {
         options: {
           session: {
             // If using Redis (recommended for production)
-            secret: process.env.SESSION_SECRET || 'changeme',
+            secret: getEnv('SESSION_SECRET'),
             store: {
               connect: require('connect-redis'),
               options: {
-                url: process.env.REDIS_URI || 'redis://localhost:6379',
+                url: getEnv('REDIS_URI'),
               },
             },
           },
         },
       },
 
-      // Add attachment url hook to replace 'localstack' with 'localhost'
-      '@apostrophecms/attachment': {
-        handlers(self) {
-          return {
-            'apostrophe:modulesRegistered': {
-              fixLocalstackUrl() {
-                // Get original url method
-                const originalUrl = self.url;
-                // Override it with our fixed version
-                self.url = function (attachment, options) {
-                  // Get the url from the original method
-                  const url = originalUrl.call(this, attachment, options);
-                  // For development environment - replace localstack with localhost in URLs
-                  if (url) {
-                    return url.replace('localstack:', 'localhost:');
-                  }
-                  return url;
-                };
-                // Notification that hook was installed
-                // eslint-disable-next-line no-console
-                console.log('Attachment URL hook installed successfully');
-              },
-            },
-          };
-        },
+      // Make getEnv function available to templates
+      '@apostrophecms/template': {
+        options: {
+          nunjucksEnv: {
+            getEnv: getEnv
+          }
+        }
       },
-
+      
       // Add global data module
       'global-data': {},
 

@@ -1,8 +1,10 @@
+const { getEnv } = require('../../../utils/env');
+
 module.exports = {
   options: {
     session: {
       // If this still says `undefined`, set a real secret!
-      secret: process.env.SESSION_SECRET,
+      secret: getEnv('SESSION_SECRET'),
     },
   },
 };
