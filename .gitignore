@@ -144,3 +144,9 @@ website/public/apos-frontend
 dump.archive
 .prettierrc
 aposUsersSafe.json
+
+# Cursor temporary files
+.cursor/tmp/
+
+# Export directory
+export/
