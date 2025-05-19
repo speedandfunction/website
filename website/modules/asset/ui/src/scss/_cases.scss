@@ -95,7 +95,6 @@
 .tag-item {
   display: flex;
   align-items: center;
-  margin-bottom: 20px;
 }
 
 .tag-link {
@@ -148,16 +147,6 @@
   }
 }
 
-.clear-all-link {
-  color: #e53e3e;
-  text-decoration: none;
-  font-weight: 500;
-
-  &:hover {
-    text-decoration: underline;
-  }
-}
-
 // Pagination
 .pagination-container {
   margin-top: 3rem;
@@ -186,6 +175,133 @@
       color: white;
     }
   }
+}
+
+// Filter info
+
+.cs_filter-info {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: space-between;
+  margin-bottom: 32px;
+
+  @include breakpoint-medium {
+    flex-wrap: nowrap;
+    align-items: flex-start;
+    justify-content: flex-start;
+    margin-bottom: 42px;
+  }
+}
+
+.items-count {
+  font-weight: $font-weight-extra-bold;
+  font-size: $font-size-body-small-mobile;
+  line-height: 140%;
+  color: $gray-500;
+  margin: 0;
+  white-space: nowrap;
+  @include breakpoint-medium {
+    font-size: $font-size-h6;
+    line-height: 110%;
+  }
+}
+
+.selected-tags-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  @include breakpoint-medium {
+    gap: 12px;
+  }
+}
+
+.selected-tag {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  background-color: $gray-100;
+  font-weight: $font-weight-medium;
+  font-size: 10px;
+  line-height: 140%;
+  text-transform: capitalize;
+  color: $gray-300;
+  height: 24px;
+  @include breakpoint-medium {
+    font-size: 11px;
+    line-height: 110%;
+    height: 28px;
+    gap: 12px;
+  }
+}
+
+.remove-tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  font-size: 16px;
+  color: $gray-300;
+  text-decoration: none;
+}
+
+.clear-all {
+  display: flex;
+  align-items: center;
+  padding: 4px 8px;
+  border: 1px solid $red;
+  background-color: $white;
+  font-weight: $font-weight-medium;
+  font-size: 11px;
+  line-height: 140%;
+  color: $gray-300;
+  height: 24px;
+  min-width: 87px;
+  text-transform: capitalize;
+  white-space: nowrap;
+  @include breakpoint-medium {
+    margin-right: 8px;
+    height: 28px;
+    padding: 6px 12px;
+    min-width: 99px;
+  }
+}
+
+.clear-all-link {
+  color: $gray-300;
+  text-decoration: none;
+}
+
+.clear-all-content {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  gap: 8px;
+  @include breakpoint-medium {
+    gap: 12px;
+  }
+}
+
+.clear-text {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  line-height: 1;
+}
+
+.remove-sign {
+  display: grid;
+  place-items: center;
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
 }
 
 // Case Study preview card
