@@ -68,9 +68,7 @@
       margin-right: 0;
     }
 
-    &:nth-child(odd):last-child,
-    &:nth-child(even):last-child,
-    &:nth-child(even):last-child ~ &:nth-last-child(2),
+    &:last-child,
     &:nth-last-child(2):nth-of-type(odd) {
       margin-bottom: 0;
     }
@@ -143,6 +141,7 @@
     @include breakpoint-medium {
       font-size: 22px;
       line-height: 110%;
+      max-width: 100%;
     }
   }
   
