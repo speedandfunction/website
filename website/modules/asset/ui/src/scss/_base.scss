@@ -121,10 +121,14 @@
   font-weight: $font-weight-medium;
   font-size: $font-size-body-small-mobile;
   line-height: 150%;
-  margin-left: 40px;
+  width: min(1280px, 100%);
+  margin: 0 auto;
+  padding: 0 40px;
+  height: 100%;
+  margin-top: 64px;
   color: $black;
-  @include breakpoint-extra-extra-large {
-    margin-left: 120px;
+  @include breakpoint-medium {
+    margin-top: 95px;
   }
 }
 
