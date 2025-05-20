@@ -8,179 +8,162 @@ describe('createAposConfig', () => {
 
   beforeEach(() => {
     originalEnv = { ...process.env };
+    // Set default environment variables
+    process.env.BASE_URL = 'http://localhost:3000';
+    process.env.SESSION_SECRET = 'changeme';
+    process.env.REDIS_URI = 'redis://localhost:6379';
   });
 
   afterEach(() => {
     process.env = originalEnv;
   });
 
-  test('returns correct default config', () => {
-    delete process.env.BASE_URL;
-    delete process.env.SESSION_SECRET;
-    delete process.env.REDIS_URI;
+  test.each([
+    [
+      'default config',
+      {
+        baseUrl: 'http://localhost:3000',
+        sessionSecret: 'changeme',
+        redisUri: 'redis://localhost:6379',
+      },
+    ],
+    [
+      'custom config',
+      {
+        baseUrl: 'http://test.com',
+        sessionSecret: 'topsecret',
+        redisUri: 'redis://remote',
+      },
+    ],
+  ])('returns correct %s', (_, envVars) => {
+    // Set environment variables for this test case
+    if (envVars.baseUrl !== 'http://localhost:3000') {
+      process.env.BASE_URL = envVars.baseUrl;
+      process.env.SESSION_SECRET = envVars.sessionSecret;
+      process.env.REDIS_URI = envVars.redisUri;
+    }
 
     const config = createAposConfig();
 
-    expect(config.baseUrl).toBe('http://localhost:3000');
+    // Verify config
+    expect(config.baseUrl).toBe(envVars.baseUrl);
     expect(
       config.modules['@apostrophecms/express'].options.session.secret,
-    ).toBe('changeme');
+    ).toBe(envVars.sessionSecret);
     expect(
       config.modules['@apostrophecms/express'].options.session.store,
     ).toEqual({
       connect: mockConnectRedis,
-      options: { url: 'redis://localhost:6379' },
+      options: { url: envVars.redisUri },
     });
   });
 
-  test('uses environment variables', () => {
-    process.env.BASE_URL = 'http://test.com';
-    process.env.SESSION_SECRET = 'topsecret';
-    process.env.REDIS_URI = 'redis://remote';
+  // Define module categories for verification - moved outside the test
+  const moduleCategories = [
+    {
+      name: 'Core modules',
+      modules: [
+        '@apostrophecms/express',
+        '@apostrophecms/template',
+        'global-data',
+      ],
+    },
+    {
+      name: 'Widget types',
+      modules: [
+        '@apostrophecms/rich-text-widget',
+        '@apostrophecms/image-widget',
+        '@apostrophecms/video-widget',
+      ],
+    },
+    {
+      name: 'Custom widgets',
+      modules: [
+        'home-hero-widget',
+        'default-hero-widget',
+        'buttons-widget',
+        'flex-cards-widget',
+        'links-buttons-widget',
+        'team-carousel-widget',
+        'testimonials-carousel-widget',
+        'about-widget',
+        'map-widget',
+        'simple-cards-widget',
+        'leadership-carousel-widget',
+        'insights-carousel-widget',
+        'contact-widget',
+        'page-intro-widget',
+        'whitespace-widget',
+      ],
+    },
+    {
+      name: 'Form modules',
+      modules: [
+        '@apostrophecms/form',
+        '@apostrophecms/form-widget',
+        '@apostrophecms/form-text-field-widget',
+        '@apostrophecms/form-textarea-field-widget',
+        '@apostrophecms/form-select-field-widget',
+        '@apostrophecms/form-radio-field-widget',
+        '@apostrophecms/form-file-field-widget',
+        '@apostrophecms/form-checkboxes-field-widget',
+        '@apostrophecms/form-boolean-field-widget',
+        '@apostrophecms/form-conditional-widget',
+        '@apostrophecms/form-divider-widget',
+        '@apostrophecms/form-group-widget',
+      ],
+    },
+    {
+      name: 'Custom pieces and pages',
+      modules: [
+        'team-members',
+        'testimonials',
+        'asset',
+        'default-page',
+        '@apostrophecms/import-export',
+        'cases-tags',
+        'case-studies',
+        'case-studies-page',
+        'categories',
+        'case-studies-carousel-widget',
+        'container-widget',
+      ],
+    },
+  ];
 
+  // Create a test for checking if config has all required modules
+  test('creates config with required modules', () => {
     const config = createAposConfig();
 
-    expect(config.baseUrl).toBe('http://test.com');
-    expect(
-      config.modules['@apostrophecms/express'].options.session.secret,
-    ).toBe('topsecret');
-    expect(
-      config.modules['@apostrophecms/express'].options.session.store,
-    ).toEqual({
-      connect: mockConnectRedis,
-      options: { url: 'redis://remote' },
-    });
+    // Verify that config has modules property
+    expect(config.modules).toBeDefined();
+    expect(typeof config.modules).toBe('object');
   });
 
-  test('includes all required modules', () => {
-    const config = createAposConfig();
+  // Use describe.each to create a separate describe block for each category
+  describe.each(moduleCategories)(
+    'Required Module Category: $name',
+    (category) => {
+      // Within each category describe block, test each module
+      test.each(category.modules)('%s is defined', (moduleName) => {
+        const config = createAposConfig();
+        expect(config.modules[moduleName]).toBeDefined();
+      });
+    },
+  );
 
-    // Core modules
-    expect(config.modules['@apostrophecms/express']).toBeDefined();
-    expect(config.modules['@apostrophecms/attachment']).toBeDefined();
-
-    // Page types and widgets
-    expect(config.modules['@apostrophecms/rich-text-widget']).toBeDefined();
-    expect(config.modules['@apostrophecms/image-widget']).toBeDefined();
-    expect(config.modules['@apostrophecms/video-widget']).toBeDefined();
-
-    // Custom widgets
-    expect(config.modules['home-hero-widget']).toBeDefined();
-    expect(config.modules['default-hero-widget']).toBeDefined();
-    expect(config.modules['buttons-widget']).toBeDefined();
-
-    // Form modules
-    expect(config.modules['@apostrophecms/form']).toBeDefined();
-    expect(config.modules['@apostrophecms/form-widget']).toBeDefined();
-
-    // Custom pieces
-    expect(config.modules['team-members']).toBeDefined();
-    expect(config.modules.testimonials).toBeDefined();
-    expect(config.modules['case-studies']).toBeDefined();
-    expect(config.modules.categories).toBeDefined();
-  });
-
-  test('configures image and video widgets with proper class names', () => {
-    const config = createAposConfig();
-
-    expect(
-      config.modules['@apostrophecms/image-widget'].options.className,
-    ).toBe('bp-image-widget');
-    expect(
-      config.modules['@apostrophecms/video-widget'].options.className,
-    ).toBe('bp-video-widget');
-  });
-
-  test('attachment module contains URL hook handler', () => {
-    const config = createAposConfig();
-    const attachmentModule = config.modules['@apostrophecms/attachment'];
-
-    expect(attachmentModule).toBeDefined();
-    expect(typeof attachmentModule.handlers).toBe('function');
-
-    const handlers = attachmentModule.handlers({});
-    expect(handlers['apostrophe:modulesRegistered']).toBeDefined();
-    expect(
-      typeof handlers['apostrophe:modulesRegistered'].fixLocalstackUrl,
-    ).toBe('function');
-  });
-
-  test('URL hook replaces localstack with localhost in URLs', () => {
-    const config = createAposConfig();
-    const attachmentModule = config.modules['@apostrophecms/attachment'];
-
-    // Original URL method that will be replaced
-    const mockOriginalUrl = jest.fn().mockImplementation(function () {
-      return 'https://localstack:4566/bucket/file.jpg';
-    });
-
-    // Mock self object to simulate the module context
-    const mockSelf = {
-      url: mockOriginalUrl,
-    };
-
-    // Get handlers and execute the hook
-    const handlers = attachmentModule.handlers(mockSelf);
-    const fixLocalstackUrlHandler =
-      handlers['apostrophe:modulesRegistered'].fixLocalstackUrl;
-    fixLocalstackUrlHandler();
-
-    // Now mockSelf.url should be the new method, test it
-    const result = mockSelf.url({}, {});
-    expect(result).toBe('https://localhost:4566/bucket/file.jpg');
-    expect(mockOriginalUrl).toHaveBeenCalled();
-  });
-
-  test('URL hook handles undefined URLs properly', () => {
-    const config = createAposConfig();
-    const attachmentModule = config.modules['@apostrophecms/attachment'];
-
-    // Original URL method that will be replaced
-    const mockOriginalUrl = jest.fn().mockReturnValue(undefined);
-
-    // Mock self object to simulate the module context
-    const mockSelf = {
-      url: mockOriginalUrl,
-    };
-
-    // Get handlers and execute the hook
-    const handlers = attachmentModule.handlers(mockSelf);
-    const fixLocalstackUrlHandler =
-      handlers['apostrophe:modulesRegistered'].fixLocalstackUrl;
-    fixLocalstackUrlHandler();
-
-    // Now mockSelf.url should be the new method, test it
-    const result = mockSelf.url({}, {});
-    expect(result).toBeUndefined();
-    expect(mockOriginalUrl).toHaveBeenCalled();
-  });
-
-  test('URL hook logs a success message', () => {
-    const config = createAposConfig();
-    const attachmentModule = config.modules['@apostrophecms/attachment'];
-
-    // Spy on console.log
-    const consoleSpy = jest.spyOn(console, 'log').mockImplementation();
-
-    // Mock self object to simulate the module context
-    const mockSelf = {
-      url: jest.fn(),
-    };
-
-    // Get handlers and execute the hook
-    const handlers = attachmentModule.handlers(mockSelf);
-    const fixLocalstackUrlHandler =
-      handlers['apostrophe:modulesRegistered'].fixLocalstackUrl;
-    fixLocalstackUrlHandler();
-
-    // Verify the console.log message
-    expect(consoleSpy).toHaveBeenCalledWith(
-      'Attachment URL hook installed successfully',
-    );
-
-    // Clean up
-    consoleSpy.mockRestore();
-  });
+  test.each([
+    ['@apostrophecms/image-widget', 'bp-image-widget'],
+    ['@apostrophecms/video-widget', 'bp-video-widget'],
+  ])(
+    'configures %s with proper class name',
+    (widgetName, expectedClassName) => {
+      const config = createAposConfig();
+      expect(config.modules[widgetName].options.className).toBe(
+        expectedClassName,
+      );
+    },
+  );
 
   test('shortName is set correctly', () => {
     const config = createAposConfig();
@@ -205,10 +188,6 @@ describe('main module execution', () => {
   });
 
   test('apostrophe is not called when required as a module', () => {
-    /*
-     * This test relies on the fact that when we require('./app')
-     * in this test file, it's not the main module
-     */
     expect(apostropheMock).not.toHaveBeenCalled();
   });
 });

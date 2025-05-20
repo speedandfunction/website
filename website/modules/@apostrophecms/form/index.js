@@ -1,5 +1,6 @@
 const { google } = require('googleapis');
 const postmark = require('postmark');
+const { getEnv } = require('../../../utils/env');
 
 // === Utility Functions ===
 
@@ -223,7 +224,7 @@ module.exports = {
         },
         serviceAccountPrivateKey: {
           type: 'string',
-          placeholder: process.env.SERVICE_ACCOUNT_PRIVATE_KEY || '',
+          placeholder: getEnv('SERVICE_ACCOUNT_PRIVATE_KEY'),
           textarea: true,
           required: true,
           if: {
