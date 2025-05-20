@@ -43,4 +43,11 @@ module.exports = {
       },
     },
   },
+  filters: {
+    add: {
+      _category: {
+        label: 'Category',
+      },
+    },
+  },
 };
