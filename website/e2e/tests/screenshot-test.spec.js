@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { getEnv } from '../../utils/env.js';
 
 test('Snapshot for Home Page', async ({ page }) => {
   await page.setViewportSize({
@@ -6,7 +7,7 @@ test('Snapshot for Home Page', async ({ page }) => {
     height: 720,
   });
 
-  await page.goto(process.env.BASE_URL ?? 'http://localhost:3000', {
+  await page.goto(getEnv('BASE_URL'), {
     timeout: 60000,
     waitUntil: 'networkidle',
   });

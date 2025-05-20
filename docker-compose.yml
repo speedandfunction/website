@@ -37,29 +37,29 @@ services:
     ports:
       - "3000:3000"
     environment:
+      - REDIS_URI=redis://redis:6379
+      - BASE_URL=http://localhost:3000
       - NODE_ENV=development
       - APOS_MONGODB_URI=mongodb://mongodb:27017/apostrophe
       - SESSION_SECRET=change_this_to_a_secure_secret
-      # AWS S3 settings loaded from .env file
+      # AWS S3 settings loaded
       - APOS_S3_BUCKET=${APOS_S3_BUCKET:-apostrophe-test-bucket}
       - APOS_S3_REGION=${APOS_S3_REGION:-us-east-1}
       - APOS_S3_KEY=${APOS_S3_KEY:-test}
       - APOS_S3_SECRET=${APOS_S3_SECRET:-test}
-      # Support for custom S3 endpoint (LocalStack)
+      - APOS_CDN_URL=${APOS_CDN_URL:-http://localhost:4566/apostrophe-test-bucket}
+      # Required to use LocalStack
+      - APOS_S3_STYLE=${APOS_S3_STYLE:-path}
+      - APOS_S3_HTTPS=${APOS_S3_HTTPS:-false}
       - APOS_S3_ENDPOINT=${APOS_S3_ENDPOINT:-http://localstack:4566}
-      - APOS_S3_PATH_STYLE=${APOS_S3_PATH_STYLE:-true}
-      # Fix for URL generation in HTML
-      - APOS_UPLOADS_URL=${APOS_UPLOADS_URL:-http://localstack:4566/apostrophe-test-bucket}
-      # Public URL for browser access (must use localhost, not container name)
-      - APOS_UPLOADS_PUBLIC_URL=${APOS_UPLOADS_PUBLIC_URL:-http://localhost:4566/apostrophe-test-bucket}
-      # CDN setting loaded from .env file
-      - APOS_CDN_URL=${APOS_CDN_URL:-}
-      - APOS_CDN_ENABLED=${APOS_CDN_ENABLED:-false}
+      # Google Cloud Storage settings
+      - SERVICE_ACCOUNT_PRIVATE_KEY=${SERVICE_ACCOUNT_PRIVATE_KEY:-'unknown'}
 
     command: ["npm", "start"]
     depends_on:
       - mongodb
       - localstack
+      - redis
     restart: unless-stopped
     healthcheck:
       test:

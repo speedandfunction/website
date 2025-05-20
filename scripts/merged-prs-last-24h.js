@@ -1,14 +1,15 @@
 #!/usr/bin/env node
 
 const https = require('https');
+const { getEnv } = require('../website/utils/env');
 
 // Configuration - replace these values with your own
-const GITHUB_TOKEN = process.env.GITHUB_TOKEN; // Set your GitHub token as an environment variable
-const OWNER = process.env.GITHUB_OWNER || 'your-organization-or-username';
-const REPO = process.env.GITHUB_REPO || 'your-repository-name';
-const SLACK_WEBHOOK_URL = process.env.SLACK_WEBHOOK_URL; // Slack webhook URL
-const SLACK_CHANNEL = process.env.SLACK_CHANNEL; // Optional specific Slack channel to post to
-const BOT_NAME = process.env.BOT_NAME || 'PRs_bot'; // Custom bot name for Slack messages
+const GITHUB_TOKEN = getEnv('GITHUB_TOKEN'); // Set your GitHub token as an environment variable
+const OWNER = getEnv('GITHUB_OWNER');
+const REPO = getEnv('GITHUB_REPO');
+const SLACK_WEBHOOK_URL = getEnv('SLACK_WEBHOOK_URL'); // Slack webhook URL
+const SLACK_CHANNEL = getEnv('SLACK_CHANNEL'); // Optional specific Slack channel to post to
+const BOT_NAME = getEnv('BOT_NAME');
 
 // Calculate timestamp for 24 hours ago
 const now = new Date();
