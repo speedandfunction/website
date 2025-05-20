@@ -15,3 +15,10 @@ main {
 body {
   min-height: 100vh;
 }
+
+main {
+  margin-top: 64px;
+  @include breakpoint-medium {
+    margin-top: 95px;
+  }
+}
