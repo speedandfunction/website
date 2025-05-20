@@ -7,6 +7,28 @@ module.exports = {
     pluralLabel: 'Testimonials',
     searchable: false,
   },
+  init(self) {
+    // Register migrations
+    self.apos.migration.add('add-new-testimonial', async () => {
+      await self.apos.doc.insert(self.apos.task.getReq(), {
+        type: 'testimonials',
+        title: 'John Doe',
+        position: 'CEO',
+        organization: 'Tech Corp',
+        url: 'techcorp.com',
+        feedback: {
+          type: 'area',
+          items: [
+            {
+              type: '@apostrophecms/rich-text',
+              content: '<p>Working with this team has been an absolute pleasure. Their expertise and dedication to quality have helped us achieve remarkable results.</p>',
+            },
+          ],
+        },
+        published: true,
+      });
+    });
+  },
   fields: {
     add: {
       title: {
