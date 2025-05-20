@@ -60,30 +60,9 @@ const initAllSwipers = function () {
       const elements = document.querySelectorAll(selector);
 
       elements.forEach(function (element) {
-        // Handle testimonials with 2 cards differently
-        if (element.classList.contains('sf-testimonials')) {
-          const testimonialCount = element.getAttribute(
-            'data-testimonial-count',
-          );
-          const swiperConfig = { ...config };
-
-          // For 2 testimonials, show both at desktop size
-          if (testimonialCount === '2') {
-            swiperConfig.breakpoints = {
-              768: {
-                slidesPerView: 2,
-              },
-            };
-          }
-
-          const swiper = new Swiper(element, swiperConfig);
-          swiper.init();
-        } else {
-          apos.util.onReady(function () {
-            const swiper = new Swiper(element, config);
-            return swiper;
-          });
-        }
+        const swiperConfig = { ...config };
+        const swiper = new Swiper(element, swiperConfig);
+        swiper.init();
       });
     }
   });
