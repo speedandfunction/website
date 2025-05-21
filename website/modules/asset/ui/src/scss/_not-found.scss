@@ -2,8 +2,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  height: calc(100vh - 95px - 110px);
-  margin-top: 95px;
+
+  // 64(95) - header height, 18 - breadcrumbs height,
+  // 20 - sf-container padding-top
+  height: calc(100vh - (64px + 18px + 20px) * 2);
+  @include breakpoint-medium {
+    height: calc(100vh - (95px + 18px + 20px) * 2);
+  }
   .not-found-content {
     width: 75%;
     min-width: 322px;

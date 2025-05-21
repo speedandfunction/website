@@ -36,13 +36,13 @@
     margin: 0 0 4px;
     font-weight: 700;
     font-size: 14px;
+    line-height: 110%;
+    @include breakpoint-medium {
+      line-height: 150%;
+    }
     color: $gray-500;
     text-decoration: none;
-    @include breakpoint-medium {
-      font-size: 22px;
-      line-height: 24px;
-      margin: 0 0 8px;
-    }
+    @include truncate-lines(1);
   }
   &__subtitle {
     font-weight: 500;
@@ -53,28 +53,36 @@
     @include breakpoint-medium {
       margin: 20px 0 0;
     }
+    @include truncate-lines(1);
   }
   &__position {
     font-weight: 500;
-    font-size: 10px;
-    line-height: 14px;
+    font-size: 12px;
+    line-height: 140%;
     color: $gray-500;
     margin: 0;
     @include breakpoint-medium {
-      font-size: 14px;
-      line-height: 20px;
+      font-size: 10px;
+      line-height: 14px;
     }
+    @include truncate-lines(1);
   }
+  &__organization {
+    margin-bottom: 12px;
+    @include truncate-lines(1);
+    margin-bottom: 8px;
+  }
+
   &__content {
-    @include breakpoint-medium {
-      min-height: 215px;
-    }
     p {
       font-weight: 500;
       font-size: 14px;
-      line-height: 20px;
+      line-height: 21px;
       color: $gray-300;
       margin: 0;
+      @include breakpoint-medium {
+        @include truncate-lines(8);
+      }
     }
   }
   &__url {
@@ -83,6 +91,7 @@
     font-size: 12px;
     line-height: 17px;
     color: $gray-500;
+    @include truncate-lines(1);
     @include transition(color);
     @include breakpoint-large {
       font-size: 14px;
@@ -102,82 +111,27 @@
     line-height: 20px;
     color: $gray-300;
   }
-}
-.sf-person-wrapper {
-  padding: 20px;
-  @include border(border-top);
-  @include border(border-bottom);
-  @include border(border-right);
-  @include breakpoint-medium {
-    padding: 40px;
-  }
-}
-.swiper-slide-active {
-  .sf-person-wrapper {
-    @include border(border-left);
-  }
-}
-.sf-testimonials {
-  .sf-person__content {
-    margin-bottom: 10px;
-    min-height: 200px;
-    @include breakpoint-small {
-      min-height: 200px;
+  &-wrapper {
+    padding: 24px;
+    overflow: hidden;
+    border: 1px solid $gray-border;
+    height: 200px;
+    @include breakpoint-medium {
+      border: 1px solid $gray-border;
+      border-left: none;
+      padding: 10px 40px 0 0;
     }
     @include breakpoint-medium {
-      min-height: 215px;
-    }
-  }
-  .sf-person-wrapper {
-    @include breakpoint-medium {
-      border: 0;
-    }
-    @include breakpoint-large {
-      @include border(border-top);
-      @include border(border-bottom);
-      @include border(border-right);
-    }
-  }
-  .swiper-slide-active {
-    .sf-person-wrapper {
-      @include breakpoint-large {
-        @include border(border-left);
-      }
+      padding: 40px;
     }
   }
 }
 
-.sf-testimonial-header {
-  display: flex;
-  @include breakpoint-medium {
-    flex-direction: column;
-  }
-  @include breakpoint-large {
-    flex-direction: row;
-    align-items: center;
-  }
-  .sf-person__photo {
-    img {
-      width: 87px;
-      height: 87px;
-      @include breakpoint-medium {
-        width: 160px;
-        height: 160px;
-      }
-    }
-  }
-  &__bio {
-    margin: 0 0 0 20px;
+.swiper-slide-active {
+  .sf-person-wrapper {
     @include breakpoint-medium {
-      margin: 20px 0 20px 40px;
+      border-left: 1px solid $gray-border;
     }
-    @include breakpoint-large {
-      margin: 0 0 0 40px;
-    }
-  }
-  .sf-person__title {
-    font-size: 14px;
-    line-height: 16px;
   }
 }
 
