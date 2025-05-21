@@ -19,6 +19,7 @@ module.exports = {
         '@apostrophecms/rich-text': {
           ...headingToolbar,
         },
+        'table': {},
       },
       columns: 2,
     },
