@@ -102,6 +102,7 @@ function createAposConfig() {
       'categories': {},
       'case-studies-carousel-widget': {},
       'container-widget': {},
+      'table-widget': {},
     },
   };
 }
