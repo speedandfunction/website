@@ -100,6 +100,7 @@ function createAposConfig() {
       'case-studies': {},
       'case-studies-page': {},
       'categories': {},
+      'vacancies': {},
       'case-studies-carousel-widget': {},
       'container-widget': {},
       'table-widget': {},
