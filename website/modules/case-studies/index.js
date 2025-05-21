@@ -183,6 +183,7 @@ module.exports = {
         if (!Array.isArray(tags)) {
           return grouped;
         }
+        /* eslint-disable no-underscore-dangle */
         tags.forEach((tag) => {
           const category =
             (tag._category && tag._category[0] && tag._category[0].title) ||
