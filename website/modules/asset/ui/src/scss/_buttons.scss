@@ -41,8 +41,10 @@
 }
 
 .button-widget {
-  &:has(.sf-buttons-group.two-buttons) {
-    text-align: center;
+  @supports (selector(:has(.sf-buttons-group.two-buttons))) {
+    &:has(.sf-buttons-group.two-buttons) {
+      text-align: center;
+    }
   }
 }
 
