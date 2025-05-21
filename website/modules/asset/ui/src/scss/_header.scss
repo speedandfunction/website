@@ -21,8 +21,6 @@
   }
 
   .sf-logo {
-    font-size: 12px;
-    font-weight: 800;
     z-index: 11;
     text-transform: uppercase;
     color: $gray-500;
@@ -31,9 +29,9 @@
     &:focus {
       color: $gray-300;
     }
+    @include font-settings(16px, 110%, 700);
     @include breakpoint-medium {
-      font-size: $font-size-body-small;
-      line-height: $line-height-h1;
+      @include font-settings(14px, 110%, 800);
     }
   }
 }
