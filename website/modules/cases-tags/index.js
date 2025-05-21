@@ -4,7 +4,7 @@ module.exports = {
     label: 'Case Study Tag',
     pluralLabel: 'Case Studies Tags',
     slugPrefix: 'cases-tag-',
-    shortcut: 'G,M',
+    shortcut: 'G,H',
   },
   fields: {
     add: {

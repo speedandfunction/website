@@ -9,6 +9,7 @@ module.exports = {
       updatedAt: -1,
     },
     perPage: 9,
+    alias: 'caseStudy',
   },
   fields: {
     add: {
@@ -81,8 +82,10 @@ module.exports = {
           project: {
             title: 1,
             slug: 1,
+            _category: 1,
           },
         },
+        withRelationships: ['_category'],
       },
       objective: {
         label: 'Objective',
@@ -172,5 +175,25 @@ module.exports = {
         label: 'Tags',
       },
     },
+  },
+  helpers() {
+    return {
+      groupTagsByCategory(tags) {
+        const grouped = {};
+        if (!Array.isArray(tags)) {
+          return grouped;
+        }
+        tags.forEach((tag) => {
+          const category =
+            (tag._category && tag._category[0] && tag._category[0].title) ||
+            'Uncategorized';
+          if (!grouped[category]) {
+            grouped[category] = [];
+          }
+          grouped[category].push(tag.label);
+        });
+        return grouped;
+      },
+    };
   },
 };

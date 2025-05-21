@@ -67,29 +67,35 @@ data.piecesFilters.tags %} {% block main %}
 
     <div class="cs_list">
       <div class="tags-filter">
-        <p class="tags-title">Tags:</p>
+        {% set groupedTags = apos.caseStudy.groupTagsByCategory(tags) %} {% for
+        category, tagLabels in groupedTags %}
+        <p>{{ category }}:</p>
         <ul class="tags-list">
-          {% for tag in tags %} {% if data.query.tags and tag.value in
-          data.query.tags %}
+          {% for label in tagLabels %} {# Find the tag object that matches this
+          label #} {% set matchingTag = null %} {% for tag in tags %} {% if
+          tag.label == label %} {% set matchingTag = tag %} {% endif %} {%
+          endfor %} {% if matchingTag %} {% if data.query.tags and
+          matchingTag.value in data.query.tags %}
           <li class="tag-item active">
             <a
               class="tag-link"
-              href="{{ data.url | build({}, { tags: { $pull: tag.value } }) }}"
+              href="{{ data.url | build({}, { tags: { $pull: matchingTag.value } }) }}"
             >
-              {{ tag.label }}
+              {{ matchingTag.label }}
             </a>
           </li>
           {% else %}
           <li class="tag-item">
             <a
               class="tag-link"
-              href="{{ data.url | build({}, { tags: { $addToSet: tag.value } }) }}"
+              href="{{ data.url | build({}, { tags: { $addToSet: matchingTag.value } }) }}"
             >
-              {{ tag.label }}
+              {{ matchingTag.label }}
             </a>
           </li>
-          {% endif %} {% endfor %}
+          {% endif %} {% endif %} {% endfor %}
         </ul>
+        {% endfor %}
       </div>
 
       <div class="cs_grid">
