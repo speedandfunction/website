@@ -1,0 +1,112 @@
+.sf-table-intro {
+  margin-bottom: 40px;
+  max-width: 800px;
+  
+  h2 {
+    margin-bottom: 20px;
+  }
+  
+  p {
+    color: $gray-300;
+  }
+}
+
+.sf-table {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  
+  @include breakpoint-medium {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+}
+
+.sf-table-row {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  border: 1px solid $gray-200;
+  padding: 24px;
+
+  &:not(:last-child) {
+    border-bottom: none;
+  }
+  @include breakpoint-medium {
+    width: calc(33.3% - 24px);
+    padding: 40px;
+    margin: 0 -1px 0 0;
+    border: 1px solid $gray-200;
+
+    &:not(:last-child) {
+      border: 1px solid $gray-200;
+    }
+    &:nth-child(3n+6) {
+      border-top: none;
+    }
+    &:nth-child(4n) {
+      border-top: none;
+    }
+    &:nth-child(n+4) {
+      border-top: none;
+    }
+
+  }
+}
+
+.sf-table-cell-title {
+  font-weight: 700;
+  font-size: 14px;
+  color: $gray-500;
+  
+  @include breakpoint-medium {
+    font-size: 22px;
+  }
+}
+
+.sf-table-title {
+  font-weight: 700;
+  font-size: 18px;
+  color: $gray-500;
+  margin: 0;
+  
+  @include breakpoint-medium {
+    font-size: 22px;
+  }
+}
+
+.sf-table-cell-description {
+  border-bottom: none;
+  font-weight: 500;
+  font-size: 14px;
+  color: $gray-300;
+
+  p {
+    margin: 24px 0 0;
+  }
+  @include breakpoint-medium {
+    p {
+      margin: 32px 0 0;
+      min-height: 80px;
+    }
+  }
+}
+
+
+.sf-table-link {
+  margin-top:24px;
+  
+  a {
+    color: $gray-300;
+    text-decoration: underline;
+    font-weight: 300;
+    font-size: 11px;
+    
+    &:hover {
+      text-decoration: none;
+    }
+  }
+  @include breakpoint-medium {
+    margin-top: 32px;
+  }
+} 
