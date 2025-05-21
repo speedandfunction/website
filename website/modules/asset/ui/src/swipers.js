@@ -32,7 +32,7 @@ const swiperConfigs = [
   {
     selector: '.sf-person-swiper',
     config: {
-      loop: true,
+      init: false,
       navigation: {
         el: '.swiper-nav',
         nextEl: '.swiper-button-next',
@@ -40,8 +40,12 @@ const swiperConfigs = [
       },
       modules: [Navigation],
       slidesPerView: 1,
+      spaceBetween: 0,
       breakpoints: {
         768: {
+          slidesPerView: 2,
+        },
+        1200: {
           slidesPerView: 3,
         },
       },
@@ -53,7 +57,13 @@ const swiperConfigs = [
 const initAllSwipers = function () {
   swiperConfigs.forEach(({ selector, config }) => {
     if (document.querySelector(selector)) {
-      apos.util.onReady(() => new Swiper(selector, config));
+      const elements = document.querySelectorAll(selector);
+
+      elements.forEach(function (element) {
+        const swiperConfig = { ...config };
+        const swiper = new Swiper(element, swiperConfig);
+        swiper.init();
+      });
     }
   });
 };

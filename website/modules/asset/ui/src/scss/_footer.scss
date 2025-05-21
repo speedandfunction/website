@@ -4,9 +4,9 @@
   font-size: $font-size-body-small;
   line-height: 140%;
   margin-top: 0;
-  margin-bottom: 68px;
+  margin-bottom: 10px;
   color: $gray-300;
   @include breakpoint-medium {
-    margin-bottom: 90px;
+    margin-bottom: 34px;
   }
 }
