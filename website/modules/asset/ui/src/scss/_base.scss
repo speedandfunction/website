@@ -17,6 +17,7 @@
   width: 100%;
   max-width: $breakpoint-extra-extra-large;
   padding: 0 40px;
+  padding-top: $sf-container-padding-top;
   margin: 0 auto;
 
   @include breakpoint-extra-extra-large {
@@ -132,6 +133,7 @@
   font-weight: $font-weight-medium;
   font-size: $font-size-body-small-mobile;
   line-height: 150%;
+  line-height: $breadcrumbs-line-height;
   width: min(1280px, 100%);
   margin: 0 auto;
   padding: 0 40px;

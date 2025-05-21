@@ -3,12 +3,11 @@
   align-items: center;
   justify-content: center;
 
-  // 64(95) - header height, 18 - breadcrumbs height,
-  // 20 - sf-container padding-top
-  height: calc(100vh - (64px + 18px + 20px) * 2);
+  height: $mobile-not-found-height;
   @include breakpoint-medium {
-    height: calc(100vh - (95px + 18px + 20px) * 2);
+    height: $desktop-not-found-height;
   }
+
   .not-found-content {
     width: 75%;
     min-width: 322px;
