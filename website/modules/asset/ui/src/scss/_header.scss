@@ -1,14 +1,12 @@
 .sf-header {
   background-color: $white;
-  position: fixed;
+  position: sticky;
   top: 0;
-  left: 0;
-  right: 0;
   height: 64px;
   z-index: 11;
+
   @include breakpoint-medium {
     height: 95px;
-    padding-top: 17px;
   }
 
   &__content {
@@ -23,8 +21,6 @@
   }
 
   .sf-logo {
-    font-size: 12px;
-    font-weight: 800;
     z-index: 11;
     text-transform: uppercase;
     color: $gray-500;
@@ -33,9 +29,9 @@
     &:focus {
       color: $gray-300;
     }
+    @include font-settings(16px, 110%, 700);
     @include breakpoint-medium {
-      font-size: $font-size-body-small;
-      line-height: $line-height-h1;
+      @include font-settings(14px, 110%, 800);
     }
   }
 }
@@ -97,21 +93,20 @@
 }
 
 .sf-nav {
-  position: fixed;
+  position: absolute;
   background-color: $white;
-  top: 70px;
-  right: 0;
-  width: 100%;
   z-index: 10;
   transform: translateY(-200%);
   transition: transform 1s cubic-bezier(0.77, 0, 0.175, 1);
   overflow: hidden;
-  max-height: calc(100vh - 70px);
   overflow-y: auto;
+  width: 100%;
 
   @include breakpoint-medium {
-    width: auto;
+    top: 40px;
     right: 30px;
+    width: 230px;
+    padding-right: 10px;
   }
 
   @include breakpoint-extra-extra-large {
@@ -144,16 +139,18 @@
   li {
     position: relative;
     margin-bottom: 20px;
+    display: block;
 
     a {
       position: relative;
-      left: 0;
       font-size: 10px;
       color: $gray-300;
       font-weight: 500;
       text-transform: uppercase;
       text-decoration: none;
+      white-space: nowrap;
       @include transition(all);
+      @include truncate-lines(1);
 
       &.active {
         font-weight: 700;

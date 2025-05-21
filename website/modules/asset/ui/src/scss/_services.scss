@@ -7,8 +7,10 @@
   @include breakpoint-medium {
     border: 0;
     
-    &:not(.has-even) .sf-simple-card:last-child {
-      width: 100%;
+    &:not(.has-even) {
+      .sf-simple-card:last-child {
+        width: 100%;
+      }
     }
   }
   
@@ -33,7 +35,7 @@
       }
       &__text {
         display: block;
-        padding-top: 10px;
+        margin-top: 20px;
         max-height: none;
         opacity: 1;
         overflow: visible;
@@ -57,22 +59,31 @@
   }
   
   @include breakpoint-medium {
-    margin-bottom: -1px;
     width: 50%;
-    @include border(border-bottom);
-
+    margin-right: -1px;
+    margin-bottom: -1px;
     
     &:nth-child(2n) {
       border-left: none;
+      margin-right: 0;
+    }
+
+    &:last-child,
+    &:nth-last-child(2):nth-of-type(odd) {
+      margin-bottom: 0;
+    }
+    
+    &:nth-last-child(2):nth-of-type(odd) {
+      @include border(border-bottom);
     }
     
     &:last-child:nth-child(odd) {
       width: 100%;
-      border-bottom: 2px solid $gray-300;
-      
+      margin-right: 1px;
+
       .sf-simple-card-wrap {
         padding: 40px;
-        
+
         &:hover {
           padding-left: 50px;
           padding-right: 50px;
@@ -84,15 +95,21 @@
   &__toggle {
     display: none;
     
-    &:checked ~ .sf-simple-card-wrap .sf-simple-card__text {
-      max-height: 1000px;
-      opacity: 1;
-      margin-top: 10px;
-      transform: translateY(0);
-    }
+    &:checked {
+      ~ .sf-simple-card-wrap {
+        .sf-simple-card__text {
+          max-height: 1000px;
+          opacity: 1;
+          margin-top: 10px;
+          transform: translateY(0);
+        }
     
-    &:checked ~ .sf-simple-card-wrap .sf-simple-card__expand-button::before {
-      transform: rotate(225deg);
+        .sf-simple-card__expand-button {
+          &::before {
+            transform: rotate(225deg);
+          }
+        }
+      }
     }
   }
   
@@ -117,12 +134,14 @@
     color: $gray-500;
     font-size: 16px;
     margin: 1px 0;
+    max-width: 90%;
     @include transition(color);
+    @include truncate-lines(1);
     
     @include breakpoint-medium {
       font-size: 22px;
-      line-height: 24px;
-      margin: 0 0 20px;
+      line-height: 110%;
+      max-width: 100%;
     }
   }
   

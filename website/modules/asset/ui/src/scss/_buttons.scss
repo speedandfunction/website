@@ -160,18 +160,18 @@
 // Carousel controls
 .swiper-controls {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   margin-top: 20px;
-  @include breakpoint-medium {
-    margin-top: 40px;
+  @include breakpoint-extra-large {
+    margin-top: 32px;
   }
 }
 
 .swiper-nav {
   position: relative;
   display: flex;
-  gap: 20px;
+  gap: 24px;
   .swiper-button-prev,
   .swiper-button-next {
     left: inherit;
@@ -180,11 +180,10 @@
     width: auto;
     height: auto;
     margin-top: 0;
-    font-size: 10px;
-    line-height: 14px;
-    font-weight: 500;
+    font-size: 11px;
+    line-height: 120%;
+    font-weight: 300;
     color: $gray-300;
-    text-transform: uppercase;
     user-select: none;
     &:hover,
     &:focus {
