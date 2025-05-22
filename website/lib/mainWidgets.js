@@ -20,6 +20,7 @@ module.exports = {
           ...headingToolbar,
         },
         'table': {},
+        'vacancies-list': {},
       },
       columns: 2,
     },
