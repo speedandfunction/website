@@ -2,11 +2,11 @@
   background-color: $white;
   position: sticky;
   top: 0;
-  height: 64px;
+  height: $mobile-header-height;
   z-index: 11;
 
   @include breakpoint-medium {
-    height: 95px;
+    height: $desktop-header-height;
   }
 
   &__content {
