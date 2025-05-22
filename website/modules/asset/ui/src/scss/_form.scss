@@ -1,5 +1,6 @@
 .sf-contact-form {
   .sf-form {
+    position: relative;
     min-width: 295px;
     max-width: 900px;
     margin: 0 auto;
@@ -54,6 +55,7 @@
       }
     }
     .sf-button {
+      min-width: 93px;
       margin: 0 auto;
       position: absolute;
       left: 50%;
@@ -69,6 +71,7 @@
     flex-direction: column-reverse;
   }
   .sf-field-textarea {
+    display: flex;
     flex-direction: column;
   }
   .apos-form-fieldset {
