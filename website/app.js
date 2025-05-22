@@ -101,6 +101,7 @@ function createAposConfig() {
       'case-studies-page': {},
       'categories': {},
       'vacancies': {},
+      'vacancies-list-widget': {},
       'case-studies-carousel-widget': {},
       'container-widget': {},
       'table-widget': {},

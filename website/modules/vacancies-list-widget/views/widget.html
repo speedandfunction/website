@@ -1,0 +1,14 @@
+<section class="sf-section" data-vacancies-list-widget>
+  {% area data.widget, 'intro' %}
+  <div class="sf-vacancies-list">
+    {% for vacancy in data.widget._vacancies %}
+    <div class="sf-vacancy-card">
+      <h3 class="sf-vacancy-title">{{ vacancy.title }}</h3>
+      <p class="sf-vacancy-description">{{ vacancy.description }}</p>
+      <a class="sf-vacancy-link" href="{{ vacancy.link }}" target="_blank"
+        >Apply</a
+      >
+    </div>
+    {% endfor %}
+  </div>
+</section>
