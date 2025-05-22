@@ -29,7 +29,7 @@ module.exports = {
         label: 'Link',
         type: 'string',
         required: true,
-        help: 'Application link for the position',
+        help: 'Application link for the position (must include http:// or https://)',
       },
     },
     group: {

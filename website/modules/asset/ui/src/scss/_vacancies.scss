@@ -1,0 +1,103 @@
+.sf-vacancies {
+  max-width: 900px;
+  display: flex;
+  flex-direction: column;
+  margin: 64px auto 32px;
+  font-style: $font-style-normal;
+  color: $gray-500;
+
+  @include breakpoint-medium {
+    margin-top: 120px auto 52px;
+  }
+
+  .vacancy-card {
+    border-bottom: 1px solid rgba($gray-200, 0.4);
+    font-weight: $font-weight-medium;
+    display: flex;
+    padding: 16px 0;
+    flex-direction: column;
+
+    &:first-child {
+      padding-top: 0;
+    }
+
+    @include breakpoint-medium {
+      padding: 32px 0;
+      justify-content: space-between;
+      flex-direction: row;
+
+      &:first-child {
+        padding-top: 0;
+      }
+    }
+
+    .primary-info {
+      display: flex;
+      flex-direction: column;
+
+      .vacancy-title {
+        @include responsive-font(14px, 22px);
+        @include responsive-line-height(150%, 110%);
+        font-weight: $font-weight-extra-bold;
+        margin: 0 0 8px;
+
+        @include breakpoint-medium {
+          margin: 0 0 12px;
+        }
+      }
+
+      .vacancy-description {
+        @include responsive-font(14px, 14px);
+        @include responsive-line-height(150%, 150%);
+        margin: 0 0 16px;
+
+        @include breakpoint-medium {
+          margin: 0;
+        }
+      }
+    }
+
+    .vacancy-link {
+      @include responsive-font(11px, 11px);
+      @include responsive-line-height(120%, 120%);
+      font-weight: $font-weight-300;
+      text-decoration-line: underline;
+      text-transform: lowercase;
+      color: $gray-500;
+      max-width: fit-content;
+
+      &:hover,
+      &:focus {
+        text-decoration: none;
+      }
+
+      @include breakpoint-medium {
+        align-self: center;
+        text-align: right;
+        min-width: 100px;
+      }
+    }
+  }
+
+  .sf-vacancies_footer {
+    font-weight: $font-weight-extra-bold;
+    text-align: center;
+
+    h2 {
+      @include responsive-font(24px, 52px);
+      @include responsive-line-height(110%, 140%);
+      margin: 48px 0 8px;
+
+      @include breakpoint-medium {
+        margin: 120px 0 32px;
+      }
+    }
+
+    p {
+      @include responsive-font(22px, 28px);
+      @include responsive-line-height(140%, 130%);
+      color: $gray-300;
+      margin: 0;
+    }
+  }
+}
