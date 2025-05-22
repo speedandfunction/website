@@ -1,13 +1,12 @@
 const mainWidgets = require('../../lib/mainWidgets');
 
-// Helper utility functions
+// Helper utility functions for tag counting
 const tagCountHelpers = {
-  createTagMap(casesTags, log) {
+  createTagMap(casesTags) {
     const tagMap = {};
     casesTags.forEach((tag) => {
       tagMap[tag.aposDocId] = tag.slug;
     });
-
     return tagMap;
   },
 
@@ -15,7 +14,6 @@ const tagCountHelpers = {
     if (!tagIds || !tagIds.length) {
       return;
     }
-
     tagIds.forEach((tagId) => {
       const tagSlug = tagMap[tagId];
       if (tagSlug && !countsForType[tagSlug]) {
@@ -29,10 +27,26 @@ const tagCountHelpers = {
 
   async fetchCaseStudiesAndTags(req, aposModules, options) {
     const caseStudies = await aposModules[options.pieces].find(req).toArray();
-
     const casesTags = await aposModules['cases-tags'].find(req).toArray();
-
     return [caseStudies, casesTags];
+  },
+
+  // Process case studies to count tags
+  processCaseStudies(caseStudies, tagMap, tagCounts) {
+    caseStudies.forEach((study) => {
+      // Count industry tags
+      this.countTagsOfType(study.industryIds, tagMap, tagCounts.industry);
+
+      // Count stack tags
+      this.countTagsOfType(study.stackIds, tagMap, tagCounts.stack);
+
+      // Count case study type tags
+      this.countTagsOfType(
+        study.caseStudyTypeIds,
+        tagMap,
+        tagCounts.caseStudyType,
+      );
+    });
   },
 };
 
@@ -66,6 +80,7 @@ module.exports = {
   },
 
   init(self) {
+    // Add a hook to calculate tag counts before rendering the index page
     self.beforeIndex = async (req) => {
       try {
         const tagCounts = await self.calculateTagCounts(req);
@@ -75,23 +90,6 @@ module.exports = {
           reqCopy.data = {};
         }
         reqCopy.data.tagCounts = tagCounts;
-
-        self.apos.util.log(
-          'Tag counts calculated:',
-          JSON.stringify(tagCounts, null, 2),
-        );
-
-        self.apos.util.log(
-          'Filter data:',
-          JSON.stringify(
-            {
-              piecesFilters: req.data.piecesFilters,
-              query: req.query,
-            },
-            null,
-            2,
-          ),
-        );
       } catch (error) {
         self.apos.util.error('Error calculating tag counts:', error);
 
@@ -108,61 +106,30 @@ module.exports = {
     };
   },
 
-  tagCountsMethods: {
-    processCaseStudiesForTags(caseStudies, tagMap, tagCounts, log) {
-      caseStudies.forEach((study) => {
-        tagCountHelpers.logFirstCaseStudy(caseStudies, study, log);
-        this.countTagsForStudy(study, tagMap, tagCounts);
-      });
-    },
-
-    countTagsForStudy(study, tagMap, tagCounts) {
-      tagCountHelpers.countTagsOfType(
-        study.industryIds,
-        tagMap,
-        tagCounts.industry,
-      );
-
-      tagCountHelpers.countTagsOfType(study.stackIds, tagMap, tagCounts.stack);
-
-      tagCountHelpers.countTagsOfType(
-        study.caseStudyTypeIds,
-        tagMap,
-        tagCounts.caseStudyType,
-      );
-    },
-  },
-
   methods(self) {
-    Object.assign(self, self.tagCountsMethods);
-
     return {
+      // Calculate tag counts for the current request
       async calculateTagCounts(req) {
+        // Initialize tag counts structure
         const tagCounts = {
           industry: {},
           stack: {},
           caseStudyType: {},
         };
 
+        // Fetch case studies and tags
         const [caseStudies, casesTags] =
           await tagCountHelpers.fetchCaseStudiesAndTags(
             req,
             self.apos.modules,
             self.options,
-            self.apos.util.log.bind(self.apos.util),
           );
 
-        const tagMap = tagCountHelpers.createTagMap(
-          casesTags,
-          self.apos.util.log.bind(self.apos.util),
-        );
+        // Create a map of tag IDs to slugs
+        const tagMap = tagCountHelpers.createTagMap(casesTags);
 
-        self.processCaseStudiesForTags(
-          caseStudies,
-          tagMap,
-          tagCounts,
-          self.apos.util.log.bind(self.apos.util),
-        );
+        // Process case studies to count tags
+        tagCountHelpers.processCaseStudies(caseStudies, tagMap, tagCounts);
 
         return tagCounts;
       },
