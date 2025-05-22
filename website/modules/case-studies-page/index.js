@@ -11,7 +11,7 @@ const tagCountHelpers = {
   },
 
   countTagsOfType(tagIds, tagMap, countsForType) {
-    if (!tagIds || !tagIds.length) {
+    if (!tagIds?.length) {
       return;
     }
     tagIds.forEach((tagId) => {
@@ -31,16 +31,12 @@ const tagCountHelpers = {
     return [caseStudies, casesTags];
   },
 
-  // Process case studies to count tags
   processCaseStudies(caseStudies, tagMap, tagCounts) {
     caseStudies.forEach((study) => {
-      // Count industry tags
       this.countTagsOfType(study.industryIds, tagMap, tagCounts.industry);
 
-      // Count stack tags
       this.countTagsOfType(study.stackIds, tagMap, tagCounts.stack);
 
-      // Count case study type tags
       this.countTagsOfType(
         study.caseStudyTypeIds,
         tagMap,
@@ -80,7 +76,6 @@ module.exports = {
   },
 
   init(self) {
-    // Add a hook to calculate tag counts before rendering the index page
     self.beforeIndex = async (req) => {
       try {
         const tagCounts = await self.calculateTagCounts(req);
@@ -108,16 +103,13 @@ module.exports = {
 
   methods(self) {
     return {
-      // Calculate tag counts for the current request
       async calculateTagCounts(req) {
-        // Initialize tag counts structure
         const tagCounts = {
           industry: {},
           stack: {},
           caseStudyType: {},
         };
 
-        // Fetch case studies and tags
         const [caseStudies, casesTags] =
           await tagCountHelpers.fetchCaseStudiesAndTags(
             req,
@@ -125,10 +117,8 @@ module.exports = {
             self.options,
           );
 
-        // Create a map of tag IDs to slugs
         const tagMap = tagCountHelpers.createTagMap(casesTags);
 
-        // Process case studies to count tags
         tagCountHelpers.processCaseStudies(caseStudies, tagMap, tagCounts);
 
         return tagCounts;

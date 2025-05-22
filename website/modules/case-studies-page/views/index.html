@@ -32,7 +32,12 @@ main %}
         <ul class="selected-tags-list">
           {% for filterType in ['industry', 'stack', 'caseStudyType'] %} {% if
           data.query[filterType] %} {% for tag in data.piecesFilters[filterType]
-          %} {% if tag.value in data.query[filterType] %}
+          %} {# Check if tag is selected (handle both array and string) #} {%
+          set isTagSelected = false %} {% if data.query[filterType].length is
+          defined %} {# It's an array (multiple values) #} {% set isTagSelected
+          = tag.value in data.query[filterType] %} {% else %} {# It's a string
+          (single value) #} {% set isTagSelected = tag.value ==
+          data.query[filterType] %} {% endif %} {% if isTagSelected %}
           <li class="selected-tag">
             {{ tag.label }} {% if filterType == 'industry' %}
             <a
@@ -95,9 +100,15 @@ main %}
         <div class="filter-section">
           <p class="filter-category">{{ filterLabel }}:</p>
           <ul class="tags-list">
-            {% for tag in tags %} {# Use the full tag value as is #} {% set
-            count = data.tagCounts[filterType][tag.value] or 0 %} {% if
-            data.query[filterType] and tag.value in data.query[filterType] %}
+            {% for tag in tags %} {# Get count from dynamic tag counts #} {% set
+            count = data.tagCounts[filterType][tag.value] or 0 %} {# Check if
+            tag is selected (handle both array and string) #} {% set
+            isTagSelected = false %} {% if data.query[filterType] %} {% if
+            data.query[filterType].length is defined %} {# It's an array
+            (multiple values) #} {% set isTagSelected = tag.value in
+            data.query[filterType] %} {% else %} {# It's a string (single value)
+            #} {% set isTagSelected = tag.value == data.query[filterType] %} {%
+            endif %} {% endif %} {% if isTagSelected %}
             <li class="tag-item active">
               {% if filterType == 'industry' %}
               <a
@@ -158,7 +169,6 @@ main %}
         <a href="{{ article._url }}" class="cs_card">
           {% set picture = apos.image.first(article.picture) %} {% if picture is
           defined %}
-
           <img
             class="image"
             loading="lazy"
@@ -167,9 +177,7 @@ main %}
             width="{{ apos.attachment.getWidth(picture) }}"
             height="{{ apos.attachment.getHeight(picture) }}"
           />
-
           {% else %}
-
           <div class="placeholder-image-container">
             <img
               class="placeholder-image"
@@ -180,7 +188,6 @@ main %}
               height="50"
             />
           </div>
-
           {% endif %}
           <div class="cs_details">
             <h3 class="cname">{{ article.title }}</h3>
@@ -196,9 +203,7 @@ main %}
             </div>
 
             {% if article.portfolioTitle %}
-
             <h4 class="portfolio-title">{{ article.portfolioTitle }}</h4>
-
             {% endif %}
 
             <div class="stack">

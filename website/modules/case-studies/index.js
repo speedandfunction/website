@@ -45,24 +45,12 @@ module.exports = {
         required: true,
         builders: {
           project: {
-            'title': 1,
-            '_category.title': 1,
+            title: 1,
+            slug: 1,
+            _category: 1,
           },
         },
         withRelationships: ['_category'],
-        browser: {
-          projection: {
-            'title': 1,
-            '_category._id': 1,
-            '_category.title': 1,
-          },
-          filters: [
-            {
-              field: '_category.title',
-              value: 'Technology',
-            },
-          ],
-        },
         help: 'Select technologies utilized in the project.',
       },
       _caseStudyType: {
@@ -72,24 +60,12 @@ module.exports = {
         required: true,
         builders: {
           project: {
-            'title': 1,
-            '_category.title': 1,
+            title: 1,
+            slug: 1,
+            _category: 1,
           },
         },
         withRelationships: ['_category'],
-        browser: {
-          projection: {
-            'title': 1,
-            '_category._id': 1,
-            '_category.title': 1,
-          },
-          filters: [
-            {
-              field: '_category.title',
-              value: 'Case Study Type',
-            },
-          ],
-        },
         help: 'The nature of the project identifying the projectʼs scope and requirements, relationship, or key characteristics.',
       },
       _industry: {
@@ -99,24 +75,12 @@ module.exports = {
         required: true,
         builders: {
           project: {
-            'title': 1,
-            '_category.title': 1,
+            title: 1,
+            slug: 1,
+            _category: 1,
           },
         },
         withRelationships: ['_category'],
-        browser: {
-          projection: {
-            'title': 1,
-            '_category._id': 1,
-            '_category.title': 1,
-          },
-          filters: [
-            {
-              field: '_category.title',
-              value: 'Industry',
-            },
-          ],
-        },
         help: "Select client's industry or sector.",
       },
       portfolioTitle: {
@@ -136,19 +100,6 @@ module.exports = {
         type: 'string',
         help: 'Public link referring to the delivered result.',
         placeholder: 'https://example.com/project',
-      },
-      _tags: {
-        type: 'relationship',
-        label: 'Tags',
-        withType: 'cases-tags',
-        builders: {
-          project: {
-            title: 1,
-            slug: 1,
-            _category: 1,
-          },
-        },
-        withRelationships: ['_category'],
       },
       objective: {
         label: 'Objective',
@@ -208,7 +159,6 @@ module.exports = {
           'portfolioTitle',
           'descriptor',
           'prodLink',
-          '_tags',
         ],
       },
       details: {
@@ -227,16 +177,18 @@ module.exports = {
         label: 'Tech Stack',
         component: 'AposCellTags',
       },
-      _tags: {
-        label: 'Tags',
-        component: 'AposCellTags',
-      },
     },
   },
   filters: {
     add: {
-      _tags: {
-        label: 'Tags',
+      _industry: {
+        label: 'Industry',
+      },
+      _caseStudyType: {
+        label: 'Case Study Type',
+      },
+      _stack: {
+        label: 'Stack',
       },
     },
   },
@@ -249,9 +201,7 @@ module.exports = {
         }
         /* eslint-disable no-underscore-dangle */
         tags.forEach((tag) => {
-          const category =
-            (tag._category && tag._category[0] && tag._category[0].title) ||
-            'Uncategorized';
+          const category = tag._category?.[0]?.title || 'Uncategorized';
           if (!grouped[category]) {
             grouped[category] = [];
           }
