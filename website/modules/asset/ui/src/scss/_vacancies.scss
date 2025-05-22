@@ -7,7 +7,7 @@
   color: $gray-500;
 
   @include breakpoint-medium {
-    margin-top: 120px auto 52px;
+    margin: 120px auto 52px;
   }
 
   .vacancy-card {
