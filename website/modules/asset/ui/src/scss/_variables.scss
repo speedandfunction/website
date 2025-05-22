@@ -84,3 +84,25 @@ $spacing-40: 40px;
 $spacing-50: 50px;
 $spacing-60: 60px;
 $spacing-80: 80px;
+
+//not-found-page container height calculation
+$desktop-header-height: 95px;
+$mobile-header-height: 64px;
+$breadcrumbs-line-height: 18px;
+$sf-container-padding-top: 20px;
+$desktop-not-found-height: calc(
+  100vh -
+    (
+      $desktop-header-height + $breadcrumbs-line-height +
+        $sf-container-padding-top
+    ) *
+    2
+);
+$mobile-not-found-height: calc(
+  100vh -
+    (
+      $mobile-header-height + $breadcrumbs-line-height +
+        $sf-container-padding-top
+    ) *
+    2
+);
