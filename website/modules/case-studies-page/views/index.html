@@ -71,26 +71,6 @@ main %}
     </div>
     {% endif %}
 
-    <form class="cs_search-form" action="" method="GET">
-      <input
-        class="cs_search-input"
-        type="text"
-        name="search"
-        placeholder="Search here..."
-        value="{{ data.query.search | safe }}"
-      />
-      <button type="submit" class="cs_search-button">Search</button>
-      {% if data.query.search %}
-      <button
-        class="cs_clear-search-button"
-        type="button"
-        onclick="window.location.href='{{ data.url | build({search: null}) }}'"
-      >
-        Clear Search
-      </button>
-      {% endif %}
-    </form>
-
     <div class="cs_list">
       <div class="tags-filter">
         {# Display all filter types #} {% for filterType, filterLabel in [
@@ -99,6 +79,13 @@ main %}
         tags and tags.length %}
         <div class="filter-section">
           <p class="filter-category">{{ filterLabel }}:</p>
+          <input
+            type="text"
+            class="tag-search"
+            placeholder="Search {{ filterLabel | lower }}"
+            data-filter-type="{{ filterType }}"
+            style="margin-bottom: 10px; width: 100%"
+          />
           <ul class="tags-list">
             {% for tag in tags %} {# Get count from dynamic tag counts #} {% set
             count = data.tagCounts[filterType][tag.value] or 0 %} {# Check if
@@ -109,7 +96,7 @@ main %}
             data.query[filterType] %} {% else %} {# It's a string (single value)
             #} {% set isTagSelected = tag.value == data.query[filterType] %} {%
             endif %} {% endif %} {% if isTagSelected %}
-            <li class="tag-item active">
+            <li class="tag-item active" data-label="{{ tag.label | lower }}">
               {% if filterType == 'industry' %}
               <a
                 class="tag-link"
@@ -134,7 +121,7 @@ main %}
               {% endif %}
             </li>
             {% else %}
-            <li class="tag-item">
+            <li class="tag-item" data-label="{{ tag.label | lower }}">
               {% if filterType == 'industry' %}
               <a
                 class="tag-link"
@@ -223,4 +210,29 @@ main %}
     </div>
   </div>
 </div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const searchInputs = document.querySelectorAll('.tag-search');
+
+    searchInputs.forEach((input) => {
+      input.addEventListener('input', () => {
+        const filterValue = input.value.trim().toLowerCase();
+        const filterType = input.dataset.filterType;
+        const tagList = input
+          .closest('.filter-section')
+          .querySelectorAll('.tag-item');
+
+        tagList.forEach((tagItem) => {
+          const tagLabel = tagItem.dataset.label;
+          if (tagLabel.includes(filterValue)) {
+            tagItem.style.display = '';
+          } else {
+            tagItem.style.display = 'none';
+          }
+        });
+      });
+    });
+  });
+</script>
 {% endblock main %}
