@@ -1,10 +1,12 @@
-{# modules/articles-page/views/index.html #} {% extends "layout.html" %} {%
-import '@apostrophecms/pager:macros.html' as pager with context %} {% set tags =
-data.piecesFilters.tags %} {% block main %}
+{# modules/case-studies-page/views/index.new.html #} {% extends "layout.html" %}
+{% import '@apostrophecms/pager:macros.html' as pager with context %} {% block
+main %}
 <div class="cs_container">
   <div class="cs_content">
     <div class="page-main_content">{% area data.page, 'main' %}</div>
-    {% if data.query.tags.length >= 1 %}
+
+    {% set hasActiveFilters = data.query.industry or data.query.stack or
+    data.query.caseStudyType %} {% if hasActiveFilters %}
     <div class="cs_filter-info">
       <p class="items-count">
         {{ data.totalPieces }} Ite{% if data.totalPieces == 1 %}m{% else %}ms{%
@@ -14,37 +16,61 @@ data.piecesFilters.tags %} {% block main %}
       <div class="clear-all">
         <a
           class="clear-all-link"
-          href="{{ data.url | build({ tags: null }) }}"
-          aria-label="Clear all tags"
+          href="{{ data.url | build({ industry: null, stack: null, caseStudyType: null }) }}"
+          aria-label="Clear all filters"
         >
           <span class="clear-all-content">
             <span class="clear-text">Clear all</span>
-            <span class="remove-sign"
-              ><img src="/images/close.svg" alt="Close Icon" />
+            <span class="remove-sign">
+              <img src="/images/close.svg" alt="Close Icon" />
             </span>
           </span>
         </a>
       </div>
-      {% if data.query.tags and data.query.tags.length %}
+
       <div class="selected-tags">
         <ul class="selected-tags-list">
-          {% for tag in tags %} {% if tag.value in data.query.tags %}
+          {% for filterType in ['industry', 'stack', 'caseStudyType'] %} {% if
+          data.query[filterType] %} {% for tag in data.piecesFilters[filterType]
+          %} {# Check if tag is selected (handle both array and string) #} {%
+          set isTagSelected = false %} {% if data.query[filterType].length is
+          defined %} {# It's an array (multiple values) #} {% set isTagSelected
+          = tag.value in data.query[filterType] %} {% else %} {# It's a string
+          (single value) #} {% set isTagSelected = tag.value ==
+          data.query[filterType] %} {% endif %} {% if isTagSelected %}
           <li class="selected-tag">
-            {{ tag.label }}
+            {{ tag.label }} {% if filterType == 'industry' %}
             <a
               class="remove-tag"
-              href="{{ data.url | build({}, { tags: { $pull: tag.value } }) }}"
-              aria-label="Remove tag {{ tag.label }}"
+              href="{{ data.url | build({}, { industry: { $pull: tag.value } }) }}"
+              aria-label="Remove industry tag {{ tag.label }}"
             >
               <img src="/images/close.svg" alt="Close Icon" />
             </a>
+            {% elif filterType == 'stack' %}
+            <a
+              class="remove-tag"
+              href="{{ data.url | build({}, { stack: { $pull: tag.value } }) }}"
+              aria-label="Remove stack tag {{ tag.label }}"
+            >
+              <img src="/images/close.svg" alt="Close Icon" />
+            </a>
+            {% elif filterType == 'caseStudyType' %}
+            <a
+              class="remove-tag"
+              href="{{ data.url | build({}, { caseStudyType: { $pull: tag.value } }) }}"
+              aria-label="Remove case study type tag {{ tag.label }}"
+            >
+              <img src="/images/close.svg" alt="Close Icon" />
+            </a>
+            {% endif %}
           </li>
-          {% endif %} {% endfor %}
+          {% endif %} {% endfor %} {% endif %} {% endfor %}
         </ul>
       </div>
-      {% endif %}
     </div>
     {% endif %}
+
     <form class="cs_search-form" action="" method="GET">
       <input
         class="cs_search-input"
@@ -67,29 +93,75 @@ data.piecesFilters.tags %} {% block main %}
 
     <div class="cs_list">
       <div class="tags-filter">
-        <p class="tags-title">Tags:</p>
-        <ul class="tags-list">
-          {% for tag in tags %} {% if data.query.tags and tag.value in
-          data.query.tags %}
-          <li class="tag-item active">
-            <a
-              class="tag-link"
-              href="{{ data.url | build({}, { tags: { $pull: tag.value } }) }}"
-            >
-              {{ tag.label }}
-            </a>
-          </li>
-          {% else %}
-          <li class="tag-item">
-            <a
-              class="tag-link"
-              href="{{ data.url | build({}, { tags: { $addToSet: tag.value } }) }}"
-            >
-              {{ tag.label }}
-            </a>
-          </li>
-          {% endif %} {% endfor %}
-        </ul>
+        {# Display all filter types #} {% for filterType, filterLabel in [
+        ['industry', 'Industry'], ['caseStudyType', 'Case Type'], ['stack',
+        'Technology'] ] %} {% set tags = data.piecesFilters[filterType] %} {% if
+        tags and tags.length %}
+        <div class="filter-section">
+          <p class="filter-category">{{ filterLabel }}:</p>
+          <ul class="tags-list">
+            {% for tag in tags %} {# Get count from dynamic tag counts #} {% set
+            count = data.tagCounts[filterType][tag.value] or 0 %} {# Check if
+            tag is selected (handle both array and string) #} {% set
+            isTagSelected = false %} {% if data.query[filterType] %} {% if
+            data.query[filterType].length is defined %} {# It's an array
+            (multiple values) #} {% set isTagSelected = tag.value in
+            data.query[filterType] %} {% else %} {# It's a string (single value)
+            #} {% set isTagSelected = tag.value == data.query[filterType] %} {%
+            endif %} {% endif %} {% if isTagSelected %}
+            <li class="tag-item active">
+              {% if filterType == 'industry' %}
+              <a
+                class="tag-link"
+                href="{{ data.url | build({}, { industry: { $pull: tag.value } }) }}"
+              >
+                {{ tag.label }} [{{ count }}]
+              </a>
+              {% elif filterType == 'caseStudyType' %}
+              <a
+                class="tag-link"
+                href="{{ data.url | build({}, { caseStudyType: { $pull: tag.value } }) }}"
+              >
+                {{ tag.label }} [{{ count }}]
+              </a>
+              {% elif filterType == 'stack' %}
+              <a
+                class="tag-link"
+                href="{{ data.url | build({}, { stack: { $pull: tag.value } }) }}"
+              >
+                {{ tag.label }} [{{ count }}]
+              </a>
+              {% endif %}
+            </li>
+            {% else %}
+            <li class="tag-item">
+              {% if filterType == 'industry' %}
+              <a
+                class="tag-link"
+                href="{{ data.url | build({}, { industry: { $addToSet: tag.value } }) }}"
+              >
+                {{ tag.label }} [{{ count }}]
+              </a>
+              {% elif filterType == 'caseStudyType' %}
+              <a
+                class="tag-link"
+                href="{{ data.url | build({}, { caseStudyType: { $addToSet: tag.value } }) }}"
+              >
+                {{ tag.label }} [{{ count }}]
+              </a>
+              {% elif filterType == 'stack' %}
+              <a
+                class="tag-link"
+                href="{{ data.url | build({}, { stack: { $addToSet: tag.value } }) }}"
+              >
+                {{ tag.label }} [{{ count }}]
+              </a>
+              {% endif %}
+            </li>
+            {% endif %} {% endfor %}
+          </ul>
+        </div>
+        {% endif %} {% endfor %}
       </div>
 
       <div class="cs_grid">
@@ -97,7 +169,6 @@ data.piecesFilters.tags %} {% block main %}
         <a href="{{ article._url }}" class="cs_card">
           {% set picture = apos.image.first(article.picture) %} {% if picture is
           defined %}
-
           <img
             class="image"
             loading="lazy"
@@ -106,9 +177,7 @@ data.piecesFilters.tags %} {% block main %}
             width="{{ apos.attachment.getWidth(picture) }}"
             height="{{ apos.attachment.getHeight(picture) }}"
           />
-
           {% else %}
-
           <div class="placeholder-image-container">
             <img
               class="placeholder-image"
@@ -119,22 +188,29 @@ data.piecesFilters.tags %} {% block main %}
               height="50"
             />
           </div>
-
           {% endif %}
           <div class="cs_details">
             <h3 class="cname">{{ article.title }}</h3>
-            <div class="type">{{ article.caseStudyType }}</div>
-            <div class="industry">{{ article.industry }}</div>
+            <div class="type">
+              {% if article._caseStudyType.length %} {% for type in
+              article._caseStudyType %} {{ type.title }}{% if not loop.last %},
+              {% endif %} {% endfor %} {% endif %}
+            </div>
+            <div class="industry">
+              {% if article._industry.length %} {% for industry in
+              article._industry %} {{ industry.title }}{% if not loop.last %},
+              {% endif %} {% endfor %} {% endif %}
+            </div>
 
             {% if article.portfolioTitle %}
-
             <h4 class="portfolio-title">{{ article.portfolioTitle }}</h4>
-
-            {% endif %} {% if article.stack %}
-
-            <div class="stack">{{ article.stack }}</div>
-
             {% endif %}
+
+            <div class="stack">
+              {% if article._stack.length %} {% for tech in article._stack %} {{
+              tech.title }}{% if not loop.last %}, {% endif %} {% endfor %} {%
+              endif %}
+            </div>
           </div>
         </a>
         {# CARD END: {{ article.title }} #} {% endfor %}
