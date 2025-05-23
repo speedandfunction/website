@@ -210,28 +210,4 @@ main %}
     </div>
   </div>
 </div>
-
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const searchInputs = document.querySelectorAll('.tag-search');
-
-    searchInputs.forEach((input) => {
-      input.addEventListener('input', () => {
-        const filterValue = input.value.trim().toLowerCase();
-        const tagList = input
-          .closest('.filter-section')
-          .querySelectorAll('.tag-item');
-
-        tagList.forEach((tagItem) => {
-          const tagLabel = tagItem.dataset.label;
-          if (tagLabel.includes(filterValue)) {
-            tagItem.style.display = '';
-          } else {
-            tagItem.style.display = 'none';
-          }
-        });
-      });
-    });
-  });
-</script>
 {% endblock main %}
