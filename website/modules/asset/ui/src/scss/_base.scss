@@ -135,10 +135,13 @@
   line-height: 150%;
   line-height: $breadcrumbs-line-height;
   width: min(1280px, 100%);
-  margin: 0 auto;
+  margin: 0 auto 52px;
   padding: 0 40px;
   height: 100%;
   color: $black;
+  @include breakpoint-medium {
+    margin-bottom: 80px;
+  }
 }
 
 .breadcrumb-list {
@@ -167,8 +170,4 @@
 
 .breadcrumb-link:hover {
   text-decoration: underline;
-}
-
-.breadcrumb-home {
-  color: $gray-300;
 }
