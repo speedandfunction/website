@@ -37,23 +37,86 @@ module.exports = {
           },
         },
       },
-      stack: {
+      _stack: {
         label: 'Tech Stack',
-        type: 'string',
-        help: 'Comma separated tags indicating the technologies utilized in the project.',
+        type: 'relationship',
+        withType: 'cases-tags',
         required: true,
+        builders: {
+          project: {
+            'title': 1,
+            '_category.title': 1,
+          },
+        },
+        withRelationships: ['_category'],
+        browser: {
+          projection: {
+            'title': 1,
+            '_category._id': 1,
+            '_category.title': 1,
+          },
+          filters: [
+            {
+              field: '_category.title',
+              value: 'Technology',
+            },
+          ],
+        },
+        help: 'Select technologies utilized in the project.',
       },
-      caseStudyType: {
+      _caseStudyType: {
         label: 'Case Study Type',
-        type: 'string',
-        help: 'The nature of the project identifying the projectʼs scope and requirements, relationship, or key characteristics (e.g., Mobile Development, Product Enhancement, ML/AI).',
+        type: 'relationship',
+        withType: 'cases-tags',
         required: true,
+        builders: {
+          project: {
+            'title': 1,
+            '_category.title': 1,
+          },
+        },
+        withRelationships: ['_category'],
+        browser: {
+          projection: {
+            'title': 1,
+            '_category._id': 1,
+            '_category.title': 1,
+          },
+          filters: [
+            {
+              field: '_category.title',
+              value: 'Case Study Type',
+            },
+          ],
+        },
+        help: 'The nature of the project identifying the projectʼs scope and requirements, relationship, or key characteristics.',
       },
-      industry: {
+      _industry: {
         label: 'Industry',
-        type: 'string',
-        help: "Comma seperated tags representing the client's industry or sector (e.g. Financial Services, Healthcare, Retail & E-commerce).",
+        type: 'relationship',
+        withType: 'cases-tags',
         required: true,
+        builders: {
+          project: {
+            'title': 1,
+            '_category.title': 1,
+          },
+        },
+        withRelationships: ['_category'],
+        browser: {
+          projection: {
+            'title': 1,
+            '_category._id': 1,
+            '_category.title': 1,
+          },
+          filters: [
+            {
+              field: '_category.title',
+              value: 'Industry',
+            },
+          ],
+        },
+        help: "Select client's industry or sector.",
       },
       portfolioTitle: {
         label: 'Portfolio Title',
@@ -136,9 +199,9 @@ module.exports = {
           'title',
           'clientWebsite',
           'picture',
-          'stack',
-          'caseStudyType',
-          'industry',
+          '_stack',
+          '_caseStudyType',
+          '_industry',
           'portfolioTitle',
           'descriptor',
           'prodLink',
@@ -157,8 +220,9 @@ module.exports = {
   },
   columns: {
     add: {
-      stack: {
+      _stack: {
         label: 'Tech Stack',
+        component: 'AposCellTags',
       },
       _tags: {
         label: 'Tags',
