@@ -40,12 +40,39 @@ function initFontChanger() {
   }, 500);
 }
 
+// Tag search filter for case studies page
+function bindTagSearch() {
+  const searchInputs = document.querySelectorAll('.tag-search');
+  searchInputs.forEach((input) => {
+    if (input.tagSearchHandler) {
+      input.removeEventListener('input', input.tagSearchHandler);
+    }
+    const handler = () => {
+      const filterValue = input.value.trim().toLowerCase();
+      const tagList = input
+        .closest('.filter-section')
+        .querySelectorAll('.tag-item');
+      tagList.forEach((tagItem) => {
+        const tagLabel = tagItem.dataset.label;
+        if (tagLabel.includes(filterValue)) {
+          tagItem.style.display = '';
+        } else {
+          tagItem.style.display = 'none';
+        }
+      });
+    };
+    input.tagSearchHandler = handler;
+    input.addEventListener('input', handler);
+  });
+}
+
 // Wrapper function
 function initializeAllComponents() {
   initImageLozad();
   initAllSwipers();
   initSmoothCounters();
   initFontChanger();
+  bindTagSearch();
 }
 
 // Barba pages
