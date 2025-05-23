@@ -10,7 +10,7 @@ Apostrophe page or piece.') }} {% endif %} {% endblock %} {% block beforeMain %}
   data-barba="wrapper"
   data-barba-namespace="home"
 >
-  {% render fragments.header() %} {% render fragments.breadcrumbs() %}
+  {% render fragments.header() %}
   <main
     class="bp-main"
     role="main"
@@ -24,6 +24,7 @@ Apostrophe page or piece.') }} {% endif %} {% endblock %} {% block beforeMain %}
     endif
     %}
   >
+    {% render fragments.breadcrumbs() %}
     <div class="sf-container">
       {% endblock %} {% block main %} {# Usually, your page templates in the
       @apostrophecms/pages module will override this block. It is safe to assume
