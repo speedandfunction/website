@@ -1,12 +1,15 @@
 <section class="sf-section" data-vacancies-list-widget>
-  {% area data.widget, 'intro' %}
-  <div class="sf-vacancies-list">
-    {% for vacancy in data.widget._vacancies %}
-    <div class="sf-vacancy-card">
-      <h3 class="sf-vacancy-title">{{ vacancy.title }}</h3>
-      <p class="sf-vacancy-description">{{ vacancy.description }}</p>
+  <div class="sf-vacancies">
+    {% if data.widget._vacancies and data.widget._vacancies.length %} {% for
+    vacancy in data.widget._vacancies %}
+    <div class="vacancy-card">
+      <div class="primary-info">
+        <h3 class="vacancy-title">{{ vacancy.title }}</h3>
+        <p class="vacancy-description">{{ vacancy.description }}</p>
+      </div>
+
       <a
-        class="sf-vacancy-link"
+        class="vacancy-link"
         href="{{ vacancy.link }}"
         target="_blank"
         rel="noopener noreferrer"
@@ -14,5 +17,15 @@
       >
     </div>
     {% endfor %}
+    <div class="sf-vacancies_footer">
+      <h2>{{ data.widget.listTitle }}</h2>
+      <p>{{ data.widget.listSubtitle }}</p>
+    </div>
+    {% else %}
+    <div class="sf-vacancies_footer">
+      <h2>{{ data.widget.emptyTitle }}</h2>
+      <p>{{ data.widget.emptySubtitle }}</p>
+    </div>
+    {% endif %}
   </div>
 </section>

@@ -6,16 +6,6 @@ module.exports = {
   },
   fields: {
     add: {
-      intro: {
-        label: 'Intro',
-        type: 'area',
-        options: {
-          max: 1,
-          widgets: {
-            '@apostrophecms/rich-text': {},
-          },
-        },
-      },
       _vacancies: {
         label: 'Vacancies',
         help: 'Select and order the Vacancies',
@@ -29,6 +19,38 @@ module.exports = {
             link: 1,
           },
         },
+      },
+      listTitle: {
+        label: 'Title',
+        type: 'string',
+        required: true,
+      },
+      listSubtitle: {
+        label: 'Subtitle',
+        type: 'string',
+        textarea: true,
+        required: false,
+      },
+      emptyTitle: {
+        label: 'Title',
+        type: 'string',
+        required: true,
+      },
+      emptySubtitle: {
+        label: 'Subtitle',
+        type: 'string',
+        textarea: true,
+        required: false,
+      },
+    },
+    group: {
+      vacanciesTexts: {
+        label: 'Texts when vacancies EXIST',
+        fields: ['_vacancies', 'listTitle', 'listSubtitle'],
+      },
+      emptyTexts: {
+        label: 'Texts when NO vacancies',
+        fields: ['emptyTitle', 'emptySubtitle'],
       },
     },
   },
