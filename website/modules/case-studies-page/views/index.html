@@ -123,18 +123,34 @@ data.piecesFilters.tags %} {% block main %}
           {% endif %}
           <div class="cs_details">
             <h3 class="cname">{{ article.title }}</h3>
-            <div class="type">{{ article.caseStudyType }}</div>
-            <div class="industry">{{ article.industry }}</div>
+            <div class="type">
+              {% if article._caseStudyType.length %}
+                {% for type in article._caseStudyType %}
+                  {{ type.title }}{% if not loop.last %}, {% endif %}
+                {% endfor %}
+              {% endif %}
+            </div>
+            <div class="industry">
+              {% if article._industry.length %}
+                {% for industry in article._industry %}
+                  {{ industry.title }}{% if not loop.last %}, {% endif %}
+                {% endfor %}
+              {% endif %}
+            </div>
 
             {% if article.portfolioTitle %}
 
             <h4 class="portfolio-title">{{ article.portfolioTitle }}</h4>
 
-            {% endif %} {% if article.stack %}
-
-            <div class="stack">{{ article.stack }}</div>
-
-            {% endif %}
+            {% endif %} 
+            
+            <div class="stack">
+              {% if article._stack.length %}
+                {% for tech in article._stack %}
+                  {{ tech.title }}{% if not loop.last %}, {% endif %}
+                {% endfor %}
+              {% endif %}
+            </div>
           </div>
         </a>
         {# CARD END: {{ article.title }} #} {% endfor %}
