@@ -5,7 +5,7 @@
     max-width: 900px;
     margin: 0 auto;
     padding: 23px 15px 7px;
-    @include border(border);
+    border: 1px solid $gray-border;
     @include font-settings(14px, 150%, 500);
     margin-bottom: 84px;
     @include breakpoint-medium {
