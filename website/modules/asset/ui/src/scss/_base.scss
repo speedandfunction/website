@@ -135,12 +135,12 @@
   line-height: 150%;
   line-height: $breadcrumbs-line-height;
   width: min(1280px, 100%);
-  margin: 0 auto 52px;
+  margin: 0 auto 32px;
   padding: 0 40px;
   height: 100%;
   color: $black;
   @include breakpoint-medium {
-    margin-bottom: 80px;
+    margin-bottom: 60px;
   }
 }
 
