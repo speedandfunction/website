@@ -54,6 +54,10 @@ resource "aws_s3_bucket_lifecycle_configuration" "attachments" {
     id     = "transition_to_ia"
     status = "Enabled"
 
+    filter {
+      prefix = ""
+    }
+
     transition {
       days          = 30
       storage_class = "STANDARD_IA"
@@ -68,6 +72,10 @@ resource "aws_s3_bucket_lifecycle_configuration" "attachments" {
   rule {
     id     = "expire_non_current_versions"
     status = "Enabled"
+
+    filter {
+      prefix = ""
+    }
 
     noncurrent_version_expiration {
       noncurrent_days = 30
@@ -123,6 +131,10 @@ resource "aws_s3_bucket_lifecycle_configuration" "logs" {
   rule {
     id     = "log_lifecycle"
     status = "Enabled"
+
+    filter {
+      prefix = ""
+    }
 
     transition {
       days          = 90

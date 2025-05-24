@@ -46,12 +46,12 @@ output "ecr_repository_arn" {
 # ALB Outputs
 output "alb_dns_name" {
   description = "DNS name of the Application Load Balancer"
-  value       = module.alb.dns_name
+  value       = module.alb.alb_dns_name
 }
 
 output "alb_zone_id" {
   description = "Zone ID of the Application Load Balancer"
-  value       = module.alb.zone_id
+  value       = module.alb.alb_zone_id
 }
 
 output "domain_name" {
@@ -67,7 +67,7 @@ output "cloudfront_distribution_id" {
 
 output "cloudfront_domain_name" {
   description = "Domain name of the CloudFront distribution"
-  value       = module.cloudfront.domain_name
+  value       = module.cloudfront.distribution_domain_name
 }
 
 output "media_domain_name" {
@@ -79,12 +79,6 @@ output "media_domain_name" {
 output "documentdb_cluster_endpoint" {
   description = "DocumentDB cluster endpoint"
   value       = module.documentdb.cluster_endpoint
-  sensitive   = true
-}
-
-output "documentdb_cluster_reader_endpoint" {
-  description = "DocumentDB cluster reader endpoint"
-  value       = module.documentdb.cluster_reader_endpoint
   sensitive   = true
 }
 

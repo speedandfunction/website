@@ -31,9 +31,12 @@ provider "aws" {
 # Data sources
 data "aws_caller_identity" "current" {}
 data "aws_region" "current" {}
-data "aws_availability_zones" "available" {
-  state = "available"
-}
+
+# Hardcoded availability zones for us-east-1 to avoid IAM permission issues
+# Comment out if you have ec2:DescribeAvailabilityZones permission
+# data "aws_availability_zones" "available" {
+#   state = "available"
+# }
 
 # Random password for Redis auth token
 resource "random_password" "redis_auth_token" {
@@ -46,8 +49,12 @@ locals {
   name_prefix = "sf-website"
   environment = var.environment
   
-  # Availability zones (first 2)
-  azs = slice(data.aws_availability_zones.available.names, 0, 2)
+  # Hardcoded availability zones for us-east-1 (first 2)
+  # Change this if using a different region
+  azs = ["us-east-1a", "us-east-1b"]
+  
+  # If you have ec2:DescribeAvailabilityZones permission, uncomment this line and comment the one above:
+  # azs = slice(data.aws_availability_zones.available.names, 0, 2)
   
   # Common tags for all resources
   common_tags = merge(var.default_tags, {

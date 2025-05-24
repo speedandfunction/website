@@ -146,3 +146,5 @@ dump.archive
 aposUsersSafe.json
 terraform.tfvars
 terraform/.terraform
+dev.tfplan
+plan.out.txt
