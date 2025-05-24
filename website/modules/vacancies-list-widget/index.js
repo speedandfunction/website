@@ -9,7 +9,7 @@ module.exports = {
       _vacancies: {
         label: 'Vacancies',
         help: 'Select and order the Vacancies',
-        required: true,
+        required: false,
         type: 'relationship',
         withType: 'vacancies',
         builders: {
