@@ -147,6 +147,17 @@ variable "container_port" {
   }
 }
 
+variable "health_check_path" {
+  description = "Path for ALB health checks"
+  type        = string
+  default     = "/health"
+  
+  validation {
+    condition = can(regex("^/", var.health_check_path))
+    error_message = "Health check path must start with a forward slash."
+  }
+}
+
 variable "log_retention_days" {
   description = "Number of days to retain CloudWatch logs"
   type        = number

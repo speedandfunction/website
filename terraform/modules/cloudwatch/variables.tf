@@ -39,6 +39,12 @@ variable "slack_webhook_url" {
   default     = ""
 }
 
+variable "log_retention_days" {
+  description = "Number of days to retain CloudWatch logs"
+  type        = number
+  default     = 7
+}
+
 variable "tags" {
   description = "Tags to apply to resources"
   type        = map(string)

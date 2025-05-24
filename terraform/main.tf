@@ -93,6 +93,9 @@ module "security_groups" {
   
   vpc_id = module.vpc.vpc_id
   
+  # Container configuration
+  container_port = var.container_port
+  
   tags = local.common_tags
 }
 
@@ -200,6 +203,10 @@ module "alb" {
   domain_name     = var.domain_name
   certificate_arn = var.certificate_arn
   
+  # Container configuration
+  container_port    = var.container_port
+  health_check_path = var.health_check_path
+  
   tags = local.common_tags
 }
 
@@ -241,8 +248,8 @@ module "ecs" {
   # Container configuration
   container_cpu       = var.container_cpu
   container_memory    = var.container_memory
-  container_port      = 3000
-  log_retention_days  = 7
+  container_port      = var.container_port
+  log_retention_days  = var.log_retention_days
   ecs_desired_count   = var.ecs_desired_count
   ecs_max_capacity    = var.ecs_max_capacity
   
@@ -285,6 +292,9 @@ module "cloudwatch" {
   alb_arn_suffix       = module.alb.arn_suffix
   documentdb_cluster_id = module.documentdb.cluster_identifier
   redis_cluster_id     = module.redis.cluster_id
+  
+  # Configuration
+  log_retention_days = var.log_retention_days
   
   # Slack webhook for notifications
   slack_webhook_url = var.slack_webhook_url

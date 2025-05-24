@@ -13,17 +13,18 @@ resource "aws_lb" "main" {
 
 # Target Group
 resource "aws_lb_target_group" "main" {
-  name     = "${var.name_prefix}-${var.environment}-tg"
-  port     = 3000
-  protocol = "HTTP"
-  vpc_id   = var.vpc_id
+  name        = "${var.name_prefix}-${var.environment}-tg"
+  port        = var.container_port
+  protocol    = "HTTP"
+  vpc_id      = var.vpc_id
+  target_type = "ip"
 
   health_check {
     enabled             = true
     healthy_threshold   = 2
     interval            = 30
     matcher             = "200"
-    path                = "/health"
+    path                = var.health_check_path
     port                = "traffic-port"
     protocol            = "HTTP"
     timeout             = 5

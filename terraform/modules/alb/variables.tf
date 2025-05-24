@@ -33,6 +33,18 @@ variable "certificate_arn" {
   type        = string
 }
 
+variable "container_port" {
+  description = "Port that the container exposes"
+  type        = number
+  default     = 3000
+}
+
+variable "health_check_path" {
+  description = "Path for ALB health checks"
+  type        = string
+  default     = "/health"
+}
+
 variable "tags" {
   description = "Tags to apply to resources"
   type        = map(string)

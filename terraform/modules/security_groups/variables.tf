@@ -15,6 +15,12 @@ variable "vpc_id" {
   type        = string
 }
 
+variable "container_port" {
+  description = "Port that the container exposes"
+  type        = number
+  default     = 3000
+}
+
 variable "tags" {
   description = "Tags to apply to resources"
   type        = map(string)

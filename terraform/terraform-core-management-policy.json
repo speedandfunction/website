@@ -47,7 +47,10 @@
         "iam:ListRoleTags",
         "iam:TagOpenIDConnectProvider",
         "iam:UntagOpenIDConnectProvider",
-        "iam:ListOpenIDConnectProviderTags"
+        "iam:ListOpenIDConnectProviderTags",
+        "iam:CreateServiceLinkedRole",
+        "iam:DeleteServiceLinkedRole",
+        "iam:GetServiceLinkedRoleDeletionStatus"
       ],
       "Resource": "*"
     },
