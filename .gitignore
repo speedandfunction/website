@@ -144,3 +144,5 @@ website/public/apos-frontend
 dump.archive
 .prettierrc
 aposUsersSafe.json
+terraform.tfvars
+terraform/.terraform

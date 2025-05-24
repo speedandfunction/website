@@ -1,17 +1,16 @@
 #!/bin/bash
 
-# Script to manage Terraform backend resources (S3 bucket and DynamoDB table)
+# Script to manage Terraform backend resources (S3 bucket)
 # Usage: ./init-aws-for-terraform.sh [create|delete|status] [--profile PROFILE_NAME]
 
 set -e
 
 # Configuration from backend-dev.hcl
-readonly BUCKET_NAME='sf-website-infrastructure'
-readonly DYNAMODB_TABLE='sf-website-terraform-locks'
-readonly AWS_REGION='us-east-1'
+BUCKET_NAME="${BUCKET_NAME:-sf-website-infrastructure}"
+AWS_REGION="${AWS_REGION:-us-east-1}"
 
 # Global variables
-PROFILE=''
+AWS_PROFILE="${AWS_PROFILE:-}"
 
 # Colors for output
 readonly RED='\033[0;31m'
@@ -34,9 +33,9 @@ print_error() {
 
 # Execute AWS command with proper profile handling and error suppression
 aws_exec() {
-  if [ -n "${PROFILE}" ]; then
+  if [ -n "${AWS_PROFILE}" ]; then
     # Suppress spurious head/cat errors that occur with some AWS CLI configurations
-    aws --profile "${PROFILE}" "$@" 2> >(grep -v "head:" | grep -v "cat:" >&2)
+    aws --profile "${AWS_PROFILE}" "$@" 2> >(grep -v "head:" | grep -v "cat:" >&2)
   else
     aws "$@" 2> >(grep -v "head:" | grep -v "cat:" >&2)
   fi
@@ -51,12 +50,12 @@ check_aws_cli() {
 
   # Check credentials by testing the command and capturing exit code
   if aws_exec sts get-caller-identity >/dev/null 2>&1; then
-    if [ -n "${PROFILE}" ]; then
-      print_info "Using AWS profile: ${PROFILE}"
+    if [ -n "${AWS_PROFILE}" ]; then
+      print_info "Using AWS profile: ${AWS_PROFILE}"
     fi
   else
-    if [ -n "${PROFILE}" ]; then
-      print_error "AWS CLI profile '${PROFILE}' is not configured or credentials are invalid"
+    if [ -n "${AWS_PROFILE}" ]; then
+      print_error "AWS CLI profile '${AWS_PROFILE}' is not configured or credentials are invalid"
     else
       print_error 'AWS CLI is not configured or credentials are invalid'
     fi
@@ -67,13 +66,6 @@ check_aws_cli() {
 # Check if S3 bucket exists
 bucket_exists() {
   aws_exec s3api head-bucket --bucket "${BUCKET_NAME}" \
-    --region "${AWS_REGION}" >/dev/null 2>&1
-  return $?
-}
-
-# Check if DynamoDB table exists
-table_exists() {
-  aws_exec dynamodb describe-table --table-name "${DYNAMODB_TABLE}" \
     --region "${AWS_REGION}" >/dev/null 2>&1
   return $?
 }
@@ -121,29 +113,6 @@ create_s3_bucket() {
   print_info "S3 bucket '${BUCKET_NAME}' created successfully"
 }
 
-# Create DynamoDB table
-create_dynamodb_table() {
-  if table_exists; then
-    print_warning "DynamoDB table '${DYNAMODB_TABLE}' already exists"
-    return 0
-  fi
-
-  print_info "Creating DynamoDB table '${DYNAMODB_TABLE}'..."
-  
-  aws_exec dynamodb create-table \
-    --table-name "${DYNAMODB_TABLE}" \
-    --attribute-definitions AttributeName=LockID,AttributeType=S \
-    --key-schema AttributeName=LockID,KeyType=HASH \
-    --billing-mode PAY_PER_REQUEST \
-    --region "${AWS_REGION}" >> /dev/null 2>&1
-
-  print_info "Waiting for DynamoDB table to be active..."
-  aws_exec dynamodb wait table-exists --table-name "${DYNAMODB_TABLE}" \
-    --region "${AWS_REGION}"
-
-  print_info "DynamoDB table '${DYNAMODB_TABLE}' created successfully"
-}
-
 # Delete S3 bucket (including all objects and versions)
 delete_s3_bucket() {
   if ! bucket_exists; then
@@ -180,25 +149,6 @@ delete_s3_bucket() {
   print_info "S3 bucket '${BUCKET_NAME}' deleted successfully"
 }
 
-# Delete DynamoDB table
-delete_dynamodb_table() {
-  if ! table_exists; then
-    print_warning "DynamoDB table '${DYNAMODB_TABLE}' does not exist"
-    return 0
-  fi
-
-  print_info "Deleting DynamoDB table '${DYNAMODB_TABLE}'..."
-  
-  aws_exec dynamodb delete-table --table-name "${DYNAMODB_TABLE}" \
-    --region "${AWS_REGION}" >> /dev/null 2>&1
-
-  print_info "Waiting for DynamoDB table to be deleted..."
-  aws_exec dynamodb wait table-not-exists --table-name "${DYNAMODB_TABLE}" \
-    --region "${AWS_REGION}"
-
-  print_info "DynamoDB table '${DYNAMODB_TABLE}' deleted successfully"
-}
-
 # Show status of resources
 show_status() {
   print_info 'Checking Terraform backend resources status...'
@@ -208,19 +158,12 @@ show_status() {
   else
     print_warning "S3 bucket '${BUCKET_NAME}' does not exist"
   fi
-
-  if table_exists; then
-    print_info "DynamoDB table '${DYNAMODB_TABLE}' exists"
-  else
-    print_warning "DynamoDB table '${DYNAMODB_TABLE}' does not exist"
-  fi
 }
 
 # Create all resources
 create_resources() {
   print_info 'Creating Terraform backend resources...'
   create_s3_bucket
-  create_dynamodb_table
   print_info 'All resources created successfully!'
 }
 
@@ -242,7 +185,6 @@ delete_resources() {
 
   print_info 'Deleting Terraform backend resources...'
   delete_s3_bucket
-  delete_dynamodb_table
   print_info 'All resources deleted successfully!'
 }
 
@@ -251,21 +193,27 @@ show_usage() {
   echo 'Usage: ./init-aws-for-terraform.sh [create|delete|status] [--profile PROFILE_NAME]'
   echo ''
   echo 'Commands:'
-  echo '  create  - Create S3 bucket and DynamoDB table'
-  echo '  delete  - Delete S3 bucket and DynamoDB table'
+  echo '  create  - Create S3 bucket'
+  echo '  delete  - Delete S3 bucket'
   echo '  status  - Show status of resources'
   echo ''
   echo 'Options:'
   echo '  --profile PROFILE_NAME  - Use specified AWS profile'
   echo ''
+  echo 'Environment Variables:'
+  echo '  AWS_PROFILE            - AWS profile to use (can be overridden by --profile)'
+  echo '  BUCKET_NAME            - S3 bucket name (default: sf-website-infrastructure)'
+  echo '  AWS_REGION             - AWS region (default: us-east-1)'
+  echo ''
   echo 'Examples:'
   echo '  ./init-aws-for-terraform.sh create'
   echo '  ./init-aws-for-terraform.sh create --profile tf-sf-website'
   echo '  ./init-aws-for-terraform.sh status --profile tf-sf-website'
+  echo '  AWS_PROFILE=tf-sf-website ./init-aws-for-terraform.sh create'
+  echo '  BUCKET_NAME=my-terraform-state AWS_REGION=us-west-2 ./init-aws-for-terraform.sh create'
   echo ''
   echo 'Resources managed:'
   echo "  S3 Bucket: ${BUCKET_NAME}"
-  echo "  DynamoDB Table: ${DYNAMODB_TABLE}"
   echo "  Region: ${AWS_REGION}"
 }
 
@@ -282,7 +230,7 @@ main() {
         ;;
       '--profile')
         if [ -n "$2" ]; then
-          PROFILE="$2"
+          AWS_PROFILE="$2"
           shift 2
         else
           print_error 'Profile name is required after --profile'
