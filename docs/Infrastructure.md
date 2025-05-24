@@ -4,7 +4,7 @@
 
 * **AWS Region**: `us-east-1`
 * **Environments**: `dev`, `staging`, `prod`
-* **Domain**: `sf-website-<env>.prettyclear.com`
+* **Domain**: `sf-website-<env>.sandbox-prettyclear.com`
 * **Structure**: Modular Terraform setup for multi-environment support
 * **Resource Tags** (applied to all resources):
 
@@ -158,7 +158,8 @@
     * ECR (container image repository)
     * ALB (for ingress)
     * CloudWatch (for logs & metrics)
-    * MongoDB EC2 instance (database)
+    * DocumentDB Cluster (database)
+    * ElastiCache Redis (caching)
     * S3 Attachments Bucket
   * **Service Name**: `sf-website`
   * **Container Image**: Built from project Dockerfile and stored in ECR
@@ -167,7 +168,8 @@
   * **Auto-scaling**: Based on CPU usage (target: 70%)
   * **Environment Variables**:
     * `NODE_ENV=production`
-    * `APOS_MONGODB_URI=mongodb://<mongodb-hostname>:27017/apostrophe`
+    * `APOS_MONGODB_URI=mongodb://<documentdb-cluster-endpoint>:27017/apostrophe`
+    * `REDIS_URI=redis://<elasticache-cluster-endpoint>:6379`
     * `SESSION_SECRET=<from parameter store>`
     * `APOS_S3_BUCKET=sf-website-s3-attachments-<env>`
     * `APOS_S3_REGION=us-east-1`
@@ -198,7 +200,7 @@
     * ACM (for SSL certificates)
   * **Type**: HTTPS-only
   * **SSL**: Via AWS ACM
-  * **Domain**: `sf-website-<env>.prettyclear.com`
+  * **Domain**: `sf-website-<env>.sandbox-prettyclear.com`
 
 ---
 
@@ -219,7 +221,7 @@
     * ECS Cluster (via APOS_CDN_URL environment variable)
   * **Origin**: S3 bucket `sf-website-s3-attachments-<env>`
   * **Access**: Origin access identity (OAI) to restrict direct S3 access
-  * **Custom domain**: `sf-website-media-<env>.prettyclear.com`
+  * **Custom domain**: `sf-website-media-<env>.sandbox-prettyclear.com`
   * **SSL Certificate**: Managed through AWS ACM
   * **Cache Behavior**:
     * Default TTL: 86400 seconds (1 day)
@@ -247,51 +249,133 @@
   * **Resource Integration**:
     * ECS Apostrophe Cluster
     * ALB
+    * DocumentDB Cluster
+    * ElastiCache Redis
     * Slack (for alerts)
   * **Features**:
     * ECS logs and detailed metrics
     * ALB metrics (e.g., 5xx, latency)
+    * DocumentDB cluster and instance metrics
+    * ElastiCache Redis performance metrics
     * CloudWatch alarms for key metrics
   * **Alerts**: Sent to Slack
   * **Log retention**: 90 days
 
 ---
 
-### 📄 MongoDB on EC2
+### 🔴 Amazon ElastiCache (Redis)
 
-* **MongoDB**:
-  * **Instance Name**: `sf-website-mongodb-<env>`
-  * **Purpose**: Primary data store for ApostropheCMS
+* **ElastiCache Redis Cluster**:
+  * **Cluster Name**: `sf-website-redis-<env>`
+  * **Purpose**: Managed Redis service for session storage and application caching
   * **Resource Tags**:
-    * `Name: sf-website-mongodb-<env>`
+    * `Name: sf-website-redis-<env>`
     * `Project: Website`
     * `CostCenter: Website`
     * `Environment: <environment>`
     * `Owner: peter.ovchyn`
   * **Resource Integration**:
     * ECS Apostrophe Cluster
-    * AWS Backup service
     * CloudWatch (for monitoring)
-    * Parameter Store (for credentials)
-  * **Instance Type**: t3.medium (2 vCPU, 4GB RAM)
-  * **Storage**: 100GB gp3 EBS volume with 3000 IOPS
-  * **AMI**: Amazon Linux 2
-  * **Deployment**: Single EC2 instance in private subnet
+    * Cache Subnet Group (for networking)
+  * **Engine Version**: Redis 7.0 (latest stable)
+  * **Node Configuration**:
+    * **Node Type**: `cache.t3.micro` (1 vCPU, 0.5GB RAM) for dev/staging
+    * **Node Type**: `cache.t3.small` (2 vCPU, 1.5GB RAM) for production
+    * **Number of Nodes**: 1 (single node for simplicity)
+    * **Port**: 6379 (Redis standard)
+  * **Deployment**:
+    * Deployed in private subnets
+    * Cache Subnet Group spans both availability zones
   * **Security**:
-    * No public IP assigned
-    * Security group allows ingress only from ECS service security group on port 27017
-    * SSH access via Session Manager (no direct SSH allowed)
-  * **Authentication**: Username/password authentication enabled
-    * Credentials stored in AWS Parameter Store
+    * VPC security group restricting access to ECS service only
+    * No public access
+    * Transit encryption enabled
+    * Auth token enabled for authentication
+  * **Authentication**:
+    * Auth token stored in AWS Parameter Store
     * Referenced in ECS task environment variables
   * **Backup Strategy**:
-    * Daily automated snapshots of EBS volume
-    * Retention period: 7 daily, 4 weekly
-    * Snapshot automation via AWS Backup service
+    * **Automatic Backups**: 
+      * Daily snapshots enabled
+      * Retention period: 5 days
+      * Backup window: 02:00-03:00 UTC
   * **Monitoring**:
-    * CloudWatch agent for system metrics
-    * Custom MongoDB metrics published to CloudWatch
-    * Alerts for disk usage, connections, and query performance
+    * CloudWatch metrics for cluster performance
+    * CloudWatch alarms for:
+      * CPU utilization > 80%
+      * Memory usage > 80%
+      * Connection count thresholds
+      * Cache hit ratio < 80%
   * **High Availability**:
-    * Configured for future upgrade to a replica set
-    * Placeholder DNS record for future replica nodes
+    * Automatic failover enabled
+    * Multi-AZ deployment for production environment
+    * Automatic minor version updates during maintenance window
+  * **Network Configuration**:
+    * **Cache Subnet Group**: `sf-website-redis-subnet-group-<env>`
+    * **Security Group**: `sf-website-redis-sg-<env>`
+    * **Endpoint**: Primary endpoint for read/write operations
+
+---
+
+### 📄 Amazon DocumentDB
+
+* **DocumentDB Cluster**:
+  * **Cluster Name**: `sf-website-documentdb-<env>`
+  * **Purpose**: Managed MongoDB-compatible database service for ApostropheCMS
+  * **Resource Tags**:
+    * `Name: sf-website-documentdb-<env>`
+    * `Project: Website`
+    * `CostCenter: Website`
+    * `Environment: <environment>`
+    * `Owner: peter.ovchyn`
+  * **Resource Integration**:
+    * ECS Apostrophe Cluster
+    * CloudWatch (for monitoring)
+    * Parameter Store (for credentials)
+    * DB Subnet Group (for networking)
+  * **Engine Version**: 4.0.0 (MongoDB compatible)
+  * **Cluster Configuration**:
+    * **Primary Instance**: `db.t3.medium` (2 vCPU, 4GB RAM)
+    * **Replica Instances**: 1 replica for high availability
+    * **Storage**: Encrypted with AWS managed keys
+    * **Port**: 27017 (MongoDB standard)
+  * **Deployment**: 
+    * Multi-AZ deployment across private subnets
+    * DB Subnet Group spans both availability zones
+  * **Security**:
+    * VPC security group restricting access to ECS service only
+    * TLS encryption in transit required
+    * No public access
+    * Authentication required
+  * **Authentication**: 
+    * Master username/password stored in AWS Parameter Store
+    * Referenced in ECS task environment variables via Parameter Store
+    * Database: `apostrophe`
+  * **Backup Strategy**:
+    * **Automated Backups**: 
+      * Backup retention period: 7 days
+      * Backup window: 03:00-04:00 UTC
+      * Point-in-time recovery enabled
+    * **Manual Snapshots**: Available for major releases
+  * **Monitoring**:
+    * CloudWatch metrics for cluster and instance performance
+    * Enhanced monitoring enabled (60-second granularity)
+    * CloudWatch alarms for:
+      * CPU utilization > 80%
+      * Database connections > 80% of max
+      * Free storage < 20%
+      * Read/Write latency thresholds
+  * **Parameter Group**:
+    * Custom parameter group for performance optimization
+    * TLS enforcement enabled
+    * Audit logging enabled for security compliance
+  * **High Availability**:
+    * Multi-AZ replica instance for automatic failover
+    * Cross-AZ backup replication
+    * Automatic minor version updates during maintenance window
+  * **Network Configuration**:
+    * **DB Subnet Group**: `sf-website-documentdb-subnet-group-<env>`
+    * **Security Group**: `sf-website-documentdb-sg-<env>`
+    * **Endpoint**: Cluster endpoint for write operations
+    * **Reader Endpoint**: Available for read-only operations
