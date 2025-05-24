@@ -28,6 +28,12 @@ provider "aws" {
   }
 }
 
+# ECS Service-Linked Role (required for ECS services)
+resource "aws_iam_service_linked_role" "ecs" {
+  aws_service_name = "ecs.amazonaws.com"
+  description      = "Service-linked role for ECS services"
+}
+
 # Data sources
 data "aws_caller_identity" "current" {}
 data "aws_region" "current" {}
@@ -232,6 +238,17 @@ module "ecs" {
   # Target group for ALB
   target_group_arn = module.alb.target_group_arn
   
+  # Container configuration
+  container_cpu       = var.container_cpu
+  container_memory    = var.container_memory
+  container_port      = 3000
+  log_retention_days  = 7
+  ecs_desired_count   = var.ecs_desired_count
+  ecs_max_capacity    = var.ecs_max_capacity
+  
+  # Service-linked role dependency
+  service_linked_role_arn = aws_iam_service_linked_role.ecs.arn
+  
   # Environment variables
   environment_variables = {
     NODE_ENV                   = "production"
@@ -244,10 +261,12 @@ module "ecs" {
     APOS_CDN_ENABLED         = "true"
   }
   
-  # Secrets from Parameter Store
+  # Secrets from Parameter Store - filter out empty values
   secrets = {
-    SESSION_SECRET               = module.parameter_store.session_secret_arn
-    SERVICE_ACCOUNT_PRIVATE_KEY = module.parameter_store.gcs_service_account_key_arn
+    for k, v in {
+      SESSION_SECRET               = module.parameter_store.session_secret_arn
+      SERVICE_ACCOUNT_PRIVATE_KEY = module.parameter_store.gcs_service_account_key_arn
+    } : k => v if v != ""
   }
   
   tags = local.common_tags

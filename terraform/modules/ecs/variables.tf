@@ -43,6 +43,36 @@ variable "target_group_arn" {
   type        = string
 }
 
+variable "container_cpu" {
+  description = "CPU units for the container"
+  type        = number
+}
+
+variable "container_memory" {
+  description = "Memory in MB for the container"
+  type        = number
+}
+
+variable "container_port" {
+  description = "Port that the container exposes"
+  type        = number
+}
+
+variable "log_retention_days" {
+  description = "Number of days to retain CloudWatch logs"
+  type        = number
+}
+
+variable "ecs_desired_count" {
+  description = "Desired number of ECS tasks"
+  type        = number
+}
+
+variable "ecs_max_capacity" {
+  description = "Maximum number of ECS tasks for auto-scaling"
+  type        = number
+}
+
 variable "environment_variables" {
   description = "Environment variables for the container"
   type        = map(string)
@@ -59,4 +89,9 @@ variable "tags" {
   description = "Tags to apply to resources"
   type        = map(string)
   default     = {}
+}
+
+variable "service_linked_role_arn" {
+  description = "ARN of the ECS service-linked role"
+  type        = string
 } 

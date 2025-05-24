@@ -136,6 +136,28 @@ variable "container_memory" {
   }
 }
 
+variable "container_port" {
+  description = "Port that the container exposes"
+  type        = number
+  default     = 3000
+  
+  validation {
+    condition = var.container_port > 0 && var.container_port <= 65535
+    error_message = "Container port must be between 1 and 65535."
+  }
+}
+
+variable "log_retention_days" {
+  description = "Number of days to retain CloudWatch logs"
+  type        = number
+  default     = 7
+  
+  validation {
+    condition = contains([1, 3, 5, 7, 14, 30, 60, 90, 120, 150, 180, 365, 400, 545, 731, 1827, 3653], var.log_retention_days)
+    error_message = "Log retention must be one of the valid CloudWatch retention periods."
+  }
+}
+
 # Scaling Configuration
 variable "ecs_desired_count" {
   description = "Desired number of ECS tasks"

@@ -36,6 +36,8 @@ route53_zone_id = ""  # Leave empty to skip DNS record creation
 container_image_tag = "latest"
 container_cpu      = 1024  # 1024 = 1 vCPU
 container_memory   = 2048  # 2048 MB = 2 GB
+container_port     = 3000  # Application port
+log_retention_days = 7     # CloudWatch log retention
 
 # Scaling Configuration
 ecs_desired_count = 1

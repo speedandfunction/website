@@ -148,3 +148,4 @@ terraform.tfvars
 terraform/.terraform
 dev.tfplan
 plan.out.txt
+.cursor/tmp
