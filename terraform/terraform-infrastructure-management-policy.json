@@ -52,59 +52,6 @@
       "Resource": "*"
     },
     {
-      "Sid": "TerraformELBPermissions",
-      "Effect": "Allow",
-      "Action": [
-        "elasticloadbalancing:CreateLoadBalancer",
-        "elasticloadbalancing:DeleteLoadBalancer",
-        "elasticloadbalancing:DescribeLoadBalancers",
-        "elasticloadbalancing:DescribeLoadBalancerAttributes",
-        "elasticloadbalancing:ModifyLoadBalancerAttributes",
-        "elasticloadbalancing:CreateTargetGroup",
-        "elasticloadbalancing:DeleteTargetGroup",
-        "elasticloadbalancing:DescribeTargetGroups",
-        "elasticloadbalancing:DescribeTargetGroupAttributes",
-        "elasticloadbalancing:ModifyTargetGroupAttributes",
-        "elasticloadbalancing:CreateListener",
-        "elasticloadbalancing:DeleteListener",
-        "elasticloadbalancing:DescribeListeners",
-        "elasticloadbalancing:ModifyListener",
-        "elasticloadbalancing:RegisterTargets",
-        "elasticloadbalancing:DeregisterTargets",
-        "elasticloadbalancing:DescribeTargetHealth",
-        "elasticloadbalancing:AddTags",
-        "elasticloadbalancing:RemoveTags",
-        "elasticloadbalancing:DescribeTags"
-      ],
-      "Resource": "*"
-    },
-    {
-      "Sid": "TerraformDocumentDBRDSPermissions",
-      "Effect": "Allow",
-      "Action": [
-        "rds:CreateDBSubnetGroup",
-        "rds:DeleteDBSubnetGroup",
-        "rds:DescribeDBSubnetGroups",
-        "rds:ModifyDBSubnetGroup",
-        "rds:AddTagsToResource",
-        "rds:RemoveTagsFromResource",
-        "rds:ListTagsForResource",
-        "rds:CreateDBClusterParameterGroup",
-        "rds:DeleteDBClusterParameterGroup",
-        "rds:DescribeDBClusterParameterGroups",
-        "rds:ModifyDBClusterParameterGroup",
-        "rds:CreateDBCluster",
-        "rds:DeleteDBCluster",
-        "rds:DescribeDBClusters",
-        "rds:ModifyDBCluster",
-        "rds:CreateDBInstance",
-        "rds:DeleteDBInstance",
-        "rds:DescribeDBInstances",
-        "rds:ModifyDBInstance"
-      ],
-      "Resource": "*"
-    },
-    {
       "Sid": "TerraformElastiCachePermissions",
       "Effect": "Allow",
       "Action": [
