@@ -291,4 +291,60 @@ redis_node_type          = "cache.r6g.large"
 
 ---
 
-**Next Steps**: After deploying infrastructure, configure your CI/CD pipeline to build and deploy the ApostropheCMS application to the created ECS cluster. 
+**Next Steps**: After deploying infrastructure, configure your CI/CD pipeline to build and deploy the ApostropheCMS application to the created ECS cluster.
+
+# Terraform Infrastructure Setup
+
+This directory contains the Terraform configuration and initialization scripts for the SF Website infrastructure.
+
+## Quick Start
+
+### Initialize AWS Resources
+
+The `init-aws-for-terraform.sh` script manages the Terraform backend resources (S3 bucket and DynamoDB table).
+
+```bash
+# Create resources
+./init-aws-for-terraform.sh create --profile tf-sf-website
+
+# Check status
+./init-aws-for-terraform.sh status --profile tf-sf-website
+
+# Delete resources (interactive)
+./init-aws-for-terraform.sh delete --profile tf-sf-website
+
+# Delete resources (non-interactive for automation)
+TERRAFORM_NON_INTERACTIVE=true ./init-aws-for-terraform.sh delete --profile tf-sf-website
+```
+
+### Non-Interactive Mode
+
+The script supports non-interactive mode for automation and CI/CD pipelines:
+
+- Set `TERRAFORM_NON_INTERACTIVE=true` environment variable
+- The script will automatically skip confirmation prompts
+- Useful for automated deployments and scripts
+
+### Error Handling
+
+The script includes robust error handling:
+
+- Proper AWS CLI profile support
+- Graceful handling of existing resources
+- Suppression of spurious AWS CLI configuration errors
+- Clear status reporting and logging
+
+## Script Features
+
+- ✅ **Non-interactive support** - No user prompts when `TERRAFORM_NON_INTERACTIVE=true`
+- ✅ **AWS Profile support** - Works with named AWS profiles
+- ✅ **Error suppression** - Filters out spurious AWS CLI configuration errors
+- ✅ **Resource validation** - Checks if resources exist before creating/deleting
+- ✅ **Comprehensive logging** - Clear status messages and error reporting
+- ✅ **Safe deletion** - Confirms before deleting resources (unless non-interactive)
+
+## Resources Managed
+
+- **S3 Bucket**: `sf-website-infrastructure` (with versioning and encryption)
+- **DynamoDB Table**: `sf-website-terraform-locks` (for state locking)
+- **Region**: `us-east-1` 

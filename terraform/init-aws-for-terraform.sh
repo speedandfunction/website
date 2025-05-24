@@ -32,12 +32,13 @@ print_error() {
   echo -e "${RED}[ERROR]${NC} $1"
 }
 
-# Get AWS CLI command with profile if specified
-aws_cmd() {
+# Execute AWS command with proper profile handling and error suppression
+aws_exec() {
   if [ -n "${PROFILE}" ]; then
-    echo "aws --profile ${PROFILE}"
+    # Suppress spurious head/cat errors that occur with some AWS CLI configurations
+    aws --profile "${PROFILE}" "$@" 2> >(grep -v "head:" | grep -v "cat:" >&2)
   else
-    echo "aws"
+    aws "$@" 2> >(grep -v "head:" | grep -v "cat:" >&2)
   fi
 }
 
@@ -48,11 +49,8 @@ check_aws_cli() {
     exit 1
   fi
 
-  local aws_command
-  aws_command=$(aws_cmd)
-  
   # Check credentials by testing the command and capturing exit code
-  if ${aws_command} sts get-caller-identity >/dev/null 2>&1; then
+  if aws_exec sts get-caller-identity >/dev/null 2>&1; then
     if [ -n "${PROFILE}" ]; then
       print_info "Using AWS profile: ${PROFILE}"
     fi
@@ -68,18 +66,16 @@ check_aws_cli() {
 
 # Check if S3 bucket exists
 bucket_exists() {
-  local aws_command
-  aws_command=$(aws_cmd)
-  ${aws_command} s3api head-bucket --bucket "${BUCKET_NAME}" \
-    --region "${AWS_REGION}" 2>/dev/null
+  aws_exec s3api head-bucket --bucket "${BUCKET_NAME}" \
+    --region "${AWS_REGION}" >/dev/null 2>&1
+  return $?
 }
 
 # Check if DynamoDB table exists
 table_exists() {
-  local aws_command
-  aws_command=$(aws_cmd)
-  ${aws_command} dynamodb describe-table --table-name "${DYNAMODB_TABLE}" \
-    --region "${AWS_REGION}" &> /dev/null
+  aws_exec dynamodb describe-table --table-name "${DYNAMODB_TABLE}" \
+    --region "${AWS_REGION}" >/dev/null 2>&1
+  return $?
 }
 
 # Create S3 bucket
@@ -91,25 +87,22 @@ create_s3_bucket() {
 
   print_info "Creating S3 bucket '${BUCKET_NAME}'..."
   
-  local aws_command
-  aws_command=$(aws_cmd)
-  
   # Create bucket
   if [ "${AWS_REGION}" = 'us-east-1' ]; then
-    ${aws_command} s3api create-bucket --bucket "${BUCKET_NAME}" \
+    aws_exec s3api create-bucket --bucket "${BUCKET_NAME}" \
       --region "${AWS_REGION}"
   else
-    ${aws_command} s3api create-bucket --bucket "${BUCKET_NAME}" \
+    aws_exec s3api create-bucket --bucket "${BUCKET_NAME}" \
       --region "${AWS_REGION}" \
       --create-bucket-configuration LocationConstraint="${AWS_REGION}"
   fi
 
   # Enable versioning
-  ${aws_command} s3api put-bucket-versioning --bucket "${BUCKET_NAME}" \
+  aws_exec s3api put-bucket-versioning --bucket "${BUCKET_NAME}" \
     --versioning-configuration Status=Enabled
 
   # Enable server-side encryption
-  ${aws_command} s3api put-bucket-encryption --bucket "${BUCKET_NAME}" \
+  aws_exec s3api put-bucket-encryption --bucket "${BUCKET_NAME}" \
     --server-side-encryption-configuration '{
       "Rules": [
         {
@@ -121,7 +114,7 @@ create_s3_bucket() {
     }'
 
   # Block public access
-  ${aws_command} s3api put-public-access-block --bucket "${BUCKET_NAME}" \
+  aws_exec s3api put-public-access-block --bucket "${BUCKET_NAME}" \
     --public-access-block-configuration \
     BlockPublicAcls=true,IgnorePublicAcls=true,BlockPublicPolicy=true,RestrictPublicBuckets=true
 
@@ -137,18 +130,15 @@ create_dynamodb_table() {
 
   print_info "Creating DynamoDB table '${DYNAMODB_TABLE}'..."
   
-  local aws_command
-  aws_command=$(aws_cmd)
-  
-  ${aws_command} dynamodb create-table \
+  aws_exec dynamodb create-table \
     --table-name "${DYNAMODB_TABLE}" \
     --attribute-definitions AttributeName=LockID,AttributeType=S \
     --key-schema AttributeName=LockID,KeyType=HASH \
     --billing-mode PAY_PER_REQUEST \
-    --region "${AWS_REGION}"
+    --region "${AWS_REGION}" >> /dev/null 2>&1
 
   print_info "Waiting for DynamoDB table to be active..."
-  ${aws_command} dynamodb wait table-exists --table-name "${DYNAMODB_TABLE}" \
+  aws_exec dynamodb wait table-exists --table-name "${DYNAMODB_TABLE}" \
     --region "${AWS_REGION}"
 
   print_info "DynamoDB table '${DYNAMODB_TABLE}' created successfully"
@@ -163,31 +153,28 @@ delete_s3_bucket() {
 
   print_info "Deleting all objects from S3 bucket '${BUCKET_NAME}'..."
   
-  local aws_command
-  aws_command=$(aws_cmd)
-  
   # Delete all object versions and delete markers
-  ${aws_command} s3api list-object-versions --bucket "${BUCKET_NAME}" \
+  aws_exec s3api list-object-versions --bucket "${BUCKET_NAME}" \
     --query 'Versions[].{Key:Key,VersionId:VersionId}' \
     --output text | while read -r key version_id; do
     if [ -n "${key}" ] && [ -n "${version_id}" ]; then
-      ${aws_command} s3api delete-object --bucket "${BUCKET_NAME}" \
+      aws_exec s3api delete-object --bucket "${BUCKET_NAME}" \
         --key "${key}" --version-id "${version_id}"
     fi
   done
 
   # Delete all delete markers
-  ${aws_command} s3api list-object-versions --bucket "${BUCKET_NAME}" \
+  aws_exec s3api list-object-versions --bucket "${BUCKET_NAME}" \
     --query 'DeleteMarkers[].{Key:Key,VersionId:VersionId}' \
     --output text | while read -r key version_id; do
     if [ -n "${key}" ] && [ -n "${version_id}" ]; then
-      ${aws_command} s3api delete-object --bucket "${BUCKET_NAME}" \
+      aws_exec s3api delete-object --bucket "${BUCKET_NAME}" \
         --key "${key}" --version-id "${version_id}"
     fi
   done
 
   print_info "Deleting S3 bucket '${BUCKET_NAME}'..."
-  ${aws_command} s3api delete-bucket --bucket "${BUCKET_NAME}" \
+  aws_exec s3api delete-bucket --bucket "${BUCKET_NAME}" \
     --region "${AWS_REGION}"
 
   print_info "S3 bucket '${BUCKET_NAME}' deleted successfully"
@@ -202,14 +189,11 @@ delete_dynamodb_table() {
 
   print_info "Deleting DynamoDB table '${DYNAMODB_TABLE}'..."
   
-  local aws_command
-  aws_command=$(aws_cmd)
-  
-  ${aws_command} dynamodb delete-table --table-name "${DYNAMODB_TABLE}" \
-    --region "${AWS_REGION}"
+  aws_exec dynamodb delete-table --table-name "${DYNAMODB_TABLE}" \
+    --region "${AWS_REGION}" >> /dev/null 2>&1
 
   print_info "Waiting for DynamoDB table to be deleted..."
-  ${aws_command} dynamodb wait table-not-exists --table-name "${DYNAMODB_TABLE}" \
+  aws_exec dynamodb wait table-not-exists --table-name "${DYNAMODB_TABLE}" \
     --region "${AWS_REGION}"
 
   print_info "DynamoDB table '${DYNAMODB_TABLE}' deleted successfully"
@@ -240,10 +224,16 @@ create_resources() {
   print_info 'All resources created successfully!'
 }
 
-# Delete all resources
+# Delete all resources with automatic confirmation for non-interactive use
 delete_resources() {
-  print_warning 'This will delete all Terraform backend resources!'
-  read -p 'Are you sure? (yes/no): ' confirmation
+  # Check if running in non-interactive mode (for automation)
+  if [ "${TERRAFORM_NON_INTERACTIVE:-false}" = "true" ] || [ ! -t 0 ]; then
+    print_warning 'Running in non-interactive mode, skipping confirmation...'
+    confirmation="yes"
+  else
+    print_warning 'This will delete all Terraform backend resources!'
+    read -p 'Are you sure? (yes/no): ' confirmation
+  fi
   
   if [ "${confirmation}" != 'yes' ]; then
     print_info 'Operation cancelled'
