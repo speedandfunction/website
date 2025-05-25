@@ -56,7 +56,7 @@
       "Resource": "*"
     },
     {
-      "Sid": "TerraformCloudWatchLogsPermissions",
+      "Sid": "TerraformCloudWatchPermissions",
       "Effect": "Allow",
       "Action": [
         "logs:CreateLogGroup",
@@ -67,7 +67,19 @@
         "logs:TagLogGroup",
         "logs:UntagLogGroup",
         "logs:ListTagsForResource",
-        "logs:ListTagsLogGroup"
+        "logs:ListTagsLogGroup",
+        "cloudwatch:PutDashboard",
+        "cloudwatch:GetDashboard",
+        "cloudwatch:DeleteDashboards",
+        "cloudwatch:ListDashboards",
+        "cloudwatch:PutMetricAlarm",
+        "cloudwatch:DeleteAlarms",
+        "cloudwatch:DescribeAlarms",
+        "cloudwatch:EnableAlarmActions",
+        "cloudwatch:DisableAlarmActions",
+        "cloudwatch:TagResource",
+        "cloudwatch:UntagResource",
+        "cloudwatch:ListTagsForResource"
       ],
       "Resource": "*"
     },
