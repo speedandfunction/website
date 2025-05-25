@@ -43,27 +43,4 @@ module.exports = {
       },
     };
   },
-
-  handlers(self) {
-    return {
-      '@apostrophecms/doc:afterInsert': {
-        async handleFormSubmission(req, doc) {
-          if (doc.type !== '@apostrophecms/form-submission' || !doc.data) {
-            return;
-          }
-
-          try {
-            let formData = doc.data;
-            if (typeof doc.data === 'string') {
-              formData = JSON.parse(doc.data);
-            }
-            await self.sendToGoogleSheets(formData);
-          } catch (err) {
-            // eslint-disable-next-line no-console
-            console.error(`Error processing form submission: ${err.message}`);
-          }
-        },
-      },
-    };
-  },
 };
