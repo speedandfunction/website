@@ -191,7 +191,8 @@
   }
 }
 
-Leadership team .sf-leadership {
+//Leadership team
+.sf-leadership {
   .sf-person__photo {
     @include transition(opacity);
     img {
