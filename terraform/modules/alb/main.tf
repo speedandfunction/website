@@ -47,6 +47,13 @@ resource "aws_lb_listener" "https" {
     target_group_arn = aws_lb_target_group.main.arn
   }
 
+  # Ensure this listener is created after target group and destroyed before target group
+  depends_on = [aws_lb_target_group.main]
+
+  lifecycle {
+    create_before_destroy = false
+  }
+
   tags = var.tags
 }
 
@@ -64,6 +71,13 @@ resource "aws_lb_listener" "http" {
       protocol    = "HTTPS"
       status_code = "HTTP_301"
     }
+  }
+
+  # Ensure this listener is destroyed before target group (even though it doesn't reference it)
+  depends_on = [aws_lb_target_group.main]
+
+  lifecycle {
+    create_before_destroy = false
   }
 
   tags = var.tags

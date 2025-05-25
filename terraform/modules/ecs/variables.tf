@@ -89,9 +89,4 @@ variable "tags" {
   description = "Tags to apply to resources"
   type        = map(string)
   default     = {}
-}
-
-variable "service_linked_role_arn" {
-  description = "ARN of the ECS service-linked role"
-  type        = string
 } 

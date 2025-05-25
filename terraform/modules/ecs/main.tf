@@ -90,7 +90,7 @@ resource "aws_ecs_service" "main" {
     container_port   = var.container_port
   }
 
-  depends_on = [var.target_group_arn, var.service_linked_role_arn]
+  depends_on = [var.target_group_arn]
 
   tags = var.tags
 }

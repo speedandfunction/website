@@ -26,6 +26,7 @@
         "ec2:ReleaseAddress",
         "ec2:DescribeAddresses",
         "ec2:DescribeAddressesAttribute",
+        "ec2:DisassociateAddress",
         "ec2:CreateRouteTable",
         "ec2:DeleteRouteTable",
         "ec2:DescribeRouteTables",
@@ -45,6 +46,7 @@
         "ec2:DeleteFlowLogs",
         "ec2:DescribeFlowLogs",
         "ec2:DescribeAvailabilityZones",
+        "ec2:DescribeNetworkInterfaces",
         "ec2:CreateTags",
         "ec2:DeleteTags",
         "ec2:DescribeTags"

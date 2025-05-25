@@ -28,12 +28,6 @@ provider "aws" {
   }
 }
 
-# ECS Service-Linked Role (required for ECS services)
-resource "aws_iam_service_linked_role" "ecs" {
-  aws_service_name = "ecs.amazonaws.com"
-  description      = "Service-linked role for ECS services"
-}
-
 # Data sources
 data "aws_caller_identity" "current" {}
 data "aws_region" "current" {}
@@ -252,9 +246,6 @@ module "ecs" {
   log_retention_days  = var.log_retention_days
   ecs_desired_count   = var.ecs_desired_count
   ecs_max_capacity    = var.ecs_max_capacity
-  
-  # Service-linked role dependency
-  service_linked_role_arn = aws_iam_service_linked_role.ecs.arn
   
   # Environment variables
   environment_variables = {
