@@ -24,6 +24,19 @@
 }
 
 .leader-card {
+  flex: 1 1 33%;
+  min-width: 300px;
+  box-sizing: border-box;
+  font-style: $font-style-normal;
+  width: 100%;
+  height: 100%;
+  margin-bottom: 24px;
+
+  @include breakpoint-large {
+    max-height: 383px;
+    margin-bottom: 0;
+  }
+
   // avoid double border
   &:not(:first-child) {
     .leader-header {
@@ -56,21 +69,6 @@
         border-right: none;
       }
     }
-  }
-}
-
-.leader-card {
-  flex: 1 1 33%;
-  min-width: 300px;
-  box-sizing: border-box;
-  font-style: $font-style-normal;
-  width: 100%;
-  height: 100%;
-  margin-bottom: 24px;
-
-  @include breakpoint-large {
-    max-height: 383px;
-    margin-bottom: 0;
   }
 
   .leader-header {
