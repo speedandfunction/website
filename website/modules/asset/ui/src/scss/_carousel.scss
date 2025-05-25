@@ -190,40 +190,40 @@
     }
   }
 }
-// Leadership team
-// .sf-leadership {
-//   .sf-person__photo {
-//     @include transition(opacity);
-//     img {
-//       width: 87px;
-//       height: 87px;
-//       @include breakpoint-medium {
-//         width: 225px;
-//         height: 225px;
-//       }
-//     }
-//   }
-//   @include breakpoint-medium {
-//     .swiper-slide-active {
-//       .sf-leadership-header__bio {
-//         @include border(border-left);
-//       }
-//     }
-//     .sf-person {
-//       &:hover {
-//         .sf-person__vita {
-//           opacity: 1;
-//         }
-//         .sf-person__photo {
-//           opacity: 0;
-//         }
-//       }
-//     }
-//     .sf-person-wrapper {
-//       border-top: 0;
-//     }
-//     .sf-person__footer {
-//       margin-top: 0;
-//     }
-//   }
-// }
+
+Leadership team .sf-leadership {
+  .sf-person__photo {
+    @include transition(opacity);
+    img {
+      width: 87px;
+      height: 87px;
+      @include breakpoint-medium {
+        width: 225px;
+        height: 225px;
+      }
+    }
+  }
+  @include breakpoint-medium {
+    .swiper-slide-active {
+      .sf-leadership-header__bio {
+        @include border(border-left);
+      }
+    }
+    .sf-person {
+      &:hover {
+        .sf-person__vita {
+          opacity: 1;
+        }
+        .sf-person__photo {
+          opacity: 0;
+        }
+      }
+    }
+    .sf-person-wrapper {
+      border-top: 0;
+    }
+    .sf-person__footer {
+      margin-top: 0;
+    }
+  }
+}
