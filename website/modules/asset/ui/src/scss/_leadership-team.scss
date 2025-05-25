@@ -6,9 +6,25 @@
   @include breakpoint-large {
     flex-direction: row;
   }
+
+  // prevent extra top border when leader-card is hovered in second row
+  & + .leadership-list {
+    .leader-card {
+      &:hover {
+        .leader-header {
+          .leader-title-block {
+            @include breakpoint-large {
+              border-top: 1px solid transparent;
+            }
+          }
+        }
+      }
+    }
+  }
 }
 
 .leader-card {
+  // avoid double border
   &:not(:first-child) {
     .leader-header {
       .leader-title-block {
@@ -21,6 +37,23 @@
     .leader-footer {
       @include breakpoint-large {
         border-left: none;
+      }
+    }
+  }
+
+  // avoid double border on hover for leader-card
+  &:has(+ .leader-card:hover) {
+    .leader-header {
+      .leader-title-block {
+        @include breakpoint-large {
+          border-right: none;
+        }
+      }
+    }
+
+    .leader-footer {
+      @include breakpoint-large {
+        border-right: none;
       }
     }
   }
@@ -104,6 +137,21 @@
     }
   }
 
+  .leader-bio {
+    @include font-settings(14px, 150%, $font-weight-medium);
+    color: $gray-300;
+    margin-bottom: 16px;
+
+    @include breakpoint-large {
+      color: $gray-500;
+      display: none;
+
+      .bio-inner {
+        opacity: 0;
+      }
+    }
+  }
+
   .leader-meta {
     display: flex;
     justify-content: space-between;
@@ -122,25 +170,38 @@
     }
   }
 
-  .leader-bio {
-    @include font-settings(14px, 150%, $font-weight-medium);
-    color: $gray-300;
-    margin-bottom: 16px;
-
-    @include breakpoint-large {
-      color: $gray-500;
-      display: none;
-    }
-  }
-
   &:hover {
     .leader-photo {
-      display: none;
+      @include breakpoint-large {
+        display: none;
+      }
     }
 
     .leader-bio {
       @include breakpoint-large {
         display: block;
+        overflow-y: auto;
+        max-height: 209px;
+        height: 100%;
+        min-height: 209px;
+
+        .bio-inner {
+          animation: fadeSlideIn 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+      }
+    }
+
+    .leader-header {
+      .leader-title-block {
+        @include breakpoint-large {
+          border-left: 1px solid $whisper;
+        }
+      }
+    }
+
+    .leader-footer {
+      @include breakpoint-large {
+        border-left: 1px solid $whisper;
       }
     }
   }
