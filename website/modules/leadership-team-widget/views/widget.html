@@ -9,28 +9,34 @@
     {% endif %}
 
     <article class="leader-card">
-      {% if leader.headshot %}
-      <div class="leader-photo">
-        {% set attachment = apos.image.first(leader.headshot) %} {% if
-        attachment %}
-        <img
-          srcset="{{ apos.image.srcset(attachment) }}"
-          src="{{ apos.attachment.url(attachment, { size: data.options.size or 'full' }) }}"
-          alt="{{ attachment._alt or leader.title }}"
-        />
-        {% endif %}
-      </div>
-      {% endif %}
       <div class="leader-info">
-        <h3 class="leader-title">{{ leader.title }}</h3>
-        <p class="leader-position">{{ leader.position }}</p>
+        <div class="leader-header">
+          {% if leader.headshot %} {% set attachment =
+          apos.image.first(leader.headshot) %} {% if attachment %}
+          <img
+            srcset="{{ apos.image.srcset(attachment) }}"
+            src="{{ apos.attachment.url(attachment, { size: data.options.size or 'full' }) }}"
+            alt="{{ attachment._alt or leader.title }}"
+            class="leader-photo"
+          />
+          {% endif %} {% endif %}
 
-        <span class="leader-experience">{{ leader.experience }} yrs</span>
-        <a class="leader-link" href="{{ leader.linkedin }}" target="_blank"
-          >LinkedIn</a
-        >
+          <div class="leader-title-block">
+            <h3 class="leader-title">{{ leader.title }}</h3>
+            <p class="leader-position">{{ leader.position }}</p>
+          </div>
+        </div>
 
-        <div class="leader-bio">{{ leader.bio }}</div>
+        <div class="leader-footer">
+          <div class="leader-bio">{{ leader.bio }}</div>
+
+          <div class="leader-meta">
+            <span class="leader-experience">{{ leader.experience }} yrs</span>
+            <a class="leader-link" href="{{ leader.linkedin }}" target="_blank"
+              >LinkedIn</a
+            >
+          </div>
+        </div>
       </div>
     </article>
 

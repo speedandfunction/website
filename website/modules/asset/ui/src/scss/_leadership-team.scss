@@ -1,49 +1,112 @@
 .leadership-list {
   display: flex;
   flex-direction: column;
+  align-items: center;
 
-  @include breakpoint-medium {
+  @include breakpoint-large {
     flex-direction: row;
   }
 }
 
 .leader-card {
-  max-width: 400px;
-  max-height: 383px;
+  &:not(:first-child) {
+    .leader-header {
+      .leader-title-block {
+        @include breakpoint-large {
+          border-left: none;
+        }
+      }
+    }
+
+    .leader-footer {
+      @include breakpoint-large {
+        border-left: none;
+      }
+    }
+  }
+}
+
+.leader-card {
+  flex: 1 1 33%;
+  min-width: 300px;
+  box-sizing: border-box;
   font-style: $font-style-normal;
   width: 100%;
   height: 100%;
+  margin-bottom: 24px;
+
+  @include breakpoint-large {
+    max-height: 383px;
+    margin-bottom: 0;
+  }
+
+  .leader-header {
+    display: flex;
+    max-width: calc(100% - 102px);
+
+    @include breakpoint-large {
+      flex-direction: column;
+      max-width: none;
+    }
+
+    .leader-title-block {
+      padding: 29px 24px;
+      width: 100%;
+
+      @include breakpoint-large {
+        padding: 40px 40px 0;
+        border: 1px solid $whisper;
+        border-bottom: none;
+        width: auto;
+      }
+    }
+  }
+
+  .leader-footer {
+    padding: 24px;
+    border: 1px solid $whisper;
+
+    @include breakpoint-large {
+      padding: 0 40px 40px;
+      border-top: none;
+    }
+  }
 
   .leader-photo {
     height: 102px;
     width: 102px;
 
-    img {
-      max-width: 100%;
-    }
-
-    @include breakpoint-medium {
+    @include breakpoint-large {
       height: 225px;
       width: 225px;
     }
   }
 
-  .leader-info {
-    .leader-title {
-      @include responsive-font(16px, 22px);
-      @include responsive-line-height(140%, 110%);
-      font-weight: $font-weight-extra-bold;
-      color: $gray-500;
-      margin: 0;
-    }
+  .leader-title {
+    @include responsive-font(16px, 22px);
+    @include responsive-line-height(140%, 110%);
+    @include truncate-lines(1);
+    font-weight: $font-weight-extra-bold;
+    color: $gray-500;
+    margin: 0;
+  }
 
-    .leader-position {
-      @include font-settings(10px, 140%, $font-weight-medium);
-      font-weight: $font-weight-medium;
-      text-transform: capitalize;
-      color: $gray-300;
-      margin-top: 4px;
+  .leader-position {
+    @include font-settings(10px, 140%, $font-weight-medium);
+    @include truncate-lines(1);
+    font-weight: $font-weight-medium;
+    text-transform: capitalize;
+    color: $gray-300;
+    margin: 8px 0 0;
+
+    @include breakpoint-large {
+      margin: 4px 0 16px;
     }
+  }
+
+  .leader-meta {
+    display: flex;
+    justify-content: space-between;
 
     .leader-experience {
       @include font-settings(11px, 120%, $font-weight-300);
@@ -57,14 +120,27 @@
       text-decoration: underline;
       text-transform: lowercase;
     }
+  }
+
+  .leader-bio {
+    @include font-settings(14px, 150%, $font-weight-medium);
+    color: $gray-300;
+    margin-bottom: 16px;
+
+    @include breakpoint-large {
+      color: $gray-500;
+      display: none;
+    }
+  }
+
+  &:hover {
+    .leader-photo {
+      display: none;
+    }
 
     .leader-bio {
-      @include font-settings(14px, 150%, $font-weight-medium);
-      color: $gray-300;
-
-      @include breakpoint-medium {
-        color: $gray-500;
-        visibility: hidden;
+      @include breakpoint-large {
+        display: block;
       }
     }
   }
