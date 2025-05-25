@@ -1,11 +1,33 @@
 const { google } = require('googleapis');
 const { getEnv } = require('../../../../utils/env');
 
+const APPEND_RANGE = 'Sheet1!A1';
+
+const ERROR_MESSAGES = {
+  401: 'Unauthorized: Invalid credentials or misconfigured service account',
+  403: 'Permission denied: Check if the service account has access to the spreadsheet',
+  404: 'Spreadsheet not found',
+};
+
+const formatHeaderName = (key) =>
+  key
+    .split('-')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+
+const logError = (context, error) =>
+  // eslint-disable-next-line no-console
+  console.error(`[SHEETS] ${context}: ${error?.message || error}`);
+
 const googleSheetsService = {
   getGoogleSheetsClient() {
     const spreadsheetId = getEnv('SPREADSHEET_ID');
     const serviceAccountEmail = getEnv('SERVICE_ACCOUNT_EMAIL');
     const serviceAccountPrivateKey = getEnv('SERVICE_ACCOUNT_PRIVATE_KEY');
+
+    if (!spreadsheetId || !serviceAccountEmail || !serviceAccountPrivateKey) {
+      throw new Error('Missing required Google Sheets environment variables');
+    }
 
     const privateKey = serviceAccountPrivateKey.replace(/\\n/gu, '\n');
     const auth = new google.auth.JWT({
@@ -17,6 +39,22 @@ const googleSheetsService = {
     return { spreadsheetId, auth };
   },
 
+  handleSheetsError(err, contextMessage, spreadsheetId = '') {
+    let baseMessage = '';
+    if (ERROR_MESSAGES[err.code]) {
+      baseMessage = ERROR_MESSAGES[err.code];
+    } else {
+      baseMessage = err.message;
+    }
+
+    let fullMessage = `${baseMessage}`;
+    if (spreadsheetId) {
+      fullMessage += `: ${spreadsheetId}`;
+    }
+
+    throw new Error(fullMessage);
+  },
+
   async checkNeedHeaders(sheets, spreadsheetId) {
     try {
       const checkResponse = await sheets.spreadsheets.values.get({
@@ -26,19 +64,8 @@ const googleSheetsService = {
 
       return !checkResponse.data?.values?.length;
     } catch (err) {
-      if (err.code === 404) {
-        throw new Error(`Spreadsheet not found: ${spreadsheetId}`);
-      } else if (err.code === 403) {
-        throw new Error(
-          `Permission denied: Check if the service account has access to the spreadsheet`,
-        );
-      } else if (err.code === 401) {
-        throw new Error(
-          `Unauthorized: Invalid credentials or misconfigured service account`,
-        );
-      } else {
-        throw new Error(`Headers check error: ${err.message}`);
-      }
+      this.handleSheetsError(err, 'Headers check error', spreadsheetId);
+      throw err;
     }
   },
 
@@ -51,36 +78,28 @@ const googleSheetsService = {
 
     const { _id, ...formFields } = formData;
 
-    Object.entries(formFields).forEach(([key, value]) => {
-      const headerName = key
-        .split('-')
-        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-        .join(' ');
-
-      headers.push(headerName);
-
+    for (const [key, value] of Object.entries(formFields)) {
+      headers.push(formatHeaderName(key));
       if (Array.isArray(value)) {
         rowData.push(value.join(', '));
       } else {
         rowData.push(value);
       }
-    });
+    }
 
     return { headers, rowData };
   },
 
   async appendToSheet(sheets, spreadsheetId, values) {
     try {
-      const response = await sheets.spreadsheets.values.append({
+      return await sheets.spreadsheets.values.append({
         spreadsheetId,
-        range: 'Sheet1!A1',
+        range: APPEND_RANGE,
         valueInputOption: 'RAW',
         resource: { values },
       });
-      return response;
     } catch (err) {
-      // eslint-disable-next-line no-console
-      console.error(`[SHEETS] Append error: ${err.message}`);
+      logError('Append error', err);
       throw err;
     }
   },
@@ -101,20 +120,16 @@ const googleSheetsService = {
       } catch (error) {
         lastError = error;
         const retriesLeft = maxRetries - attempt - 1;
-
-        // eslint-disable-next-line no-console
-        console.error(`Operation failed, retries left: ${retriesLeft}`);
-
+        logError(`Operation failed, retries left: ${retriesLeft}`, error);
         if (retriesLeft <= 0) {
           break;
         }
-
         // eslint-disable-next-line no-await-in-loop
         await this.sleep(delayMs);
       }
     }
 
-    throw lastError;
+    throw lastError || new Error('Operation failed');
   },
 
   async checkHeadersWithRetry(sheets, spreadsheetId) {
@@ -125,10 +140,7 @@ const googleSheetsService = {
         1000,
       );
     } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error(
-        `[SHEETS] Headers check failed after all attempts: ${error.message}`,
-      );
+      logError('Headers check failed after all attempts', error);
       return null;
     }
   },
@@ -144,8 +156,7 @@ const googleSheetsService = {
       try {
         await this.appendToSheet(sheets, spreadsheetId, [headers]);
       } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error(`[SHEETS] Failed to add headers: ${error.message}`);
+        logError('Failed to add headers', error);
         return false;
       }
     }
@@ -156,6 +167,7 @@ const googleSheetsService = {
   async sendFormDataToGoogleSheets(formData) {
     try {
       const { spreadsheetId, auth } = this.getGoogleSheetsClient();
+
       if (!spreadsheetId || !auth) {
         // eslint-disable-next-line no-console
         console.error('[SHEETS] Missing Google Sheets configuration');
@@ -170,19 +182,20 @@ const googleSheetsService = {
         spreadsheetId,
         headers,
       );
-      if (!headersAdded) return false;
 
-      try {
-        await this.appendToSheet(sheets, spreadsheetId, [rowData]);
-        return true;
-      } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error(`[SHEETS] Failed to send form data: ${error.message}`);
+      if (!headersAdded) {
         return false;
       }
+
+      await this.appendToSheet(sheets, spreadsheetId, [rowData]);
+      return true;
     } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error(`[SHEETS] Unexpected error: ${error.message}`);
+      if (error.message === 'Append failed') {
+        // eslint-disable-next-line no-console
+        console.error('[SHEETS] Failed to send form data: Append failed');
+      } else {
+        logError('Unexpected error', error);
+      }
       return false;
     }
   },

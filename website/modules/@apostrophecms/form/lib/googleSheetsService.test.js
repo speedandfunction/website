@@ -121,71 +121,34 @@ describe('googleSheetsService', () => {
 
   describe('formatFormData', () => {
     it('should format form data correctly', () => {
-      // Замінюємо весь метод formatFormData щоб мати повний контроль
-      const originalFormatFormData = googleSheetsService.formatFormData;
+      const formData = {
+        '_id': 'form-id-123',
+        'first-name': 'John',
+        'last-name': 'Doe',
+        'email-address': 'john@example.com',
+        'multiple-choice': ['Option 1', 'Option 2'],
+      };
 
-      googleSheetsService.formatFormData = jest.fn((formData) => {
-        const { _id, ...formFields } = formData;
+      const result = googleSheetsService.formatFormData(formData);
 
-        const headers = ['ID', 'Timestamp'];
-        const rowData = ['1234567890', '2023-01-01T12:00:00.000Z'];
+      expect(result).toHaveProperty('headers');
+      expect(result).toHaveProperty('rowData');
+      expect(result.headers).toContain('ID');
+      expect(result.headers).toContain('Timestamp');
+      expect(result.headers).toContain('First Name');
+      expect(result.headers).toContain('Last Name');
+      expect(result.headers).toContain('Email Address');
+      expect(result.headers).toContain('Multiple Choice');
 
-        Object.entries(formFields).forEach(([key, value]) => {
-          const headerName = key
-            .split('-')
-            .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-            .join(' ');
-
-          headers.push(headerName);
-
-          if (Array.isArray(value)) {
-            rowData.push(value.join(', '));
-          } else {
-            rowData.push(value);
-          }
-        });
-
-        return { headers, rowData };
-      });
-
-      try {
-        const formData = {
-          '_id': 'form-id',
-          'first-name': 'John',
-          'last-name': 'Doe',
-          'email-address': 'john@example.com',
-          'multiple-choice': ['Option 1', 'Option 2'],
-        };
-
-        const result = googleSheetsService.formatFormData(formData);
-
-        expect(result).toEqual({
-          headers: [
-            'ID',
-            'Timestamp',
-            'First Name',
-            'Last Name',
-            'Email Address',
-            'Multiple Choice',
-          ],
-          rowData: [
-            '1234567890',
-            '2023-01-01T12:00:00.000Z',
-            'John',
-            'Doe',
-            'john@example.com',
-            'Option 1, Option 2',
-          ],
-        });
-
-        // Перевіряємо, що мок був викликаний
-        expect(googleSheetsService.formatFormData).toHaveBeenCalledWith(
-          formData,
-        );
-      } finally {
-        // Відновлюємо оригінальний метод
-        googleSheetsService.formatFormData = originalFormatFormData;
-      }
+      expect(result.rowData).toHaveLength(result.headers.length);
+      expect(result.rowData[result.headers.indexOf('First Name')]).toBe('John');
+      expect(result.rowData[result.headers.indexOf('Last Name')]).toBe('Doe');
+      expect(result.rowData[result.headers.indexOf('Email Address')]).toBe(
+        'john@example.com',
+      );
+      expect(result.rowData[result.headers.indexOf('Multiple Choice')]).toBe(
+        'Option 1, Option 2',
+      );
     });
   });
 
@@ -331,6 +294,25 @@ describe('googleSheetsService', () => {
         'test-id',
         [['123', '2023-01-01', 'John']],
       );
+    });
+
+    it('should handle missing environment variables gracefully', async () => {
+      const consoleSpy = jest.spyOn(console, 'error').mockImplementation();
+      googleSheetsService.getGoogleSheetsClient.mockImplementation(() => {
+        throw new Error('Missing required environment variables');
+      });
+
+      const result = await googleSheetsService.sendFormDataToGoogleSheets({
+        _id: 'form-id',
+        name: 'John',
+      });
+
+      expect(result).toBe(false);
+      expect(consoleSpy).toHaveBeenCalledWith(
+        expect.stringContaining('Missing required environment variables'),
+      );
+
+      consoleSpy.mockRestore();
     });
 
     it('should return false when headers cannot be added', async () => {
