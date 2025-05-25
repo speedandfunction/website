@@ -1,5 +1,3 @@
-const headingToolbar = require('../../lib/headingToolbar');
-
 module.exports = {
   cascades: ['batchOperations'],
   extend: '@apostrophecms/piece-type',
