@@ -39,14 +39,25 @@
             class="client-website-link"
             >{{ data.piece.clientWebsite }}</a
           >
-          {% endif %} {% if data.piece.industry %}
-          <div class="industry">{{ data.piece.industry }}</div>
-          {% endif %} {% if data.piece.portfolioTitle %}
+          {% endif %} 
+          {% if data.piece._industry.length %}
+          <div class="industry">
+            {% for industry in data.piece._industry %}
+              {{ industry.title }}{% if not loop.last %}, {% endif %}
+            {% endfor %}
+          </div>
+          {% endif %}
+          {% if data.piece.portfolioTitle %}
           <h2 class="portfolio-title">{{ data.piece.portfolioTitle }}</h2>
           {% endif %} {% if data.piece.descriptor %}
           <p class="descriptor">{{ data.piece.descriptor }}</p>
-          {% endif %} {% if data.piece.caseStudyType %}
-          <div class="type">{{ data.piece.caseStudyType }}</div>
+          {% endif %} 
+          {% if data.piece._caseStudyType.length %}
+          <div class="type">
+            {% for type in data.piece._caseStudyType %}
+              {{ type.title }}{% if not loop.last %}, {% endif %}
+            {% endfor %}
+          </div>
           {% endif %}
         </div>
 
@@ -82,10 +93,15 @@
           <h3>Results</h3>
           <p>{{ data.piece.results }}</p>
         </div>
-        {% endif %} {% if data.piece.stack %}
+        {% endif %} 
+        {% if data.piece._stack.length %}
         <div>
           <h3>Tech stack</h3>
-          <p>{{ data.piece.stack }}</p>
+          <p>
+            {% for tech in data.piece._stack %}
+              {{ tech.title }}{% if not loop.last %}, {% endif %}
+            {% endfor %}
+          </p>
         </div>
         {% endif %}
       </div>

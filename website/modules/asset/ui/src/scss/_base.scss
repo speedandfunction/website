@@ -17,6 +17,7 @@
   width: 100%;
   max-width: $breakpoint-extra-extra-large;
   padding: 0 40px;
+  padding-top: $sf-container-padding-top;
   margin: 0 auto;
 
   @include breakpoint-extra-extra-large {
@@ -37,6 +38,7 @@
   font-weight: $font-weight-extra-bold;
   font-size: $font-size-h1-mobile;
   line-height: 110%;
+  margin: 0;
 
   @include breakpoint-medium {
     font-size: $font-size-h1;
@@ -47,6 +49,7 @@
   font-weight: $font-weight-extra-bold;
   font-size: $font-size-h2-mobile;
   line-height: 110%;
+  margin: 0;
 
   @include breakpoint-medium {
     font-size: $font-size-h2;
@@ -58,6 +61,7 @@
   font-weight: $font-weight-extra-bold;
   font-size: $font-size-h3-mobile;
   line-height: 140%;
+  margin: 0;
 
   @include breakpoint-medium {
     font-size: $font-size-h3;
@@ -69,9 +73,11 @@
   font-weight: $font-weight-extra-bold;
   font-size: $font-size-h4-mobile;
   line-height: 140%;
+  margin: 0;
 
   @include breakpoint-medium {
     font-size: $font-size-h4;
+    line-height: 140%;
   }
 }
 
@@ -79,9 +85,11 @@
   font-weight: $font-weight-extra-bold;
   font-size: $font-size-h5-mobile;
   line-height: 140%;
+  margin: 0;
 
   @include breakpoint-medium {
     font-size: $font-size-h5;
+    line-height: 140%;
   }
 }
 
@@ -89,9 +97,11 @@
   font-weight: $font-weight-extra-bold;
   font-size: $font-size-h6-mobile;
   line-height: 110%;
+  margin: 0;
 
   @include breakpoint-medium {
     font-size: $font-size-h6;
+    line-height: 110%;
   }
 }
 
@@ -99,6 +109,7 @@
   font-weight: $font-weight-medium;
   font-size: $font-size-body-small;
   line-height: 140%;
+  margin: 0;
 
   @include breakpoint-medium {
     font-size: $font-size-h4-mobile;
@@ -110,6 +121,7 @@
   font-weight: $font-weight-medium;
   font-size: $font-size-body-small-mobile;
   line-height: 140%;
+  margin: 0;
 
   @include breakpoint-medium {
     font-size: $font-size-body-small;
@@ -121,10 +133,14 @@
   font-weight: $font-weight-medium;
   font-size: $font-size-body-small-mobile;
   line-height: 150%;
-  margin-left: 40px;
+  line-height: $breadcrumbs-line-height;
+  width: min(1280px, 100%);
+  margin: 0 auto 32px;
+  padding: 0 40px;
+  height: 100%;
   color: $black;
-  @include breakpoint-extra-extra-large {
-    margin-left: 120px;
+  @include breakpoint-medium {
+    margin-bottom: 60px;
   }
 }
 
@@ -154,8 +170,4 @@
 
 .breadcrumb-link:hover {
   text-decoration: underline;
-}
-
-.breadcrumb-home {
-  color: $gray-300;
 }

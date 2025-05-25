@@ -1,0 +1,58 @@
+.not-found-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  height: $mobile-not-found-height;
+  @include breakpoint-medium {
+    height: $desktop-not-found-height;
+  }
+
+  .not-found-content {
+    width: 75%;
+    min-width: 322px;
+    text-align: center;
+
+    img {
+      width: 50%;
+      min-width: 237px;
+      margin-bottom: 33px;
+      @include breakpoint-medium {
+        margin-bottom: 7px;
+      }
+    }
+
+    h1 {
+      color: $gray-300;
+      text-align: center;
+      @include font-settings(24px, 110%, 700);
+      margin-bottom: 79px;
+      @include breakpoint-medium {
+        margin-bottom: 73px;
+        font-size: 36px;
+      }
+    }
+
+    .two-buttons {
+      width: 146px;
+      margin: auto;
+      gap: 24px;
+      @include breakpoint-medium {
+        width: 100%;
+        gap: 0;
+      }
+
+      .sf-button {
+        width: 100%;
+        margin-bottom: 0;
+        font-size: 12px;
+        border: 1px solid $gray-500;
+        padding: 11px;
+        @include breakpoint-medium {
+          font-size: 20px;
+          padding: 23px;
+        }
+      }
+    }
+  }
+}

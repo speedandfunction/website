@@ -9,6 +9,7 @@ module.exports = {
       updatedAt: -1,
     },
     perPage: 9,
+    alias: 'caseStudy',
   },
   fields: {
     add: {
@@ -37,23 +38,50 @@ module.exports = {
           },
         },
       },
-      stack: {
+      _stack: {
         label: 'Tech Stack',
-        type: 'string',
-        help: 'Comma separated tags indicating the technologies utilized in the project.',
+        type: 'relationship',
+        withType: 'cases-tags',
         required: true,
+        builders: {
+          project: {
+            title: 1,
+            slug: 1,
+            _category: 1,
+          },
+        },
+        withRelationships: ['_category'],
+        help: 'Select technologies utilized in the project.',
       },
-      caseStudyType: {
+      _caseStudyType: {
         label: 'Case Study Type',
-        type: 'string',
-        help: 'The nature of the project identifying the projectʼs scope and requirements, relationship, or key characteristics (e.g., Mobile Development, Product Enhancement, ML/AI).',
+        type: 'relationship',
+        withType: 'cases-tags',
         required: true,
+        builders: {
+          project: {
+            title: 1,
+            slug: 1,
+            _category: 1,
+          },
+        },
+        withRelationships: ['_category'],
+        help: 'The nature of the project identifying the projectʼs scope and requirements, relationship, or key characteristics.',
       },
-      industry: {
+      _industry: {
         label: 'Industry',
-        type: 'string',
-        help: "Comma seperated tags representing the client's industry or sector (e.g. Financial Services, Healthcare, Retail & E-commerce).",
+        type: 'relationship',
+        withType: 'cases-tags',
         required: true,
+        builders: {
+          project: {
+            title: 1,
+            slug: 1,
+            _category: 1,
+          },
+        },
+        withRelationships: ['_category'],
+        help: "Select client's industry or sector.",
       },
       portfolioTitle: {
         label: 'Portfolio Title',
@@ -72,17 +100,6 @@ module.exports = {
         type: 'string',
         help: 'Public link referring to the delivered result.',
         placeholder: 'https://example.com/project',
-      },
-      _tags: {
-        type: 'relationship',
-        label: 'Tags',
-        withType: 'cases-tags',
-        builders: {
-          project: {
-            title: 1,
-            slug: 1,
-          },
-        },
       },
       objective: {
         label: 'Objective',
@@ -136,13 +153,12 @@ module.exports = {
           'title',
           'clientWebsite',
           'picture',
-          'stack',
-          'caseStudyType',
-          'industry',
+          '_stack',
+          '_caseStudyType',
+          '_industry',
           'portfolioTitle',
           'descriptor',
           'prodLink',
-          '_tags',
         ],
       },
       details: {
@@ -157,20 +173,42 @@ module.exports = {
   },
   columns: {
     add: {
-      stack: {
+      _stack: {
         label: 'Tech Stack',
-      },
-      _tags: {
-        label: 'Tags',
         component: 'AposCellTags',
       },
     },
   },
   filters: {
     add: {
-      _tags: {
-        label: 'Tags',
+      _industry: {
+        label: 'Industry',
+      },
+      _caseStudyType: {
+        label: 'Case Study Type',
+      },
+      _stack: {
+        label: 'Stack',
       },
     },
+  },
+  helpers() {
+    return {
+      groupTagsByCategory(tags) {
+        const grouped = {};
+        if (!Array.isArray(tags)) {
+          return grouped;
+        }
+        /* eslint-disable no-underscore-dangle */
+        tags.forEach((tag) => {
+          const category = tag._category?.[0]?.title || 'Uncategorized';
+          if (!grouped[category]) {
+            grouped[category] = [];
+          }
+          grouped[category].push(tag.label);
+        });
+        return grouped;
+      },
+    };
   },
 };

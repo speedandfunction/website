@@ -24,19 +24,12 @@
       <div class="leader-info">
         <h3 class="leader-title">{{ leader.title }}</h3>
         <p class="leader-position">{{ leader.position }}</p>
+        <div class="leader-bio">{{ leader.bio }}</div>
 
-        <div class="leader-bio">{% leader.bio %}</div>
-
-        {% if leader.experience %}
         <span class="leader-experience">{{ leader.experience }} yrs</span>
-        {% endif %}
-
-        <!-- prettier-ignore -->
-        {% if leader.linkedin %}
         <a class="leader-link" href="{{ leader.linkedin }}" target="_blank"
           >LinkedIn</a
         >
-        {% endif %}
       </div>
     </article>
 

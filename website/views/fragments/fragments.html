@@ -1,20 +1,18 @@
 {% import 'fragments/utilities.html' as utilities %} {% fragment header() %}
-<header class="sf-container">
-  <div class="sf-header">
-    <div class="sf-header__content">
-      {% render utilities.siteLogo() %}
-      <button
-        class="sf-menu"
-        id="nav-icon"
-        aria-label="Toggle menu"
-        aria-expanded="false"
-        aria-controls="main-navigation"
-      >
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
-    </div>
+<header class="sf-header">
+  <div class="sf-header__content">
+    {% render utilities.siteLogo() %}
+    <button
+      class="sf-menu"
+      id="nav-icon"
+      aria-label="Toggle menu"
+      aria-expanded="false"
+      aria-controls="main-navigation"
+    >
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
   </div>
   <nav class="sf-nav" data-menu>
     <ol class="sf-nav__list">
@@ -28,14 +26,11 @@
 <footer class="sf-container">
   <p class="sf-copy">&#169; {{ data.currentYear or '2025' }} S&F</p>
 </footer>
-{% endfragment %} {% fragment breadcrumbs() %}
+{% endfragment %} {% fragment breadcrumbs() %} {% if data.page._url !=
+data.home._url %}
 <nav class="breadcrumb" aria-label="Breadcrumb navigation">
   <ol class="breadcrumb-list">
-    {% if data.page._url == data.home._url %}
-    <li class="breadcrumb-home" aria-current="page">
-      <span>S&amp;F Home</span>
-    </li>
-    {% else %} {% for page in data.page._ancestors %}
+    {% for page in data.page._ancestors %}
     <li class="breadcrumb-item">
       <a href="{{ page._url }}" class="breadcrumb-link">
         {% if page._url == data.home._url %} Home {% else %} {{ page.title }} {%
@@ -55,7 +50,7 @@
     <li class="breadcrumb-item breadcrumb-item-current" aria-current="page">
       <span>{{ data.page.title }}</span>
     </li>
-    {% endif %} {% endif %}
+    {% endif %}
   </ol>
 </nav>
-{% endfragment %}
+{% endif %} {% endfragment %}
