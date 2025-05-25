@@ -1,190 +1,70 @@
-.sf-leadership-team-grid {
-  width: 100%;
-}
-
-.sf-leadership-row {
+.leadership-list {
   display: flex;
+  background: lightgreen;
   flex-direction: column;
-  flex-wrap: wrap;
-}
 
-.sf-leader {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  width: 100%;
-  border: 1px solid #eaeaea;
-  border-radius: 5px;
-  overflow: hidden;
-  transition: all 0.3s ease;
-  position: relative;
-  
-  &:hover {
-    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
-    
-    .sf-leader__photo {
-      opacity: 0;
-    }
-    
-    .sf-leadership-header__bio {
-      position: absolute;
-      top: 20px;
-      left: 15px;
-      right: 15px;
-      z-index: 10;
-      margin: 0;
-      
-      @include breakpoint-medium {
-        left: 40px;
-        right: 40px;
-        top: 40px;
-      }
-    }
-    
-    .sf-leader__vita {
-      opacity: 1;
-      max-height: 120px;
-      padding: 10px 40px 20px;
-      margin-top: 50px;
-      
-      @include breakpoint-medium {
-        margin-top: 80px;
-        max-height: 140px;
-      }
-      
-      p {
-        transform: translateY(0);
-      }
-    }
-  }
-}
-
-.sf-leadership-header {
-  display: flex;
-  flex-direction: column;
-  background-color: #f9f9f9;
-  position: relative;
-  min-height: 87px;
-  
   @include breakpoint-medium {
-    min-height: 225px;
-  }
-}
-
-.sf-leader__photo {
-  display: flex;
-  align-items: center;
-  @include transition(opacity);
-  
-  img {
-    width: 87px;
-    height: 87px;
-    object-fit: cover;
-    display: block;
-    
-    @include breakpoint-medium {
-      width: 225px;
-      height: 225px;
-      max-width: 225px;
-      max-height: 225px;
-    }
-  }
-}
-
-.sf-leader__vita {
-  max-height: 0;
-  opacity: 0;
-  overflow: hidden;
-  transition: all 0.3s ease;
-  padding: 0;
-  background-color: #f9f9f9;
-  
-  p {
-    margin-top: 0;
-    font-size: 14px;
-    line-height: 20px;
-    font-weight: 500;
-    color: $gray-500;
-    transform: translateY(100%);
-    transition: transform 0.6s ease;
-    padding: 20px 40px;
-  }
-
-  span {
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 150%;
-  }
-}
-
-.sf-leadership-header__bio {
-  margin-bottom: 10px;
-  padding: 0 15px;
-  transition: all 0.3s ease;
-  
-  @include breakpoint-medium {
-    padding: 0 40px;
-  }
-}
-
-.sf-leader__title {
-  font-size: 18px;
-  font-weight: 600;
-  margin: 0;
-  color: $gray-500;
-}
-
-.sf-leader__position {
-  font-size: 14px;
-  font-weight: 400;
-  color: $gray-500;
-  margin-top: 4px;
-}
-
-.sf-leader-wrapper {
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  padding: 15px;
-  
-  @include breakpoint-medium {
-    padding: 40px;
-  }
-}
-
-.sf-leader__footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: auto;
-  font-size: 11px;
-  font-weight: 300;
-  line-height: 1.2;
-  color: $gray-300;
-  text-decoration: underline;
-  
-  & .sf-leader__link {
-    color: $gray-300;
-    text-decoration: none;
-  }
-}
-
-.sf-leadership-col {
-  width: 100%;
-  margin-bottom: 20px;
-  display: flex;
-}
-
-@include breakpoint-medium {
-  .sf-leadership-row {
-    display: flex;
     flex-direction: row;
-    margin: 0 -15px;
   }
-  
-  .sf-leadership-col {
-    width: 33.333%;
-    padding: 0 15px;
-    margin-bottom: 30px;
+}
+
+.leader-card {
+  border: 1px solid red;
+  max-width: 400px;
+  max-height: 383px;
+  font-style: $font-style-normal;
+
+  .leader-photo {
+    height: 102px;
+    width: 102px;
+
+    img {
+      max-width: 100%;
+    }
+
+    @include breakpoint-medium {
+      height: 225px;
+      width: 225px;
+    }
+  }
+
+  .leader-info {
+    .leader-title {
+      @include responsive-font(16px, 22px);
+      @include responsive-line-height(140%, 110%);
+      font-weight: $font-weight-extra-bold;
+      color: $gray-500;
+      margin: 0;
+    }
+
+    .leader-position {
+      @include font-settings(10px, 140%, $font-weight-medium);
+      font-weight: $font-weight-medium;
+      text-transform: capitalize;
+      color: $gray-300;
+      margin-top: 4px;
+    }
+
+    .leader-experience {
+      @include font-settings(11px, 120%, $font-weight-300);
+      color: $gray-300;
+      text-transform: lowercase;
+    }
+
+    .leader-link {
+      @include font-settings(11px, 120%, $font-weight-300);
+      color: $gray-300;
+      text-decoration: underline;
+      text-transform: lowercase;
+    }
+
+    .leader-bio {
+      @include font-settings(14px, 150%, $font-weight-medium);
+      color: $gray-300;
+
+      @include breakpoint-medium {
+        color: $gray-500;
+      }
+    }
   }
 }

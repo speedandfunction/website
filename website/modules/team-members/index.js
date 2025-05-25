@@ -23,6 +23,7 @@ module.exports = {
       position: {
         label: 'Position',
         type: 'string',
+        required: true,
       },
       order: {
         label: 'Order',
@@ -46,15 +47,10 @@ module.exports = {
       },
       bio: {
         label: 'Bio',
-        type: 'area',
-        options: {
-          max: 1,
-          widgets: {
-            '@apostrophecms/rich-text': {
-              ...headingToolbar,
-            },
-          },
-        },
+        type: 'string',
+        textarea: true,
+        help: 'Enter a short biography (up to 400 characters)',
+        required: true,
       },
     },
     group: {
