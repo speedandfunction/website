@@ -24,11 +24,14 @@ const googleSheetsService = {
         range: 'Sheet1!A1:Z1',
       });
 
-      return (
-        !checkResponse.data.values || checkResponse.data.values.length === 0
-      );
+      const needHeaders =
+        !checkResponse.data.values || checkResponse.data.values.length === 0;
+
+      return needHeaders;
     } catch (err) {
-      throw new Error(`Headers check error: ${err.message}`);
+      // eslint-disable-next-line no-console
+      console.error(`[SHEETS] Headers check error: ${err.message}`);
+      return true;
     }
   },
 
@@ -60,31 +63,121 @@ const googleSheetsService = {
   },
 
   async appendToSheet(sheets, spreadsheetId, values) {
-    return await sheets.spreadsheets.values.append({
-      spreadsheetId,
-      range: 'Sheet1!A1',
-      valueInputOption: 'RAW',
-      resource: { values },
+    try {
+      const response = await sheets.spreadsheets.values.append({
+        spreadsheetId,
+        range: 'Sheet1!A1',
+        valueInputOption: 'RAW',
+        resource: { values },
+      });
+      return response;
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error(`[SHEETS] Append error: ${err.message}`);
+      throw err;
+    }
+  },
+
+  sleep(ms) {
+    return new Promise((resolve) => {
+      setTimeout(resolve, ms);
     });
   },
 
-  async sendFormDataToGoogleSheets(formData) {
-    const { spreadsheetId, auth } = this.getGoogleSheetsClient();
-    if (!auth) {
-      throw new Error('Google Sheets auth failed');
+  async retryOperation(operation, maxRetries = 3, delayMs = 1000) {
+    let lastError = null;
+
+    for (let attempt = 0; attempt < maxRetries; attempt += 1) {
+      try {
+        // eslint-disable-next-line no-await-in-loop
+        return await operation();
+      } catch (error) {
+        lastError = error;
+        const retriesLeft = maxRetries - attempt - 1;
+
+        // eslint-disable-next-line no-console
+        console.error(`Operation failed, retries left: ${retriesLeft}`);
+
+        if (retriesLeft <= 0) {
+          break;
+        }
+
+        // eslint-disable-next-line no-await-in-loop
+        await this.sleep(delayMs);
+      }
     }
 
-    const sheets = google.sheets({ version: 'v4', auth });
+    throw lastError;
+  },
 
-    const { headers, rowData } = this.formatFormData(formData);
-    const needHeaders = await this.checkNeedHeaders(sheets, spreadsheetId);
+  async checkHeadersWithRetry(sheets, spreadsheetId) {
+    try {
+      return await this.retryOperation(
+        () => this.checkNeedHeaders(sheets, spreadsheetId),
+        3,
+        1000,
+      );
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error(
+        `[SHEETS] Headers check failed after all attempts: ${error.message}`,
+      );
+      return null;
+    }
+  },
+
+  async addHeadersIfNeeded(sheets, spreadsheetId, headers) {
+    const needHeaders = await this.checkHeadersWithRetry(sheets, spreadsheetId);
+
+    if (needHeaders === null) {
+      return false;
+    }
 
     if (needHeaders) {
-      await this.appendToSheet(sheets, spreadsheetId, [headers]);
+      try {
+        await this.appendToSheet(sheets, spreadsheetId, [headers]);
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error(`[SHEETS] Failed to add headers: ${error.message}`);
+        return false;
+      }
     }
 
-    await this.appendToSheet(sheets, spreadsheetId, [rowData]);
     return true;
+  },
+
+  async sendFormDataToGoogleSheets(formData) {
+    try {
+      const { spreadsheetId, auth } = this.getGoogleSheetsClient();
+      if (!spreadsheetId || !auth) {
+        // eslint-disable-next-line no-console
+        console.error('[SHEETS] Missing Google Sheets configuration');
+        return false;
+      }
+
+      const sheets = google.sheets({ version: 'v4', auth });
+      const { headers, rowData } = this.formatFormData(formData);
+
+      const headersAdded = await this.addHeadersIfNeeded(
+        sheets,
+        spreadsheetId,
+        headers,
+      );
+      if (!headersAdded) return false;
+
+      try {
+        await this.appendToSheet(sheets, spreadsheetId, [rowData]);
+        return true;
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error(`[SHEETS] Failed to send form data: ${error.message}`);
+        return false;
+      }
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error(`[SHEETS] Unexpected error: ${error.message}`);
+      return false;
+    }
   },
 };
 
