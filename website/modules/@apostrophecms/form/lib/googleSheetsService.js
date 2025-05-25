@@ -55,6 +55,7 @@ const googleSheetsService = {
     throw new Error(fullMessage);
   },
 
+  // eslint-disable-next-line consistent-return
   async checkNeedHeaders(sheets, spreadsheetId) {
     try {
       const checkResponse = await sheets.spreadsheets.values.get({
@@ -65,7 +66,6 @@ const googleSheetsService = {
       return !checkResponse.data?.values?.length;
     } catch (err) {
       this.handleSheetsError(err, 'Headers check error', spreadsheetId);
-      throw err;
     }
   },
 
