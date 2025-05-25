@@ -24,14 +24,21 @@ const googleSheetsService = {
         range: 'Sheet1!A1:Z1',
       });
 
-      const needHeaders =
-        !checkResponse.data.values || checkResponse.data.values.length === 0;
-
-      return needHeaders;
+      return !checkResponse.data?.values?.length;
     } catch (err) {
-      // eslint-disable-next-line no-console
-      console.error(`[SHEETS] Headers check error: ${err.message}`);
-      return true;
+      if (err.code === 404) {
+        throw new Error(`Spreadsheet not found: ${spreadsheetId}`);
+      } else if (err.code === 403) {
+        throw new Error(
+          `Permission denied: Check if the service account has access to the spreadsheet`,
+        );
+      } else if (err.code === 401) {
+        throw new Error(
+          `Unauthorized: Invalid credentials or misconfigured service account`,
+        );
+      } else {
+        throw new Error(`Headers check error: ${err.message}`);
+      }
     }
   },
 

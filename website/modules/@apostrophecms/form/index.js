@@ -22,9 +22,15 @@ module.exports = {
         }
 
         if (formData) {
-          await self.sendToGoogleSheets(formData);
+          try {
+            await self.sendToGoogleSheets(formData);
+          } catch (err) {
+            // eslint-disable-next-line no-console
+            console.error(
+              `Failed to send form data to Google Sheets: ${err.message}`,
+            );
+          }
         }
-
         return result;
       };
     }
