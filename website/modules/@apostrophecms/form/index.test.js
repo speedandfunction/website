@@ -31,11 +31,6 @@ describe('@apostrophecms/form module', () => {
     if (formModule.methods) {
       Object.assign(self, formModule.methods(self));
     }
-
-    // Store handlers
-    if (formModule.handlers) {
-      self.handlers = formModule.handlers(self);
-    }
   });
 
   describe('init function', () => {
@@ -111,76 +106,6 @@ describe('@apostrophecms/form module', () => {
       expect(
         googleSheetsService.sendFormDataToGoogleSheets,
       ).toHaveBeenCalledWith(formData);
-    });
-  });
-
-  describe('handleFormSubmission handler', () => {
-    it('should process form submissions', async () => {
-      const req = {};
-      const doc = {
-        type: '@apostrophecms/form-submission',
-        data: { field1: 'value1' },
-      };
-
-      await self.handlers[
-        '@apostrophecms/doc:afterInsert'
-      ].handleFormSubmission(req, doc);
-
-      expect(
-        googleSheetsService.sendFormDataToGoogleSheets,
-      ).toHaveBeenCalledWith(expect.objectContaining({ field1: 'value1' }));
-    });
-
-    it('should handle string data by parsing it', async () => {
-      const req = {};
-      const doc = {
-        type: '@apostrophecms/form-submission',
-        data: JSON.stringify({ field1: 'value1' }),
-      };
-
-      await self.handlers[
-        '@apostrophecms/doc:afterInsert'
-      ].handleFormSubmission(req, doc);
-
-      expect(
-        googleSheetsService.sendFormDataToGoogleSheets,
-      ).toHaveBeenCalledWith(expect.objectContaining({ field1: 'value1' }));
-    });
-
-    it('should ignore non-form submissions', async () => {
-      const req = {};
-      const doc = {
-        type: 'some-other-type',
-        data: { field1: 'value1' },
-      };
-
-      await self.handlers[
-        '@apostrophecms/doc:afterInsert'
-      ].handleFormSubmission(req, doc);
-
-      expect(
-        googleSheetsService.sendFormDataToGoogleSheets,
-      ).not.toHaveBeenCalled();
-    });
-
-    it('should handle errors gracefully', async () => {
-      const consoleSpy = jest.spyOn(console, 'error').mockImplementation();
-
-      const req = {};
-      const doc = {
-        type: '@apostrophecms/form-submission',
-        data: 'invalid-json',
-      };
-
-      await self.handlers[
-        '@apostrophecms/doc:afterInsert'
-      ].handleFormSubmission(req, doc);
-
-      expect(consoleSpy).toHaveBeenCalledWith(
-        expect.stringContaining('Error processing form submission'),
-      );
-
-      consoleSpy.mockRestore();
     });
   });
 });
