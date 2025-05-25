@@ -15,14 +15,23 @@ module.exports = {
       subtitle: {
         label: 'Subtitle',
         type: 'string',
-        help: 'Subtile text that appears below the title',
+        help: 'Subtitle text that appears below the title',
       },
-      description: {
-        label: 'Description Text',
-        type: 'string',
-        textarea: true,
-        help: 'Descriptive text that appears below the title and the subtitle',
-        max: 500,
+      descriptions: {
+        label: 'Description Texts',
+        type: 'array',
+        titleField: 'description',
+        help: 'Add one or more description blocks',
+        fields: {
+          add: {
+            description: {
+              label: 'Description',
+              type: 'string',
+              textarea: true,
+              max: 500,
+            },
+          },
+        },
       },
     },
   },
