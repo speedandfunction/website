@@ -32,6 +32,7 @@ module.exports = {
         '@apostrophecms/html': {},
         'page-intro': {},
         'home-hero': {},
+        'leadership-team': {},
       },
       columns: 2,
     },

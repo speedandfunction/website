@@ -1,0 +1,54 @@
+<section class="sf-section" data-leadership-team-widget>
+  {% area data.widget, 'intro' %}
+  <div class="sf-leadership-team-grid">
+    <div class="sf-leadership-row">
+      {% for leader in data.widget._teamLeaders %}
+        {% if loop.index0 % 3 == 0 and loop.index0 > 0 %}
+          </div><div class="sf-leadership-row">
+        {% endif %}
+        
+        <div class="sf-leadership-col">
+          <div class="sf-leader">
+            <div class="sf-leadership-header">
+              {% if leader.headshot %}
+              <div class="sf-leader__photo">
+                {% set attachment = apos.image.first(leader.headshot) %}
+                {% if attachment %}
+                  <img 
+                    srcset="{{ apos.image.srcset(attachment) }}"
+                    src="{{ apos.attachment.url(attachment, { size: data.options.size or 'full' }) }}"
+                    alt="{{ attachment._alt or leader.title }}"
+                    {% if apos.attachment.hasFocalPoint(attachment) %}style="object-position: {{ apos.attachment.focalPointToObjectPosition(attachment) }}"{% endif %}
+                  >
+                {% endif %}
+              </div>
+              {% endif %}
+            </div>
+            <div class="sf-leader-wrapper">
+              <div class="sf-leadership-header__bio">
+                <h4 class="sf-leader__title">{{ leader.title }}</h4>
+                <h5 class="sf-leader__position">{{ leader.position }}</h5>
+              </div>
+              
+              <div class="sf-leader__vita">
+                {% area leader, 'bio' %}
+              </div>
+              
+              <div class="sf-leader__footer">
+                {% if leader.experience %}
+                  <span>{{ leader.experience }} yrs</span>
+                {% endif %}
+                
+                {% if leader.linkedin %}
+                  <a class="sf-leader__link" href="{{ leader.linkedin }}" target="_blank">
+                    <span>LinkedIn</span>
+                  </a>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
