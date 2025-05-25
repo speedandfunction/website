@@ -69,7 +69,7 @@ const googleSheetsService = {
   },
 
   async sendFormDataToGoogleSheets(formData) {
-    const { spreadsheetId, auth } = await this.getGoogleSheetsClient();
+    const { spreadsheetId, auth } = this.getGoogleSheetsClient();
     if (!auth) {
       throw new Error('Google Sheets auth failed');
     }
