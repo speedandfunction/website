@@ -19,6 +19,7 @@ documentdb_master_password = "your-secure-password-here"  # Min 8 characters
 
 # Application Secrets (SENSITIVE - Store securely)
 session_secret = "${SESSION_SECRET_KEY}"
+redis_auth_token = "your-secure-redis-token-here"  # 16-128 chars, alphanumeric and symbols (no @, ", /)
 
 # Optional: Google Cloud Storage Service Account (if using GCS)
 gcs_service_account_key = ""  # Leave empty if not using GCS

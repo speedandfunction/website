@@ -80,6 +80,22 @@ variable "session_secret" {
   }
 }
 
+variable "redis_auth_token" {
+  description = "Auth token for Redis cluster (alphanumeric and symbols excluding @, \", /)"
+  type        = string
+  sensitive   = true
+  
+  validation {
+    condition = length(var.redis_auth_token) >= 16 && length(var.redis_auth_token) <= 128
+    error_message = "Redis auth token must be between 16 and 128 characters long."
+  }
+  
+  validation {
+    condition = can(regex("^[A-Za-z0-9!#$%&*()\\-_=\\+\\[\\]{}<>:;.,?~]+$", var.redis_auth_token))
+    error_message = "Redis auth token can only contain alphanumeric characters and symbols (excluding @, \", and /)."
+  }
+}
+
 variable "gcs_service_account_key" {
   description = "Google Cloud Storage service account private key (optional)"
   type        = string

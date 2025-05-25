@@ -7,10 +7,6 @@ terraform {
       source  = "hashicorp/aws"
       version = "~> 5.0"
     }
-    random = {
-      source  = "hashicorp/random"
-      version = "~> 3.4"
-    }
   }
   
   backend "s3" {
@@ -37,12 +33,6 @@ data "aws_region" "current" {}
 # data "aws_availability_zones" "available" {
 #   state = "available"
 # }
-
-# Random password for Redis auth token
-resource "random_password" "redis_auth_token" {
-  length  = 32
-  special = true
-}
 
 # Local values for common naming
 locals {
@@ -142,7 +132,7 @@ module "parameter_store" {
   session_secret            = var.session_secret
   
   # Auto-generated Redis auth token
-  redis_auth_token = random_password.redis_auth_token.result
+  redis_auth_token = var.redis_auth_token
   
   # Optional Google Cloud Storage key
   gcs_service_account_key = var.gcs_service_account_key
@@ -178,7 +168,7 @@ module "redis" {
   subnet_ids               = module.vpc.private_subnet_ids
   security_group_ids       = [module.security_groups.redis_sg_id]
   
-  auth_token = random_password.redis_auth_token.result
+  auth_token = var.redis_auth_token
   
   tags = local.common_tags
 }
