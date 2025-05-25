@@ -1,6 +1,5 @@
 .leadership-list {
   display: flex;
-  background: lightgreen;
   flex-direction: column;
 
   @include breakpoint-medium {
@@ -9,10 +8,11 @@
 }
 
 .leader-card {
-  border: 1px solid red;
   max-width: 400px;
   max-height: 383px;
   font-style: $font-style-normal;
+  width: 100%;
+  height: 100%;
 
   .leader-photo {
     height: 102px;
@@ -64,6 +64,7 @@
 
       @include breakpoint-medium {
         color: $gray-500;
+        visibility: hidden;
       }
     }
   }
