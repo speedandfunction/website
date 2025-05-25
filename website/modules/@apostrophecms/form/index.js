@@ -12,7 +12,7 @@ module.exports = {
         const result = await originalSubmitForm.call(self, req, data, options);
 
         let formData = data;
-        if (req && req.body && req.body.data) {
+        if (req?.body?.data) {
           try {
             formData = JSON.parse(req.body.data);
           } catch (err) {
