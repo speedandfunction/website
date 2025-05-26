@@ -180,19 +180,6 @@
       vertical-align: middle;
       margin-top: -1px;
     }
-    &:focus + label::before {
-      outline: 2px solid $gray-border;
-      outline-offset: 2px;
-    }
-
-    &:focus:not(:focus-visible) + label::before {
-      outline: none;
-    }
-
-    &:focus-visible + label::before {
-      outline: 2px solid $gray-border;
-      outline-offset: 2px;
-    }
   }
 }
 
