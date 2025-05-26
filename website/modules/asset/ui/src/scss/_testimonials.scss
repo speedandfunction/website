@@ -212,6 +212,16 @@
   }
 }
 
+.cs_testimonials {
+  .sf-testimonials-container {
+    margin-top: 32px;
+
+    @include breakpoint-medium {
+      margin-top: 52px;
+    }
+  }
+}
+
 /* Common swiper styles */
 .sf-person-swiper {
   width: 100%;
