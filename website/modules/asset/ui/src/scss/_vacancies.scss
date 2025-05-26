@@ -79,6 +79,18 @@
     }
   }
 
+  .vacancy-card {
+    & + .sf-vacancies_footer {
+      h2 {
+        margin-top: 48px;
+
+        @include breakpoint-medium {
+          margin-top: 120px;
+        }
+      }
+    }
+  }
+
   .sf-vacancies_footer {
     font-weight: $font-weight-extra-bold;
     text-align: center;
@@ -86,10 +98,10 @@
     h2 {
       @include responsive-font(24px, 52px);
       @include responsive-line-height(110%, 140%);
-      margin: 48px 0 8px;
+      margin: 0 0 8px;
 
       @include breakpoint-medium {
-        margin: 120px 0 32px;
+        margin: 0 0 32px;
       }
     }
 
