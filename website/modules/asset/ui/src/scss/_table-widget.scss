@@ -5,7 +5,7 @@
 
 .sf-table-intro {
   margin-bottom: 40px;
-  max-width: 800px;
+  max-width: 900px;
   align-self: center;
   width: 100%;
 
@@ -26,7 +26,6 @@
 
   @include breakpoint-medium {
     flex-direction: row;
-    flex-wrap: wrap;
   }
 }
 
@@ -41,7 +40,6 @@
     border-bottom: none;
   }
   @include breakpoint-medium {
-    width: calc(33.3% - 24px);
     padding: 40px;
     margin: 0 -1px 0 0;
     border: 1px solid $gray-200;
