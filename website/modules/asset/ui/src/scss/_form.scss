@@ -7,7 +7,8 @@
     margin: 0 0 10px;
     padding-top: 10px;
   }
-  .sf-textarea, .sf-input {
+  .sf-textarea,
+  .sf-input {
     box-sizing: border-box;
     border-radius: 0;
   }
@@ -20,23 +21,23 @@
 }
 
 .sf-input {
-	width: 100%;
-	padding: 20px 0 10px;
-	font-size: 14px;
-	color: $gray-300;
-	font-weight: 500;
-	margin-bottom: 10px;
-	border: 0;
-	@include border(border-bottom);
-	@include transition(all);
+  width: 100%;
+  padding: 20px 0 10px;
+  font-size: 14px;
+  color: $gray-300;
+  font-weight: 500;
+  margin-bottom: 10px;
+  border: 0;
+  @include border(border-bottom);
+  @include transition(all);
   &:focus + label,
   &:not(:placeholder-shown) ~ label {
     font-size: 10px;
     top: -10px;
   }
-	&::placeholder {
-		color: $gray-300;
-	}
+  &::placeholder {
+    color: $gray-300;
+  }
   &:focus {
     outline: 0;
     border-left: 0;
@@ -47,6 +48,9 @@
   }
   &:focus:invalid {
     outline: 0;
+    border-color: $red;
+  }
+  &.has-error {
     border-color: $red;
   }
 }
@@ -68,6 +72,9 @@
   &:focus {
     outline: 0;
     border-bottom-color: $gray-300;
+  }
+  &.has-error {
+    border-color: $red;
   }
 }
 .sf-field-textarea {
@@ -104,4 +111,13 @@
       color: $gray-300;
     }
   }
+}
+
+// Validation error styling
+.validation-error {
+  color: $red;
+  font-size: 12px;
+  margin-top: -5px;
+  margin-bottom: 10px;
+  font-weight: 500;
 }

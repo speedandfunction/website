@@ -1,8 +1,9 @@
 import barba from '@barba/core';
 import { gsap } from 'gsap';
+import { initFormValidation } from './js/formValidation';
+import lozad from 'lozad';
 import { initAllSwipers } from './swipers';
 import { initSmoothCounters } from './smoothCounters';
-import lozad from 'lozad';
 
 // Lazy loading
 function initImageLozad() {
@@ -46,6 +47,7 @@ function initializeAllComponents() {
   initAllSwipers();
   initSmoothCounters();
   initFontChanger();
+  initFormValidation();
 }
 
 // Barba pages

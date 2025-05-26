@@ -2,79 +2,69 @@ import * as yup from 'yup';
 
 // Основні схеми валідації для різних типів полів
 const validationSchemas = {
-  text: yup.string().required("Це поле обов'язкове"),
+  text: yup
+    .string()
+    .min(2, 'Поле повинно містити мінімум 2 символи')
+    .max(50, 'Поле не може бути довшим за 50 символів')
+    .required("Це поле обов'язкове"),
+
   email: yup
     .string()
     .email('Введіть коректну email адресу')
     .required("Email обов'язковий"),
-  url: yup.string().url('Введіть коректний URL').required("URL обов'язковий"),
-  date: yup
-    .date()
-    .typeError('Введіть коректну дату у форматі YYYY-MM-DD')
-    .required("Дата обов'язкова"),
-  textarea: yup.string(),
-  tel: yup
-    .string()
-    .matches(/^\+?[\d\s()]+$/u, 'Введіть коректний номер телефону')
-    .required("Телефон обов'язковий"),
 };
 
-// Спеціальні валідаційні схеми для конкретних полів за їх іменами
-const fieldSpecificSchemas = {
-  'full-name': yup
-    .string()
-    .min(2, "Ім'я повинно містити мінімум 2 символи")
-    .max(50, "Ім'я не може бути довшим 50 символів")
-    .required("Ім'я обов'язкове"),
-  'email-address': yup
-    .string()
-    .email('Введіть коректну email адресу')
-    .required("Email обов'язковий"),
-  //   'linkedin-profile': yup
-  //     .string()
-  //     .matches(
-  //       /^(?:https?:\/\/)?(?:www\.)?linkedin\.com\/in\/[\w-]+\/?$/u,
-  //       'Введіть коректний URL профілю LinkedIn',
-  //     )
-  //     .required("LinkedIn профіль обов'язковий"),
-  //   'enter-your-e-mail': yup
-  //     .string()
-  //     .email('Введіть коректну email адресу')
-  //     .required("Email обов'язковий"),
-  //   'describe-your-project-or-challenge': yup
-  //     .string()
-  //     .max(1000, 'Опис не може перевищувати 1000 символів'),
-};
+// // Спеціальні валідаційні схеми для конкретних полів за їх іменами
+// Const fieldSpecificSchemas = {
+//   'full-name': yup
+//     .string()
+//     .min(2, "Ім'я повинно містити мінімум 2 символи")
+//     .max(50, "Ім'я не може бути довшим 50 символів")
+//     .required("Ім'я обов'язкове"),
+//   'email-address': yup
+//     .string()
+//     .email('Введіть коректну email адресу')
+//     .required("Email обов'язковий"),
+// };
 
-// Функція для валідації конкретного поля
-const validateField = async (field, value) => {
-  try {
-    const fieldName = field.getAttribute('name');
-    // Визначаємо тип поля
-    let fieldType = field.getAttribute('type');
-    if (!fieldType) {
-      fieldType =
-        field.tagName.toLowerCase() === 'textarea' ? 'textarea' : 'text';
-    }
+// // Функція для валідації конкретного поля
+// Const validateField = async (field, value) => {
+//   Try {
+//     Const fieldName = field.getAttribute('name');
+//     // Визначаємо тип поля
+//     Let fieldType = field.getAttribute('type');
+//     If (!fieldType) {
+//       If (field.tagName.toLowerCase() === 'textarea') {
+//         FieldType = 'textarea';
+//       } else {
+//         FieldType = 'text';
+//       }
+//     }
 
-    // Визначаємо, яку схему використовувати - спеціальну за іменем або загальну за типом
-    let schema = fieldSpecificSchemas[fieldName];
-    if (!schema) {
-      schema = validationSchemas[fieldType] || validationSchemas.text;
-    }
+/*
+ *     // Визначаємо, яку схему використовувати - спеціальну за іменем або загальну за типом
+ *     let schema = fieldSpecificSchemas[fieldName];
+ *     if (!schema) {
+ *       schema = validationSchemas[fieldType] || validationSchemas.text;
+ *     }
+ */
 
-    // Якщо поле не обов'язкове і порожнє, пропускаємо валідацію
-    if (!field.hasAttribute('required') && (!value || value.trim() === '')) {
-      return { isValid: true };
-    }
+/*
+ *     // Якщо поле не обов'язкове і порожнє, пропускаємо валідацію
+ *     if (!field.hasAttribute('required') && (!value || value.trim() === '')) {
+ *       return { isValid: true };
+ *     }
+ */
 
-    // Виконуємо валідацію
-    await schema.validate(value);
-    return { isValid: true };
-  } catch (error) {
-    return { isValid: false, message: error.message };
-  }
-};
+/*
+ *     // Виконуємо валідацію
+ *     await schema.validate(value);
+ *     return { isValid: true };
+ *   } catch (error) {
+ *     return { isValid: false, message: error.message };
+ *   }
+ * };
+ */
 
 // Функція для показу помилки валідації
 const showValidationError = (field, message) => {
@@ -136,10 +126,10 @@ const addFieldValidationHandlers = (field) => {
   // Валідація при втраті фокуса
   field.addEventListener('blur', async (event) => {
     const result = await validateField(event.target, event.target.value);
-    if (!result.isValid) {
-      showValidationError(event.target, result.message);
-    } else {
+    if (result.isValid) {
       clearValidationError(event.target);
+    } else {
+      showValidationError(event.target, result.message);
     }
   });
 
