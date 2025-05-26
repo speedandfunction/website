@@ -21,6 +21,12 @@ variable "container_port" {
   default     = 3000
 }
 
+variable "bastion_security_group_id" {
+  description = "Security group ID of the bastion host for SSH access"
+  type        = string
+  default     = ""
+}
+
 variable "tags" {
   description = "Tags to apply to resources"
   type        = map(string)

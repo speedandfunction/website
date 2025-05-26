@@ -48,6 +48,14 @@ ecs_max_capacity  = 3
 documentdb_instance_class = "db.t3.medium"
 redis_node_type          = "cache.t3.micro"  # cache.t3.small for production
 
+# Bastion Host Configuration
+bastion_instance_type = "t3.micro"
+bastion_key_pair_name = "your-ec2-key-pair-name"  # Must exist in AWS
+bastion_allowed_cidr_blocks = [
+  "203.0.113.0/24",  # Example: Your office IP range
+  "198.51.100.0/24"  # Example: Your home IP range
+]
+
 # Tags
 default_tags = {
   Project    = "Website"

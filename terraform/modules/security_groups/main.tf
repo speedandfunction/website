@@ -62,6 +62,19 @@ resource "aws_security_group" "ecs" {
   })
 }
 
+# SSH access from bastion to ECS (optional rule)
+resource "aws_security_group_rule" "ecs_ssh_from_bastion" {
+  count = var.bastion_security_group_id != "" ? 1 : 0
+  
+  type                     = "ingress"
+  from_port                = 22
+  to_port                  = 22
+  protocol                 = "tcp"
+  source_security_group_id = var.bastion_security_group_id
+  security_group_id        = aws_security_group.ecs.id
+  description              = "SSH from bastion host"
+}
+
 # DocumentDB Security Group
 resource "aws_security_group" "documentdb" {
   name        = "${var.name_prefix}-documentdb-sg-${var.environment}"
@@ -89,6 +102,19 @@ resource "aws_security_group" "documentdb" {
   })
 }
 
+# MongoDB access from bastion to DocumentDB (for debugging)
+resource "aws_security_group_rule" "documentdb_from_bastion" {
+  count = var.bastion_security_group_id != "" ? 1 : 0
+  
+  type                     = "ingress"
+  from_port                = 27017
+  to_port                  = 27017
+  protocol                 = "tcp"
+  source_security_group_id = var.bastion_security_group_id
+  security_group_id        = aws_security_group.documentdb.id
+  description              = "MongoDB from bastion host"
+}
+
 # Redis Security Group
 resource "aws_security_group" "redis" {
   name        = "${var.name_prefix}-redis-sg-${var.environment}"
@@ -114,4 +140,17 @@ resource "aws_security_group" "redis" {
   tags = merge(var.tags, {
     Name = "${var.name_prefix}-redis-sg-${var.environment}"
   })
+}
+
+# Redis access from bastion (for debugging)
+resource "aws_security_group_rule" "redis_from_bastion" {
+  count = var.bastion_security_group_id != "" ? 1 : 0
+  
+  type                     = "ingress"
+  from_port                = 6379
+  to_port                  = 6379
+  protocol                 = "tcp"
+  source_security_group_id = var.bastion_security_group_id
+  security_group_id        = aws_security_group.redis.id
+  description              = "Redis from bastion host"
 } 

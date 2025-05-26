@@ -219,4 +219,31 @@ variable "redis_node_type" {
   description = "ElastiCache Redis node type"
   type        = string
   default     = "cache.t3.micro"
+}
+
+# Bastion Host Configuration
+variable "bastion_instance_type" {
+  description = "EC2 instance type for bastion host"
+  type        = string
+  default     = "t3.micro"
+  
+  validation {
+    condition = can(regex("^[tm][0-9]+\\.", var.bastion_instance_type))
+    error_message = "Bastion instance type must be a valid EC2 instance type."
+  }
+}
+
+variable "bastion_key_pair_name" {
+  description = "Name of the EC2 key pair for SSH access to bastion host"
+  type        = string
+}
+
+variable "bastion_allowed_cidr_blocks" {
+  description = "List of CIDR blocks allowed to SSH to bastion host"
+  type        = list(string)
+  
+  validation {
+    condition = length(var.bastion_allowed_cidr_blocks) > 0
+    error_message = "At least one CIDR block must be specified for bastion access."
+  }
 } 

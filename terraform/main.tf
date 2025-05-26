@@ -68,6 +68,22 @@ module "vpc" {
   tags = local.common_tags
 }
 
+# Bastion Host Module
+module "bastion" {
+  source = "./modules/bastion"
+  
+  name_prefix = local.name_prefix
+  environment = local.environment
+  
+  vpc_id                = module.vpc.vpc_id
+  subnet_id             = module.vpc.public_subnet_ids[0]
+  instance_type         = var.bastion_instance_type
+  key_pair_name         = var.bastion_key_pair_name
+  allowed_cidr_blocks   = var.bastion_allowed_cidr_blocks
+  
+  tags = local.common_tags
+}
+
 # Security Groups Module
 module "security_groups" {
   source = "./modules/security_groups"
@@ -79,6 +95,9 @@ module "security_groups" {
   
   # Container configuration
   container_port = var.container_port
+  
+  # Bastion security group for SSH access
+  bastion_security_group_id = module.bastion.security_group_id
   
   tags = local.common_tags
 }
