@@ -27,6 +27,7 @@
         "ec2:DescribeAddresses",
         "ec2:DescribeAddressesAttribute",
         "ec2:DisassociateAddress",
+        "ec2:AssociateAddress",
         "ec2:CreateRouteTable",
         "ec2:DeleteRouteTable",
         "ec2:DescribeRouteTables",
@@ -49,7 +50,17 @@
         "ec2:DescribeNetworkInterfaces",
         "ec2:CreateTags",
         "ec2:DeleteTags",
-        "ec2:DescribeTags"
+        "ec2:DescribeTags",
+        "ec2:DescribeImages",
+        "ec2:RunInstances",
+        "ec2:TerminateInstances",
+        "ec2:DescribeInstances",
+        "ec2:DescribeInstanceAttribute",
+        "ec2:ModifyInstanceAttribute",
+        "ec2:StartInstances",
+        "ec2:StopInstances",
+        "ec2:RebootInstances",
+        "ec2:DescribeKeyPairs"
       ],
       "Resource": "*"
     },

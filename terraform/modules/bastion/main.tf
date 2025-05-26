@@ -55,7 +55,29 @@ resource "aws_instance" "bastion" {
   associate_public_ip_address = true
   
   # User data script for basic setup
-  user_data = base64encode(templatefile("${path.module}/user_data.sh", {}))
+  user_data = base64encode(<<-EOF
+    #!/bin/bash
+    yum update -y
+    yum install -y aws-cli
+    
+    # Start and enable SSM agent for Session Manager access
+    systemctl start amazon-ssm-agent
+    systemctl enable amazon-ssm-agent
+    
+    # Basic security hardening
+    sed -i 's/#PermitRootLogin yes/PermitRootLogin no/' /etc/ssh/sshd_config
+    systemctl restart sshd
+    
+    # Install additional useful tools
+    yum install -y htop vim wget curl git
+    
+    # Configure timezone
+    timedatectl set-timezone UTC
+    
+    # Create a log file to verify user data execution
+    echo "Bastion host user data script completed at $(date)" > /var/log/user-data.log
+  EOF
+  )
   
   tags = merge(var.tags, {
     Name = "${var.name_prefix}-bastion-${var.environment}"

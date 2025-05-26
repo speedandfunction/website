@@ -27,8 +27,9 @@ variable "instance_type" {
 }
 
 variable "key_pair_name" {
-  description = "Name of the EC2 key pair for SSH access"
+  description = "Name of the EC2 key pair for SSH access (optional - leave null for Session Manager only)"
   type        = string
+  default     = null
 }
 
 variable "allowed_cidr_blocks" {
