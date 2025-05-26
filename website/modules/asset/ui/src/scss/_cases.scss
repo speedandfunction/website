@@ -141,7 +141,7 @@
         &::before {
           content: '';
           background-color: $gray-500;
-          background-image: url(/images/check_mark.svg);
+          background-image: var(--check-mark-url, url(/images/check_mark.svg));
         }
       }
     }
