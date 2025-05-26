@@ -115,8 +115,16 @@
     @include font-settings(11px, 140%, $font-weight-medium);
     border: 1px solid rgba($gray-200, 0.4);
     padding: 12px;
+    margin-bottom: 11px;
     color: $gray-300;
     width: 100%;
+    &:focus {
+      outline: 0;
+      border-left: 0;
+      border-right: 0;
+      border-top: 0;
+      padding-left: 0;
+    }
   }
 
   .tags-list {
@@ -126,7 +134,7 @@
   }
 
   .tag-item {
-    margin: 16px 0;
+    margin-bottom: 6px;
 
     &.active {
       .tag-link {
@@ -146,7 +154,18 @@
     color: $gray-300;
     display: block;
     text-decoration: none;
+    padding: 5px;
     cursor: pointer;
+    &:focus {
+      outline: 0;
+      border-left: 0;
+      border-right: 0;
+      border-top: 0;
+      &::before {
+        outline: 2px solid $gray-border;
+        outline-offset: 2px;
+      }
+    }
 
     &::before {
       content: '';
@@ -160,6 +179,19 @@
       margin-right: 10px;
       vertical-align: middle;
       margin-top: -1px;
+    }
+    &:focus + label::before {
+      outline: 2px solid $gray-border;
+      outline-offset: 2px;
+    }
+
+    &:focus:not(:focus-visible) + label::before {
+      outline: none;
+    }
+
+    &:focus-visible + label::before {
+      outline: 2px solid $gray-border;
+      outline-offset: 2px;
     }
   }
 }
