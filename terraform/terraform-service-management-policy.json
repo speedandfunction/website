@@ -15,7 +15,15 @@
         "ecr:PutImageTagMutability",
         "ecr:TagResource",
         "ecr:UntagResource",
-        "ecr:ListTagsForResource"
+        "ecr:ListTagsForResource",
+        "ecr:GetAuthorizationToken",
+        "ecr:BatchCheckLayerAvailability",
+        "ecr:GetDownloadUrlForLayer",
+        "ecr:BatchGetImage",
+        "ecr:InitiateLayerUpload",
+        "ecr:UploadLayerPart",
+        "ecr:CompleteLayerUpload",
+        "ecr:PutImage"
       ],
       "Resource": "*"
     },
@@ -26,6 +34,7 @@
         "ecs:CreateCluster",
         "ecs:DeleteCluster",
         "ecs:DescribeClusters",
+        "ecs:ListClusters",
         "ecs:CreateService",
         "ecs:DeleteService",
         "ecs:DescribeServices",
@@ -33,6 +42,9 @@
         "ecs:RegisterTaskDefinition",
         "ecs:DeregisterTaskDefinition",
         "ecs:DescribeTaskDefinition",
+        "ecs:ListServices",
+        "ecs:DescribeTasks",
+        "ecs:ListTasks",
         "ecs:TagResource",
         "ecs:UntagResource",
         "ecs:ListTagsForResource"
@@ -68,6 +80,23 @@
         "ssm:AddTagsToResource",
         "ssm:RemoveTagsFromResource",
         "ssm:ListTagsForResource"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "TerraformCloudWatchLogsPermissions",
+      "Effect": "Allow",
+      "Action": [
+        "logs:CreateLogGroup",
+        "logs:DeleteLogGroup",
+        "logs:DescribeLogGroups",
+        "logs:DescribeLogStreams",
+        "logs:GetLogEvents",
+        "logs:FilterLogEvents",
+        "logs:PutRetentionPolicy",
+        "logs:TagResource",
+        "logs:UntagResource",
+        "logs:ListTagsForResource"
       ],
       "Resource": "*"
     }

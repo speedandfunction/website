@@ -24,6 +24,28 @@ resource "aws_iam_role_policy_attachment" "ecs_execution_role_policy" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 }
 
+# SSM access policy for ECS execution role
+resource "aws_iam_role_policy" "ecs_execution_ssm_policy" {
+  name = "${var.name_prefix}-${var.environment}-ecs-execution-ssm-policy"
+  role = aws_iam_role.ecs_execution_role.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "ssm:GetParameters",
+          "ssm:GetParameter"
+        ]
+        Resource = [
+          "arn:aws:ssm:*:*:parameter/${var.name_prefix}/${var.environment}/*"
+        ]
+      }
+    ]
+  })
+}
+
 # ECS Task Role
 resource "aws_iam_role" "ecs_task_role" {
   name = "${var.name_prefix}-${var.environment}-ecs-task-role"
