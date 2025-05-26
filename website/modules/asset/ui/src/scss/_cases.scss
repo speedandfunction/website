@@ -67,9 +67,15 @@
   &_list {
     display: flex;
     flex-direction: column;
+    gap: 32px;
+    border-top: 1px solid $gray-border;
+    padding-top: 24px;
+    align-items: center;
 
     @include breakpoint-medium {
       flex-direction: row;
+      padding-top: 32px;
+      align-items: flex-start;
     }
   }
 }
@@ -77,72 +83,83 @@
 // Tags styling
 
 .tags-filter {
-  margin-top: 1rem;
+  border: 1px solid $gray-border;
+  font-style: $font-style-normal;
+  max-width: 262px;
 }
 
-.tags-title {
-  font-weight: 600;
-  color: #1a202c;
-  margin-bottom: 0.75rem;
-}
+.filter-section {
+  padding: 15px 24px;
 
-.tags-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
+  .filter-category {
+    @include font-settings(14px, 150%, $font-weight-extra-bold);
+    color: $gray-500;
+    margin: 0;
+    padding-bottom: 12px;
+    margin-bottom: 16px;
+    position: relative;
 
-.tag-item {
-  display: flex;
-  align-items: center;
-}
-
-.tag-link {
-  display: flex;
-  align-items: center;
-  padding: 0 12px 0 0;
-  font-size: 11px;
-  font-weight: $font-weight-medium;
-  line-height: $line-height-body;
-  color: $gray-300;
-  text-decoration: none;
-  position: relative;
-  flex: 1;
-  cursor: pointer;
-  transition: color 0.2s;
-
-  &::before {
-    content: '';
-    display: inline-block;
-    width: 14px;
-    height: 14px;
-    border: 1px solid $gray-300;
-    margin-right: 10px;
-    background: $gray-100;
-    box-sizing: border-box;
-    transition:
-      border-color 0.2s,
-      background 0.2s;
-  }
-
-  &.selected {
-    &::before {
-      content: '';
-      display: inline-block;
-      background: $gray-400;
-      border-color: $gray-400;
-    }
     &::after {
       content: '';
       position: absolute;
-      left: 2px;
-      top: 1px;
-      width: 8px;
-      height: 6px;
-      border: solid white;
-      border-width: 0 2px 2px 0;
-      transform: rotate(45deg);
-      pointer-events: none;
+      left: -24px;
+      right: -24px;
+      bottom: 0;
+      border-bottom: 1px solid $gray-border;
+    }
+  }
+}
+
+.filter-content {
+  .tag-search {
+    @include font-settings(11px, 140%, $font-weight-medium);
+    border: 1px solid rgba($gray-200, 0.4);
+    padding: 12px;
+    color: $gray-300;
+    width: 100%;
+  }
+
+  .tags-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .tag-item {
+    margin: 16px 0;
+
+    &.active {
+      .tag-link {
+        &::before {
+          content: '';
+          background-color: $gray-500;
+          background-image: url(/images/check_mark.svg);
+        }
+      }
+    }
+  }
+
+  .tag-link {
+    @include truncate-lines(1);
+    @include font-settings(11px, 140%, $font-weight-medium);
+    text-transform: capitalize;
+    color: $gray-300;
+    display: block;
+    text-decoration: none;
+    cursor: pointer;
+
+    &::before {
+      content: '';
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      background-color: $gray-100;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: 10px 10px;
+      margin-right: 10px;
+      vertical-align: middle;
+      margin-top: -1px;
     }
   }
 }
