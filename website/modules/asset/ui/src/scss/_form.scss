@@ -1,42 +1,36 @@
-.sf-field {
-  position: relative;
-  box-sizing: border-box;
-  .apos-form-label {
-    font-weight: 500;
-    color: $gray-300;
-    margin: 0 0 10px;
-    padding-top: 10px;
-  }
-  .sf-textarea, .sf-input {
-    box-sizing: border-box;
-    border-radius: 0;
-  }
-  .sf-label {
-    position: absolute;
-    top: 4px;
-    @include transition(all);
-    font-size: 10px;
+.sf-contact-form {
+  .sf-form {
+    position: relative;
+    min-width: 295px;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 23px 15px 7px;
+    border: 1px solid $gray-border;
+    @include font-settings(14px, 150%, 500);
+    margin-bottom: 84px;
+    @include breakpoint-medium {
+      padding: 24px 44px 6px;
+      margin-bottom: 248px;
+    }
   }
 }
 
+.sf-textarea,
 .sf-input {
-	width: 100%;
-	padding: 20px 0 10px;
-	font-size: 14px;
-	color: $gray-300;
-	font-weight: 500;
-	margin-bottom: 10px;
-	border: 0;
-	@include border(border-bottom);
-	@include transition(all);
-  &:focus + label,
-  &:not(:placeholder-shown) ~ label {
-    font-size: 10px;
-    top: -10px;
+  box-sizing: border-box;
+  border-radius: 0;
+  border: 1px solid $whisper;
+  padding: 8px 16px;
+  height: 37px;
+  margin-bottom: 24px;
+  @include breakpoint-medium {
+    height: 53px;
+    padding: 16px 25px;
   }
-	&::placeholder {
-		color: $gray-300;
-	}
+  line-height: 140%;
+  &::placeholder {
+    color: $gray-300;
+  }
   &:focus {
     outline: 0;
     border-left: 0;
@@ -46,62 +40,84 @@
     border-color: $gray-300;
   }
   &:focus:invalid {
-    outline: 0;
     border-color: $red;
   }
 }
+
+.sf-input,
+.sf-textarea,
+.sf-input::placeholder,
+.sf-textarea::placeholder {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .sf-textarea {
-  width: 100%;
-  font-size: 10px;
-  line-height: 14px;
-  color: $gray-300;
-  font-weight: 500;
-  padding: 10px;
-  @include border(border);
-  min-height: 125px;
+  min-height: unset;
+  overflow: hidden;
   resize: none;
-  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  margin-bottom: 12px;
+  color: $gray-500;
+}
+
+.sf-button {
+  min-width: 93px;
+  margin: 0 auto;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: -65px;
   @include breakpoint-medium {
-    margin-bottom: 40px;
-  }
-  @include transition(border-color);
-  &:focus {
-    outline: 0;
-    border-bottom-color: $gray-300;
+    bottom: -136px;
   }
 }
+
+.apos-form-input-wrapper {
+  display: flex;
+  flex-direction: column-reverse;
+}
+
 .sf-field-textarea {
-  .apos-form-label {
-    font-size: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.apos-form-fieldset {
+  border: 0;
+  padding: 0;
+  margin: 0;
+
+  legend {
+    margin-bottom: 12px;
   }
   .apos-form-field-optional {
     display: none;
   }
-}
-.sf-contact-form {
-  .sf-form {
-    position: relative;
-    padding: 6px 20px 20px 20px;
-    @include border(border);
-    @include breakpoint-medium {
-      padding: 40px;
-    }
+  div {
+    margin-bottom: 16px;
   }
-  .apos-form-submission-thank-you {
-    padding: 40px 0;
-    h3 {
-      font-weight: 700;
-      font-size: 22px;
-      line-height: 24px;
-      margin: 0 0 20px;
-      color: $gray-500;
-    }
-    p {
-      font-weight: 500;
-      font-size: 14px;
-      line-height: 20px;
-      margin: 0;
-      color: $gray-300;
-    }
+}
+
+.apos-form-submission-thank-you {
+  padding: 40px 0;
+  text-align: center;
+  h3 {
+    font-weight: 700;
+    font-size: 22px;
+    line-height: 24px;
+    margin: 0 0 20px;
+    color: $gray-500;
+  }
+  p {
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 20px;
+    margin: 0;
+    color: $gray-300;
   }
 }
