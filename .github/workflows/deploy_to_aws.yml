@@ -53,7 +53,7 @@ jobs:
 
       - name: Copy tfvars for ${{ vars.ENV_NAME }}
         run: |
-          cat "terraform-config/environments/${{ vars.ENV_NAME }}"  "deployment/environments/${{ vars.ENV_NAME }}"  > "deployment/terraform/terraform.tfvars"
+          cat "terraform-config/${{ vars.ENV_NAME }}.tfvars"  "deployment/environments/${{ vars.ENV_NAME }}.tfvars"  > "deployment/terraform.tfvars"
 
 
       - name: Setup Terraform
