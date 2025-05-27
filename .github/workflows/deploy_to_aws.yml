@@ -66,14 +66,14 @@ jobs:
         run: |
           cd deployment
           terraform init -backend-config="environments/backend-${{ vars.ENV_NAME }}.hcl"
-          terraform plan  -out="terraform/${{ vars.ENV_NAME }}.tfplan"
+          terraform plan  -out="${{ vars.ENV_NAME }}.tfplan"
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.TF_AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.TF_AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: "us-east-1"
    
       - name: Copy planfile to S3 bucket for ${{ vars.ENV_NAME }}
-        run: aws s3 cp "terraform/${{ vars.ENV_NAME }}.tfplan" "s3://${{ env.SETTINGS_BUCKET }}/plans/${{ vars.ENV_NAME }}.tfplan"
+        run: aws s3 cp "deployment/${{ vars.ENV_NAME }}.tfplan" "s3://${{ env.SETTINGS_BUCKET }}/plans/${{ vars.ENV_NAME }}.tfplan"
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.TF_AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.TF_AWS_SECRET_ACCESS_KEY }}
