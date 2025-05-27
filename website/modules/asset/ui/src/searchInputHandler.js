@@ -4,6 +4,22 @@ const removePreviousHandler = (input) => {
   }
 };
 
+const toggleNoTagsMessage = (
+  tagItems,
+  hasVisible,
+  parentSelector = '.filter-section',
+) => {
+  const parent = tagItems[0]?.closest(parentSelector);
+  const messageEl = parent?.querySelector('.no-tags-message');
+  if (messageEl) {
+    if (hasVisible) {
+      messageEl.style.display = 'none';
+    } else {
+      messageEl.style.display = 'block';
+    }
+  }
+};
+
 const getFilterValue = (input) => {
   return input.value.trim().toLowerCase();
 };
@@ -12,15 +28,20 @@ const getTagItems = (container, tagSelector) => {
   return container.querySelectorAll(tagSelector);
 };
 
-const filterTagItems = (tagItems, filterValue, getTagLabel) => {
+const filterTagItems = (tagItems, filterValue, getTagLabel, parentSelector) => {
+  let hasVisible = false;
+
   tagItems.forEach((tagItem) => {
     const tagLabel = getTagLabel(tagItem);
     if (tagLabel.includes(filterValue)) {
       tagItem.style.display = '';
+      hasVisible = true;
     } else {
       tagItem.style.display = 'none';
     }
   });
+
+  toggleNoTagsMessage(tagItems, hasVisible, parentSelector);
 };
 
 const handleTagSearch = (
@@ -34,7 +55,7 @@ const handleTagSearch = (
   if (!container) return;
 
   const tagItems = getTagItems(container, tagSelector);
-  filterTagItems(tagItems, filterValue, getTagLabel);
+  filterTagItems(tagItems, filterValue, getTagLabel, containerSelector);
 };
 
 const createTagSearchHandler = (

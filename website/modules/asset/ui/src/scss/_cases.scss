@@ -147,6 +147,13 @@
   }
 }
 
+.no-tags-message {
+  display: none;
+  margin: 0;
+  color: $gray-300;
+  @include font-settings(11px, 140%, $font-weight-medium);
+}
+
 // Pagination
 .pagination-container {
   margin-top: 3rem;
