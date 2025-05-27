@@ -49,7 +49,7 @@ jobs:
         with:
           repository: 'speedandfunction/website-ci-secrets'
           path: 'terraform-config'
-          token: ${{ secrets.PAT }}
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Copy tfvars for ${{ vars.ENV_NAME }}
         run: |

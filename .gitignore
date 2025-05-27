@@ -145,7 +145,7 @@ dump.archive
 .prettierrc
 aposUsersSafe.json
 terraform.tfvars
-terraform/.terraform
+deployment/.terraform
 *.tfplan
 plan.out.txt
 .cursor/tmp
