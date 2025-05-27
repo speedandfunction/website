@@ -5,7 +5,7 @@
 
 set -e
 
-# Configuration from backend-dev.hcl
+# Configuration from backend-development.hcl
 BUCKET_NAME="${BUCKET_NAME:-sf-website-infrastructure}"
 AWS_REGION="${AWS_REGION:-us-east-1}"
 

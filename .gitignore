@@ -146,7 +146,7 @@ dump.archive
 aposUsersSafe.json
 terraform.tfvars
 terraform/.terraform
-dev.tfplan
+*.tfplan
 plan.out.txt
 .cursor/tmp
 .terraform.lock.hcl

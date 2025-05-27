@@ -34,7 +34,7 @@ on:
 jobs:
   init-and-plan:
     runs-on: ubuntu-latest
-    environment:  ${{ inputs.deploy-env || (github.ref_name == 'main' && 'Development') || (startsWith(github.ref_name, 'prod/') && 'Production') || (startsWith(github.ref_name, 'staging/') && 'Staging')  || 'None' }}
+    environment: Development
     steps:
       - name: Get Environment Name for ${{ vars.ENV_NAME }}
         id: get_env_name
@@ -47,7 +47,7 @@ jobs:
       - name: Checkout config repository
         uses: actions/checkout@v4
         with:
-          repository: 'speedandfunction/websie-ci-secrets'
+          repository: 'speedandfunction/website-ci-secrets'
           path: 'terraform-config'
           token: ${{ secrets.PAT }}
 

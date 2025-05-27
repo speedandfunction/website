@@ -11,7 +11,7 @@ terraform {
   
   backend "s3" {
     # Backend configuration will be provided via backend.hcl files
-    # Example: terraform init -backend-config=backend-dev.hcl
+    # Example: terraform init -backend-config=backend-development.hcl
   }
 }
 
@@ -95,9 +95,6 @@ module "security_groups" {
   
   # Container configuration
   container_port = var.container_port
-  
-  # Bastion security group for SSH access
-  bastion_security_group_id = module.bastion.security_group_id
   
   tags = local.common_tags
 }

@@ -41,13 +41,13 @@ Edit `terraform.tfvars` with your specific values:
 Create S3 buckets and DynamoDB table for state management:
 ```bash
 # Create S3 buckets for each environment
-aws s3 mb s3://sf-website-terraform-state-dev
+aws s3 mb s3://sf-website-terraform-state-development
 aws s3 mb s3://sf-website-terraform-state-staging  
-aws s3 mb s3://sf-website-terraform-state-prod
+aws s3 mb s3://sf-website-terraform-state-production
 
 # Enable versioning
 aws s3api put-bucket-versioning \
-  --bucket sf-website-terraform-state-dev \
+  --bucket sf-website-terraform-state-development \
   --versioning-configuration Status=Enabled
 
 # Create DynamoDB table for state locking
@@ -61,7 +61,7 @@ aws dynamodb create-table \
 ### 4. **Initialize and Deploy**
 ```bash
 # Initialize with backend
-terraform init -backend-config=backend-dev.hcl
+terraform init -backend-config=backend-development.hcl
 
 # Plan deployment
 terraform plan
@@ -76,16 +76,16 @@ Deploy different environments using different backend configurations:
 
 ```bash
 # Development
-terraform init -backend-config=backend-dev.hcl
-terraform apply -var-file=dev.tfvars
+terraform init -backend-config=backend-development.hcl
+terraform apply -var-file=development.tfvars
 
 # Staging  
 terraform init -backend-config=backend-staging.hcl
 terraform apply -var-file=staging.tfvars
 
 # Production
-terraform init -backend-config=backend-prod.hcl
-terraform apply -var-file=prod.tfvars
+terraform init -backend-config=backend-production.hcl
+terraform apply -var-file=production.tfvars
 ```
 
 ## 📁 **File Structure**
@@ -138,8 +138,8 @@ sf-website-{resource-type}-{environment}
 ```
 
 Examples:
-- `sf-website-vpc-dev`
-- `sf-website-ecs-cluster-prod`
+- `sf-website-vpc-development`
+- `sf-website-ecs-cluster-production`
 - `sf-website-documentdb-staging`
 
 ## 📊 **Monitoring & Alerts**
@@ -186,7 +186,7 @@ jobs:
         uses: hashicorp/setup-terraform@v3
         
       - name: Terraform Init
-        run: terraform init -backend-config=backend-prod.hcl
+        run: terraform init -backend-config=backend-production.hcl
         
       - name: Terraform Apply
         run: terraform apply -auto-approve
@@ -202,7 +202,7 @@ terraform fmt -recursive
 terraform validate
 
 # Plan with specific var file
-terraform plan -var-file=prod.tfvars
+terraform plan -var-file=production.tfvars
 
 # Show current state
 terraform show
@@ -221,9 +221,9 @@ terraform destroy
 
 ### **Environment-Specific Variables**
 Create separate tfvars files for each environment:
-- `dev.tfvars`
+- `development.tfvars`
 - `staging.tfvars` 
-- `prod.tfvars`
+- `production.tfvars`
 
 ### **Scaling Configuration**
 Adjust container resources and auto-scaling:
@@ -253,7 +253,7 @@ redis_node_type          = "cache.r6g.large"
 
 1. **Backend bucket doesn't exist**
    ```bash
-   aws s3 mb s3://sf-website-terraform-state-dev
+   aws s3 mb s3://sf-website-terraform-state-development
    ```
 
 2. **Certificate ARN invalid**
@@ -285,7 +285,7 @@ redis_node_type          = "cache.r6g.large"
 ## 🔄 **Updates and Maintenance**
 
 1. **Provider Updates**: Regularly update AWS provider version
-2. **Module Updates**: Test module changes in dev first
+2. **Module Updates**: Test module changes in development first
 3. **State Backup**: S3 versioning provides automatic backups
 4. **Security Updates**: Monitor AWS security bulletins
 

@@ -8,7 +8,7 @@ variable "aws_region" {
 }
 
 variable "environment" {
-  description = "Environment name (e.g., dev, staging, prod, qa, demo, sandbox, etc.)"
+  description = "Environment name (e.g., development, staging, production, qa, demo, sandbox, etc.)"
   type        = string
 }
 
@@ -36,12 +36,12 @@ variable "vpc_cidr" {
 
 # Domain Configuration
 variable "domain_name" {
-  description = "Domain name for the application (e.g., sf-website-dev.sandbox-prettyclear.com)"
+  description = "Domain name for the application (e.g., sf-website-development.sandbox-prettyclear.com)"
   type        = string
 }
 
 variable "media_domain_name" {
-  description = "Domain name for media CDN (e.g., sf-website-media-dev.sandbox-prettyclear.com)"
+  description = "Domain name for media CDN (e.g., sf-website-media-development.sandbox-prettyclear.com)"
   type        = string
 }
 

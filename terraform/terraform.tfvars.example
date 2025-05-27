@@ -3,14 +3,14 @@
 
 # General Configuration
 aws_region  = "us-east-1"
-environment = "dev"  # Can be any name: dev, staging, prod, qa, demo, sandbox, etc.
+environment = "development"  # Can be any name: development, staging, production, qa, demo, sandbox, etc.
 
 # Networking
 vpc_cidr = "10.0.0.0/16"  # Choose unique CIDR for each environment to avoid conflicts
 
 # Domain Configuration
-domain_name       = "sf-website-dev.sandbox-prettyclear.com"
-media_domain_name = "sf-website-media-dev.sandbox-prettyclear.com"
+domain_name       = "sf-website-development.sandbox-prettyclear.com"
+media_domain_name = "sf-website-media-development.sandbox-prettyclear.com"
 certificate_arn   = "arn:aws:acm:us-east-1:548271326349:certificate/7e11016f-f90e-4800-972d-622bf1a82948"
 
 # Database Configuration (SENSITIVE - Store securely)
