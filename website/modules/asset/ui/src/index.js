@@ -3,6 +3,7 @@ import { gsap } from 'gsap';
 import { initAllSwipers } from './swipers';
 import { initSmoothCounters } from './smoothCounters';
 import lozad from 'lozad';
+import { setupTagSearchForInput } from './searchInputHandler';
 
 // Lazy loading
 function initImageLozad() {
@@ -41,29 +42,20 @@ function initFontChanger() {
 }
 
 // Tag search filter for case studies page
-function bindTagSearch() {
-  const searchInputs = document.querySelectorAll('.tag-search');
-  searchInputs.forEach((input) => {
-    if (input.tagSearchHandler) {
-      input.removeEventListener('input', input.tagSearchHandler);
-    }
-    const handler = () => {
-      const filterValue = input.value.trim().toLowerCase();
-      const tagList = input
-        .closest('.filter-section')
-        .querySelectorAll('.tag-item');
-      tagList.forEach((tagItem) => {
-        const tagLabel = tagItem.dataset.label;
-        if (tagLabel.includes(filterValue)) {
-          tagItem.style.display = '';
-        } else {
-          tagItem.style.display = 'none';
-        }
-      });
-    };
-    input.tagSearchHandler = handler;
-    input.addEventListener('input', handler);
-  });
+function initCaseStudiesTagFilter({
+  inputSelector = '.tag-search',
+  containerSelector = '.filter-section',
+  tagSelector = '.tag-item',
+  getTagLabel = (tagItem) => tagItem.dataset.label?.toLowerCase() || '',
+} = {}) {
+  const searchInputs = document.querySelectorAll(inputSelector);
+  searchInputs.forEach((input) =>
+    setupTagSearchForInput(input, {
+      containerSelector,
+      tagSelector,
+      getTagLabel,
+    }),
+  );
 }
 
 // Wrapper function
@@ -72,7 +64,7 @@ function initializeAllComponents() {
   initAllSwipers();
   initSmoothCounters();
   initFontChanger();
-  bindTagSearch();
+  initCaseStudiesTagFilter();
 }
 
 // Barba pages
