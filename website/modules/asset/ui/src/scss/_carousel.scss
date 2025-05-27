@@ -190,7 +190,8 @@
     }
   }
 }
-// Leadership team
+
+//Leadership team
 .sf-leadership {
   .sf-person__photo {
     @include transition(opacity);
@@ -224,20 +225,6 @@
     }
     .sf-person__footer {
       margin-top: 0;
-    }
-  }
-}
-.sf-leadership-header {
-  display: flex;
-  gap: 20px;
-  @include breakpoint-medium {
-    flex-direction: column;
-    gap: 0;
-    &__bio {
-      padding: 40px 40px 0 40px;
-      @include border(border);
-      border-bottom: 0;
-      border-left: 0;
     }
   }
 }
