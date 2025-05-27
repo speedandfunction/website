@@ -1,5 +1,3 @@
-const headingToolbar = require('../../lib/headingToolbar');
-
 module.exports = {
   cascades: ['batchOperations'],
   extend: '@apostrophecms/piece-type',
@@ -40,16 +38,10 @@ module.exports = {
       },
       bio: {
         label: 'Bio',
-        type: 'area',
+        type: 'string',
+        textarea: true,
+        help: 'Enter a short biography (up to 400 characters)',
         required: true,
-        options: {
-          max: 1,
-          widgets: {
-            '@apostrophecms/rich-text': {
-              ...headingToolbar,
-            },
-          },
-        },
       },
       experience: {
         label: 'Experience',
@@ -57,12 +49,14 @@ module.exports = {
         help: 'Experience in years',
         min: 0,
         def: 0,
+        required: true,
       },
       linkedin: {
         label: 'LinkedIn',
         type: 'string',
         help: 'Site url without http protocol.',
         placeholder: 'linkedin.com/in/your-profile',
+        required: true,
       },
       order: {
         label: 'Order',
