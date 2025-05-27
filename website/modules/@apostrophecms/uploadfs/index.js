@@ -2,7 +2,7 @@ const { getEnv } = require('../../../utils/env');
 
 const s3aws = {
   bucket: getEnv('APOS_S3_BUCKET'),
-  region: getEnv('APOS_S3_REGION'),,
+  region: getEnv('APOS_S3_REGION'),
   https: true,
 };
 

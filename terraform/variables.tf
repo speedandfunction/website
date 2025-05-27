@@ -226,11 +226,6 @@ variable "bastion_instance_type" {
   description = "EC2 instance type for bastion host"
   type        = string
   default     = "t3.micro"
-  
-  validation {
-    condition = can(regex("^[tm][0-9]+\\.", var.bastion_instance_type))
-    error_message = "Bastion instance type must be a valid EC2 instance type."
-  }
 }
 
 variable "bastion_key_pair_name" {
