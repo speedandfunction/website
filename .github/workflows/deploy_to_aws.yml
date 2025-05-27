@@ -78,7 +78,7 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.TF_AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.TF_AWS_SECRET_ACCESS_KEY }}
           SETTINGS_BUCKET: sf-website-infrastructure
-          AWS_DEFAULT_REGION: "eu-east-1"
+          AWS_DEFAULT_REGION: "us-east-1"
 
   # detach-waf-if-needed:
   #   needs: init-and-plan
