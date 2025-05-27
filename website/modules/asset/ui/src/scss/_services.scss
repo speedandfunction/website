@@ -6,6 +6,8 @@
   
   @include breakpoint-medium {
     border: 0;
+    max-width: 900px;
+    margin: 0 auto;
     
     &:not(.has-even) {
       .sf-simple-card:last-child {
@@ -35,7 +37,6 @@
       }
       &__text {
         display: block;
-        margin-top: 20px;
         max-height: none;
         opacity: 1;
         overflow: visible;
@@ -135,6 +136,7 @@
     font-size: 16px;
     margin: 1px 0;
     max-width: 90%;
+    margin-bottom: 20px;
     @include transition(color);
     @include truncate-lines(1);
     
