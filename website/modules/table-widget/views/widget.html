@@ -1,38 +1,45 @@
-<section class="sf-section" data-table-widget>
-  {% if data.widget.intro %}
-    <div class="sf-table-intro">
-      {% area data.widget, 'intro' %}
-    </div>
-  {% endif %}
-  
-  <div class="sf-table">
-    {% for row in data.widget.rows %}
-      <div class="sf-table-row">
-        <div class="sf-table-cell sf-table-cell-title">
-          <h3 class="sf-table-title">{{ row.title }}</h3>
-        </div>
-        
-        <div class="sf-table-cell sf-table-cell-description">
-          {% area row, 'description' %}
-          
-          {% if row.linkTitle %}
-            <div class="sf-table-link">
-              {% set linkUrl = '' %}
-              {% if row.linkType == 'page' and row._page[0] %}
-                {% set linkUrl = row._page[0]._url %}
-              {% elif row.linkType == 'file' and row._file[0] %}
-                {% set linkUrl = row._file[0]._url %}
-              {% elif row.linkType == 'custom' and row.customUrl %}
-                {% set linkUrl = row.customUrl %}
-              {% endif %}
-              
-              {% if linkUrl %}
-                <a href="{{ linkUrl }}" class="sf-link" {% if '_blank' in (row.target or []) %}target="_blank" rel="noopener noreferrer"{% endif %}>{{ row.linkTitle }}</a>
-              {% endif %}
-            </div>
-          {% endif %}
-        </div>
+<section class="sf-section sf-table-section" data-table-widget>
+    {% if data.widget.intro %}
+      <div class="sf-table-intro">
+        {% area data.widget, 'intro' %}
       </div>
-    {% endfor %}
-  </div>
+    {% endif %}
+    
+    <div class="sf-table">
+      {% for row in data.widget.rows %}
+        <div class="sf-table-row">
+          <div class="sf-table-cell sf-table-cell-title">
+            <h3 class="sf-table-title">{{ row.title }}</h3>
+          </div>
+          
+          <div class="sf-table-cell sf-table-cell-description">
+            {% area row, 'description' %}
+            
+            {% if row.linkTitle %}
+              <div class="sf-table-link">
+                {% set linkUrl = '' %}
+                {% if row.linkType == 'page' and row._page[0] %}
+                  {% set linkUrl = row._page[0]._url %}
+                {% elif row.linkType == 'file' and row._file[0] %}
+                  {% set linkUrl = row._file[0]._url %}
+                {% elif row.linkType == 'custom' and row.customUrl %}
+                  {% set linkUrl = row.customUrl %}
+                {% endif %}
+                
+                {% if linkUrl %}
+                  <a
+                    href="{{ linkUrl }}"
+                    class="sf-link"
+                    {% if '_blank' in (row.target or []) %}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    {% endif %}
+                  >{{ row.linkTitle }}</a>
+                {% endif %}
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
 </section>
