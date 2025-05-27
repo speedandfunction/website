@@ -259,7 +259,9 @@ module "ecs" {
   # Environment variables
   environment_variables = {
     NODE_ENV                   = "production"
-    APOS_MONGODB_URI          = "mongodb://${module.documentdb.cluster_endpoint}:27017/apostrophe"
+    DOCUMENTDB_HOST           = module.documentdb.cluster_endpoint
+    DOCUMENTDB_PORT           = "27017"
+    DOCUMENTDB_DATABASE       = "apostrophe"
     REDIS_URI                 = "redis://${module.redis.cluster_endpoint}:6379"
     BASE_URL                  = "https://${var.domain_name}"
     APOS_S3_BUCKET           = module.s3.attachments_bucket_id
@@ -274,6 +276,8 @@ module "ecs" {
     for k, v in {
       SESSION_SECRET               = module.parameter_store.session_secret_arn
       SERVICE_ACCOUNT_PRIVATE_KEY = module.parameter_store.gcs_service_account_key_arn
+      DOCUMENTDB_USERNAME         = module.parameter_store.documentdb_username_arn
+      DOCUMENTDB_PASSWORD         = module.parameter_store.documentdb_password_arn
     } : k => v if v != ""
   }
   

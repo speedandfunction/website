@@ -2,6 +2,27 @@ const apostrophe = require('apostrophe');
 require('dotenv').config({ path: '../.env' });
 const { getEnv } = require('./utils/env');
 
+// Construct MongoDB URI from environment variables
+// This must happen before Apostrophe initialization
+function constructMongoDbUri() {
+  const mongoUsername = getEnv('DOCUMENTDB_USERNAME');
+  const mongoPassword = getEnv('DOCUMENTDB_PASSWORD');
+  const mongoHost = getEnv('DOCUMENTDB_HOST');
+  const mongoPort = getEnv('DOCUMENTDB_PORT');
+  const mongoDatabase = getEnv('DOCUMENTDB_DATABASE');
+
+  // Construct the full MongoDB URI with authentication and SSL
+  const mongoUri = `mongodb://${encodeURIComponent(mongoUsername)}:${encodeURIComponent(mongoPassword)}@${mongoHost}:${mongoPort}/${mongoDatabase}?ssl=true&replicaSet=rs0&readPreference=secondaryPreferred&retryWrites=false`;
+
+  // Log success (using simple logging since Apostrophe isn't initialized yet)
+  process.stdout.write('✅ MongoDB URI constructed successfully\n');
+  process.stdout.write(`   Host: ${mongoHost}:${mongoPort}\n`);
+  process.stdout.write(`   Database: ${mongoDatabase}\n`);
+  process.stdout.write(`   Username: ${mongoUsername}\n`);
+
+  return mongoUri;
+}
+
 function createAposConfig() {
   return {
     shortName: 'apostrophe-site',
@@ -9,6 +30,13 @@ function createAposConfig() {
 
     // Session configuration
     modules: {
+      // Database configuration with direct URI
+      '@apostrophecms/db': {
+        options: {
+          uri: constructMongoDbUri()
+        }
+      },
+
       // Core modules configuration
       '@apostrophecms/express': {
         options: {
