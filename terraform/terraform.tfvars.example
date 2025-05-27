@@ -35,6 +35,7 @@ route53_zone_id = ""  # Leave empty to skip DNS record creation
 
 # Container Configuration
 container_image_tag = "latest"
+apos_release_id    = "v1.0.0"  # Release ID for deployment tracking (required)
 container_cpu      = 1024  # 1024 = 1 vCPU
 container_memory   = 2048  # 2048 MB = 2 GB
 container_port     = 3000  # Application port

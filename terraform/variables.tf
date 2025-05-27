@@ -130,6 +130,11 @@ variable "container_image_tag" {
   default     = "latest"
 }
 
+variable "apos_release_id" {
+  description = "Release ID for the application deployment"
+  type        = string
+}
+
 variable "container_cpu" {
   description = "CPU units for the container (1024 = 1 vCPU)"
   type        = number

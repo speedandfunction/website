@@ -266,6 +266,7 @@ module "ecs" {
     APOS_S3_REGION           = var.aws_region
     APOS_CDN_URL             = "https://${var.media_domain_name}"
     APOS_CDN_ENABLED         = "true"
+    APOS_RELEASE_ID          = var.apos_release_id
   }
   
   # Secrets from Parameter Store - filter out empty values
