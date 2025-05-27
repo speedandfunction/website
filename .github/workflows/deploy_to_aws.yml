@@ -3,7 +3,7 @@ name: 'Deploy to AWS'
 on:
   push:
     branches:
-      - origin/create-terraform-configuration
+      - create-terraform-configuration
       # - 'releases/**'
 
   workflow_dispatch:
@@ -47,32 +47,34 @@ jobs:
       - name: Checkout config repository
         uses: actions/checkout@v4
         with:
-          repository: 'speedandfunction/website-ci-secrets'
+          repository: 'speedandfunction/website-ci-secret'
           path: 'terraform-config'
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Copy tfvars for ${{ vars.ENV_NAME }}
-        run: |
-          cat "terraform-config/environments/${{ env.TFVAR_NAME }}"  "deployment/environments/${{env.TFVAR_NAME}}"  > "deployment/terraform/${{ env.SETTINGS_BUCKET }}.tfvars"
-        env:
-          SETTINGS_BUCKET: oshub-settings-${{ steps.get_env_name.outputs.lowercase }}
-          TFVAR_NAME: terraform-${{steps.get_env_name.outputs.lowercase}}.tfvars
+      # - name: Copy tfvars for ${{ vars.ENV_NAME }}
+      #   run: |
+      #     cat "terraform-config/environments/${{ env.TFVAR_NAME }}"  "deployment/environments/${{env.TFVAR_NAME}}"  > "deployment/terraform/${{ env.SETTINGS_BUCKET }}.tfvars"
+      #   env:
+      #     SETTINGS_BUCKET: oshub-settings-${{ steps.get_env_name.outputs.lowercase }}
+      #     TFVAR_NAME: terraform-${{steps.get_env_name.outputs.lowercase}}.tfvars
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
         with:
-          terraform_version: 1.5.0
+          terraform_version: 1.12.0
           terraform_wrapper: false
 
 
       - name: Terraform Plan for ${{ vars.ENV_NAME }}
-        run: ./deployment/infra plan
+        run: |
+          cd deployment
+          terraform init -backend-config="backend-${{ vars.ENV_NAME }}.hcl"
+          terraform plan -var-file="terraform-config/environments/${{ env.TFVAR_NAME }}" -out="terraform/${{ env.SETTINGS_BUCKET }}.tfplan"
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: "eu-west-1"
-          SETTINGS_BUCKET: oshub-settings-${{ steps.get_env_name.outputs.lowercase }}
-
+          AWS_ACCESS_KEY_ID: ${{ secrets.TF_AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.TF_AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: "eu-east-1"
+   
       - name: Copy planfile to S3 bucket for ${{ vars.ENV_NAME }}
         run: aws s3 cp "deployment/terraform/${{ env.SETTINGS_BUCKET }}.tfplan" "s3://${{ env.SETTINGS_BUCKET }}/terraform/${{ env.SETTINGS_BUCKET }}.tfplan"
         env:
