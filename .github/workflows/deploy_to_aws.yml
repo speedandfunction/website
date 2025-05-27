@@ -49,14 +49,12 @@ jobs:
         with:
           repository: 'speedandfunction/website-ci-secret'
           path: 'terraform-config'
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.PAT }}
 
-      # - name: Copy tfvars for ${{ vars.ENV_NAME }}
-      #   run: |
-      #     cat "terraform-config/environments/${{ env.TFVAR_NAME }}"  "deployment/environments/${{env.TFVAR_NAME}}"  > "deployment/terraform/${{ env.SETTINGS_BUCKET }}.tfvars"
-      #   env:
-      #     SETTINGS_BUCKET: oshub-settings-${{ steps.get_env_name.outputs.lowercase }}
-      #     TFVAR_NAME: terraform-${{steps.get_env_name.outputs.lowercase}}.tfvars
+      - name: Copy tfvars for ${{ vars.ENV_NAME }}
+        run: |
+          cat "terraform-config/environments/${{ vars.ENV_NAME }}"  "deployment/environments/${{ vars.ENV_NAME }}"  > "deployment/terraform/terraform.tfvars"
+
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
