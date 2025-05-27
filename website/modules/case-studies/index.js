@@ -101,6 +101,12 @@ module.exports = {
         help: 'Public link referring to the delivered result.',
         placeholder: 'https://example.com/project',
       },
+      fullStoryUrl: {
+        label: 'Full Story URL',
+        type: 'string',
+        help: 'Link to the full case study article or story.',
+        placeholder: 'https://example.com/full-story',
+      },
       objective: {
         label: 'Objective',
         type: 'string',
@@ -159,6 +165,7 @@ module.exports = {
           'portfolioTitle',
           'descriptor',
           'prodLink',
+          'fullStoryUrl',
         ],
       },
       details: {
