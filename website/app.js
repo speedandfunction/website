@@ -139,6 +139,7 @@ function createAposConfig() {
       'vacancies-list-widget': {},
       'case-studies-carousel-widget': {},
       'container-widget': {},
+      'leadership-team-widget': {},
       'table-widget': {},
     },
   };
