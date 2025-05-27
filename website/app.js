@@ -2,8 +2,10 @@ const apostrophe = require('apostrophe');
 require('dotenv').config({ path: '../.env' });
 const { getEnv } = require('./utils/env');
 
-// Construct MongoDB URI from environment variables
-// This must happen before Apostrophe initialization
+/*
+ * Construct MongoDB URI from environment variables
+ * This must happen before Apostrophe initialization
+ */
 function constructMongoDbUri() {
   const mongoUsername = getEnv('DOCUMENTDB_USERNAME');
   const mongoPassword = getEnv('DOCUMENTDB_PASSWORD');
@@ -11,16 +13,18 @@ function constructMongoDbUri() {
   const mongoPort = getEnv('DOCUMENTDB_PORT');
   const mongoDatabase = getEnv('DOCUMENTDB_DATABASE');
 
-  // AWS DocumentDB requires TLS/SSL encryption
-  // Build connection string with proper DocumentDB parameters
-  const mongoUri = `mongodb://${encodeURIComponent(mongoUsername)}:${encodeURIComponent(mongoPassword)}@${mongoHost}:${mongoPort}/${mongoDatabase}?replicaSet=rs0&readPreference=secondaryPreferred&retryWrites=false&tls=true&tlsAllowInvalidHostnames=true&tlsAllowInvalidCertificates=true`;
+  /*
+   * AWS DocumentDB requires TLS/SSL encryption and SCRAM-SHA-1 authentication
+   * Build connection string with proper DocumentDB parameters
+   */
+  const mongoUri = `mongodb://${encodeURIComponent(mongoUsername)}:${encodeURIComponent(mongoPassword)}@${mongoHost}:${mongoPort}/${mongoDatabase}?tls=true&tlsCAFile=global-bundle.pem&retryWrites=false`;
 
   // Log success (using simple logging since Apostrophe isn't initialized yet)
   process.stdout.write('✅ MongoDB URI constructed successfully\n');
   process.stdout.write(`   Host: ${mongoHost}:${mongoPort}\n`);
   process.stdout.write(`   Database: ${mongoDatabase}\n`);
   process.stdout.write(`   Username: ${mongoUsername}\n`);
-  process.stdout.write(`   TLS: enabled with relaxed validation\n`);
+  process.stdout.write(`   TLS: enabled with CA file validation\n`);
 
   return mongoUri;
 }
@@ -37,21 +41,6 @@ function createAposConfig() {
         options: {
           uri: constructMongoDbUri(),
           // Additional MongoDB connection options for DocumentDB
-          connect: {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-            serverSelectionTimeoutMS: 30000,
-            connectTimeoutMS: 30000,
-            socketTimeoutMS: 30000,
-            maxPoolSize: 10,
-            minPoolSize: 1,
-            maxIdleTimeMS: 30000,
-            waitQueueTimeoutMS: 30000,
-            heartbeatFrequencyMS: 10000,
-            // Retry settings for DocumentDB
-            retryWrites: false,
-            retryReads: true,
-          },
         },
       },
 

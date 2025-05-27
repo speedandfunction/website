@@ -2,20 +2,6 @@
   "Version": "2012-10-17",
   "Statement": [
     {
-      "Sid": "TerraformBackendDynamoDBPermissions",
-      "Effect": "Allow",
-      "Action": [
-        "dynamodb:CreateTable",
-        "dynamodb:DeleteTable",
-        "dynamodb:DescribeTable",
-        "dynamodb:GetItem",
-        "dynamodb:PutItem",
-        "dynamodb:DeleteItem",
-        "dynamodb:UpdateItem"
-      ],
-      "Resource": "arn:aws:dynamodb:us-east-1:695912022152:table/sf-website-terraform-locks"
-    },
-    {
       "Sid": "TerraformIAMPermissions",
       "Effect": "Allow",
       "Action": [
@@ -110,6 +96,7 @@
         "rds:CreateDBClusterParameterGroup",
         "rds:DeleteDBClusterParameterGroup",
         "rds:DescribeDBClusterParameterGroups",
+        "rds:DescribeDBClusterParameters",
         "rds:ModifyDBClusterParameterGroup",
         "rds:CreateDBInstance",
         "rds:DeleteDBInstance",

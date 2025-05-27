@@ -150,3 +150,4 @@ dev.tfplan
 plan.out.txt
 .cursor/tmp
 .terraform.lock.hcl
+*.pem

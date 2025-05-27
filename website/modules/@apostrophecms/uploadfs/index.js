@@ -6,13 +6,15 @@ const s3aws = {
   https: true,
 };
 
-// const s3localstack = {
-//   bucket: getEnv('APOS_S3_BUCKET'),
-//   region: getEnv('APOS_S3_REGION'),
-//   endpoint: getEnv('APOS_S3_ENDPOINT'),
-//   style: 'path',
-//   https: false,
-// };
+/*
+ * Const s3localstack = {
+ *   bucket: getEnv('APOS_S3_BUCKET'),
+ *   region: getEnv('APOS_S3_REGION'),
+ *   endpoint: getEnv('APOS_S3_ENDPOINT'),
+ *   style: 'path',
+ *   https: false,
+ * };
+ */
 
 const res = {
   options: {
@@ -20,15 +22,15 @@ const res = {
       storage: 's3',
       ...s3aws,
       // Get your credentials at aws.amazon.com
-      // secret: getEnv('APOS_S3_SECRET'),
-      // key: getEnv('APOS_S3_KEY'),
+      // Secret: getEnv('APOS_S3_SECRET'),
+      // Key: getEnv('APOS_S3_KEY'),
       // // Bucket name created on aws.amazon.com
-      // bucket: getEnv('APOS_S3_BUCKET'),
+      // Bucket: getEnv('APOS_S3_BUCKET'),
       // // Region name for endpoint
-      // region: getEnv('APOS_S3_REGION'),
-      // endpoint: getEnv('APOS_S3_ENDPOINT'),
-      // style: getEnv('APOS_S3_STYLE'),
-      // https: getEnv('APOS_S3_HTTPS'),
+      // Region: getEnv('APOS_S3_REGION'),
+      // Endpoint: getEnv('APOS_S3_ENDPOINT'),
+      // Style: getEnv('APOS_S3_STYLE'),
+      // Https: getEnv('APOS_S3_HTTPS'),
       cdn: {
         enabled: true,
         url: getEnv('APOS_CDN_URL'),
