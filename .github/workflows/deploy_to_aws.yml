@@ -127,6 +127,8 @@ jobs:
       - name: Terraform Apply for ${{ vars.ENV_NAME }}
         run: |
           cd deployment
+          cd deployment
+          terraform init -backend-config="environments/backend-${{ vars.ENV_NAME }}.hcl"
           terraform apply "${{ vars.ENV_NAME }}.tfplan"
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.TF_AWS_ACCESS_KEY_ID }}
