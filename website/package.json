@@ -4,16 +4,17 @@
   "description": "Apostrophe CMS website",
   "main": "app.js",
   "scripts": {
-    "start": "node app @apostrophecms/asset:build && node app.js",
-    "dev": "nodemon",
-    "build": "NODE_ENV=production node app.js apostrophe:generation",
+    "start": "node scripts/generate-constants.js && node app @apostrophecms/asset:build && node app.js",
+    "dev": "node scripts/generate-constants.js && nodemon",
+    "build": "node scripts/generate-constants.js && NODE_ENV=production node app.js apostrophe:generation",
     "serve": "NODE_ENV=production node app.js",
     "test": "jest",
     "test:coverage": "jest --coverage",
     "lint": "eslint .",
     "lint:pr-script": "eslint ../scripts/merged-prs-last-24h.js --no-eslintrc --env node --parser-options=ecmaVersion:2022",
     "format": "prettier --write '**/**/*.{js,jsx,ts,tsx,json,css,md}'",
-    "format:pr-script": "prettier --write ../scripts/merged-prs-last-24h.js"
+    "format:pr-script": "prettier --write ../scripts/merged-prs-last-24h.js",
+    "generate-constants": "node scripts/generate-constants.js"
   },
   "nodemonConfig": {
     "delay": 1000,

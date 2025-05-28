@@ -1,15 +1,18 @@
 import * as yup from 'yup';
+// Import constants directly
+import { STANDARD_FORM_FIELD_NAMES } from '../../../../shared-constants/ui/src/index';
 
 // Specific validation for particular fields
 const fieldSpecificSchemas = {
-  'full-name': yup
+  // Field validations using imported constants
+  [STANDARD_FORM_FIELD_NAMES.FULL_NAME]: yup
     .string()
     .trim()
     .min(2, 'Name must contain at least 2 characters')
     .max(50, 'Name cannot be longer than 50 characters')
     .required('Name is required'),
 
-  'email-address': yup
+  [STANDARD_FORM_FIELD_NAMES.EMAIL_ADDRESS]: yup
     .string()
     .email('Enter a valid email address')
     .test('domain-check', 'Check the domain part of the email', (value) => {
@@ -24,7 +27,7 @@ const fieldSpecificSchemas = {
     })
     .required('Email is required'),
 
-  'phone-number': yup
+  [STANDARD_FORM_FIELD_NAMES.PHONE_NUMBER]: yup
     .string()
     .test(
       'is-valid-international-phone',
@@ -106,6 +109,7 @@ const validateField = async (field, value) => {
     return { isValid: false, message: error.message };
   }
 };
+
 // Function to show validation error
 const showValidationError = (field, message) => {
   // Find the parent element of the field
