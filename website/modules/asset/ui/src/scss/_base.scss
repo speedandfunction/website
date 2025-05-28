@@ -42,6 +42,7 @@
 
   @include breakpoint-medium {
     font-size: $font-size-h1;
+    line-height: 110%;
   }
 }
 
@@ -60,12 +61,12 @@
 .sf-title {
   font-weight: $font-weight-extra-bold;
   font-size: $font-size-h3-mobile;
-  line-height: 140%;
+  line-height: 110%;
   margin: 0;
 
   @include breakpoint-medium {
     font-size: $font-size-h3;
-    line-height: 170%;
+    line-height: 140%;
   }
 }
 
@@ -108,7 +109,7 @@
 .sf-rich-large {
   font-weight: $font-weight-medium;
   font-size: $font-size-body-small;
-  line-height: 140%;
+  line-height: 150%;
   margin: 0;
 
   @include breakpoint-medium {
