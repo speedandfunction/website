@@ -79,6 +79,14 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.TF_AWS_SECRET_ACCESS_KEY }}
           SETTINGS_BUCKET: sf-website-infrastructure
           AWS_DEFAULT_REGION: "us-east-1"
+
+      - name: Copy lock file to S3 bucket for ${{ vars.ENV_NAME }}
+        run: aws s3 cp "deployment/.terraform.lock.hcl" "s3://${{ env.SETTINGS_BUCKET }}/plans/${{ vars.ENV_NAME }}.terraform.lock.hcl"
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.TF_AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.TF_AWS_SECRET_ACCESS_KEY }}
+          SETTINGS_BUCKET: sf-website-infrastructure
+          AWS_DEFAULT_REGION: "us-east-1"
   apply:
     needs: [init-and-plan]
     runs-on: ubuntu-latest
@@ -102,6 +110,14 @@ jobs:
 
       - name: Get planfile from S3 bucket for ${{ vars.ENV_NAME }}
         run: aws s3 cp "s3://${{ env.SETTINGS_BUCKET }}/plans/${{ vars.ENV_NAME }}.tfplan" "deployment/${{ vars.ENV_NAME }}.tfplan"
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.TF_AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.TF_AWS_SECRET_ACCESS_KEY }}
+          SETTINGS_BUCKET: sf-website-infrastructure
+          AWS_DEFAULT_REGION: "us-east-1"
+
+      - name: Get lock file from S3 bucket for ${{ vars.ENV_NAME }}
+        run: aws s3 cp "s3://${{ env.SETTINGS_BUCKET }}/plans/${{ vars.ENV_NAME }}.terraform.lock.hcl" "deployment/.terraform.lock.hcl"
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.TF_AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.TF_AWS_SECRET_ACCESS_KEY }}
