@@ -27,13 +27,13 @@ module.exports = {
     layout: {
       label: 'Specialty',
       widgets: {
-        'leadership-carousel': {},
         'testimonials-carousel': {},
         'insights-carousel': {},
         'contact': {},
         '@apostrophecms/html': {},
         'page-intro': {},
         'home-hero': {},
+        'leadership-team': {},
       },
       columns: 2,
     },

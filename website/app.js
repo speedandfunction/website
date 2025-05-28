@@ -61,7 +61,6 @@ function createAposConfig() {
       'about-widget': {},
       'map-widget': {},
       'simple-cards-widget': {},
-      'leadership-carousel-widget': {},
       'insights-carousel-widget': {},
       'contact-widget': {},
       'page-intro-widget': {},
@@ -104,6 +103,7 @@ function createAposConfig() {
       'vacancies-list-widget': {},
       'case-studies-carousel-widget': {},
       'container-widget': {},
+      'leadership-team-widget': {},
       'table-widget': {},
     },
   };
