@@ -116,7 +116,7 @@ const showValidationError = (field, message) => {
     errorElement.className = 'validation-error';
 
     const dateHelp = wrapper.querySelector('.apos-form-help');
-    if (dateHelp && dateHelp.parentElement) {
+    if (dateHelp?.parentElement) {
       wrapper.insertBefore(errorElement, dateHelp.parentElement.nextSibling);
     } else {
       wrapper.appendChild(errorElement);
