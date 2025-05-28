@@ -86,19 +86,30 @@
   border: 1px solid $gray-border;
   font-style: $font-style-normal;
   max-width: 262px;
+  width: 100%;
+
+  .filter-section {
+    &:first-of-type {
+      .filter-category {
+        &::before {
+          content: none;
+        }
+      }
+    }
+  }
 }
 
 .filter-section {
-  padding: 15px 24px;
+  padding: 0 24px;
 
   .filter-category {
     @include font-settings(14px, 150%, $font-weight-extra-bold);
     color: $gray-500;
-    margin: 0;
-    padding-bottom: 12px;
-    margin-bottom: 16px;
+    margin: 0 0 16px;
+    padding: 12px 0;
     position: relative;
 
+    &::before,
     &::after {
       content: '';
       position: absolute;
@@ -107,10 +118,17 @@
       bottom: 0;
       border-bottom: 1px solid $gray-border;
     }
+
+    &::before {
+      top: 0;
+      bottom: initial;
+    }
   }
 }
 
 .filter-content {
+  margin-bottom: 32px;
+
   .tag-search {
     @include font-settings(11px, 140%, $font-weight-medium);
     border: 1px solid rgba($gray-200, 0.4);
@@ -118,6 +136,7 @@
     margin-bottom: 11px;
     color: $gray-300;
     width: 100%;
+
     &:focus {
       outline: 0;
       border-left: 0;
@@ -154,18 +173,8 @@
     color: $gray-300;
     display: block;
     text-decoration: none;
-    padding: 5px;
+    padding: 5px 0;
     cursor: pointer;
-    &:focus {
-      outline: 0;
-      border-left: 0;
-      border-right: 0;
-      border-top: 0;
-      &::before {
-        outline: 2px solid $gray-border;
-        outline-offset: 2px;
-      }
-    }
 
     &::before {
       content: '';
@@ -179,6 +188,10 @@
       margin-right: 10px;
       vertical-align: middle;
       margin-top: -1px;
+    }
+
+    span {
+      margin-left: 5px;
     }
   }
 }
@@ -220,13 +233,11 @@
   flex-wrap: wrap;
   gap: 16px;
   justify-content: space-between;
-  margin-bottom: 32px;
 
   @include breakpoint-medium {
     flex-wrap: nowrap;
     align-items: flex-start;
     justify-content: flex-start;
-    margin-bottom: 42px;
   }
 }
 
