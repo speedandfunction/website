@@ -21,7 +21,7 @@ module.exports = {
       clientWebsite: {
         label: 'Client Website',
         type: 'string',
-        help: "Link to client's official website.",
+        help: "Link to client's official website (must include http(s) protocol).",
         placeholder: 'https://example.com',
       },
       picture: {
@@ -86,7 +86,7 @@ module.exports = {
       portfolioTitle: {
         label: 'Portfolio Title',
         type: 'string',
-        help: 'The official product name or a concise, descriptive project name if confidentiality is necessary',
+        help: 'The official product name or a concise, descriptive project name if confidentiality is necessary.',
         required: true,
       },
       descriptor: {
@@ -98,8 +98,14 @@ module.exports = {
       prodLink: {
         label: 'Link to Prod',
         type: 'string',
-        help: 'Public link referring to the delivered result.',
+        help: 'Public link referring to the delivered result (must include http(s) protocol).',
         placeholder: 'https://example.com/project',
+      },
+      fullStoryUrl: {
+        label: 'Full Story URL',
+        type: 'string',
+        help: 'Link to the full case study article or story (must include http(s) protocol).',
+        placeholder: 'https://example.com/full-story',
       },
       objective: {
         label: 'Objective',
@@ -159,6 +165,7 @@ module.exports = {
           'portfolioTitle',
           'descriptor',
           'prodLink',
+          'fullStoryUrl',
         ],
       },
       details: {

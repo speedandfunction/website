@@ -59,9 +59,15 @@
         </div>
 
         <div class="links-area">
-          <a href="#" class="full-story_btn">Read The Full Story</a>
-
-          {% if data.piece.prodLink %}
+          {% if data.piece.fullStoryUrl %}
+          <a
+            href="{{ data.piece.fullStoryUrl }}"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="full-story_btn"
+            >Read The Full Story</a
+          >
+          {% endif %} {% if data.piece.prodLink %}
           <a href="{{ data.piece.prodLink }}" target="_blank" class="prod-link"
             >{{ data.piece.prodLink }}</a
           >
