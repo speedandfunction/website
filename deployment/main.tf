@@ -270,12 +270,10 @@ module "ecs" {
   
   # Secrets from Parameter Store - filter out empty values
   secrets = {
-    for k, v in {
-      SESSION_SECRET               = module.parameter_store.session_secret_arn
-      SERVICE_ACCOUNT_PRIVATE_KEY = module.parameter_store.gcs_service_account_key_arn
-      DOCUMENTDB_USERNAME         = module.parameter_store.documentdb_username_arn
-      DOCUMENTDB_PASSWORD         = module.parameter_store.documentdb_password_arn
-    } : k => v if v != ""
+    SESSION_SECRET               = module.parameter_store.session_secret_arn
+    SERVICE_ACCOUNT_PRIVATE_KEY = module.parameter_store.gcs_service_account_key_arn
+    DOCUMENTDB_USERNAME         = module.parameter_store.documentdb_username_arn
+    DOCUMENTDB_PASSWORD         = module.parameter_store.documentdb_password_arn
   }
   
   tags = local.common_tags
