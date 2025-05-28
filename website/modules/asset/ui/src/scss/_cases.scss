@@ -413,7 +413,8 @@
 
   .placeholder-image-container {
     width: 100%;
-    height: 200px;
+    max-height: 240px;
+    height: 100%;
     overflow: hidden;
     display: flex;
     justify-content: center;
@@ -422,7 +423,7 @@
 
     @include breakpoint-large {
       align-items: flex-start;
-      padding-top: 35px;
+      padding-top: 50px;
     }
   }
 
@@ -599,6 +600,17 @@
           }
         }
 
+        .cname {
+          a {
+            color: $gray-500;
+            text-decoration: none;
+
+            &:hover {
+              text-decoration: underline;
+            }
+          }
+        }
+
         .type,
         .industry {
           @include responsive-font(11px, 11px);
@@ -656,7 +668,6 @@
           }
         }
 
-        .client-website-link,
         .prod-link {
           @include responsive-font(11px, 11px);
           @include responsive-line-height(120%, 120%);
@@ -664,10 +675,6 @@
           text-decoration: underline;
           text-transform: lowercase;
           color: $gray-500;
-        }
-
-        .client-website-link {
-          margin-bottom: 10px;
         }
       }
 
