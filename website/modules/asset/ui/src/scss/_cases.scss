@@ -622,11 +622,15 @@
         .links-area {
           display: flex;
           flex-direction: column-reverse;
-          justify-content: space-between;
+          justify-content: flex-end;
           height: 100%;
 
           @include breakpoint-medium {
             flex-direction: column;
+          }
+
+          &:has(.full-story_btn) {
+            justify-content: space-between;
           }
         }
 
