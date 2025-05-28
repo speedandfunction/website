@@ -20,7 +20,7 @@ module.exports = {
             i += 1
           ) {
             const field = items[i];
-            if (field.fieldName && !standardNames.includes(field.fieldName)) {
+            if (field?.fieldName && !standardNames.includes(field.fieldName)) {
               field.fieldName = standardNames[i];
             }
           }

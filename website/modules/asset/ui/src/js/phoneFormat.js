@@ -205,8 +205,15 @@ const initPhoneFormatting = function () {
   });
 };
 
+let initialized = false;
+
 // Initialize after DOM is loaded
-document.addEventListener('DOMContentLoaded', initPhoneFormatting);
+document.addEventListener('DOMContentLoaded', () => {
+  if (!initialized) {
+    initPhoneFormatting();
+    initialized = true;
+  }
+});
 
 // Export the function for use in other modules
 export { initPhoneFormatting, formatPhoneNumber };
