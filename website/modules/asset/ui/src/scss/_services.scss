@@ -137,8 +137,8 @@
     margin: 1px 0;
     max-width: 90%;
     margin-bottom: 20px;
+    line-height: 140%;
     @include transition(color);
-    @include truncate-lines(1);
     
     @include breakpoint-medium {
       font-size: 22px;
@@ -233,8 +233,8 @@
       }
       
       .background-circle {
-        width: 200em;
-        height: 40em;
+        width: 150em;
+        height: 50em;
         transform: translate3d(-5%, -10%, 0);
       }
       
