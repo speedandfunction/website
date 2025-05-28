@@ -53,24 +53,57 @@
     display: inline-flex;
     justify-content: space-evenly;
     flex-direction: column;
-
+    
     @include breakpoint-medium {
       display: flex;
       margin: 0;
       flex-direction: row;
     }
-
+    
     .sf-button {
       justify-content: center;
       align-items: center;
       padding: 12px;
       margin: 0 auto 24px;
       width: 100%;
+      transition: color 0.9s ease, transform 0.9s ease;
+      position: relative;
+      overflow: hidden;
+
+      .background-circle {
+        z-index: -1;
+        background-color: $white;
+        border-radius: 25%;
+        width: 130%;
+        height: 100%;
+        position: absolute;
+        inset: -100% -60% auto auto;
+        transition: all 0.9s ease;
+      }
+      
+      &:hover,
+      &:focus {
+        color: $gray-500;
+        transform: scale(1.05);
+        border: 1px solid $gray-500;
+
+        .background-circle {
+          width: 200em;
+          height: 40em;
+          transform: translate3d(-5%, -10%, 0);
+        }
+      }
 
       &.sf-button_underline {
         background-color: $gray-500;
         color: $white;
         padding: 12px;
+
+        &:hover,
+        &:focus {
+          color: $gray-500;
+          transform: scale(1.05); 
+        }
 
         span {
           &::before,
@@ -86,6 +119,15 @@
         border: 1px solid $gray-500;
         box-sizing: border-box;
         text-decoration: none;
+
+        .background-circle {
+          background-color: $gray-500;
+        }
+
+        &:hover,
+        &:focus {
+          color: $white;
+        }
 
         @include breakpoint-medium {
           span {
@@ -111,15 +153,61 @@
 
     .sf-button {
       margin: 0;
+      transition: color 0.9s ease, transform 0.9s ease;
+      border: 1px solid $gray-500;
+      position: relative;
+      overflow: hidden;
+
+      .background-circle {
+        z-index: -1;
+        background-color: $white;
+        border-radius: 25%;
+        width: 130%;
+        height: 100%;
+        position: absolute;
+        inset: -100% -60% auto auto;
+        transition: all 0.9s ease;
+      }
+
+      &:hover,
+      &:focus {
+        color: $gray-500;
+        transform: scale(1.05);
+
+        .background-circle {
+          width: 200em;
+          height: 40em;
+          transform: translate3d(-5%, -10%, 0);
+        }
+      }
 
       &.btn-dark {
         background-color: $gray-500;
         color: $white;
+
+        .background-circle {
+          background-color: $white;
+        }
+
+        &:hover,
+        &:focus {
+          color: $gray-500;
+          transform: scale(1.05);
+        }
       }
 
       &.sf-button_underline {
         background: none;
         color: $gray-500;
+
+        .background-circle {
+          background-color: $gray-500;
+        }
+
+        &:hover,
+        &:focus {
+          color: $white;
+        }
       }
     }
 
