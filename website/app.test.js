@@ -89,7 +89,6 @@ describe('createAposConfig', () => {
         'about-widget',
         'map-widget',
         'simple-cards-widget',
-        'leadership-carousel-widget',
         'insights-carousel-widget',
         'contact-widget',
         'page-intro-widget',
