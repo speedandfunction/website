@@ -120,11 +120,12 @@ const showValidationError = (field, message) => {
     errorElement = document.createElement('div');
     errorElement.className = 'validation-error';
 
-    // Add after field or its label
-    const label = wrapper.querySelector('label');
-    if (label && label.nextSibling) {
-      wrapper.insertBefore(errorElement, label.nextSibling);
+    // Find the date help text if it exists, or append at the end
+    const dateHelp = wrapper.querySelector('.apos-form-help');
+    if (dateHelp && dateHelp.parentElement) {
+      wrapper.insertBefore(errorElement, dateHelp.parentElement.nextSibling);
     } else {
+      // Simply append to the end of the wrapper
       wrapper.appendChild(errorElement);
     }
   }

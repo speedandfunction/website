@@ -6,6 +6,9 @@
   font-style: $font-style-normal;
   font-weight: $font-weight-extra-bold;
   text-align: center;
+  min-width: 322px;
+  max-width: min(900px, 90%);
+  margin: 0 auto;
 
   &__title {
     font-size: $font-size-h5;
@@ -40,11 +43,5 @@
       line-height: $line-height-body-large;
       margin-bottom: 50px;
     }
-  }
-
-  &__title,
-  &__subtitle,
-  &__description {
-    max-width: min(900px, 90%);
   }
 }
