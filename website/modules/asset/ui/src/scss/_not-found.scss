@@ -1,24 +1,39 @@
 .not-found-container {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  width: 100%;
+  max-width: 1440px;
+  min-height: $mobile-not-found-height;
+  margin: 0 auto;
+  padding-bottom: 270px;
+  background: $white;
 
-  height: $mobile-not-found-height;
   @include breakpoint-medium {
-    height: $desktop-not-found-height;
+    min-height: $desktop-not-found-height;
+    padding-bottom: 156px;
   }
 
   .not-found-content {
-    width: 75%;
-    min-width: 322px;
+    width: 100%;
+    max-width: 322px;
     text-align: center;
+    margin: 0 auto;
+
+    @include breakpoint-medium {
+      max-width: 905px;
+    }
 
     img {
       width: 50%;
       min-width: 237px;
       margin-bottom: 33px;
+
       @include breakpoint-medium {
         margin-bottom: 7px;
+        width: 450px;
+        min-width: unset;
       }
     }
 
@@ -26,20 +41,26 @@
       color: $gray-300;
       text-align: center;
       @include font-settings(24px, 110%, 700);
-      margin-bottom: 79px;
+      margin-bottom: 44px;
+
       @include breakpoint-medium {
-        margin-bottom: 73px;
         font-size: 36px;
+        margin-bottom: 72px;
       }
     }
 
     .two-buttons {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
       width: 146px;
-      margin: auto;
       gap: 24px;
+      margin: 0 auto;
+
       @include breakpoint-medium {
         width: 100%;
         gap: 0;
+        flex-direction: row;
       }
 
       .sf-button {
