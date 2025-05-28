@@ -1,0 +1,65 @@
+# Example Terraform Variables for SF Website Infrastructure
+# Copy this file to terraform.tfvars and customize the values
+
+# General Configuration
+aws_region  = "us-east-1"
+environment = "development"  # Can be any name: development, staging, production, qa, demo, sandbox, etc.
+
+# Networking
+vpc_cidr = "10.0.0.0/16"  # Choose unique CIDR for each environment to avoid conflicts
+
+# Domain Configuration
+domain_name       = "sf-website-development.sandbox-prettyclear.com"
+media_domain_name = "sf-website-media-development.sandbox-prettyclear.com"
+certificate_arn   = "arn:aws:acm:us-east-1:548271326349:certificate/7e11016f-f90e-4800-972d-622bf1a82948"
+
+# Database Configuration (SENSITIVE - Store securely)
+documentdb_master_username = "apostrophe_admin"
+documentdb_master_password = "your-secure-password-here"  # Min 8 characters
+
+# Application Secrets (SENSITIVE - Store securely)
+session_secret = "${SESSION_SECRET_KEY}"
+redis_auth_token = "your-secure-redis-token-here"  # 16-128 chars, alphanumeric and symbols (no @, ", /)
+
+# Optional: Google Cloud Storage Service Account (if using GCS)
+gcs_service_account_key = ""  # Leave empty if not using GCS
+
+# GitHub Actions Configuration
+github_repository = "your-username/sf-website"  # Format: owner/repo
+
+# Monitoring Configuration (SENSITIVE)
+slack_webhook_url = "https://hooks.slack.com/services/YOUR/SLACK/WEBHOOK"
+
+# Optional: Route 53 Configuration
+route53_zone_id = ""  # Leave empty to skip DNS record creation
+
+# Container Configuration
+container_image_tag = "latest"
+apos_release_id    = "v1.0.0"  # Release ID for deployment tracking (required)
+container_cpu      = 1024  # 1024 = 1 vCPU
+container_memory   = 2048  # 2048 MB = 2 GB
+container_port     = 3000  # Application port
+log_retention_days = 7     # CloudWatch log retention
+
+# Scaling Configuration
+ecs_desired_count = 1
+ecs_max_capacity  = 3
+
+# Environment-specific Instance Types
+documentdb_instance_class = "db.t3.medium"
+redis_node_type          = "cache.t3.micro"  # cache.t3.small for production
+
+# Bastion Host Configuration
+bastion_instance_type = "t3.micro"
+bastion_key_pair_name = "your-ec2-key-pair-name"  # Must exist in AWS
+bastion_allowed_cidr_blocks = [
+  "203.0.113.0/24",  # Example: Your office IP range
+  "198.51.100.0/24"  # Example: Your home IP range
+]
+
+# Tags
+default_tags = {
+  Project    = "Website"
+  CostCenter = "Website"
+  Owner      = "peter.ovchyn"
+} 
