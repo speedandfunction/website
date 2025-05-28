@@ -31,14 +31,17 @@
     <div class="cs_info">
       <div class="cs_info-primary">
         <div class="truncate-wrapper">
-          <h1 class="cname">{{ data.piece.title }}</h1>
           {% if data.piece.clientWebsite %}
-          <a
-            href="{{ data.piece.clientWebsite }}"
-            target="_blank"
-            class="client-website-link"
-            >{{ data.piece.clientWebsite }}</a
-          >
+          <h1 class="cname">
+            <a
+              href="{{ data.piece.clientWebsite }}"
+              target="_blank"
+              rel="noopener noreferrer"
+              >{{ data.piece.title }}</a
+            >
+          </h1>
+          {% else %}
+          <h1 class="cname">{{ data.piece.title }}</h1>
           {% endif %} {% if data.piece._industry and data.piece._industry.length
           %}
           <div class="industry">
@@ -62,7 +65,11 @@
           <a href="#" class="full-story_btn">Read The Full Story</a>
 
           {% if data.piece.prodLink %}
-          <a href="{{ data.piece.prodLink }}" target="_blank" class="prod-link"
+          <a
+            href="{{ data.piece.prodLink }}"
+            target="_blank"
+            class="prod-link"
+            rel="noopener noreferrer"
             >{{ data.piece.prodLink }}</a
           >
           {% endif %}
