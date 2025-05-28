@@ -67,8 +67,7 @@ const fieldSpecificSchemas = {
         // Local part must be of sufficient length
         return localPartLength >= 5;
       },
-    )
-    .required('Phone number is required'),
+    ),
 };
 
 // General schemas for optional fields
