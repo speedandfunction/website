@@ -79,74 +79,88 @@ main %}
         tags and tags.length %}
         <div class="filter-section">
           <p class="filter-category">{{ filterLabel }}:</p>
-          <input
-            type="text"
-            class="tag-search"
-            placeholder="Search {{ filterLabel | lower }}"
-            data-filter-type="{{ filterType }}"
-            style="margin-bottom: 10px; width: 100%"
-          />
-          <ul class="tags-list">
-            {% for tag in tags %} {# Get count from dynamic tag counts #} {% set
-            count = data.tagCounts[filterType][tag.value] or 0 %} {# Check if
-            tag is selected (handle both array and string) #} {% set
-            isTagSelected = false %} {% if data.query[filterType] %} {% if
-            data.query[filterType].length is defined %} {# It's an array
-            (multiple values) #} {% set isTagSelected = tag.value in
-            data.query[filterType] %} {% else %} {# It's a string (single value)
-            #} {% set isTagSelected = tag.value == data.query[filterType] %} {%
-            endif %} {% endif %} {% if isTagSelected %}
-            <li class="tag-item active" data-label="{{ tag.label | lower }}">
-              {% if filterType == 'industry' %}
-              <a
-                class="tag-link"
-                href="{{ data.url | build({}, { industry: { $pull: tag.value } }) }}"
-              >
-                {{ tag.label }} [{{ count }}]
-              </a>
-              {% elif filterType == 'caseStudyType' %}
-              <a
-                class="tag-link"
-                href="{{ data.url | build({}, { caseStudyType: { $pull: tag.value } }) }}"
-              >
-                {{ tag.label }} [{{ count }}]
-              </a>
-              {% elif filterType == 'stack' %}
-              <a
-                class="tag-link"
-                href="{{ data.url | build({}, { stack: { $pull: tag.value } }) }}"
-              >
-                {{ tag.label }} [{{ count }}]
-              </a>
+          <div class="filter-content">
+            <input
+              type="text"
+              class="tag-search"
+              placeholder="Search by {{ filterLabel | capitalize }}"
+              data-filter-type="{{ filterType }}"
+            />
+            <ul class="tags-list">
+              <!-- prettier-ignore -->
+              {% for tag in tags %} 
+              
+              {# Get count from dynamic tag counts #} 
+              {% set count = data.tagCounts[filterType][tag.value] or 0 %} 
+              
+              {# Check if tag is selected (handle both array and string) #} 
+              {% set isTagSelected = false %} 
+              
+              {% if data.query[filterType] %} 
+              {% if data.query[filterType].length is defined %} 
+              
+              {# It's an array (multiple values) #} 
+              {% set isTagSelected = tag.value in data.query[filterType] %} 
+              {% else %} 
+              
+              {# It's a string (single value) #} 
+              {% set isTagSelected = tag.value == data.query[filterType] %} 
               {% endif %}
-            </li>
-            {% else %}
-            <li class="tag-item" data-label="{{ tag.label | lower }}">
-              {% if filterType == 'industry' %}
-              <a
-                class="tag-link"
-                href="{{ data.url | build({}, { industry: { $addToSet: tag.value } }) }}"
-              >
-                {{ tag.label }} [{{ count }}]
-              </a>
-              {% elif filterType == 'caseStudyType' %}
-              <a
-                class="tag-link"
-                href="{{ data.url | build({}, { caseStudyType: { $addToSet: tag.value } }) }}"
-              >
-                {{ tag.label }} [{{ count }}]
-              </a>
-              {% elif filterType == 'stack' %}
-              <a
-                class="tag-link"
-                href="{{ data.url | build({}, { stack: { $addToSet: tag.value } }) }}"
-              >
-                {{ tag.label }} [{{ count }}]
-              </a>
-              {% endif %}
-            </li>
-            {% endif %} {% endfor %}
-          </ul>
+
+              {% endif %} 
+              {% if isTagSelected %}
+              <li class="tag-item active" data-label="{{ tag.label | lower }}">
+                {% if filterType == 'industry' %}
+                <a
+                  class="tag-link"
+                  href="{{ data.url | build({}, { industry: { $pull: tag.value } }) }}"
+                >
+                  {{ tag.label }} <span>[ {{ count }} ]</span>
+                </a>
+                {% elif filterType == 'caseStudyType' %}
+                <a
+                  class="tag-link"
+                  href="{{ data.url | build({}, { caseStudyType: { $pull: tag.value } }) }}"
+                >
+                  {{ tag.label }} <span>[ {{ count }} ]</span>
+                </a>
+                {% elif filterType == 'stack' %}
+                <a
+                  class="tag-link"
+                  href="{{ data.url | build({}, { stack: { $pull: tag.value } }) }}"
+                >
+                  {{ tag.label }} <span>[ {{ count }} ]</span>
+                </a>
+                {% endif %}
+              </li>
+              {% else %}
+              <li class="tag-item" data-label="{{ tag.label | lower }}">
+                {% if filterType == 'industry' %}
+                <a
+                  class="tag-link"
+                  href="{{ data.url | build({}, { industry: { $addToSet: tag.value } }) }}"
+                >
+                  {{ tag.label }} <span>[ {{ count }} ]</span>
+                </a>
+                {% elif filterType == 'caseStudyType' %}
+                <a
+                  class="tag-link"
+                  href="{{ data.url | build({}, { caseStudyType: { $addToSet: tag.value } }) }}"
+                >
+                  {{ tag.label }} <span>[ {{ count }} ]</span>
+                </a>
+                {% elif filterType == 'stack' %}
+                <a
+                  class="tag-link"
+                  href="{{ data.url | build({}, { stack: { $addToSet: tag.value } }) }}"
+                >
+                  {{ tag.label }} <span>[ {{ count }} ]</span>
+                </a>
+                {% endif %}
+              </li>
+              {% endif %} {% endfor %}
+            </ul>
+          </div>
         </div>
         {% endif %} {% endfor %}
       </div>
