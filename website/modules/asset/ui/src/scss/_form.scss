@@ -20,6 +20,24 @@
   }
 }
 
+.sf-contact-form {
+  .sf-form {
+    position: relative;
+    min-width: 295px;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 23px 15px 7px;
+    border: 1px solid $gray-border;
+    @include font-settings(14px, 150%, 500);
+    margin-bottom: 84px;
+    @include breakpoint-medium {
+      padding: 24px 44px 6px;
+      margin-bottom: 248px;
+    }
+  }
+}
+
+.sf-textarea,
 .sf-input {
   width: 100%;
   padding: 20px 0 10px;
@@ -38,6 +56,20 @@
   &::placeholder {
     color: $gray-300;
   }
+  box-sizing: border-box;
+  border-radius: 0;
+  border: 1px solid $whisper;
+  padding: 8px 16px;
+  height: 37px;
+  margin-bottom: 24px;
+  @include breakpoint-medium {
+    height: 53px;
+    padding: 16px 25px;
+  }
+  line-height: 140%;
+  &::placeholder {
+    color: $gray-300;
+  }
   &:focus {
     outline: 0;
     border-left: 0;
@@ -47,39 +79,66 @@
     border-color: $gray-300;
   }
   &:focus:invalid {
-    outline: 0;
+    border-color: $red;
+  }
+  &.has-error {
     border-color: $red;
   }
   &.has-error {
     border-color: $red;
   }
 }
+
+.sf-input,
+.sf-textarea,
+.sf-input::placeholder,
+.sf-textarea::placeholder {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .sf-textarea {
-  width: 100%;
-  font-size: 10px;
-  line-height: 14px;
-  color: $gray-300;
-  font-weight: 500;
-  padding: 10px;
-  @include border(border);
-  min-height: 125px;
+  min-height: unset;
+  overflow: hidden;
   resize: none;
-  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  margin-bottom: 12px;
+  color: $gray-500;
+}
+
+.sf-button {
+  min-width: 93px;
+  margin: 0 auto;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: -65px;
   @include breakpoint-medium {
-    margin-bottom: 40px;
-  }
-  @include transition(border-color);
-  &:focus {
-    outline: 0;
-    border-bottom-color: $gray-300;
-  }
-  &.has-error {
-    border-color: $red;
+    bottom: -136px;
   }
 }
+
+.apos-form-input-wrapper {
+  display: flex;
+  flex-direction: column-reverse;
+}
+
 .sf-field-textarea {
-  .apos-form-label {
-    font-size: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.apos-form-fieldset {
+  border: 0;
+  padding: 0;
+  margin: 0;
+
+  legend {
+    margin-bottom: 12px;
   }
   .apos-form-field-optional {
     display: none;
@@ -112,12 +171,126 @@
     }
   }
 }
+.sf-contact-form {
+  .sf-form {
+    position: relative;
+    min-width: 295px;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 23px 15px 7px;
+    border: 1px solid $gray-border;
+    @include font-settings(14px, 150%, 500);
+    margin-bottom: 84px;
+    @include breakpoint-medium {
+      padding: 24px 44px 6px;
+      margin-bottom: 248px;
+    }
+  }
+}
 
-// Validation error styling
-.validation-error {
-  color: $red;
-  font-size: 12px;
-  margin-top: -5px;
-  margin-bottom: 10px;
-  font-weight: 500;
+.sf-textarea,
+.sf-input {
+  box-sizing: border-box;
+  border-radius: 0;
+  border: 1px solid $whisper;
+  padding: 8px 16px;
+  height: 37px;
+  margin-bottom: 24px;
+  @include breakpoint-medium {
+    height: 53px;
+    padding: 16px 25px;
+  }
+  line-height: 140%;
+  &::placeholder {
+    color: $gray-300;
+  }
+  &:focus {
+    outline: 0;
+    border-left: 0;
+    border-right: 0;
+    border-top: 0;
+    padding-left: 0;
+    border-color: $gray-300;
+  }
+  &:focus:invalid {
+    border-color: $red;
+  }
+}
+
+.sf-input,
+.sf-textarea,
+.sf-input::placeholder,
+.sf-textarea::placeholder {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sf-textarea {
+  min-height: unset;
+  overflow: hidden;
+  resize: none;
+}
+
+label {
+  display: block;
+  margin-bottom: 12px;
+  color: $gray-500;
+}
+
+.sf-button {
+  min-width: 93px;
+  margin: 0 auto;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: -65px;
+  @include breakpoint-medium {
+    bottom: -136px;
+  }
+}
+
+.apos-form-input-wrapper {
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+.sf-field-textarea {
+  display: flex;
+  flex-direction: column;
+}
+
+.apos-form-fieldset {
+  border: 0;
+  padding: 0;
+  margin: 0;
+
+  legend {
+    margin-bottom: 12px;
+  }
+  .apos-form-field-optional {
+    display: none;
+  }
+  div {
+    margin-bottom: 16px;
+  }
+}
+
+.apos-form-submission-thank-you {
+  padding: 40px 0;
+  text-align: center;
+  h3 {
+    font-weight: 700;
+    font-size: 22px;
+    line-height: 24px;
+    margin: 0 0 20px;
+    color: $gray-500;
+  }
+  p {
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 20px;
+    margin: 0;
+    color: $gray-300;
+  }
 }

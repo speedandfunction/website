@@ -5,6 +5,7 @@ import { initFormValidation } from './js/formValidation';
 import { initPhoneFormatting } from './js/phoneFormat';
 import { initSmoothCounters } from './smoothCounters';
 import lozad from 'lozad';
+import { setupTagSearchForInput } from './searchInputHandler';
 
 // Lazy loading
 function initImageLozad() {
@@ -42,6 +43,23 @@ function initFontChanger() {
   }, 500);
 }
 
+// Tag search filter for case studies page
+function initCaseStudiesTagFilter({
+  inputSelector = '.tag-search',
+  containerSelector = '.filter-section',
+  tagSelector = '.tag-item',
+  getTagLabel = (tagItem) => tagItem.dataset.label?.toLowerCase() || '',
+} = {}) {
+  const searchInputs = document.querySelectorAll(inputSelector);
+  searchInputs.forEach((input) =>
+    setupTagSearchForInput(input, {
+      containerSelector,
+      tagSelector,
+      getTagLabel,
+    }),
+  );
+}
+
 // Wrapper function
 function initializeAllComponents() {
   initImageLozad();
@@ -50,6 +68,7 @@ function initializeAllComponents() {
   initFontChanger();
   initFormValidation();
   initPhoneFormatting();
+  initCaseStudiesTagFilter();
 }
 
 // Barba pages
