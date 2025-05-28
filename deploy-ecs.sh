@@ -8,7 +8,7 @@ set -e  # Exit on any error
 # Configuration
 AWS_PROFILE="tf-sf-website"
 AWS_REGION="us-east-1"
-ECR_REPOSITORY="695912022152.dkr.ecr.us-east-1.amazonaws.com/sf-website-dev"
+ECR_REPOSITORY="695912022152.dkr.ecr.us-east-1.amazonaws.com/sf-website-development"
 ECS_CLUSTER="sf-website-dev-cluster"
 ECS_SERVICE="sf-website-dev-service"
 IMAGE_TAG="latest"
