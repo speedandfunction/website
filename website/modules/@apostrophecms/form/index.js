@@ -7,9 +7,6 @@ module.exports = {
 
   init(self) {
     const originalSubmitForm = self.submitForm;
-    if (typeof originalSubmitForm !== 'function') {
-      return;
-    }
 
     self.submitForm = async function (req, data, options) {
       self.apos.util.log('SUBMITTING...');
@@ -26,7 +23,11 @@ module.exports = {
 
       let formData = rawData;
       if (typeof rawData === 'string') {
-        formData = JSON.parse(rawData);
+        try {
+          formData = JSON.parse(rawData);
+        } catch (err) {
+          throw new Error('Failed to parse form data JSON:', err);
+        }
       }
       await self.sendToGoogleSheets(formData);
     };
