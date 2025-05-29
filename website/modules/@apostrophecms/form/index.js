@@ -7,33 +7,27 @@ module.exports = {
 
   init(self) {
     const originalSubmitForm = self.submitForm;
-    if (typeof originalSubmitForm === 'function') {
-      self.submitForm = async function (req, data, options) {
-        const result = await originalSubmitForm.call(self, req, data, options);
-
-        let formData = data;
-        if (req?.body?.data) {
-          try {
-            formData = JSON.parse(req.body.data);
-          } catch (err) {
-            // eslint-disable-next-line no-console
-            console.error(`Error parsing form data: ${err.message}`);
-          }
-        }
-
-        if (formData) {
-          try {
-            await self.sendToGoogleSheets(formData);
-          } catch (err) {
-            // eslint-disable-next-line no-console
-            console.error(
-              `Failed to send form data to Google Sheets: ${err.message}`,
-            );
-          }
-        }
-        return result;
-      };
+    if (typeof originalSubmitForm !== 'function') {
+      return;
     }
+
+    self.submitForm = async function (req, data, options) {
+      const result = await originalSubmitForm.call(self, req, data, options);
+
+      let formData = data;
+      if (!req?.body?.data) {
+        return result;
+      }
+      
+      try {
+        formData = JSON.parse(req.body.data);
+        await self.sendToGoogleSheets(formData);
+      } catch (err) {
+        // eslint-disable-next-line no-console
+        console.error(`Error sending form data to Google Sheets: ${err.message}`);
+      }
+      return result;
+    };
   },
 
   methods(self) {
