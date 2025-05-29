@@ -49,7 +49,6 @@ module.exports = {
             slug: 1,
           },
         },
-        withRelationships: ['_category'],
         help: 'Select technologies utilized in the project.',
       },
       _caseStudyType: {
@@ -63,7 +62,6 @@ module.exports = {
             slug: 1,
           },
         },
-        withRelationships: ['_category'],
         help: 'The nature of the project identifying the projectʼs scope and requirements, relationship, or key characteristics.',
       },
       _industry: {
@@ -77,7 +75,6 @@ module.exports = {
             slug: 1,
           },
         },
-        withRelationships: ['_category'],
         help: "Select client's industry or sector.",
       },
       portfolioTitle: {
