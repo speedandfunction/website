@@ -27,7 +27,6 @@ module.exports = {
     layout: {
       label: 'Specialty',
       widgets: {
-        'leadership-carousel': {},
         'testimonials-carousel': {},
         'insights-carousel': {},
         'contact': {},
