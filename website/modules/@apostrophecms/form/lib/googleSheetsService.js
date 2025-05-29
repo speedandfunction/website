@@ -1,6 +1,6 @@
 const { google } = require('googleapis');
 const { getEnv } = require('../../../../utils/env');
-const { sleep } = require('../../../../utils/sleep');
+const { retryOperation } = require('../../../../utils/retryOperation');
 
 const APPEND_RANGE = 'Sheet1!A1';
 
@@ -94,38 +94,9 @@ const googleSheetsService = {
     }
   },
 
-  async retryOperation(operation, options = {}) {
-    const { self, maxRetries = 3, delayMs = 1000 } = options;
-
-    let attempt = 0;
-
-    const tryOperation = async () => {
-      try {
-        return await operation();
-      } catch (error) {
-        attempt += 1;
-        const retriesLeft = maxRetries - attempt;
-
-        self.apos.util.error(
-          `[SHEETS] Operation failed, retries left: ${retriesLeft}`,
-          error,
-        );
-
-        if (retriesLeft <= 0) {
-          throw error;
-        }
-
-        await sleep(delayMs);
-        return tryOperation();
-      }
-    };
-
-    return await tryOperation();
-  },
-
   async checkHeadersWithRetry(self, sheets, spreadsheetId) {
     try {
-      return await this.retryOperation(
+      return await retryOperation(
         () => this.checkNeedHeaders(sheets, spreadsheetId),
         { self, maxRetries: 3, delayMs: 1000 },
       );
