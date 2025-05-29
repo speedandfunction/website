@@ -5,6 +5,7 @@ module.exports = {
     pluralLabel: 'Case Studies Tags',
     slugPrefix: 'cases-tag-',
     shortcut: 'G,H',
+    withRelationships: ['_category'],
   },
   fields: {
     add: {
@@ -22,7 +23,6 @@ module.exports = {
           project: {
             title: 1,
             slug: 1,
-            _category: 1,
           },
         },
         help: 'Choose a category for this tag',
