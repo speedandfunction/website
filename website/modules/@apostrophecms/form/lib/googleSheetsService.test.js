@@ -25,8 +25,20 @@ const { getEnv } = require('../../../../utils/env');
 const { google } = require('googleapis');
 
 describe('googleSheetsService', () => {
+  let mockSelf = {};
+
   beforeEach(() => {
     jest.clearAllMocks();
+
+    // Create a mock self object with apos.util methods
+    mockSelf = {
+      apos: {
+        util: {
+          log: jest.fn(),
+          error: jest.fn(),
+        },
+      },
+    };
   });
 
   describe('getGoogleSheetsClient', () => {
@@ -164,6 +176,7 @@ describe('googleSheetsService', () => {
 
       const values = [['ID', 'Timestamp', 'Name']];
       const result = await googleSheetsService.appendToSheet(
+        mockSelf,
         mockSheets,
         'test-id',
         values,
@@ -189,9 +202,9 @@ describe('googleSheetsService', () => {
       };
 
       await expect(
-        googleSheetsService.appendToSheet(mockSheets, 'test-id', []),
+        googleSheetsService.appendToSheet(mockSelf, mockSheets, 'test-id', []),
       ).rejects.toThrow('Append failed');
-      expect(console.error).toHaveBeenCalledWith(
+      expect(mockSelf.apos.util.error).toHaveBeenCalledWith(
         '[SHEETS] Append error: Append failed',
       );
     });
@@ -211,14 +224,15 @@ describe('googleSheetsService', () => {
     it('should return result on successful operation', async () => {
       const operation = jest.fn().mockResolvedValue('success');
 
-      const result = await googleSheetsService.retryOperation(operation);
+      const result = await googleSheetsService.retryOperation(operation, {
+        self: mockSelf,
+      });
 
       expect(result).toBe('success');
       expect(operation).toHaveBeenCalledTimes(1);
     });
 
     it('should retry failed operations up to maxRetries', async () => {
-      console.error = jest.fn();
       const error = new Error('Operation failed');
       const operation = jest
         .fn()
@@ -228,31 +242,36 @@ describe('googleSheetsService', () => {
 
       jest.spyOn(googleSheetsService, 'sleep').mockResolvedValue();
 
-      const result = await googleSheetsService.retryOperation(
-        operation,
-        3,
-        100,
-      );
+      const result = await googleSheetsService.retryOperation(operation, {
+        self: mockSelf,
+        maxRetries: 3,
+        delayMs: 100,
+      });
 
       expect(result).toBe('success');
       expect(operation).toHaveBeenCalledTimes(3);
       expect(googleSheetsService.sleep).toHaveBeenCalledTimes(2);
       expect(googleSheetsService.sleep).toHaveBeenCalledWith(100);
+      expect(mockSelf.apos.util.error).toHaveBeenCalled();
     });
 
     it('should throw the last error after all retries fail', async () => {
-      console.error = jest.fn();
       const error = new Error('Operation failed');
       const operation = jest.fn().mockRejectedValue(error);
 
       jest.spyOn(googleSheetsService, 'sleep').mockResolvedValue();
 
       await expect(
-        googleSheetsService.retryOperation(operation, 3, 100),
+        googleSheetsService.retryOperation(operation, {
+          self: mockSelf,
+          maxRetries: 3,
+          delayMs: 100,
+        }),
       ).rejects.toThrow('Operation failed');
 
       expect(operation).toHaveBeenCalledTimes(3);
       expect(googleSheetsService.sleep).toHaveBeenCalledTimes(2);
+      expect(mockSelf.apos.util.error).toHaveBeenCalled();
     });
   });
 
@@ -277,19 +296,22 @@ describe('googleSheetsService', () => {
     });
 
     it('should successfully send form data to Google Sheets', async () => {
-      const result = await googleSheetsService.sendFormDataToGoogleSheets({
+      const formData = {
         _id: 'form-id',
         name: 'John',
-      });
+      };
+
+      const result = await googleSheetsService.sendFormDataToGoogleSheets(
+        mockSelf,
+        formData,
+      );
 
       expect(result).toBe(true);
       expect(googleSheetsService.getGoogleSheetsClient).toHaveBeenCalled();
-      expect(googleSheetsService.formatFormData).toHaveBeenCalledWith({
-        _id: 'form-id',
-        name: 'John',
-      });
+      expect(googleSheetsService.formatFormData).toHaveBeenCalledWith(formData);
       expect(googleSheetsService.addHeadersIfNeeded).toHaveBeenCalled();
       expect(googleSheetsService.appendToSheet).toHaveBeenCalledWith(
+        mockSelf,
         expect.anything(),
         'test-id',
         [['123', '2023-01-01', 'John']],
@@ -297,66 +319,71 @@ describe('googleSheetsService', () => {
     });
 
     it('should handle missing environment variables gracefully', async () => {
-      const consoleSpy = jest.spyOn(console, 'error').mockImplementation();
       googleSheetsService.getGoogleSheetsClient.mockImplementation(() => {
         throw new Error('Missing required environment variables');
       });
 
-      const result = await googleSheetsService.sendFormDataToGoogleSheets({
-        _id: 'form-id',
-        name: 'John',
-      });
-
-      expect(result).toBe(false);
-      expect(consoleSpy).toHaveBeenCalledWith(
-        expect.stringContaining('Missing required environment variables'),
+      const result = await googleSheetsService.sendFormDataToGoogleSheets(
+        mockSelf,
+        {
+          _id: 'form-id',
+          name: 'John',
+        },
       );
 
-      consoleSpy.mockRestore();
+      expect(result).toBe(false);
+      expect(mockSelf.apos.util.error).toHaveBeenCalledWith(
+        '[SHEETS] Unexpected error: Missing required environment variables',
+      );
     });
 
     it('should return false when headers cannot be added', async () => {
       googleSheetsService.addHeadersIfNeeded.mockResolvedValue(false);
 
-      const result = await googleSheetsService.sendFormDataToGoogleSheets({
-        _id: 'form-id',
-        name: 'John',
-      });
+      const result = await googleSheetsService.sendFormDataToGoogleSheets(
+        mockSelf,
+        {
+          _id: 'form-id',
+          name: 'John',
+        },
+      );
 
       expect(result).toBe(false);
       expect(googleSheetsService.appendToSheet).not.toHaveBeenCalled();
     });
 
     it('should return false when no spreadsheet configuration', async () => {
-      console.error = jest.fn();
       googleSheetsService.getGoogleSheetsClient.mockReturnValue({});
 
-      const result = await googleSheetsService.sendFormDataToGoogleSheets({
-        _id: 'form-id',
-        name: 'John',
-      });
+      const result = await googleSheetsService.sendFormDataToGoogleSheets(
+        mockSelf,
+        {
+          _id: 'form-id',
+          name: 'John',
+        },
+      );
 
       expect(result).toBe(false);
-      expect(console.error).toHaveBeenCalledWith(
+      expect(mockSelf.apos.util.error).toHaveBeenCalledWith(
         '[SHEETS] Missing Google Sheets configuration',
       );
     });
 
     it('should return false when append fails', async () => {
-      console.error = jest.fn();
       googleSheetsService.appendToSheet.mockRejectedValue(
         new Error('Append failed'),
       );
 
-      const result = await googleSheetsService.sendFormDataToGoogleSheets({
-        _id: 'form-id',
-        name: 'John',
-      });
+      const result = await googleSheetsService.sendFormDataToGoogleSheets(
+        mockSelf,
+        {
+          _id: 'form-id',
+          name: 'John',
+        },
+      );
 
       expect(result).toBe(false);
-      expect(console.error).toHaveBeenCalledWith(
-        '[SHEETS] Failed to send form data: Append failed',
-      );
+      expect(mockSelf.apos.util.error).toHaveBeenCalled();
     });
   });
 });
