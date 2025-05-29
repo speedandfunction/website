@@ -7,12 +7,12 @@
   max-width: 1440px;
   min-height: $mobile-not-found-height;
   margin: 0 auto;
-  padding-bottom: 270px;
+  padding-bottom: 120px;
   background: $white;
 
   @include breakpoint-medium {
     min-height: $desktop-not-found-height;
-    padding-bottom: 156px;
+    padding-bottom: 80px;
   }
 
   .not-found-content {
