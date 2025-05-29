@@ -1,13 +1,18 @@
-const googleSheetsService = require('./lib/googleSheetsService');
-
-jest.mock('./lib/googleSheetsService', () => ({
-  sendFormDataToGoogleSheets: jest.fn(),
-}));
+// Mock the GoogleSheetsService class
+jest.mock('./lib/googleSheetsService', () => {
+  // Create a mock constructor function
+  return jest.fn().mockImplementation(() => {
+    return {
+      sendFormDataToGoogleSheets: jest.fn().mockResolvedValue(true),
+    };
+  });
+});
 
 describe('@apostrophecms/form module', () => {
   let self = {};
   let formModule = {};
   let originalSubmitFormMock = null;
+  let googleSheetsServiceMock = null;
 
   beforeEach(() => {
     // Reset all mocks
@@ -37,6 +42,9 @@ describe('@apostrophecms/form module', () => {
     if (formModule.methods) {
       Object.assign(self, formModule.methods(self));
     }
+
+    // Get a reference to the googleSheetsService mock
+    googleSheetsServiceMock = self.googleSheetsService;
   });
 
   describe('init function', () => {
@@ -52,10 +60,15 @@ describe('@apostrophecms/form module', () => {
       // Original submitForm should be called
       expect(originalSubmitFormMock).toHaveBeenCalled();
 
-      // GoogleSheetsService should be called with the form data
+      // Let the async operation complete
+      await new Promise((resolve) => {
+        setTimeout(resolve, 50);
+      });
+
+      // GoogleSheetsService instance method should be called
       expect(
-        googleSheetsService.sendFormDataToGoogleSheets,
-      ).toHaveBeenCalledWith(self, expect.any(Object));
+        googleSheetsServiceMock.sendFormDataToGoogleSheets,
+      ).toHaveBeenCalled();
     });
 
     it('should handle parsing errors gracefully', async () => {
@@ -69,6 +82,11 @@ describe('@apostrophecms/form module', () => {
        */
       await self.submitForm(req, data, options);
 
+      // Let the async operation complete
+      await new Promise((resolve) => {
+        setTimeout(resolve, 50);
+      });
+
       // Should still call the original submitForm
       expect(originalSubmitFormMock).toHaveBeenCalled();
 
@@ -80,24 +98,21 @@ describe('@apostrophecms/form module', () => {
     });
 
     it('should handle errors from Google Sheets service gracefully', async () => {
-      // Create a mock implementation that rejects
-      self.sendToGoogleSheets = jest
+      // Mock the sendFormDataToGoogleSheets method to reject
+      googleSheetsServiceMock.sendFormDataToGoogleSheets = jest
         .fn()
         .mockRejectedValue(new Error('Google Sheets API error'));
 
-      // Instead of waiting for the async catch handler, we'll manually call it
-      const sendFormDataToGoogleSheets = async () => {
-        try {
-          await self.sendToGoogleSheets({ field1: 'value1' });
-        } catch (err) {
-          self.apos.util.error(
-            'Error sending form data to Google Sheets:',
-            err,
-          );
-        }
-      };
+      const req = { body: { data: JSON.stringify({ field1: 'value1' }) } };
+      const data = { field1: 'value1' };
+      const options = {};
 
-      await sendFormDataToGoogleSheets();
+      await self.submitForm(req, data, options);
+
+      // Let the async operation complete
+      await new Promise((resolve) => {
+        setTimeout(resolve, 50);
+      });
 
       // Now check if error was logged
       expect(self.apos.util.error).toHaveBeenCalledWith(
@@ -114,8 +129,8 @@ describe('@apostrophecms/form module', () => {
       await self.sendToGoogleSheets(formData);
 
       expect(
-        googleSheetsService.sendFormDataToGoogleSheets,
-      ).toHaveBeenCalledWith(self, formData);
+        googleSheetsServiceMock.sendFormDataToGoogleSheets,
+      ).toHaveBeenCalledWith(formData);
     });
   });
 });

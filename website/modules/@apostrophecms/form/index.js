@@ -1,4 +1,4 @@
-const googleSheetsService = require('./lib/googleSheetsService');
+const GoogleSheetsService = require('./lib/googleSheetsService');
 
 module.exports = {
   options: {
@@ -6,6 +6,8 @@ module.exports = {
   },
 
   init(self) {
+    const googleSheetsService = new GoogleSheetsService(self);
+
     const originalSubmitForm = self.submitForm;
 
     self.submitForm = async function (req, data, options) {
@@ -31,13 +33,14 @@ module.exports = {
       }
       await self.sendToGoogleSheets(formData);
     };
+
+    self.googleSheetsService = googleSheetsService;
   },
 
   methods(self) {
     return {
       async sendToGoogleSheets(formData) {
-        return await googleSheetsService.sendFormDataToGoogleSheets(
-          self,
+        return await self.googleSheetsService.sendFormDataToGoogleSheets(
           formData,
         );
       },

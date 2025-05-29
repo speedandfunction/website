@@ -16,11 +16,30 @@ const formatHeaderName = (key) =>
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(' ');
 
-const logError = (self, context, error) =>
-  self.apos.util.error(`[SHEETS] ${context}: ${error?.message || error}`);
+class GoogleSheetsService {
+  constructor(self, options = {}) {
+    this.self = self;
 
-const googleSheetsService = {
-  getGoogleSheetsClient() {
+    if (options.spreadsheetId && options.sheets) {
+      this.spreadsheetId = options.spreadsheetId;
+      this.auth = options.auth || 'test-auth';
+      this.sheets = options.sheets;
+    } else {
+      const { spreadsheetId, auth } =
+        GoogleSheetsService.getGoogleSheetsClient();
+      this.spreadsheetId = spreadsheetId;
+      this.auth = auth;
+      this.sheets = google.sheets({ version: 'v4', auth });
+    }
+  }
+
+  logError(context, error) {
+    this.self.apos.util.error(
+      `[SHEETS] ${context}: ${error?.message || error}`,
+    );
+  }
+
+  static getGoogleSheetsClient() {
     const spreadsheetId = getEnv('SPREADSHEET_ID');
     const serviceAccountEmail = getEnv('SERVICE_ACCOUNT_EMAIL');
     const serviceAccountPrivateKey = getEnv('SERVICE_ACCOUNT_PRIVATE_KEY');
@@ -33,33 +52,33 @@ const googleSheetsService = {
     });
 
     return { spreadsheetId, auth };
-  },
+  }
 
-  handleSheetsError(err, contextMessage, spreadsheetId = '') {
+  handleSheetsError(err, contextMessage) {
     const baseMessage = ERROR_MESSAGES[err.code] || err.message;
     let fullMessage = `${baseMessage}`;
-    if (spreadsheetId) {
-      fullMessage += `: ${spreadsheetId}`;
+    if (this.spreadsheetId) {
+      fullMessage += `: ${this.spreadsheetId}`;
     }
 
     throw new Error(fullMessage);
-  },
+  }
 
-  async checkNeedHeaders(sheets, spreadsheetId) {
+  async checkNeedHeaders() {
     try {
-      const checkResponse = await sheets.spreadsheets.values.get({
-        spreadsheetId,
+      const checkResponse = await this.sheets.spreadsheets.values.get({
+        spreadsheetId: this.spreadsheetId,
         range: 'Sheet1!A1:Z1',
       });
 
       return !checkResponse.data?.values?.length;
     } catch (err) {
-      this.handleSheetsError(err, 'Headers check error', spreadsheetId);
+      this.handleSheetsError(err, 'Headers check error');
       return false;
     }
-  },
+  }
 
-  formatFormData(formData) {
+  static formatFormData(formData) {
     const id = Date.now().toString();
     const timestamp = new Date().toISOString();
 
@@ -78,40 +97,37 @@ const googleSheetsService = {
     }
 
     return { headers, rowData };
-  },
+  }
 
-  async appendToSheet(self, sheets, spreadsheetId, values) {
+  async appendToSheet(values) {
     try {
-      return await sheets.spreadsheets.values.append({
-        spreadsheetId,
+      return await this.sheets.spreadsheets.values.append({
+        spreadsheetId: this.spreadsheetId,
         range: APPEND_RANGE,
         valueInputOption: 'RAW',
         resource: { values },
       });
     } catch (err) {
-      logError(self, 'Append error', err);
+      this.logError('Append error', err);
       throw err;
     }
-  },
+  }
 
-  async checkHeadersWithRetry(self, sheets, spreadsheetId) {
+  async checkHeadersWithRetry() {
     try {
-      return await retryOperation(
-        () => this.checkNeedHeaders(sheets, spreadsheetId),
-        { self, maxRetries: 3, delayMs: 1000 },
-      );
+      return await retryOperation(() => this.checkNeedHeaders(), {
+        self: this.self,
+        maxRetries: 3,
+        delayMs: 1000,
+      });
     } catch (error) {
-      logError(self, 'Headers check failed after all attempts', error);
+      this.logError('Headers check failed after all attempts', error);
       return null;
     }
-  },
+  }
 
-  async addHeadersIfNeeded(self, sheets, spreadsheetId, headers) {
-    const needHeaders = await this.checkHeadersWithRetry(
-      self,
-      sheets,
-      spreadsheetId,
-    );
+  async addHeadersIfNeeded(headers) {
+    const needHeaders = await this.checkHeadersWithRetry();
 
     if (needHeaders === null) {
       return false;
@@ -119,46 +135,43 @@ const googleSheetsService = {
 
     if (needHeaders) {
       try {
-        await this.appendToSheet(self, sheets, spreadsheetId, [headers]);
+        await this.appendToSheet([headers]);
       } catch (error) {
-        logError(self, 'Failed to add headers', error);
+        this.logError('Failed to add headers', error);
         return false;
       }
     }
 
     return true;
-  },
+  }
 
-  async sendFormDataToGoogleSheets(self, formData) {
+  async sendFormDataToGoogleSheets(formData) {
     try {
-      const { spreadsheetId, auth } = this.getGoogleSheetsClient();
-
-      if (!spreadsheetId || !auth) {
-        self.apos.util.error('[SHEETS] Missing Google Sheets configuration');
+      if (!this.spreadsheetId || !this.auth) {
+        this.self.apos.util.error(
+          '[SHEETS] Missing Google Sheets configuration',
+        );
         return false;
       }
 
-      const sheets = google.sheets({ version: 'v4', auth });
       const { headers, rowData } = this.formatFormData(formData);
 
-      const headersAdded = await this.addHeadersIfNeeded(
-        self,
-        sheets,
-        spreadsheetId,
-        headers,
-      );
-
+      const headersAdded = await this.addHeadersIfNeeded(headers);
       if (!headersAdded) {
         return false;
       }
 
-      await this.appendToSheet(self, sheets, spreadsheetId, [rowData]);
+      await this.appendToSheet([rowData]);
       return true;
     } catch (error) {
-      logError(self, 'Unexpected error', error);
+      this.logError('Unexpected error', error);
       return false;
     }
-  },
-};
+  }
 
-module.exports = googleSheetsService;
+  formatFormData(formData) {
+    return this.constructor.formatFormData(formData);
+  }
+}
+
+module.exports = GoogleSheetsService;
