@@ -47,7 +47,6 @@ module.exports = {
           project: {
             title: 1,
             slug: 1,
-            _category: 1,
           },
         },
         withRelationships: ['_category'],
@@ -62,7 +61,6 @@ module.exports = {
           project: {
             title: 1,
             slug: 1,
-            _category: 1,
           },
         },
         withRelationships: ['_category'],
@@ -77,7 +75,6 @@ module.exports = {
           project: {
             title: 1,
             slug: 1,
-            _category: 1,
           },
         },
         withRelationships: ['_category'],
