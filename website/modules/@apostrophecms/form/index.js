@@ -26,7 +26,7 @@ module.exports = {
         try {
           formData = JSON.parse(rawData);
         } catch (err) {
-          throw new Error('Failed to parse form data JSON:', err);
+          throw new Error(`Failed to parse form data JSON: ${err.message}`);
         }
       }
       await self.sendToGoogleSheets(formData);
