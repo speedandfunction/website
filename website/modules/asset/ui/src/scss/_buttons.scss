@@ -27,7 +27,12 @@
   @include responsive-font(12px, 20px);
   transform: scale(1);
   @include transition(transform, 0.3s);
-  position: relative;
+    
+  &:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    transform: scale(1.05); 
+    z-index: 1;
+  }
     
   &:hover {
     transform: scale(1.05); 
