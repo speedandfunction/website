@@ -12,21 +12,23 @@ module.exports = {
     }
 
     self.submitForm = async function (req, data, options) {
+      self.apos.util.log('SUBMITTING...');
       const result = await originalSubmitForm.call(self, req, data, options);
-
-      let formData = data;
-      if (!req?.body?.data) {
-        return result;
-      }
-      
-      try {
-        formData = JSON.parse(req.body.data);
-        await self.sendToGoogleSheets(formData);
-      } catch (err) {
-        // eslint-disable-next-line no-console
-        console.error(`Error sending form data to Google Sheets: ${err.message}`);
-      }
+      sendFormDataToGoogleSheets(req).catch((err) => {
+        self.apos.util.error('Error sending form data to Google Sheets:', err);
+      });
       return result;
+    };
+
+    const sendFormDataToGoogleSheets = async (req) => {
+      const rawData = req?.body?.data;
+      if (!rawData) return;
+
+      let formData = rawData;
+      if (typeof rawData === 'string') {
+        formData = JSON.parse(rawData);
+      }
+      await self.sendToGoogleSheets(formData);
     };
   },
 
