@@ -1,5 +1,6 @@
 const { google } = require('googleapis');
 const { getEnv } = require('../../../../utils/env');
+const { sleep } = require('../../../../utils/sleep');
 
 const APPEND_RANGE = 'Sheet1!A1';
 
@@ -93,12 +94,6 @@ const googleSheetsService = {
     }
   },
 
-  sleep(ms) {
-    return new Promise((resolve) => {
-      setTimeout(resolve, ms);
-    });
-  },
-
   async retryOperation(operation, options = {}) {
     const { self, maxRetries = 3, delayMs = 1000 } = options;
 
@@ -120,7 +115,7 @@ const googleSheetsService = {
           throw error;
         }
 
-        await this.sleep(delayMs);
+        await sleep(delayMs);
         return tryOperation();
       }
     };
