@@ -33,11 +33,6 @@
     transform: scale(1.05); 
     z-index: 1;
   }
-    
-  &:hover {
-    transform: scale(1.05); 
-    z-index: 1;
-  }
 
   @include breakpoint-medium {
     padding: 24px 92px;
