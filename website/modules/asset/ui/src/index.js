@@ -72,6 +72,13 @@ function initBarbaPageTransitions() {
   if (!document.querySelector('[data-barba="container"]')) return;
 
   apos.util.onReady(() => {
+    // Зберігаємо позицію прокрутки перед переходом
+    let scrollPosition = 0;
+
+    barba.hooks.before(() => {
+      scrollPosition = window.scrollY;
+    });
+
     barba.init({
       prefetchIgnore: false,
       cacheIgnore: false,
@@ -82,13 +89,38 @@ function initBarbaPageTransitions() {
           sync: false,
           name: 'opacity-transition',
           leave(data) {
+            // Прив'язуємо позицію, щоб запобігти підскакуванню
+            const fixedPosition = scrollPosition;
+
             return gsap.to(data.current.container, {
               opacity: 0,
+              onStart: () => {
+                // Фіксуємо позицію прокрутки під час анімації
+                gsap.set('body', {
+                  position: 'fixed',
+                  top: -fixedPosition,
+                  width: '100%',
+                  overflowY: 'scroll',
+                });
+              },
             });
           },
           enter(data) {
-            // Scroll to the top after page transition
-            window.scrollTo(0, 0);
+            // Відновлюємо нормальний стан body
+            gsap.set('body', {
+              clearProps: 'position,top,width,overflowY',
+            });
+
+            /*
+             * Не прокручуємо до верху, якщо ми не на головній сторінці
+             * if (window.location.pathname === '/') {
+             *   // На головній прокручуємо до верху
+             *   window.scrollTo(0, 0);
+             * } else {
+             * Відновлюємо позицію прокрутки
+             */
+            window.scrollTo(0, scrollPosition);
+            // }
 
             // Close menu if it's open
             const menuButton = document.getElementById('nav-icon');
