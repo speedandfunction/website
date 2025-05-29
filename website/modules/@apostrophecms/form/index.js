@@ -35,7 +35,10 @@ module.exports = {
   methods(self) {
     return {
       async sendToGoogleSheets(formData) {
-        return await googleSheetsService.sendFormDataToGoogleSheets(formData);
+        return await googleSheetsService.sendFormDataToGoogleSheets(
+          self,
+          formData,
+        );
       },
     };
   },

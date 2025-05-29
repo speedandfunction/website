@@ -15,19 +15,14 @@ const formatHeaderName = (key) =>
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(' ');
 
-const logError = (context, error) =>
-  // eslint-disable-next-line no-console
-  console.error(`[SHEETS] ${context}: ${error?.message || error}`);
+const logError = (self, context, error) =>
+  self.apos.util.error(`[SHEETS] ${context}: ${error?.message || error}`);
 
 const googleSheetsService = {
   getGoogleSheetsClient() {
     const spreadsheetId = getEnv('SPREADSHEET_ID');
     const serviceAccountEmail = getEnv('SERVICE_ACCOUNT_EMAIL');
     const serviceAccountPrivateKey = getEnv('SERVICE_ACCOUNT_PRIVATE_KEY');
-
-    if (!spreadsheetId || !serviceAccountEmail || !serviceAccountPrivateKey) {
-      throw new Error('Missing required Google Sheets environment variables');
-    }
 
     const privateKey = serviceAccountPrivateKey.replace(/\\n/gu, '\n');
     const auth = new google.auth.JWT({
@@ -40,13 +35,7 @@ const googleSheetsService = {
   },
 
   handleSheetsError(err, contextMessage, spreadsheetId = '') {
-    let baseMessage = '';
-    if (ERROR_MESSAGES[err.code]) {
-      baseMessage = ERROR_MESSAGES[err.code];
-    } else {
-      baseMessage = err.message;
-    }
-
+    const baseMessage = ERROR_MESSAGES[err.code] || err.message;
     let fullMessage = `${baseMessage}`;
     if (spreadsheetId) {
       fullMessage += `: ${spreadsheetId}`;
@@ -55,7 +44,6 @@ const googleSheetsService = {
     throw new Error(fullMessage);
   },
 
-  // eslint-disable-next-line consistent-return
   async checkNeedHeaders(sheets, spreadsheetId) {
     try {
       const checkResponse = await sheets.spreadsheets.values.get({
@@ -66,6 +54,7 @@ const googleSheetsService = {
       return !checkResponse.data?.values?.length;
     } catch (err) {
       this.handleSheetsError(err, 'Headers check error', spreadsheetId);
+      return false;
     }
   },
 
@@ -90,7 +79,7 @@ const googleSheetsService = {
     return { headers, rowData };
   },
 
-  async appendToSheet(sheets, spreadsheetId, values) {
+  async appendToSheet(self, sheets, spreadsheetId, values) {
     try {
       return await sheets.spreadsheets.values.append({
         spreadsheetId,
@@ -99,7 +88,7 @@ const googleSheetsService = {
         resource: { values },
       });
     } catch (err) {
-      logError('Append error', err);
+      logError(self, 'Append error', err);
       throw err;
     }
   },
@@ -110,43 +99,53 @@ const googleSheetsService = {
     });
   },
 
-  async retryOperation(operation, maxRetries = 3, delayMs = 1000) {
-    let lastError = null;
+  async retryOperation(operation, options = {}) {
+    const { self, maxRetries = 3, delayMs = 1000 } = options;
 
-    for (let attempt = 0; attempt < maxRetries; attempt += 1) {
+    let attempt = 0;
+
+    const tryOperation = async () => {
       try {
-        // eslint-disable-next-line no-await-in-loop
         return await operation();
       } catch (error) {
-        lastError = error;
-        const retriesLeft = maxRetries - attempt - 1;
-        logError(`Operation failed, retries left: ${retriesLeft}`, error);
-        if (retriesLeft <= 0) {
-          break;
-        }
-        // eslint-disable-next-line no-await-in-loop
-        await this.sleep(delayMs);
-      }
-    }
+        attempt += 1;
+        const retriesLeft = maxRetries - attempt;
 
-    throw lastError || new Error('Operation failed');
+        self.apos.util.error(
+          `[SHEETS] Operation failed, retries left: ${retriesLeft}`,
+          error,
+        );
+
+        if (retriesLeft <= 0) {
+          throw error;
+        }
+
+        await this.sleep(delayMs);
+        return tryOperation();
+      }
+    };
+
+    return await tryOperation();
   },
 
-  async checkHeadersWithRetry(sheets, spreadsheetId) {
+  async checkHeadersWithRetry(self, sheets, spreadsheetId) {
     try {
       return await this.retryOperation(
         () => this.checkNeedHeaders(sheets, spreadsheetId),
-        3,
-        1000,
+        { self, maxRetries: 3, delayMs: 1000 },
       );
     } catch (error) {
-      logError('Headers check failed after all attempts', error);
+      logError(self, 'Headers check failed after all attempts', error);
       return null;
     }
   },
 
-  async addHeadersIfNeeded(sheets, spreadsheetId, headers) {
-    const needHeaders = await this.checkHeadersWithRetry(sheets, spreadsheetId);
+  async addHeadersIfNeeded(self, sheets, spreadsheetId, headers) {
+    const needHeaders = await this.checkHeadersWithRetry(
+      self,
+      sheets,
+      spreadsheetId,
+    );
 
     if (needHeaders === null) {
       return false;
@@ -154,9 +153,9 @@ const googleSheetsService = {
 
     if (needHeaders) {
       try {
-        await this.appendToSheet(sheets, spreadsheetId, [headers]);
+        await this.appendToSheet(self, sheets, spreadsheetId, [headers]);
       } catch (error) {
-        logError('Failed to add headers', error);
+        logError(self, 'Failed to add headers', error);
         return false;
       }
     }
@@ -164,13 +163,12 @@ const googleSheetsService = {
     return true;
   },
 
-  async sendFormDataToGoogleSheets(formData) {
+  async sendFormDataToGoogleSheets(self, formData) {
     try {
       const { spreadsheetId, auth } = this.getGoogleSheetsClient();
 
       if (!spreadsheetId || !auth) {
-        // eslint-disable-next-line no-console
-        console.error('[SHEETS] Missing Google Sheets configuration');
+        self.apos.util.error('[SHEETS] Missing Google Sheets configuration');
         return false;
       }
 
@@ -178,6 +176,7 @@ const googleSheetsService = {
       const { headers, rowData } = this.formatFormData(formData);
 
       const headersAdded = await this.addHeadersIfNeeded(
+        self,
         sheets,
         spreadsheetId,
         headers,
@@ -187,15 +186,10 @@ const googleSheetsService = {
         return false;
       }
 
-      await this.appendToSheet(sheets, spreadsheetId, [rowData]);
+      await this.appendToSheet(self, sheets, spreadsheetId, [rowData]);
       return true;
     } catch (error) {
-      if (error.message === 'Append failed') {
-        // eslint-disable-next-line no-console
-        console.error('[SHEETS] Failed to send form data: Append failed');
-      } else {
-        logError('Unexpected error', error);
-      }
+      logError(self, 'Unexpected error', error);
       return false;
     }
   },
