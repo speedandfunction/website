@@ -1,6 +1,0 @@
-Refactor form submission logic and improve error handling
-
-- Simplify conditional logic with early return pattern
-- Consolidate error handling for JSON parsing and Google Sheets integration
-- Remove nested conditional structure for better readability
-- Improve error message clarity
