@@ -1,4 +1,8 @@
 .sf-contact-form {
+  margin-top: 32px;
+  @include breakpoint-medium {
+    margin-top: 52px;
+  }
   .sf-form {
     position: relative;
     min-width: 295px;
