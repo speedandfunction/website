@@ -71,11 +71,45 @@
     border-top: 1px solid $gray-border;
     padding-top: 24px;
     align-items: center;
+    position: relative;
+    z-index: 10;
+    transition: all 0.3s ease;
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+
+    &.is-fixed {
+      position: fixed;
+      left: 0;
+      right: 0;
+    }
 
     @include breakpoint-medium {
       flex-direction: row;
       padding-top: 32px;
       align-items: flex-start;
+    }
+  }
+
+  &_grid {
+    margin-top: 32px;
+    flex: 1;
+    overflow-y: auto;
+    transition: max-height 0.3s ease;
+    padding-right: 20px;
+
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: $gray-100;
+      border-radius: 3px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: $gray-300;
+      border-radius: 3px;
     }
   }
 }
@@ -87,6 +121,10 @@
   font-style: $font-style-normal;
   max-width: 262px;
   width: 100%;
+  position: sticky;
+  top: 0;
+  max-height: calc(100vh - 300px);
+  overflow-y: auto;
 
   .filter-section {
     &:first-of-type {
