@@ -31,10 +31,11 @@
 .sf-wrapper {
   position: relative;
 }
+
 .sf-section {
-  margin-bottom: 80px;
+  margin-bottom: 64px;
   @include breakpoint-medium {
-    margin-bottom: 120px;
+    margin-bottom: 72px;
   }
 }
 
@@ -65,7 +66,7 @@
 .sf-title {
   font-weight: $font-weight-extra-bold;
   font-size: $font-size-h3-mobile;
-  line-height: 110%;
+  line-height: 140%;
   margin: 0;
 
   @include breakpoint-medium {
