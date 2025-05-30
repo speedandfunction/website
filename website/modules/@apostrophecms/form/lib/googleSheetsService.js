@@ -1,6 +1,7 @@
 const { google } = require('googleapis');
 const { getEnv } = require('../../../../utils/env');
 const { retryOperation } = require('../../../../utils/retryOperation');
+const { formatHeaderName } = require('../../../../utils/formatHeaderName');
 
 const APPEND_RANGE = 'Sheet1!A1';
 
@@ -9,12 +10,6 @@ const ERROR_MESSAGES = {
   403: 'Permission denied: Check if the service account has access to the spreadsheet',
   404: 'Spreadsheet not found',
 };
-
-const formatHeaderName = (key) =>
-  key
-    .split('-')
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ');
 
 class GoogleSheetsService {
   constructor(self, options = {}) {
