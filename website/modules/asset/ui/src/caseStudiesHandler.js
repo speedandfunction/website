@@ -153,9 +153,7 @@ const addBarbaHooks = (barba) => {
   registerBeforeEnterHook(barba);
   registerAfterHook(barba);
 
-  return {
-    preventFunc: createPreventFunction(),
-  };
+  return createPreventFunction();
 };
 
 export { initCaseStudiesPage, addBarbaHooks, isCaseStudiesPage };

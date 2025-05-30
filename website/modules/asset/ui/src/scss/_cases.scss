@@ -744,29 +744,24 @@
 html body.no-page-animations {
   .bp-main,
   [data-barba='container'],
-  [data-barba='wrapper'] {
-    opacity: 1;
-    transition: none;
-    animation: none;
-    transform: none;
-  }
-
+  [data-barba='wrapper'],
   main,
   .page-content,
   .cs_container,
   .cs_content,
   .cs_list,
-  .cs_grid {
-    opacity: 1;
-    transition: none;
-    animation: none;
-    transform: none;
-  }
-
+  .cs_grid,
   .cs_card,
   .cs_filter-info,
   .tags-filter,
-  .filter-section {
+  .filter-section,
+  .bp-main .fade-in,
+  .bp-main .fade-out,
+  .bp-main .slide-in,
+  .bp-main .slide-out,
+  [data-barba='container'] .animate__animated,
+  .page-content [class*='animate'],
+  .cs_container [class*='transition'] {
     opacity: 1;
     transition: none;
     animation: none;
@@ -800,22 +795,6 @@ html body[data-filter-change].no-page-animations {
 html body[data-no-transitions].no-page-animations {
   .bp-main,
   [data-barba='container'] {
-    opacity: 1;
-    transition: none;
-    animation: none;
-    transform: none;
-  }
-}
-
-/* Target specific animation classes that might be applied to content */
-html body.no-page-animations {
-  .bp-main .fade-in,
-  .bp-main .fade-out,
-  .bp-main .slide-in,
-  .bp-main .slide-out,
-  [data-barba='container'] .animate__animated,
-  .page-content [class*='animate'],
-  .cs_container [class*='transition'] {
     opacity: 1;
     transition: none;
     animation: none;

@@ -73,7 +73,7 @@ function initBarbaPageTransitions() {
   if (!document.querySelector('[data-barba="container"]')) return;
 
   apos.util.onReady(() => {
-    const { preventFunc } = addBarbaHooks(barba);
+    const preventFunc = addBarbaHooks(barba);
 
     barba.init({
       prefetchIgnore: false,
