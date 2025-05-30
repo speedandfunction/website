@@ -15,7 +15,7 @@ jest.mock('../../../../utils/env', () => ({
 const { getEnv } = require('../../../../utils/env');
 const { google } = require('googleapis');
 
-describe('GoogleSheetsService.getGoogleSheetsClient', () => {
+describe('GoogleSheetsService.getSheetsAuthConfig', () => {
   const mockEnvValues = {
     SPREADSHEET_ID: 'test-spreadsheet-id',
     SERVICE_ACCOUNT_EMAIL: 'test-email@example.com',
@@ -28,7 +28,7 @@ describe('GoogleSheetsService.getGoogleSheetsClient', () => {
   });
 
   test('returns spreadsheetId and auth object', () => {
-    const result = GoogleSheetsService.getGoogleSheetsClient();
+    const result = GoogleSheetsService.getSheetsAuthConfig();
 
     expect(result).toHaveProperty('spreadsheetId', 'test-spreadsheet-id');
     expect(result).toHaveProperty('auth');

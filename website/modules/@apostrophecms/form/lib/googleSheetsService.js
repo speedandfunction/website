@@ -20,8 +20,7 @@ class GoogleSheetsService {
       this.auth = options.auth || 'test-auth';
       this.sheets = options.sheets;
     } else {
-      const { spreadsheetId, auth } =
-        GoogleSheetsService.getGoogleSheetsClient();
+      const { spreadsheetId, auth } = GoogleSheetsService.getSheetsAuthConfig();
       this.spreadsheetId = spreadsheetId;
       this.auth = auth;
       this.sheets = google.sheets({ version: 'v4', auth });
@@ -34,7 +33,7 @@ class GoogleSheetsService {
     );
   }
 
-  static getGoogleSheetsClient() {
+  static getSheetsAuthConfig() {
     const spreadsheetId = getEnv('SPREADSHEET_ID');
     const serviceAccountEmail = getEnv('SERVICE_ACCOUNT_EMAIL');
     const serviceAccountPrivateKey = getEnv('SERVICE_ACCOUNT_PRIVATE_KEY');
