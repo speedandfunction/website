@@ -33,15 +33,23 @@ describe('GoogleSheetsService.formatFormData', () => {
 
     expect(result).toHaveProperty('headers');
     expect(result).toHaveProperty('rowData');
-    expect(result.headers).toContain('ID');
-    expect(result.headers).toContain('Timestamp');
-    expect(result.headers).toContain('First Name');
-    expect(result.headers).toContain('Last Name');
-    expect(result.headers).toContain('Email Address');
-    expect(result.headers).toContain('Multiple Choice');
+    const expectedHeaders = [
+      'ID',
+      'Timestamp',
+      'First Name',
+      'Last Name',
+      'Email Address',
+      'Multiple Choice',
+    ];
+    expect(result.headers).toEqual(expectedHeaders);
 
     expect(result.rowData).toHaveLength(result.headers.length);
+
     expect(result.rowData[0]).toBe(mockTimestamp.toString());
     expect(result.rowData[1]).toBe(mockISOString);
+    expect(result.rowData[2]).toBe('John');
+    expect(result.rowData[3]).toBe('Doe');
+    expect(result.rowData[4]).toBe('john@example.com');
+    expect(result.rowData[5]).toBe('Option 1, Option 2');
   });
 });

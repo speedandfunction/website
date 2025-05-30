@@ -66,7 +66,7 @@ class GoogleSheetsService {
 
       return !checkResponse.data?.values?.length;
     } catch (err) {
-      this.handleSheetsError(err, 'Headers check error');
+      this.logError('Headers check error', err);
       return false;
     }
   }

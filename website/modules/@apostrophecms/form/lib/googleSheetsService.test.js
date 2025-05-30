@@ -62,19 +62,23 @@ describe('GoogleSheetsService', () => {
       expect(result).toBe(false);
     });
 
-    test('throws error when spreadsheet not found', async () => {
+    test('returns false when spreadsheet not found', async () => {
       mockSheets.spreadsheets.values.get.mockRejectedValue({ code: 404 });
 
-      await expect(googleSheetsService.checkNeedHeaders()).rejects.toThrow(
-        'Spreadsheet not found: test-id',
+      const result = await googleSheetsService.checkNeedHeaders();
+      expect(result).toBe(false);
+      expect(mockSelf.apos.util.error).toHaveBeenCalledWith(
+        '[SHEETS] Headers check error: [object Object]',
       );
     });
 
-    test('throws error when permission denied', async () => {
+    test('returns false when permission denied', async () => {
       mockSheets.spreadsheets.values.get.mockRejectedValue({ code: 403 });
 
-      await expect(googleSheetsService.checkNeedHeaders()).rejects.toThrow(
-        'Permission denied: Check if the service account has access to the spreadsheet: test-id',
+      const result = await googleSheetsService.checkNeedHeaders();
+      expect(result).toBe(false);
+      expect(mockSelf.apos.util.error).toHaveBeenCalledWith(
+        '[SHEETS] Headers check error: [object Object]',
       );
     });
   });
