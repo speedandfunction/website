@@ -1,3 +1,4 @@
+import { addBarbaHooks } from './caseStudiesHandler';
 import barba from '@barba/core';
 import { gsap } from 'gsap';
 import { initAllSwipers } from './swipers';
@@ -72,55 +73,68 @@ function initBarbaPageTransitions() {
   if (!document.querySelector('[data-barba="container"]')) return;
 
   apos.util.onReady(() => {
-    // Зберігаємо позицію прокрутки перед переходом
-    let scrollPosition = 0;
+    /*
+     * Зберігаємо позицію прокрутки перед переходом
+     * let scrollPosition = 0;
+     */
 
-    barba.hooks.before(() => {
-      scrollPosition = window.scrollY;
-    });
+    /*
+     * Barba.hooks.before(() => {
+     *   scrollPosition = window.scrollY;
+     * });
+     */
+
+    // Додаємо хуки для сторінки кейсів
+    const { preventFunc } = addBarbaHooks(barba);
 
     barba.init({
       prefetchIgnore: false,
       cacheIgnore: false,
       preventRunning: true,
       timeout: 10000,
+
+      // Використовуємо функцію prevent з модуля caseStudiesHandler
+      prevent: preventFunc,
+
       transitions: [
         {
           sync: false,
           name: 'opacity-transition',
           leave(data) {
-            // Прив'язуємо позицію, щоб запобігти підскакуванню
-            const fixedPosition = scrollPosition;
+            /*
+             * Прив'язуємо позицію, щоб запобігти підскакуванню
+             * const fixedPosition = scrollPosition;
+             */
 
             return gsap.to(data.current.container, {
               opacity: 0,
               onStart: () => {
-                // Фіксуємо позицію прокрутки під час анімації
-                gsap.set('body', {
-                  position: 'fixed',
-                  top: -fixedPosition,
-                  width: '100%',
-                  overflowY: 'scroll',
-                });
+                /*
+                 * Фіксуємо позицію прокрутки під час анімації
+                 * gsap.set('body', {
+                 *   position: 'fixed',
+                 *   top: -fixedPosition,
+                 *   width: '100%',
+                 *   overflowY: 'scroll',
+                 * });
+                 */
               },
             });
           },
           enter(data) {
             // Відновлюємо нормальний стан body
             gsap.set('body', {
-              clearProps: 'position,top,width,overflowY',
+              // ClearProps: 'position,top,width,overflowY',
             });
 
             /*
-             * Не прокручуємо до верху, якщо ми не на головній сторінці
-             * if (window.location.pathname === '/') {
-             *   // На головній прокручуємо до верху
-             *   window.scrollTo(0, 0);
+             * If (window.location.pathname === '/cases') {
+             *   window.scrollTo(0, scrollPosition);
              * } else {
-             * Відновлюємо позицію прокрутки
+             *   window.scrollTo(0, 0);
+             * }
              */
-            window.scrollTo(0, scrollPosition);
-            // }
+            // Window.scrollTo(0, 0);
 
             // Close menu if it's open
             const menuButton = document.getElementById('nav-icon');

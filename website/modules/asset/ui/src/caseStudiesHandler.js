@@ -27,9 +27,6 @@ const addNoAnimationStyles = () => {
 // Initialization for the case studies page
 const initCaseStudiesPage = () => {
   if (isCaseStudiesPage(window.location.pathname) && hasQueryParams()) {
-    document.body.classList.add('case-studies-page');
-    document.body.setAttribute('data-no-transitions', 'true');
-    document.documentElement.setAttribute('data-case-studies-page', 'true');
     addNoAnimationStyles();
   }
 };
@@ -40,10 +37,21 @@ const addBeforeLeaveHook = (barba) => {
     const nextPath = next.url?.path || '';
     if (isCaseStudiesPage(nextPath)) {
       if (new URL(next.url.href).search.length > 1) {
-        document.body.setAttribute('data-no-transitions', 'true');
-        document.documentElement.setAttribute('data-case-studies-page', 'true');
         addNoAnimationStyles();
+        // Не скролимо тут
       }
+    }
+  });
+};
+
+const addBeforeEnterHook = (barba) => {
+  barba.hooks.beforeEnter(({ next }) => {
+    const nextPath = next.url?.path || '';
+    const nextUrl = new URL(next.url.href);
+
+    if (!(isCaseStudiesPage(nextPath) && nextUrl.search.length > 1)) {
+      // Скролимо одразу, ще до рендеру
+      window.scrollTo({ top: 0, behavior: 'auto' });
     }
   });
 };
@@ -52,17 +60,15 @@ const addBeforeLeaveHook = (barba) => {
 const addAfterHook = (barba) => {
   barba.hooks.after(({ next }) => {
     const nextPath = next.url?.path || '';
-    if (
-      isCaseStudiesPage(nextPath) &&
-      new URL(next.url.href).search.length > 1
-    ) {
-      document.body.setAttribute('data-no-transitions', 'true');
-      document.documentElement.setAttribute('data-case-studies-page', 'true');
-      addNoAnimationStyles();
+    const nextUrl = new URL(next.url.href);
+
+    if (isCaseStudiesPage(nextPath) && nextUrl.search.length > 1) {
+      /*
+       * If (isCaseStudiesPage(nextPath)) {
+       * Якщо це still /cases з query — не скролимо
+       */
     } else {
-      document.body.removeAttribute('data-no-transitions');
-      document.body.classList.remove('case-studies-page');
-      document.documentElement.removeAttribute('data-case-studies-page');
+      window.scrollTo({ top: 0, behavior: 'auto' });
 
       const style = document.getElementById('barba-no-animations');
       if (style) style.remove();
@@ -72,6 +78,7 @@ const addAfterHook = (barba) => {
 
 // Page transition filter (filtering case studies with query changes)
 const createPreventFunction = () => {
+  console.log('🧪 preventFunc called');
   return ({ current, next }) => {
     if (current && next) {
       const currentUrl = new URL(current.url.href);
@@ -81,11 +88,20 @@ const createPreventFunction = () => {
       const isDifferentQuery = currentUrl.search !== nextUrl.search;
       const isCaseStudiesPath = isCaseStudiesPage(currentUrl.pathname);
 
-      if (isSamePath && isDifferentQuery && isCaseStudiesPath) {
-        addNoAnimationStyles();
-        document.body.setAttribute('data-no-transitions', 'true');
-        document.documentElement.setAttribute('data-case-studies-page', 'true');
-        return true;
+      const hasNextQuery = nextUrl.search.length > 1; // ← ось ця перевірка
+
+      if (isSamePath && isDifferentQuery && isCaseStudiesPath && hasNextQuery) {
+        // Прокрутка тільки якщо є фільтри
+        requestAnimationFrame(() => {
+          const filterSection = document.querySelector('.cs_filter-info');
+          if (filterSection) {
+            filterSection.scrollIntoView({ behavior: 'smooth' });
+          } else {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }
+        });
+
+        return true; // DOM не оновлюється — внутрішній фільтр
       }
     }
     return false;
@@ -95,6 +111,7 @@ const createPreventFunction = () => {
 // Initializes Barba hooks
 const addBarbaHooks = (barba) => {
   addBeforeLeaveHook(barba);
+  addBeforeEnterHook(barba);
   addAfterHook(barba);
   return { preventFunc: createPreventFunction() };
 };
