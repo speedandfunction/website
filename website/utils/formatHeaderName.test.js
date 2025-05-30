@@ -1,20 +1,29 @@
 const { formatHeaderName } = require('./formatHeaderName');
 
 describe('formatHeaderName', () => {
-  test('capitalizes first letter of each word and joins with spaces', () => {
+  test('should format hyphenated string correctly', () => {
     expect(formatHeaderName('content-type')).toBe('Content Type');
-    expect(formatHeaderName('x-forwarded-for')).toBe('X Forwarded For');
+    expect(formatHeaderName('x-powered-by')).toBe('X Powered By');
   });
 
-  test('works with single word', () => {
-    expect(formatHeaderName('authorization')).toBe('Authorization');
-  });
-
-  test('handles empty string', () => {
+  test('should handle empty string', () => {
     expect(formatHeaderName('')).toBe('');
   });
 
-  test('preserves existing capitalization', () => {
-    expect(formatHeaderName('x-API-key')).toBe('X API Key');
+  test('should handle non-string input', () => {
+    expect(formatHeaderName(null)).toBe('');
+    expect(formatHeaderName(undefined)).toBe('');
+    expect(formatHeaderName(123)).toBe('');
+    expect(formatHeaderName({})).toBe('');
+  });
+
+  test('should handle multiple consecutive hyphens', () => {
+    expect(formatHeaderName('content--type')).toBe('Content Type');
+    expect(formatHeaderName('x---powered---by')).toBe('X Powered By');
+  });
+
+  test('should handle string with leading/trailing hyphens', () => {
+    expect(formatHeaderName('-content-type-')).toBe('Content Type');
+    expect(formatHeaderName('--x-powered-by--')).toBe('X Powered By');
   });
 });

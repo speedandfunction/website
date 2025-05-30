@@ -1,7 +1,13 @@
-const formatHeaderName = (key) =>
-  key
+const formatHeaderName = (key) => {
+  if (typeof key !== 'string' || !key) {
+    return '';
+  }
+
+  return key
     .split('-')
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .filter((word) => word.length > 0)
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
     .join(' ');
+};
 
 module.exports = { formatHeaderName };

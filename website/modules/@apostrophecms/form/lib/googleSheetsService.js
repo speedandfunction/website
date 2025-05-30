@@ -20,10 +20,9 @@ class GoogleSheetsService {
       this.auth = options.auth || 'test-auth';
       this.sheets = options.sheets;
     } else {
-      const { spreadsheetId, auth } = GoogleSheetsService.getSheetsAuthConfig();
-      this.spreadsheetId = spreadsheetId;
-      this.auth = auth;
-      this.sheets = google.sheets({ version: 'v4', auth });
+      ({ spreadsheetId: this.spreadsheetId, auth: this.auth } =
+        GoogleSheetsService.getSheetsAuthConfig());
+      this.sheets = google.sheets({ version: 'v4', auth: this.auth });
     }
   }
 
