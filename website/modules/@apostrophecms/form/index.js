@@ -11,7 +11,6 @@ module.exports = {
     const originalSubmitForm = self.submitForm;
 
     self.submitForm = async function (req, data, options) {
-      self.apos.util.log('SUBMITTING...');
       const result = await originalSubmitForm.call(self, req, data, options);
       sendFormDataToGoogleSheets(req).catch((err) => {
         self.apos.util.error('Error sending form data to Google Sheets:', err);
