@@ -73,18 +73,6 @@ function initBarbaPageTransitions() {
   if (!document.querySelector('[data-barba="container"]')) return;
 
   apos.util.onReady(() => {
-    /*
-     * Зберігаємо позицію прокрутки перед переходом
-     * let scrollPosition = 0;
-     */
-
-    /*
-     * Barba.hooks.before(() => {
-     *   scrollPosition = window.scrollY;
-     * });
-     */
-
-    // Додаємо хуки для сторінки кейсів
     const { preventFunc } = addBarbaHooks(barba);
 
     barba.init({
@@ -93,7 +81,6 @@ function initBarbaPageTransitions() {
       preventRunning: true,
       timeout: 10000,
 
-      // Використовуємо функцію prevent з модуля caseStudiesHandler
       prevent: preventFunc,
 
       transitions: [
@@ -101,41 +88,11 @@ function initBarbaPageTransitions() {
           sync: false,
           name: 'opacity-transition',
           leave(data) {
-            /*
-             * Прив'язуємо позицію, щоб запобігти підскакуванню
-             * const fixedPosition = scrollPosition;
-             */
-
             return gsap.to(data.current.container, {
               opacity: 0,
-              onStart: () => {
-                /*
-                 * Фіксуємо позицію прокрутки під час анімації
-                 * gsap.set('body', {
-                 *   position: 'fixed',
-                 *   top: -fixedPosition,
-                 *   width: '100%',
-                 *   overflowY: 'scroll',
-                 * });
-                 */
-              },
             });
           },
           enter(data) {
-            // Відновлюємо нормальний стан body
-            gsap.set('body', {
-              // ClearProps: 'position,top,width,overflowY',
-            });
-
-            /*
-             * If (window.location.pathname === '/cases') {
-             *   window.scrollTo(0, scrollPosition);
-             * } else {
-             *   window.scrollTo(0, 0);
-             * }
-             */
-            // Window.scrollTo(0, 0);
-
             // Close menu if it's open
             const menuButton = document.getElementById('nav-icon');
             const menu = document.querySelector('[data-menu]');

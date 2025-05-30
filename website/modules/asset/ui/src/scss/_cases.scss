@@ -738,3 +738,87 @@
     }
   }
 }
+
+/* Case Studies Page Animation Controls */
+
+html body.no-page-animations {
+  .bp-main,
+  [data-barba='container'],
+  [data-barba='wrapper'] {
+    opacity: 1;
+    transition: none;
+    animation: none;
+    transform: none;
+  }
+
+  main,
+  .page-content,
+  .cs_container,
+  .cs_content,
+  .cs_list,
+  .cs_grid {
+    opacity: 1;
+    transition: none;
+    animation: none;
+    transform: none;
+  }
+
+  .cs_card,
+  .cs_filter-info,
+  .tags-filter,
+  .filter-section {
+    opacity: 1;
+    transition: none;
+    animation: none;
+    transform: none;
+  }
+}
+
+/* Specific overrides for various page states */
+html[data-case-studies-page] body.no-page-animations {
+  .bp-main,
+  [data-barba='container'],
+  main,
+  .page-content {
+    opacity: 1;
+    transition: none;
+    animation: none;
+    transform: none;
+  }
+}
+
+html body[data-filter-change].no-page-animations {
+  .bp-main,
+  [data-barba='container'] {
+    opacity: 1;
+    transition: none;
+    animation: none;
+    transform: none;
+  }
+}
+
+html body[data-no-transitions].no-page-animations {
+  .bp-main,
+  [data-barba='container'] {
+    opacity: 1;
+    transition: none;
+    animation: none;
+    transform: none;
+  }
+}
+
+/* Target specific animation classes that might be applied to content */
+html body.no-page-animations {
+  .bp-main .fade-in,
+  .bp-main .fade-out,
+  .bp-main .slide-in,
+  .bp-main .slide-out,
+  [data-barba='container'] .animate__animated,
+  .page-content [class*='animate'],
+  .cs_container [class*='transition'] {
+    opacity: 1;
+    transition: none;
+    animation: none;
+    transform: none;
+  }
+}
