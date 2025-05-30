@@ -7,11 +7,9 @@
     padding: 23px 15px 7px;
     border: 1px solid $gray-border;
     @include font-settings(14px, 150%, 500);
-    margin-top: 32px;
     margin-bottom: 84px;
     @include breakpoint-medium {
       padding: 24px 44px 6px;
-      margin-top: 54px;
       margin-bottom: 248px;
     }
     .sf-button {
