@@ -54,6 +54,8 @@ services:
       - APOS_S3_ENDPOINT=${APOS_S3_ENDPOINT:-http://localstack:4566}
       # Google Cloud Storage settings
       - SERVICE_ACCOUNT_PRIVATE_KEY=${SERVICE_ACCOUNT_PRIVATE_KEY:-'unknown'}
+      - SERVICE_ACCOUNT_EMAIL=${SERVICE_ACCOUNT_EMAIL:-}
+      - SPREADSHEET_ID=${SPREADSHEET_ID:-}
 
     command: ["npm", "start"]
     depends_on:
