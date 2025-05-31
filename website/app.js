@@ -37,6 +37,9 @@ function createAposConfig() {
       // Add global data module
       'global-data': {},
 
+      // Shared constants module
+      'shared-constants': {},
+
       // Configure page types
       '@apostrophecms/rich-text-widget': {},
       '@apostrophecms/image-widget': {
@@ -105,6 +108,7 @@ function createAposConfig() {
       'container-widget': {},
       'leadership-team-widget': {},
       'table-widget': {},
+      'form-preset-names': {},
     },
   };
 }

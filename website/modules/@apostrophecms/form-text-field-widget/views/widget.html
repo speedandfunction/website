@@ -5,6 +5,10 @@
 {% import "fragments/utility.html" as utils with context %}
 
 <div data-apos-form-text class="apos-form-input-wrapper sf-field">
+  <label for="{{ id }}"
+    class="sf-label apos-form-label {{ prependIfPrefix('__label') }}"
+  >{{ widget.fieldLabel }}
+  </label>
   <input
     class="sf-input"
     type="{{ widget.inputType or "text" }}"
@@ -15,10 +19,6 @@
     {% endif %}
     {% if widget.required %}required{% endif %}
   />
-  <label for="{{ id }}"
-    class="sf-label apos-form-label {{ prependIfPrefix('__label') }}"
-  >{{ widget.fieldLabel }}
-  </label>
   {% if widget.inputType == 'date' %}
     <p>
       <small class="apos-form-help">{{ __t("(YYYY-MM-DD)") }}</small>

@@ -1,6 +1,8 @@
 import barba from '@barba/core';
 import { gsap } from 'gsap';
 import { initAllSwipers } from './swipers';
+import { initFormValidation } from './js/formValidation';
+import { initPhoneFormatting } from './js/phoneFormat';
 import { initSmoothCounters } from './smoothCounters';
 import lozad from 'lozad';
 import { setupTagSearchForInput } from './searchInputHandler';
@@ -64,6 +66,8 @@ function initializeAllComponents() {
   initAllSwipers();
   initSmoothCounters();
   initFontChanger();
+  initFormValidation();
+  initPhoneFormatting();
   initCaseStudiesTagFilter();
 }
 
