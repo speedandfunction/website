@@ -173,23 +173,17 @@ const validateForm = async (form) => {
     clearValidationError(field);
   });
 
-  for (const field of fields) {
-    if (
-      field.type === 'submit' ||
-      field.type === 'button' ||
-      field.type === 'hidden'
-    ) {
-      // eslint-disable-next-line no-continue
-      continue;
-    }
+  const validationPromises = Array.from(fields)
+    .filter((field) => !['submit', 'button', 'hidden'].includes(field.type))
+    .map(async (field) => {
+      const result = await validateField(field, field.value);
+      if (!result.isValid) {
+        showValidationError(field, result.message);
+        isFormValid = false;
+      }
+    });
 
-    // eslint-disable-next-line no-await-in-loop
-    const result = await validateField(field, field.value);
-    if (!result.isValid) {
-      showValidationError(field, result.message);
-      isFormValid = false;
-    }
-  }
+  await Promise.all(validationPromises);
 
   return isFormValid;
 };

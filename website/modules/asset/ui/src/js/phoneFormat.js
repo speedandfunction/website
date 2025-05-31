@@ -215,5 +215,4 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-// Export the function for use in other modules
 export { initPhoneFormatting, formatPhoneNumber };

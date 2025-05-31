@@ -51,41 +51,18 @@ describe('generate-constants.js', () => {
   });
 });
 
-// Separate test for error handling using a completely different approach
 test('handles errors properly', () => {
-  /*
-   * Mock global functions using spies instead of direct replacement
-   * This avoids the console statement linter errors
-   */
-  const errorSpy = jest
-    .spyOn(console, 'error')
-    .mockImplementation(() => undefined);
-  const exitSpy = jest
-    .spyOn(process, 'exit')
-    .mockImplementation(() => undefined);
+  // Force the server module's init to throw an error
+  mockServerModule.init.mockImplementationOnce(() => {
+    throw new Error('Test error');
+  });
 
-  try {
-    // Force the server module's init to throw an error
-    mockServerModule.init.mockImplementationOnce(() => {
-      throw new Error('Test error');
-    });
+  // Clear require cache to ensure script runs again
+  jest.resetModules();
+  delete require.cache[require.resolve('./generate-constants')];
 
-    // Clear require cache to ensure script runs again
-    jest.resetModules();
-    delete require.cache[require.resolve('./generate-constants')];
-
-    // Run the script which should now encounter the error
+  // Run the script which should now encounter the error
+  expect(() => {
     require('./generate-constants');
-
-    // Check that error handling was triggered
-    expect(errorSpy).toHaveBeenCalledWith(
-      'Error generating client-side constants:',
-      expect.any(Error),
-    );
-    expect(exitSpy).toHaveBeenCalledWith(1);
-  } finally {
-    // Restore spies
-    errorSpy.mockRestore();
-    exitSpy.mockRestore();
-  }
+  }).toThrow('Failed to generate client-side constants: Test error');
 });

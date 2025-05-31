@@ -49,14 +49,6 @@ export default () => {
 
   // Write the client-side constants file
   fs.writeFileSync(clientConstantsPath, clientFileContent);
-  // Success message - this is a build script, so console.log is acceptable
-  // eslint-disable-next-line no-console
-  console.log('Client-side constants generated successfully!');
 } catch (error) {
-  // Error handling - this is a build script, so console.error is acceptable
-  // eslint-disable-next-line no-console
-  console.error('Error generating client-side constants:', error);
-  // Use non-zero exit code to indicate failure
-  // eslint-disable-next-line no-process-exit
-  process.exit(1);
+  throw new Error(`Failed to generate client-side constants: ${error.message}`);
 }
