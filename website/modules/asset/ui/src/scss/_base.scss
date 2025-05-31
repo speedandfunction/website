@@ -31,10 +31,11 @@
 .sf-wrapper {
   position: relative;
 }
+
 .sf-section {
-  margin-bottom: 80px;
+  margin-bottom: 64px;
   @include breakpoint-medium {
-    margin-bottom: 120px;
+    margin-bottom: 72px;
   }
 }
 
@@ -46,6 +47,7 @@
 
   @include breakpoint-medium {
     font-size: $font-size-h1;
+    line-height: 110%;
   }
 }
 
@@ -69,7 +71,7 @@
 
   @include breakpoint-medium {
     font-size: $font-size-h3;
-    line-height: 170%;
+    line-height: 140%;
   }
 }
 
@@ -112,7 +114,7 @@
 .sf-rich-large {
   font-weight: $font-weight-medium;
   font-size: $font-size-body-small;
-  line-height: 140%;
+  line-height: 150%;
   margin: 0;
 
   @include breakpoint-medium {

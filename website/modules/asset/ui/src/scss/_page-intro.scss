@@ -13,11 +13,11 @@
   &__title {
     font-size: $font-size-h5;
     line-height: 130%;
-    margin: 0 0 8px;
+    margin: 0;
+    max-width: 1070px;
     @include breakpoint-medium {
       font-size: $font-size-h2;
       line-height: 140%;
-      margin-bottom: 24px;
     }
   }
 
@@ -25,10 +25,11 @@
     font-size: $font-size-body-large-mobile;
     line-height: $line-height-body;
     color: $gray-300;
-    margin-bottom: 32px;
+    margin-top: 8px;
+    max-width: 900px;
     @include breakpoint-medium {
       font-size: $font-size-body-large;
-      margin-bottom: 52px;
+      margin-top: 24px;
     }
   }
 
@@ -37,11 +38,13 @@
     font-weight: $font-weight-medium;
     line-height: $line-height-body;
     text-align: left;
-    margin-bottom: 30px;
+    width: 100%;
+    max-width: 900px;
+    margin: 32px 0 0 0;
     @include breakpoint-medium {
       font-size: $font-size-body-medium;
       line-height: $line-height-body-large;
-      margin-bottom: 50px;
+      margin-top: 52px;
     }
   }
 }
