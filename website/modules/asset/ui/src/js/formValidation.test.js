@@ -117,4 +117,21 @@ describe('Form Validation', () => {
     expect(validateField).toHaveBeenCalled();
     expect(form.submit).toHaveBeenCalled();
   });
+  test('prevents form submission when validation fails', async () => {
+    validateField.mockImplementation(() =>
+      Promise.resolve({ isValid: false, message: 'Error' }),
+    );
+
+    const submitEvent = createEventWithTarget('submit', form);
+    submitEvent.preventDefault = jest.fn();
+    form.submit = jest.fn();
+
+    form.dispatchEvent(submitEvent);
+
+    await waitForDomUpdate();
+
+    expect(submitEvent.preventDefault).toHaveBeenCalled();
+    expect(validateField).toHaveBeenCalled();
+    expect(form.submit).not.toHaveBeenCalled();
+  });
 });

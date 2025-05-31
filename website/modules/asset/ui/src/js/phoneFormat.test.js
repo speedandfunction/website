@@ -7,63 +7,34 @@ describe('formatPhoneNumber', () => {
     expect(formatPhoneNumber(undefined)).toBe('');
   });
 
-  test('formats Ukrainian numbers', () => {
-    expect(formatPhoneNumber('+380501234567')).toBe('+380 50 123 4567');
-    expect(formatPhoneNumber('+380671234567')).toBe('+380 67 123 4567');
+  test.each([
+    ['Ukrainian', '+380501234567', '+380 50 123 4567'],
+    ['Ukrainian', '+380671234567', '+380 67 123 4567'],
+    ['Polish', '+48501234567', '+48 50 123 4567'],
+    ['Polish', '+48601234567', '+48 60 123 4567'],
+    ['UK', '+447911123456', '+44 7911 123456'],
+    ['UK', '+441234567890', '+44 1234 567890'],
+    ['German', '+4915123456789', '+49 1512 345 6789'],
+    ['German', '+4930123456789', '+49 3012 345 6789'],
+    ['French', '+33123456789', '+33 1 23 45 67 89'],
+    ['French', '+33612345678', '+33 6 12 34 56 78'],
+    ['Italian', '+393451234567', '+39 345 1234567'],
+    ['Italian', '+393211234567', '+39 321 1234567'],
+    ['US/Canada', '+12125551234', '+1 212 555 1234'],
+    ['US/Canada', '+14165551234', '+1 416 555 1234'],
+  ])('formats %s numbers correctly: %s -> %s', (country, input, expected) => {
+    expect(formatPhoneNumber(input)).toBe(expected);
   });
 
-  test('formats Polish numbers', () => {
-    expect(formatPhoneNumber('+48501234567')).toBe('+48 50 123 4567');
-    expect(formatPhoneNumber('+48601234567')).toBe('+48 60 123 4567');
-  });
-
-  test('formats UK numbers', () => {
-    expect(formatPhoneNumber('+447911123456')).toBe('+44 7911 123456');
-    expect(formatPhoneNumber('+441234567890')).toBe('+44 1234 567890');
-  });
-
-  test('formats German numbers', () => {
-    expect(formatPhoneNumber('+4915123456789')).toBe('+49 1512 345 6789');
-    expect(formatPhoneNumber('+4930123456789')).toBe('+49 3012 345 6789');
-  });
-
-  test('formats French numbers', () => {
-    expect(formatPhoneNumber('+33123456789')).toBe('+33 1 23 45 67 89');
-    expect(formatPhoneNumber('+33612345678')).toBe('+33 6 12 34 56 78');
-  });
-
-  test('formats Italian numbers', () => {
-    expect(formatPhoneNumber('+393451234567')).toBe('+39 345 1234567');
-    expect(formatPhoneNumber('+393211234567')).toBe('+39 321 1234567');
-  });
-
-  test('formats US/Canada numbers', () => {
-    expect(formatPhoneNumber('+12125551234')).toBe('+1 212 555 1234');
-    expect(formatPhoneNumber('+14165551234')).toBe('+1 416 555 1234');
-  });
-
-  test('formats national 10-digit number', () => {
-    expect(formatPhoneNumber('2125551234')).toBe('212 555 1234');
-  });
-
-  test('formats 11-digit number', () => {
-    expect(formatPhoneNumber('12345678901')).toBe('123 4567 8901');
-  });
-
-  test('formats 9-digit number', () => {
-    expect(formatPhoneNumber('123456789')).toBe('123 456 789');
-  });
-
-  test('formats Ukrainian national number', () => {
-    expect(formatPhoneNumber('0501234567')).toBe('050 123 4567');
-  });
-
-  test('formats 8-digit number', () => {
-    expect(formatPhoneNumber('12345678')).toBe('1234 5678');
-  });
-
-  test('formats 7-digit number', () => {
-    expect(formatPhoneNumber('1234567')).toBe('123 4567');
+  test.each([
+    ['10-digit', '2125551234', '212 555 1234'],
+    ['11-digit', '12345678901', '123 4567 8901'],
+    ['9-digit', '123456789', '123 456 789'],
+    ['Ukrainian national', '0501234567', '050 123 4567'],
+    ['8-digit', '12345678', '1234 5678'],
+    ['7-digit', '1234567', '123 4567'],
+  ])('formats %s number: %s -> %s', (type, input, expected) => {
+    expect(formatPhoneNumber(input)).toBe(expected);
   });
 
   test('removes non-digit characters except leading +', () => {
