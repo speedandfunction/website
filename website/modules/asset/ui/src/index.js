@@ -1,13 +1,11 @@
 import barba from '@barba/core';
+import { enhanceBarbaWithFilterHandling } from './enhanceBarbaWithFilterHandling';
 import { gsap } from 'gsap';
-import lozad from 'lozad';
-import {
-  enhanceBarbaWithFilterHandling,
-  initCaseStudiesFilterHandler,
-} from './caseStudiesHandler';
-import { setupTagSearchForInput } from './searchInputHandler';
-import { initSmoothCounters } from './smoothCounters';
 import { initAllSwipers } from './swipers';
+import { initCaseStudiesFilterHandler } from './initCaseStudiesFilterHandler';
+import { initSmoothCounters } from './smoothCounters';
+import lozad from 'lozad';
+import { setupTagSearchForInput } from './searchInputHandler';
 
 // Lazy loading
 function initImageLozad() {

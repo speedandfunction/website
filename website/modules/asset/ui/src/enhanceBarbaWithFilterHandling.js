@@ -1,21 +1,6 @@
 // Variable to track if we should scroll to filter
 let shouldScrollToFilter = false;
 
-// Filter link detection - Single responsibility: Identify filter-related links
-const isFilterLink = function (link, href) {
-  if (!href) return false;
-
-  return (
-    href.includes('#filter') ||
-    link.classList.contains('clear-all-link') ||
-    link.classList.contains('remove-tag') ||
-    link.classList.contains('tag-link') ||
-    href.includes('industry') ||
-    href.includes('stack') ||
-    href.includes('caseStudyType')
-  );
-};
-
 // Anchor scrolling - Single responsibility: Handle scrolling to filter anchor
 const scrollToFilterAnchor = function () {
   const filterElement = document.getElementById('filter');
@@ -30,19 +15,6 @@ const scrollToFilterAnchor = function () {
 const ensureFilterHashInUrl = function () {
   const [currentUrl] = window.location.href.split('#');
   window.history.replaceState({}, '', `${currentUrl}#filter`);
-};
-
-// Filter navigation detection - Single responsibility: Track filter clicks
-const setupFilterLinkDetection = function () {
-  document.addEventListener('click', function (event) {
-    const link = event.target.closest('a');
-    if (link) {
-      const href = link.getAttribute('href');
-      if (isFilterLink(link, href)) {
-        shouldScrollToFilter = true;
-      }
-    }
-  });
 };
 
 // Filter scroll handling - Single responsibility: Handle post-transition scrolling
@@ -95,16 +67,16 @@ const enhanceBarbaWithFilterHandling = function (barbaEnterCallback) {
   };
 };
 
-// Initialization - Single responsibility: Set up all filter-related functionality
-const initCaseStudiesFilterHandler = function () {
-  setupFilterLinkDetection();
+// Function to set shouldScrollToFilter from external modules
+const setShouldScrollToFilter = function (value) {
+  shouldScrollToFilter = value;
 };
 
 // Public API
 export {
-  initCaseStudiesFilterHandler,
   enhanceBarbaWithFilterHandling,
   shouldHandleFilterNavigation,
   scrollToFilterAnchor,
   resetFilterState,
+  setShouldScrollToFilter,
 };
