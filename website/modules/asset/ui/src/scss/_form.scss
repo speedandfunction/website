@@ -124,9 +124,13 @@ label {
   position: absolute;
   bottom: -6px;
   left: 25px;
-  color: $red;
+  color: $error-color;
   font-size: 12px;
   margin-top: -5px;
   margin-bottom: 10px;
   font-weight: 500;
+}
+
+.apos-form-error {
+  font-size: 12px;
 }
