@@ -150,10 +150,20 @@
     list-style: none;
     padding: 0;
     margin: 0;
+    opacity: 0;
+    animation: fadeInUp 0.6s ease-out 0.2s forwards;
   }
 
   .tag-item {
     margin-bottom: 6px;
+    opacity: 0;
+    transform: translateY(10px);
+    animation: fadeInUp 0.4s ease-out forwards;
+    @for $i from 1 through 20 {
+      &:nth-child(#{$i}) {
+        animation-delay: #{0.1 + ($i * 0.05)}s;
+      }
+    }
 
     &.active {
       .tag-link {
@@ -175,6 +185,26 @@
     text-decoration: none;
     padding: 5px 0;
     cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 4px;
+    margin: 0 -8px;
+    padding: 8px 8px;
+    &:hover {
+      background-color: rgba($gray-100, 0.6);
+      color: $gray-500;
+      transform: translateX(4px);
+
+      &::before {
+        background-color: rgba($gray-200, 0.8);
+        transform: scale(1.1);
+        box-shadow: 0 2px 4px rgba($gray-300, 0.2);
+      }
+    }
+
+    &:focus {
+      outline: 2px solid rgba($gray-400, 0.5);
+      outline-offset: 2px;
+    }
 
     &::before {
       content: '';
@@ -188,10 +218,13 @@
       margin-right: 10px;
       vertical-align: middle;
       margin-top: -1px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      border-radius: 2px;
     }
 
     span {
       margin-left: 5px;
+      transition: color 0.3s ease;
     }
   }
 }
@@ -358,12 +391,26 @@
   height: 16px;
 }
 
+.filter-anchor {
+  position: relative;
+  top: -64px;
+  height: 0;
+  @include breakpoint-medium {
+    top: -95px;
+  }
+}
+
 // Case Study preview card
 .cs_grid {
   display: grid;
   grid-template-columns: 1fr;
   gap: 32px;
   margin: 0 auto;
+  opacity: 0;
+  transform: translateY(30px);
+  filter: blur(2px);
+  animation: smoothFadeInUp 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s
+    forwards;
 
   @include breakpoint-medium {
     grid-template-columns: repeat(2, 1fr);
@@ -388,9 +435,20 @@
   display: flex;
   flex-direction: column;
   text-decoration: none;
+  opacity: 0;
+  transform: translateY(25px);
+  filter: blur(1px);
+  animation: cardFadeInUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  @for $i from 1 through 12 {
+    &:nth-child(#{$i}) {
+      animation-delay: #{0.6 + ($i * 0.08)}s;
+    }
+  }
 
   &:hover {
-    box-shadow: 0 4px 16px rgba($black, 0.15);
+    box-shadow: 0 8px 32px rgba($black, 0.12);
+    transform: translateY(-6px);
   }
 
   @include breakpoint-large {
@@ -739,65 +797,77 @@
   }
 }
 
-/* Case Studies Page Animation Controls */
+// Keyframes for smooth animations
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
-html body.no-page-animations {
-  .bp-main,
-  [data-barba='container'],
-  [data-barba='wrapper'],
-  main,
-  .page-content,
-  .cs_container,
-  .cs_content,
-  .cs_list,
+// Keyframe for cs_grid
+@keyframes smoothFadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+    filter: blur(2px);
+  }
+  60% {
+    opacity: 0.8;
+    transform: translateY(10px);
+    filter: blur(1px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+// Keyframe for individual cards
+@keyframes cardFadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(25px);
+    filter: blur(1px);
+  }
+  70% {
+    opacity: 0.9;
+    transform: translateY(5px);
+    filter: blur(0.5px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+// Animation for reduced motion users (accessibility)
+@media (prefers-reduced-motion: reduce) {
   .cs_grid,
   .cs_card,
-  .cs_filter-info,
-  .tags-filter,
-  .filter-section,
-  .bp-main .fade-in,
-  .bp-main .fade-out,
-  .bp-main .slide-in,
-  .bp-main .slide-out,
-  [data-barba='container'] .animate__animated,
-  .page-content [class*='animate'],
-  .cs_container [class*='transition'] {
-    opacity: 1;
-    transition: none;
+  .tags-list,
+  .tag-item {
     animation: none;
+    opacity: 1;
     transform: none;
+    filter: none;
   }
-}
 
-/* Specific overrides for various page states */
-html[data-case-studies-page] body.no-page-animations {
-  .bp-main,
-  [data-barba='container'],
-  main,
-  .page-content {
-    opacity: 1;
+  .tag-link {
     transition: none;
-    animation: none;
-    transform: none;
+
+    &:hover {
+      transform: none;
+    }
   }
-}
 
-html body[data-filter-change].no-page-animations {
-  .bp-main,
-  [data-barba='container'] {
-    opacity: 1;
-    transition: none;
-    animation: none;
-    transform: none;
-  }
-}
-
-html body[data-no-transitions].no-page-animations {
-  .bp-main,
-  [data-barba='container'] {
-    opacity: 1;
-    transition: none;
-    animation: none;
+  .cs_card:hover {
     transform: none;
   }
 }

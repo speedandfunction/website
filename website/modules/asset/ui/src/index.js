@@ -1,10 +1,13 @@
-import { addBarbaHooks } from './caseStudiesHandler';
 import barba from '@barba/core';
 import { gsap } from 'gsap';
-import { initAllSwipers } from './swipers';
-import { initSmoothCounters } from './smoothCounters';
 import lozad from 'lozad';
+import {
+  enhanceBarbaWithFilterHandling,
+  initCaseStudiesFilterHandler,
+} from './caseStudiesHandler';
 import { setupTagSearchForInput } from './searchInputHandler';
+import { initSmoothCounters } from './smoothCounters';
+import { initAllSwipers } from './swipers';
 
 // Lazy loading
 function initImageLozad() {
@@ -73,15 +76,47 @@ function initBarbaPageTransitions() {
   if (!document.querySelector('[data-barba="container"]')) return;
 
   apos.util.onReady(() => {
-    const preventFunc = addBarbaHooks(barba);
+    // Initialize case studies filter handler
+    initCaseStudiesFilterHandler();
+
+    // Original Barba enter callback
+    const originalEnterCallback = function (data, hasFilterAnchor) {
+      // Scroll to the top after page transition (unless we have a filter anchor)
+      if (!hasFilterAnchor) {
+        window.scrollTo(0, 0);
+      }
+
+      // Close menu if it's open
+      const menuButton = document.getElementById('nav-icon');
+      const menu = document.querySelector('[data-menu]');
+
+      if (menuButton && menu) {
+        menu.classList.remove('open');
+        menuButton.classList.remove('open');
+      }
+
+      // Trigger video play after transition
+      const video = data.next.container.querySelector('video');
+      if (video) {
+        video.play();
+      }
+
+      // Call the wrapper function to initialize all components
+      initializeAllComponents();
+
+      // Remove the previous page container to avoid blinking
+      data.current.container.remove();
+
+      return gsap.from(data.next.container, {
+        opacity: 0,
+      });
+    };
 
     barba.init({
       prefetchIgnore: false,
       cacheIgnore: false,
       preventRunning: true,
       timeout: 10000,
-
-      prevent: preventFunc,
 
       transitions: [
         {
@@ -92,32 +127,7 @@ function initBarbaPageTransitions() {
               opacity: 0,
             });
           },
-          enter(data) {
-            // Close menu if it's open
-            const menuButton = document.getElementById('nav-icon');
-            const menu = document.querySelector('[data-menu]');
-
-            if (menuButton && menu) {
-              menu.classList.remove('open');
-              menuButton.classList.remove('open');
-            }
-
-            // Trigger video play after transition
-            const video = data.next.container.querySelector('video');
-            if (video) {
-              video.play();
-            }
-
-            // Call the wrapper function to initialize all components
-            initializeAllComponents();
-
-            // Remove the previous page container to avoid blinking
-            data.current.container.remove();
-
-            return gsap.from(data.next.container, {
-              opacity: 0,
-            });
-          },
+          enter: enhanceBarbaWithFilterHandling(originalEnterCallback),
         },
       ],
     });

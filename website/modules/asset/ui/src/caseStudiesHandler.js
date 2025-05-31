@@ -1,159 +1,110 @@
-// Utility functions
-const isCaseStudiesPage = (path) => path?.includes('/cases');
-const hasQueryParams = () => window.location.search.length > 1;
+// Variable to track if we should scroll to filter
+let shouldScrollToFilter = false;
 
-// URL utilities
-const createUrlFromHref = (href) => {
-  try {
-    return new URL(href);
-  } catch {
-    return null;
+// Filter link detection - Single responsibility: Identify filter-related links
+const isFilterLink = function (link, href) {
+  if (!href) return false;
+
+  return (
+    href.includes('#filter') ||
+    link.classList.contains('clear-all-link') ||
+    link.classList.contains('remove-tag') ||
+    link.classList.contains('tag-link') ||
+    href.includes('industry') ||
+    href.includes('stack') ||
+    href.includes('caseStudyType')
+  );
+};
+
+// Anchor scrolling - Single responsibility: Handle scrolling to filter anchor
+const scrollToFilterAnchor = function () {
+  const filterElement = document.getElementById('filter');
+  if (filterElement) {
+    filterElement.scrollIntoView({ behavior: 'smooth' });
+    return true;
   }
+  return false;
 };
 
-const hasSearchParams = (url) => url && url.search.length > 1;
-
-// Animation management
-const disablePageAnimations = () => {
-  document.body.classList.add('no-page-animations');
+// URL hash management - Single responsibility: Manage #filter in URL
+const ensureFilterHashInUrl = function () {
+  const [currentUrl] = window.location.href.split('#');
+  window.history.replaceState({}, '', `${currentUrl}#filter`);
 };
 
-const enablePageAnimations = () => {
-  document.body.classList.remove('no-page-animations');
-};
-
-// Navigation state detection
-const isFilteringCaseStudies = (currentUrl, nextUrl) => {
-  if (!currentUrl || !nextUrl) return false;
-
-  const isSamePath = currentUrl.pathname === nextUrl.pathname;
-  const isDifferentQuery = currentUrl.search !== nextUrl.search;
-  const isCaseStudiesPath = isCaseStudiesPage(currentUrl.pathname);
-  const hasNextQuery = hasSearchParams(nextUrl);
-
-  return isSamePath && isDifferentQuery && isCaseStudiesPath && hasNextQuery;
-};
-
-const isClearingFilters = (currentUrl, nextUrl) => {
-  if (!currentUrl || !nextUrl) return false;
-
-  const isSamePath = currentUrl.pathname === nextUrl.pathname;
-  const isCaseStudiesPath = isCaseStudiesPage(currentUrl.pathname);
-  const hadParams = hasSearchParams(currentUrl);
-  const hasNoParams = !hasSearchParams(nextUrl);
-
-  return isSamePath && isCaseStudiesPath && hadParams && hasNoParams;
-};
-
-// Scroll management
-const scrollToTop = () => {
-  window.scrollTo({ top: 0, behavior: 'auto' });
-};
-
-const scrollToFilterSection = () => {
-  requestAnimationFrame(() => {
-    const filterSection = document.querySelector('.cs_filter-info');
-    if (filterSection) {
-      filterSection.scrollIntoView({ behavior: 'smooth' });
-    } else {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+// Filter navigation detection - Single responsibility: Track filter clicks
+const setupFilterLinkDetection = function () {
+  document.addEventListener('click', function (event) {
+    const link = event.target.closest('a');
+    if (link) {
+      const href = link.getAttribute('href');
+      if (isFilterLink(link, href)) {
+        shouldScrollToFilter = true;
+      }
     }
   });
 };
 
-// Page initialization
-const initCaseStudiesPage = () => {
-  if (isCaseStudiesPage(window.location.pathname) && hasQueryParams()) {
-    disablePageAnimations();
-  }
-};
-
-// Barba hook handlers
-const handleBeforeLeave = ({ current, next }) => {
-  const nextPath = next.url?.path || '';
-  const nextUrl = createUrlFromHref(next.url.href);
-
-  if (isCaseStudiesPage(nextPath) && hasSearchParams(nextUrl)) {
-    disablePageAnimations();
-  }
-};
-
-const handleBeforeEnter = ({ current, next }) => {
-  let currentUrl = null;
-  if (current?.url) {
-    currentUrl = createUrlFromHref(current.url.href);
-  }
-
-  const nextUrl = createUrlFromHref(next.url.href);
-  const nextPath = next.url?.path || '';
-
-  const shouldKeepScroll =
-    (isCaseStudiesPage(nextPath) && hasSearchParams(nextUrl)) ||
-    isClearingFilters(currentUrl, nextUrl);
-
-  if (!shouldKeepScroll) {
-    scrollToTop();
-  }
-};
-
-const handleAfterTransition = ({ current, next }) => {
-  let currentUrl = null;
-  if (current?.url) {
-    currentUrl = createUrlFromHref(current.url.href);
-  }
-
-  const nextUrl = createUrlFromHref(next.url.href);
-  const nextPath = next.url?.path || '';
-
-  if (isCaseStudiesPage(nextPath) && hasSearchParams(nextUrl)) {
+// Filter scroll handling - Single responsibility: Handle post-transition scrolling
+const handleFilterScrolling = function (hasFilterAnchor) {
+  if (!hasFilterAnchor) {
+    shouldScrollToFilter = false;
     return;
   }
 
-  if (isClearingFilters(currentUrl, nextUrl)) {
-    enablePageAnimations();
-    return;
-  }
+  // Force the hash to be in the URL
+  ensureFilterHashInUrl();
 
-  scrollToTop();
-  enablePageAnimations();
+  // Use multiple timeouts to ensure DOM is fully updated
+  setTimeout(() => {
+    if (!scrollToFilterAnchor()) {
+      // Fallback: try again after longer delay
+      setTimeout(scrollToFilterAnchor, 300);
+    }
+    // Reset the flag after scrolling
+    shouldScrollToFilter = false;
+  }, 100);
 };
 
-const handlePreventTransition = ({ current, next }) => {
-  if (!current || !next) return false;
-
-  const currentUrl = createUrlFromHref(current.url.href);
-  const nextUrl = createUrlFromHref(next.url.href);
-
-  if (isFilteringCaseStudies(currentUrl, nextUrl)) {
-    scrollToFilterSection();
-    return true;
-  }
-
-  return false;
+// Filter state detection - Single responsibility: Determine if filter navigation occurred
+const shouldHandleFilterNavigation = function (targetUrl) {
+  return targetUrl.includes('#filter') || shouldScrollToFilter;
 };
 
-// Hook registration
-const registerBeforeLeaveHook = (barba) => {
-  barba.hooks.beforeLeave(handleBeforeLeave);
+// Reset filter state - Single responsibility: Clean up filter tracking
+const resetFilterState = function () {
+  shouldScrollToFilter = false;
 };
 
-const registerBeforeEnterHook = (barba) => {
-  barba.hooks.beforeEnter(handleBeforeEnter);
+// Main filter handler - Single responsibility: Coordinate all filter functionality
+const enhanceBarbaWithFilterHandling = function (barbaEnterCallback) {
+  return function (data) {
+    // Check if we should scroll to filter
+    const targetUrl = data.next.url.href;
+    const hasFilterAnchor = shouldHandleFilterNavigation(targetUrl);
+
+    // Handle filter-specific behavior
+    if (hasFilterAnchor) {
+      handleFilterScrolling(hasFilterAnchor);
+    } else {
+      resetFilterState();
+    }
+
+    // Call the original enter callback with filter handling applied
+    return barbaEnterCallback(data, hasFilterAnchor);
+  };
 };
 
-const registerAfterHook = (barba) => {
-  barba.hooks.after(handleAfterTransition);
+// Initialization - Single responsibility: Set up all filter-related functionality
+const initCaseStudiesFilterHandler = function () {
+  setupFilterLinkDetection();
 };
 
-const createPreventFunction = () => handlePreventTransition;
-
-// Main initialization
-const addBarbaHooks = (barba) => {
-  registerBeforeLeaveHook(barba);
-  registerBeforeEnterHook(barba);
-  registerAfterHook(barba);
-
-  return createPreventFunction();
+// Public API
+export {
+  initCaseStudiesFilterHandler,
+  enhanceBarbaWithFilterHandling,
+  shouldHandleFilterNavigation,
+  scrollToFilterAnchor,
+  resetFilterState,
 };
-
-export { initCaseStudiesPage, addBarbaHooks, isCaseStudiesPage };
