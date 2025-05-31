@@ -7,6 +7,7 @@ module.exports = {
   testPathIgnorePatterns: ['/node_modules/', '/apos-build/'],
   collectCoverageFrom: [
     'modules/**/ui/src/js/**/*.js',
+    'website/utils/**/*.js',
     '!modules/**/ui/src/js/**/*.min.js',
     '!**/node_modules/**',
   ],
