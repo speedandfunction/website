@@ -1,12 +1,18 @@
+.leadership-section {
+  margin-top: 32px;
+
+  @include breakpoint-large {
+    margin-top: 52px;
+  }
+}
+
 .leadership-list {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 32px;
 
   @include breakpoint-large {
     flex-direction: row;
-    margin-top: 52px;
   }
 
   // prevent extra top border when leader-card is hovered in second row
@@ -33,6 +39,7 @@
   width: 100%;
   height: 100%;
   margin-bottom: 24px;
+  position: relative;
 
   @include breakpoint-large {
     max-height: 383px;
