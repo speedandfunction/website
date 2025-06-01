@@ -9,15 +9,18 @@ const isFilterLink = function (link, href) {
     link.classList.contains('clear-all-link') ||
     link.classList.contains('remove-tag') ||
     link.classList.contains('tag-link') ||
-    href.includes('industry') ||
-    href.includes('stack') ||
-    href.includes('caseStudyType')
+    href.includes('?industry=') ||
+    href.includes('&industry=') ||
+    href.includes('?stack=') ||
+    href.includes('&stack=') ||
+    href.includes('?caseStudyType=') ||
+    href.includes('&caseStudyType=')
   );
 };
 
 // Filter navigation detection - Single responsibility: Track filter clicks
 const setupFilterLinkDetection = function () {
-  document.addEventListener('click', function (event) {
+  const handleFilterClick = function (event) {
     const link = event.target.closest('a');
     if (link) {
       const href = link.getAttribute('href');
@@ -25,12 +28,20 @@ const setupFilterLinkDetection = function () {
         setShouldScrollToFilter(true);
       }
     }
-  });
+  };
+
+  document.addEventListener('click', handleFilterClick);
+
+  // Return cleanup function
+  return function () {
+    document.removeEventListener('click', handleFilterClick);
+  };
 };
 
 // Initialization - Single responsibility: Set up all filter-related functionality
 const initCaseStudiesFilterHandler = function () {
-  setupFilterLinkDetection();
+  const cleanup = setupFilterLinkDetection();
+  return cleanup;
 };
 
 // Public API

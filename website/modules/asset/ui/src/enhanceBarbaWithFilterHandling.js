@@ -13,8 +13,9 @@ const scrollToFilterAnchor = function () {
 
 // URL hash management - Single responsibility: Manage #filter in URL
 const ensureFilterHashInUrl = function () {
-  const [currentUrl] = window.location.href.split('#');
-  window.history.replaceState({}, '', `${currentUrl}#filter`);
+  const url = new URL(window.location.href);
+  url.hash = '#filter';
+  window.history.replaceState({}, '', url.toString());
 };
 
 // Filter scroll handling - Single responsibility: Handle post-transition scrolling
@@ -27,15 +28,23 @@ const handleFilterScrolling = function (hasFilterAnchor) {
   // Force the hash to be in the URL
   ensureFilterHashInUrl();
 
-  // Use multiple timeouts to ensure DOM is fully updated
-  setTimeout(() => {
-    if (!scrollToFilterAnchor()) {
-      // Fallback: try again after longer delay
-      setTimeout(scrollToFilterAnchor, 300);
+  // Use requestAnimationFrame for better timing
+  const attemptScroll = (attempts = 0) => {
+    if (attempts > 10) {
+      shouldScrollToFilter = false;
+      return;
     }
-    // Reset the flag after scrolling
-    shouldScrollToFilter = false;
-  }, 100);
+
+    requestAnimationFrame(() => {
+      if (scrollToFilterAnchor()) {
+        shouldScrollToFilter = false;
+      } else {
+        attemptScroll(attempts + 1);
+      }
+    });
+  };
+
+  attemptScroll();
 };
 
 // Filter state detection - Single responsibility: Determine if filter navigation occurred
