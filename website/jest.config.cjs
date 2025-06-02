@@ -7,8 +7,6 @@ module.exports = {
 
   moduleDirectories: ['node_modules'],
 
-  setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
-
   testPathIgnorePatterns: ['/node_modules/', '/apos-build/'],
 
   collectCoverageFrom: [
