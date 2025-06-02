@@ -120,6 +120,7 @@
     @include breakpoint-large {
       height: 225px;
       width: 225px;
+      transition: opacity 0.9s cubic-bezier(0.4, 0, 0.2, 1);
     }
   }
 
@@ -185,6 +186,7 @@
       @include breakpoint-large {
         opacity: 0;
         transition: opacity 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+        transform: translateY(0) scale(1);
         position: absolute;
       }
     }
