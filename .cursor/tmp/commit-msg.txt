@@ -1,0 +1,6 @@
+Remove orphan field from page types
+
+- Add global page-type module to remove orphan field
+- Remove orphan field from home-page module
+- Remove orphan field from case-studies-page module
+- Remove orphan field from default-page module
