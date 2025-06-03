@@ -21,12 +21,6 @@ module.exports = {
     ],
     park: [
       {
-        slug: '/search',
-        parkedId: 'search',
-        title: 'Search',
-        type: '@apostrophecms/search',
-      },
-      {
         parkedId: 'caseParkedId',
         type: 'case-studies-page',
         _defaults: {
