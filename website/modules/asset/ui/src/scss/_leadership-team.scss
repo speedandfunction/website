@@ -14,21 +14,6 @@
   @include breakpoint-large {
     flex-direction: row;
   }
-
-  // prevent extra top border when leader-card is hovered in second row
-  & + .leadership-list {
-    .leader-card {
-      &:hover {
-        .leader-header {
-          .leader-title-block {
-            @include breakpoint-large {
-              border-top: 1px solid transparent;
-            }
-          }
-        }
-      }
-    }
-  }
 }
 
 .leader-card {
@@ -37,46 +22,41 @@
   box-sizing: border-box;
   font-style: $font-style-normal;
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   height: 100%;
+  overflow: hidden;
   margin-bottom: 24px;
   position: relative;
 
   @include breakpoint-large {
-    max-height: 383px;
+    max-height: 375px;
     max-width: 400px;
     margin-bottom: 0;
   }
 
-  // avoid double border
-  &:not(:first-child) {
-    .leader-header {
-      .leader-title-block {
-        @include breakpoint-large {
-          border-left: none;
-        }
-      }
-    }
-
-    .leader-footer {
+  &:nth-child(3n + 2) .leader-header {
+    .leader-title-block {
       @include breakpoint-large {
-        border-left: none;
+      }
+      &::after {
+        @include breakpoint-large {
+          border-left-color: transparent;
+          border-right-color: transparent;
+        }
       }
     }
   }
 
-  // avoid double border on hover for leader-card
-  &:has(+ .leader-card:hover) {
-    .leader-header {
-      .leader-title-block {
-        @include breakpoint-large {
-          border-right: none;
-        }
-      }
-    }
-
-    .leader-footer {
+  &:last-child .leader-header {
+    .leader-title-block {
       @include breakpoint-large {
-        border-right: none;
+      }
+      &::after {
+        @include breakpoint-large {
+          border-right-color: $whisper;
+        }
       }
     }
   }
@@ -96,20 +76,32 @@
 
       @include breakpoint-large {
         padding: 40px 40px 0;
-        border: 1px solid $whisper;
-        border-bottom: none;
         width: auto;
+        position: relative;
+        top: 225px;
+        animation: slideToDown 0.9s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+      }
+      &::after {
+        @include breakpoint-large {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 398px;
+          height: 148px;
+          border: 1px solid $whisper;
+          opacity: 1;
+          transition: opacity 0.9s ease;
+        }
       }
     }
   }
 
   .leader-footer {
     padding: 24px;
-    border: 1px solid $whisper;
 
     @include breakpoint-large {
       padding: 0 40px 40px;
-      border-top: none;
     }
   }
 
@@ -120,6 +112,8 @@
     @include breakpoint-large {
       height: 225px;
       width: 225px;
+      position: absolute;
+      opacity: 1;
       transition: opacity 0.9s cubic-bezier(0.4, 0, 0.2, 1);
     }
   }
@@ -153,12 +147,17 @@
 
     @include breakpoint-large {
       color: $gray-500;
-      transform: translateY(100%);
       transition: transform 0.9s cubic-bezier(0.4, 0, 0.2, 1);
-      display: none;
+
+      display: block;
+      overflow-y: auto;
+      max-height: 209px;
+      height: 100%;
+      min-height: 209px;
+      transform: translateY(0);
 
       .bio-inner {
-        opacity: 0;
+        animation: fadeSlideOut 0.9s cubic-bezier(0.4, 0, 0.2, 1) forwards;
       }
     }
   }
@@ -182,24 +181,23 @@
   }
 
   &:hover {
+    outline: 1px solid $whisper;
+    opacity: 1;
     .leader-photo {
       @include breakpoint-large {
         opacity: 0;
-        transition: opacity 0.9s cubic-bezier(0.4, 0, 0.2, 1);
         transform: translateY(0) scale(1);
-        position: absolute;
       }
     }
 
     .leader-title-block {
       @include breakpoint-large {
-        animation: fadeSlideIn 0.9s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        animation: slideToTop 0.9s cubic-bezier(0.4, 0, 0.2, 1) forwards;
       }
     }
 
     .leader-bio {
       @include breakpoint-large {
-        display: block;
         overflow-y: auto;
         max-height: 209px;
         height: 100%;
@@ -214,15 +212,12 @@
 
     .leader-header {
       .leader-title-block {
-        @include breakpoint-large {
-          border-left: 1px solid $whisper;
+        &::after {
+          @include breakpoint-large {
+            opacity: 0;
+            border-color: transparent;
+          }
         }
-      }
-    }
-
-    .leader-footer {
-      @include breakpoint-large {
-        border-left: 1px solid $whisper;
       }
     }
   }

@@ -8,3 +8,32 @@
     transform: translateY(0) scale(1);
   }
 }
+
+@keyframes fadeSlideOut {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(100%) scale(0.97);
+  }
+}
+
+@keyframes slideToDown {
+  from {
+    transform: translateY(-223px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideToTop {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-223px);
+  }
+}
