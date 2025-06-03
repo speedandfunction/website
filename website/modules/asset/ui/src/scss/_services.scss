@@ -1,26 +1,3 @@
-%simple-card-hover-base {
-  z-index: 10;
-  
-  .sf-simple-card__title {
-    color: $gray-100;
-  }
-  
-  .sf-simple-card__text,
-  .sf-button_underline {
-    color: $gray-200;
-  }
-  
-  .background-circle {
-    width: 150em;
-    height: 50em;
-    transform: translate3d(-5%, -10%, 0);
-  }
-  
-  &::before {
-    color: $gray-300;
-  }
-}
-
 .sf-simple-cards {
   display: flex;
   flex-wrap: wrap;
@@ -136,12 +113,10 @@
   .background-circle {
     display: none;
     
-    // Show on mobile only for no-expandable cards
     .sf-simple-cards--no-expandable & {
       @include decorative-background-circle($gray-500, 25%, 130%, 100%, -100% -60% auto auto, -10);
     }
     
-    // Show on desktop for all cards
     @include breakpoint-medium {
       @include decorative-background-circle($gray-500, 25%, 130%, 100%, -100% -60% auto auto, -10);
     }
@@ -229,7 +204,6 @@
   overflow: hidden;
   height: 100%;
   
-  // Base hover setup for mobile no-expandable cards
   .sf-simple-cards--no-expandable & {
     @include transition(all, 0.5s);
     transform: scale3d(1, 1, 1);
@@ -259,7 +233,6 @@
     }
   }
   
-  // Desktop styles and hover effects
   @include breakpoint-medium {
     padding: 40px;
     @include transition(all, 0.5s);
@@ -300,4 +273,4 @@
     margin-bottom: 6px;
     @include transition(color);
   }
-}
+} 
