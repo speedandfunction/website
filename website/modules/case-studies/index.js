@@ -1,5 +1,3 @@
-const headingToolbar = require('../../lib/headingToolbar');
-
 module.exports = {
   extend: '@apostrophecms/piece-type',
   options: {
@@ -125,17 +123,6 @@ module.exports = {
         help: '2-4 bullet points summarizing quantifiable improvements in performance, efficiency, cost savings, or business outcomes achieved.',
         textarea: true,
       },
-      content: {
-        label: 'Content',
-        type: 'area',
-        options: {
-          widgets: {
-            '@apostrophecms/rich-text': {
-              ...headingToolbar,
-            },
-          },
-        },
-      },
       testimonials: {
         label: 'Testimonials',
         type: 'area',
@@ -168,7 +155,7 @@ module.exports = {
       },
       content: {
         label: 'Content',
-        fields: ['content', 'testimonials'],
+        fields: ['testimonials'],
       },
     },
   },
