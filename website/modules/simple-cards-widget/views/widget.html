@@ -1,17 +1,17 @@
 <section class="sf-section" data-simple-cards-widget>
   {% area data.widget, 'intro' %}
-  <div class="sf-simple-cards {% if not data.widget.showCounter %}no-counter{% endif %} {% if data.widget.cards.length is even %}has-even{% endif %} {% if not data.widget.showExpandable %}no-expandable{% endif %}">
+  <div class="sf-simple-cards {% if not data.widget.showCounter %}sf-simple-cards--no-counter{% endif %} {% if data.widget.cards.length is even %}has-even{% endif %} {% if not data.widget.showExpandable %}sf-simple-cards--no-expandable{% endif %}">
     {% for card in data.widget.cards %}
-      <div class="sf-simple-card">
-        <input type="checkbox" id="card-toggle-{{ loop.index }}" class="sf-simple-card__toggle">
-        <div class="sf-simple-card-wrap">
-          <label for="card-toggle-{{ loop.index }}" class="sf-simple-card__expand-button" title="Expand/Collapse">
+      <div class="sf-simple-cards__card">
+        <input type="checkbox" id="card-toggle-{{ loop.index }}" class="sf-simple-cards__card__toggle">
+        <div class="sf-simple-cards__card-wrap">
+          <label for="card-toggle-{{ loop.index }}" class="sf-simple-cards__card__expand-button" title="Expand/Collapse">
             <input type="checkbox" id="card-toggle-{{ loop.index }}" hidden>
           </label>
           {% if card.cardTitle %}
-            <h4 class="sf-simple-card__title">{{ card.cardTitle }}</h4>
+            <h4 class="sf-simple-cards__card__title">{{ card.cardTitle }}</h4>
           {% endif %}
-          <div class="sf-simple-card__text">
+          <div class="sf-simple-cards__card__text">
             {% area card, 'cardContent' %}
           </div>
           <div class="background-circle"></div>          

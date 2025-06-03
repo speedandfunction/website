@@ -1,3 +1,26 @@
+%simple-card-hover-base {
+  z-index: 10;
+  
+  .sf-simple-card__title {
+    color: $gray-100;
+  }
+  
+  .sf-simple-card__text,
+  .sf-button_underline {
+    color: $gray-200;
+  }
+  
+  .background-circle {
+    width: 150em;
+    height: 50em;
+    transform: translate3d(-5%, -10%, 0);
+  }
+  
+  &::before {
+    color: $gray-300;
+  }
+}
+
 .sf-simple-cards {
   display: flex;
   flex-wrap: wrap;
@@ -10,31 +33,32 @@
     margin: 0 auto;
     
     &:not(.has-even) {
-      .sf-simple-card:last-child {
+      .sf-simple-cards__card:last-child {
         width: 100%;
       }
     }
   }
   
-  &.no-counter {
+  &--no-counter {
     counter-reset: none;
 
-    .sf-simple-card-wrap {
-      &::before {
+    .sf-simple-cards__card {
+      &-wrap::before {
         display: none;
       }
-    }
-    .sf-simple-card {
+      
       &__expand-button {
         top: 20px;
       }
     }
   }
-  &.no-expandable {
-    .sf-simple-card {
+  
+  &--no-expandable {
+    .sf-simple-cards__card {
       &__expand-button {
         display: none;
       }
+      
       &__text {
         display: block;
         max-height: none;
@@ -44,10 +68,9 @@
       }
     }
   }
-
 }
 
-.sf-simple-card {
+.sf-simple-cards__card {
   width: 100%;
   position: relative;
   display: flex;
@@ -82,7 +105,7 @@
       width: 100%;
       margin-right: 1px;
 
-      .sf-simple-card-wrap {
+      .sf-simple-cards__card-wrap {
         padding: 40px;
 
         &:hover {
@@ -96,20 +119,16 @@
   &__toggle {
     display: none;
     
-    &:checked {
-      ~ .sf-simple-card-wrap {
-        .sf-simple-card__text {
-          max-height: 1000px;
-          opacity: 1;
-          margin-top: 10px;
-          transform: translateY(0);
-        }
-    
-        .sf-simple-card__expand-button {
-          &::before {
-            transform: rotate(225deg);
-          }
-        }
+    &:checked ~ .sf-simple-cards__card-wrap {
+      .sf-simple-cards__card__text {
+        max-height: 1000px;
+        opacity: 1;
+        margin-top: 10px;
+        transform: translateY(0);
+      }
+  
+      .sf-simple-cards__card__expand-button::before {
+        transform: rotate(225deg);
       }
     }
   }
@@ -117,16 +136,14 @@
   .background-circle {
     display: none;
     
+    // Show on mobile only for no-expandable cards
+    .sf-simple-cards--no-expandable & {
+      @include decorative-background-circle($gray-500, 25%, 130%, 100%, -100% -60% auto auto, -10);
+    }
+    
+    // Show on desktop for all cards
     @include breakpoint-medium {
-      display: block;
-      z-index: -10;
-      background-color: $gray-500;
-      border-radius: 25%;
-      width: 130%;
-      height: 100%;
-      position: absolute;
-      inset: -100% -60% auto auto;
-      @include transition(all, 0.5s);
+      @include decorative-background-circle($gray-500, 25%, 130%, 100%, -100% -60% auto auto, -10);
     }
   }
   
@@ -134,9 +151,8 @@
     font-weight: 700;
     color: $gray-500;
     font-size: 16px;
-    margin: 1px 0;
+    margin: 1px 0 20px;
     max-width: 90%;
-    margin-bottom: 20px;
     line-height: 140%;
     @include transition(color);
     
@@ -165,7 +181,6 @@
     }
     
     @include breakpoint-medium {
-      display: block;
       max-height: none;
       opacity: 1;
       overflow: visible;
@@ -206,7 +221,7 @@
   }
 }
 
-.sf-simple-card-wrap {
+.sf-simple-cards__card-wrap {
   padding: 24px;
   position: relative;
   display: flex;
@@ -214,6 +229,37 @@
   overflow: hidden;
   height: 100%;
   
+  // Base hover setup for mobile no-expandable cards
+  .sf-simple-cards--no-expandable & {
+    @include transition(all, 0.5s);
+    transform: scale3d(1, 1, 1);
+    
+    &:hover {
+      transform: scale3d(1.03, 1.03, 1);
+      z-index: 10;
+      
+      .sf-simple-cards__card__title {
+        color: $gray-100;
+      }
+      
+      .sf-simple-cards__card__text,
+      .sf-button_underline {
+        color: $gray-200;
+      }
+      
+      .background-circle {
+        width: 150em;
+        height: 50em;
+        transform: translate3d(-5%, -10%, 0);
+      }
+      
+      &::before {
+        color: $gray-300;
+      }
+    }
+  }
+  
+  // Desktop styles and hover effects
   @include breakpoint-medium {
     padding: 40px;
     @include transition(all, 0.5s);
@@ -223,11 +269,11 @@
       transform: scale3d(1.02, 1.02, 1);
       z-index: 10;
       
-      .sf-simple-card__title {
+      .sf-simple-cards__card__title {
         color: $gray-100;
       }
       
-      .sf-simple-card__text,
+      .sf-simple-cards__card__text,
       .sf-button_underline {
         color: $gray-200;
       }
