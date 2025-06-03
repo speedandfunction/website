@@ -21,6 +21,7 @@ module.exports = {
         options: mainWidgets,
       },
     },
+    remove: ['orphan'],
     group: {
       hero: {
         label: 'Hero',
