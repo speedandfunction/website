@@ -1,91 +1,117 @@
-// Variable to track if we should scroll to filter
-let shouldScrollToFilter = false;
+// FilterHandler class
 
-// Anchor scrolling - Single responsibility: Handle scrolling to filter anchor
-const scrollToFilterAnchor = function () {
-  const filterElement = document.getElementById('filter');
-  if (filterElement) {
-    filterElement.scrollIntoView({ behavior: 'smooth' });
-    return true;
-  }
-  return false;
-};
-
-// URL hash management - Single responsibility: Manage #filter in URL
-const ensureFilterHashInUrl = function () {
-  const url = new URL(window.location.href);
-  url.hash = '#filter';
-  window.history.replaceState({}, '', url.toString());
-};
-
-// Filter scroll handling - Single responsibility: Handle post-transition scrolling
-const handleFilterScrolling = function (hasFilterAnchor) {
-  if (!hasFilterAnchor) {
-    shouldScrollToFilter = false;
-    return;
+class FilterHandler {
+  constructor(options = {}) {
+    this.shouldScrollToFilter = false;
+    this.maxScrollAttempts = options.maxScrollAttempts || 10;
+    this.filterElementId = options.filterElementId || 'filter';
   }
 
-  // Force the hash to be in the URL
-  ensureFilterHashInUrl();
+  scrollToFilterAnchor() {
+    const filterElement = document.getElementById(this.filterElementId);
+    if (filterElement) {
+      filterElement.scrollIntoView({ behavior: 'smooth' });
+      return true;
+    }
+    return false;
+  }
 
-  // Use requestAnimationFrame for better timing
-  const attemptScroll = (attempts = 0) => {
-    if (attempts > 10) {
-      shouldScrollToFilter = false;
+  static ensureFilterHashInUrl() {
+    const url = new URL(window.location.href);
+    url.hash = '#filter';
+    window.history.replaceState({}, '', url.toString());
+  }
+
+  handleFilterScrolling(hasFilterAnchor) {
+    if (!hasFilterAnchor) {
+      this.shouldScrollToFilter = false;
       return;
     }
 
-    requestAnimationFrame(() => {
-      if (scrollToFilterAnchor()) {
-        shouldScrollToFilter = false;
-      } else {
-        attemptScroll(attempts + 1);
+    FilterHandler.ensureFilterHashInUrl();
+
+    const attemptScroll = (attempts = 0) => {
+      if (attempts > this.maxScrollAttempts) {
+        this.shouldScrollToFilter = false;
+        return;
       }
-    });
-  };
 
-  attemptScroll();
-};
+      requestAnimationFrame(() => {
+        if (this.scrollToFilterAnchor()) {
+          this.shouldScrollToFilter = false;
+        } else {
+          attemptScroll(attempts + 1);
+        }
+      });
+    };
 
-// Filter state detection - Single responsibility: Determine if filter navigation occurred
-const shouldHandleFilterNavigation = function (targetUrl) {
-  return targetUrl.includes('#filter') || shouldScrollToFilter;
-};
+    attemptScroll();
+  }
 
-// Reset filter state - Single responsibility: Clean up filter tracking
-const resetFilterState = function () {
-  shouldScrollToFilter = false;
-};
+  shouldHandleFilterNavigation(targetUrl) {
+    return targetUrl.includes('#filter') || this.shouldScrollToFilter;
+  }
 
-// Main filter handler - Single responsibility: Coordinate all filter functionality
+  resetFilterState() {
+    this.shouldScrollToFilter = false;
+  }
+
+  setShouldScrollToFilter(value) {
+    this.shouldScrollToFilter = value;
+  }
+
+  getShouldScrollToFilter() {
+    return this.shouldScrollToFilter;
+  }
+
+  createEnhancedBarbaHandler(barbaEnterCallback) {
+    return (data) => {
+      const targetUrl = data.next.url.href;
+      const hasFilterAnchor = this.shouldHandleFilterNavigation(targetUrl);
+
+      if (hasFilterAnchor) {
+        this.handleFilterScrolling(hasFilterAnchor);
+      } else {
+        this.resetFilterState();
+      }
+
+      return barbaEnterCallback(data, hasFilterAnchor);
+    };
+  }
+}
+
+// Create default instance
+const defaultFilterHandler = new FilterHandler();
+
+// Main filter handler: Coordinate all filter functionality
 const enhanceBarbaWithFilterHandling = function (barbaEnterCallback) {
-  return function (data) {
-    // Check if we should scroll to filter
-    const targetUrl = data.next.url.href;
-    const hasFilterAnchor = shouldHandleFilterNavigation(targetUrl);
-
-    // Handle filter-specific behavior
-    if (hasFilterAnchor) {
-      handleFilterScrolling(hasFilterAnchor);
-    } else {
-      resetFilterState();
-    }
-
-    // Call the original enter callback with filter handling applied
-    return barbaEnterCallback(data, hasFilterAnchor);
-  };
+  return defaultFilterHandler.createEnhancedBarbaHandler(barbaEnterCallback);
 };
 
-// Function to set shouldScrollToFilter from external modules
+// Backward compatibility functions that use the default instance
+const shouldHandleFilterNavigation = function (targetUrl) {
+  return defaultFilterHandler.shouldHandleFilterNavigation(targetUrl);
+};
+
+const scrollToFilterAnchor = function () {
+  return defaultFilterHandler.scrollToFilterAnchor();
+};
+
+const resetFilterState = function () {
+  return defaultFilterHandler.resetFilterState();
+};
+
 const setShouldScrollToFilter = function (value) {
-  shouldScrollToFilter = value;
+  return defaultFilterHandler.setShouldScrollToFilter(value);
 };
 
 // Public API
 export {
+  FilterHandler,
   enhanceBarbaWithFilterHandling,
   shouldHandleFilterNavigation,
   scrollToFilterAnchor,
   resetFilterState,
   setShouldScrollToFilter,
+  defaultFilterHandler,
 };
