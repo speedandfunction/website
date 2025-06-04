@@ -81,7 +81,11 @@ main %}
         'Technology'] ] %} {% set tags = data.piecesFilters[filterType] %} {% if
         tags and tags.length %}
         <div class="filter-section">
-          <p class="filter-category">{{ filterLabel }}:</p>
+          <input type="checkbox" id="filter-toggle-{{ filterType }}" class="filter-category__toggle" {% if loop.first %}checked{% endif %}>
+          <div class="filter-category">
+            <span class="filter-category__title">{{ filterLabel }}:</span>
+            <label for="filter-toggle-{{ filterType }}" class="filter-category__expand-button"></label>
+          </div>
           <div class="filter-content">
             <input
               type="text"
