@@ -139,6 +139,11 @@ module.exports = {
     emailSubmissions: false,
     saveSubmissions: false,
     // Shortcut: 'G,J',
+    formWidgets: {
+      '@apostrophecms/form-text-field': {},
+      '@apostrophecms/form-textarea-field': {},
+      '@apostrophecms/form-checkboxes-field': {},
+    },
     fields: {
       add: {
         onSubmitSuccess: {
