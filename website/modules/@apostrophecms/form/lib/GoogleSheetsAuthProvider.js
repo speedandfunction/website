@@ -17,7 +17,7 @@ class GoogleSheetsAuthProvider {
   static createAuth(config) {
     const { serviceAccountEmail, serviceAccountPrivateKey } = config;
     const privateKey = serviceAccountPrivateKey.replace(/\\n/gu, '\n');
-    
+
     return new google.auth.JWT({
       email: serviceAccountEmail,
       key: privateKey,
@@ -28,7 +28,7 @@ class GoogleSheetsAuthProvider {
   static getSheetsAuthConfig() {
     const config = this.getConfigFromEnv();
     const auth = this.createAuth(config);
-    
+
     return {
       spreadsheetId: config.spreadsheetId,
       auth,
@@ -36,4 +36,4 @@ class GoogleSheetsAuthProvider {
   }
 }
 
-module.exports = GoogleSheetsAuthProvider; 
+module.exports = GoogleSheetsAuthProvider;

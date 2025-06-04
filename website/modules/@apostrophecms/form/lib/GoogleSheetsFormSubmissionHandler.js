@@ -1,42 +1,56 @@
-const { google } = require('googleapis');
 const { retryOperation } = require('../../../../utils/retryOperation');
-const GoogleSheetsAuthProvider = require('./GoogleSheetsAuthProvider');
-const FormDataFormatter = require('./FormDataFormatter');
-const GoogleSheetsClient = require('./GoogleSheetsClient');
-const GoogleSheetsErrorHandler = require('./GoogleSheetsErrorHandler');
 
-const DEFAULT_SHEET_RANGE = 'Sheet1!A1';
+const DEFAULT_APPEND_RANGE = 'Sheet1!A1';
+const DEFAULT_HEADER_CHECK_RANGE = 'Sheet1!A1:Z1';
 
 class GoogleSheetsFormSubmissionHandler {
   constructor(client, formatter, errorHandler, authProvider) {
-    if (!client || !formatter || !errorHandler) {
-      throw new Error('Client, formatter, and errorHandler are required parameters');
+    if (!client || !formatter || !errorHandler || !authProvider) {
+      throw new Error(
+        'Client, formatter, errorHandler, and authProvider are required parameters',
+      );
     }
-    
+
     if (!client.spreadsheetId) {
       throw new Error('Client must have a valid spreadsheetId');
     }
-    
+
     this.client = client;
     this.formatter = formatter;
     this.errorHandler = errorHandler;
     this.authProvider = authProvider;
   }
 
+  configureAuth() {
+    const authConfig = this.authProvider.getSheetsAuthConfig();
+    this.client.sheets = this.client.sheets.withAuth(authConfig.auth);
+  }
+
   async checkHeadersWithRetry() {
     try {
-      return await retryOperation(() => this.client.checkIfEmpty(), {
-        self: this.errorHandler.logger,
-        maxRetries: 3,
-        delayMs: 1000,
-      });
+      return await retryOperation(
+        () => this.client.checkIfEmpty(DEFAULT_HEADER_CHECK_RANGE),
+        {
+          self: this.errorHandler.logger,
+          maxRetries: 3,
+          delayMs: 1000,
+        },
+      );
     } catch (error) {
-      this.errorHandler.logError('Headers check failed after all attempts', error);
+      this.errorHandler.logError(
+        'Headers check failed after all attempts',
+        error,
+      );
       return null;
     }
   }
 
   async addHeadersIfNeeded(headers) {
+    if (!Array.isArray(headers) || headers.length === 0) {
+      this.errorHandler.logError('Invalid headers format', { headers });
+      return false;
+    }
+
     const needHeaders = await this.checkHeadersWithRetry();
 
     if (needHeaders === null) {
@@ -45,7 +59,7 @@ class GoogleSheetsFormSubmissionHandler {
 
     if (needHeaders) {
       try {
-        await this.client.appendValues(DEFAULT_SHEET_RANGE, [headers]);
+        await this.client.appendValues(DEFAULT_APPEND_RANGE, [headers]);
       } catch (error) {
         this.errorHandler.logError('Failed to add headers', error);
         return false;
@@ -56,61 +70,37 @@ class GoogleSheetsFormSubmissionHandler {
   }
 
   async handle(formSubmission) {
+    if (!formSubmission) {
+      this.errorHandler.logError('Invalid form submission', { formSubmission });
+      return false;
+    }
+
     try {
-      const { headers, rowData } = this.formatter.formatForSpreadsheet(formSubmission);
+      this.configureAuth();
+
+      const { headers, rowData } =
+        this.formatter.formatForSpreadsheet(formSubmission);
+
+      if (!Array.isArray(headers) || !Array.isArray(rowData)) {
+        this.errorHandler.logError('Invalid formatter output', {
+          headers,
+          rowData,
+        });
+        return false;
+      }
 
       const headersAdded = await this.addHeadersIfNeeded(headers);
       if (!headersAdded) {
         return false;
       }
 
-      await this.client.appendValues(DEFAULT_SHEET_RANGE, [rowData]);
+      await this.client.appendValues(DEFAULT_APPEND_RANGE, [rowData]);
       return true;
     } catch (error) {
       this.errorHandler.logError('Unexpected error', error);
       return false;
     }
   }
-
-  // Backward compatibility methods
-  async sendFormDataToGoogleSheets(formData) {
-    return this.handle(formData);
-  }
-
-  formatFormData(formData) {
-    return this.formatter.formatForSpreadsheet(formData);
-  }
-
-  async checkNeedHeaders() {
-    try {
-      return await this.client.checkIfEmpty();
-    } catch (err) {
-      this.errorHandler.logError('Headers check error', err);
-      return false;
-    }
-  }
-
-  async appendToSheet(values) {
-    try {
-      return await this.client.appendValues(DEFAULT_SHEET_RANGE, values);
-    } catch (err) {
-      this.errorHandler.logError('Append error', err);
-      throw err;
-    }
-  }
-
-  handleSheetsError(err) {
-    const formattedError = this.errorHandler.formatError(err, 'Sheets operation', this.client.spreadsheetId);
-    throw formattedError;
-  }
-
-  static getSheetsAuthConfig() {
-    return GoogleSheetsAuthProvider.getSheetsAuthConfig();
-  }
-
-  static formatFormData(formData) {
-    return FormDataFormatter.formatForSpreadsheet(formData);
-  }
 }
 
-module.exports = GoogleSheetsFormSubmissionHandler; 
+module.exports = GoogleSheetsFormSubmissionHandler;

@@ -1,44 +1,43 @@
-class MyOwnError extends Error {
-  constructor(message) {
-    super(message);
-    // write to log.
-    this.name = 'MyOwnError';
-  }
-}
-
-const APPEND_RANGE = 'Sheet1!A1';
-
 class GoogleSheetsClient {
   constructor(sheets, spreadsheetId) {
+    if (!sheets) {
+      throw new Error('Sheets service is required');
+    }
+    if (!spreadsheetId) {
+      throw new Error('Spreadsheet ID is required');
+    }
     this.sheets = sheets;
     this.spreadsheetId = spreadsheetId;
   }
 
-  async checkIfEmpty(range = 'Sheet1!A1:Z1') {
-    try {
-      const checkResponse = await this.sheets.spreadsheets.values.get({
-        spreadsheetId: this.spreadsheetId,
-        range,
-      });
-
-      return !checkResponse.data?.values?.length;
-    } catch (err) {
-      throw err;
+  async checkIfEmpty(range) {
+    if (!range) {
+      throw new Error('Range is required');
     }
+
+    const checkResponse = await this.sheets.spreadsheets.values.get({
+      spreadsheetId: this.spreadsheetId,
+      range,
+    });
+
+    return !checkResponse.data?.values?.length;
   }
 
-  async appendValues(range = APPEND_RANGE, values) {
-    try {
-      return await this.sheets.spreadsheets.values.append({
-        spreadsheetId: this.spreadsheetId,
-        range,
-        valueInputOption: 'RAW',
-        resource: { values },
-      });
-    } catch (err) {
-      throw err;
+  async appendValues(range, values) {
+    if (!range) {
+      throw new Error('Range is required');
     }
+    if (!values || !Array.isArray(values)) {
+      throw new Error('Values must be an array');
+    }
+
+    return await this.sheets.spreadsheets.values.append({
+      spreadsheetId: this.spreadsheetId,
+      range,
+      valueInputOption: 'RAW',
+      resource: { values },
+    });
   }
 }
 
-module.exports = GoogleSheetsClient; 
+module.exports = GoogleSheetsClient;

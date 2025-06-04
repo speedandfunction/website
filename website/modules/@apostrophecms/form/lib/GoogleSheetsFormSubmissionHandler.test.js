@@ -1,115 +1,163 @@
 const GoogleSheetsFormSubmissionHandler = require('./GoogleSheetsFormSubmissionHandler');
 
-// Mock all dependencies
 jest.mock('./GoogleSheetsAuthProvider');
 jest.mock('./FormDataFormatter');
 jest.mock('./GoogleSheetsClient');
 jest.mock('./GoogleSheetsErrorHandler');
 jest.mock('../../../../utils/retryOperation');
 
-const GoogleSheetsAuthProvider = require('./GoogleSheetsAuthProvider');
-const FormDataFormatter = require('./FormDataFormatter');
-const GoogleSheetsClient = require('./GoogleSheetsClient');
-const GoogleSheetsErrorHandler = require('./GoogleSheetsErrorHandler');
 const { retryOperation } = require('../../../../utils/retryOperation');
 
-describe('GoogleSheetsFormSubmissionHandler', () => {
-  let mockSelf;
-  let mockClient;
-  let mockFormatter;
-  let mockErrorHandler;
-  let mockAuthProvider;
+describe('GoogleSheetsFormSubmission Handler', () => {
+  const mockSelf = {
+    apos: {
+      util: {
+        error: jest.fn(),
+      },
+    },
+  };
+
+  const mockClient = {
+    spreadsheetId: 'test-spreadsheet-id',
+    checkIfEmpty: jest.fn(),
+    appendValues: jest.fn(),
+    sheets: {
+      withAuth: jest.fn().mockReturnThis(),
+    },
+  };
+
+  const mockFormatter = {
+    formatForSpreadsheet: jest.fn(),
+  };
+
+  const mockErrorHandler = {
+    logError: jest.fn(),
+    formatError: jest.fn(),
+    logger: mockSelf,
+  };
+
+  const mockAuthProvider = {
+    getSheetsAuthConfig: jest.fn().mockReturnValue({
+      auth: 'mock-auth',
+    }),
+  };
 
   beforeEach(() => {
     jest.clearAllMocks();
-
-    mockSelf = {
-      apos: {
-        util: {
-          error: jest.fn(),
-        },
-      },
-    };
-
-    mockClient = {
-      spreadsheetId: 'test-spreadsheet-id',
-      checkIfEmpty: jest.fn(),
-      appendValues: jest.fn(),
-    };
-
-    mockFormatter = {
-      formatForSpreadsheet: jest.fn(),
-    };
-
-    mockErrorHandler = {
-      logError: jest.fn(),
-      formatError: jest.fn(),
-      logger: mockSelf,
-    };
-
-    mockAuthProvider = {
-      getSheetsAuthConfig: jest.fn(),
-    };
-
-    GoogleSheetsClient.mockImplementation(() => mockClient);
-    GoogleSheetsAuthProvider.getSheetsAuthConfig.mockReturnValue({
-      spreadsheetId: 'test-spreadsheet-id',
-      auth: 'mock-auth',
-    });
   });
 
   describe('constructor with dependency injection', () => {
+    const expectConstructorToThrow = (
+      client,
+      formatter,
+      errorHandler,
+      authProvider,
+      message,
+    ) => {
+      const constructor = () =>
+        new GoogleSheetsFormSubmissionHandler(
+          client,
+          formatter,
+          errorHandler,
+          authProvider,
+        );
+      expect(constructor).toThrow(message);
+    };
+
     test('uses injected dependencies when provided', () => {
       const handler = new GoogleSheetsFormSubmissionHandler(
         mockClient,
         mockFormatter,
         mockErrorHandler,
-        mockAuthProvider
+        mockAuthProvider,
       );
 
       expect(handler.client).toBe(mockClient);
       expect(handler.formatter).toBe(mockFormatter);
       expect(handler.errorHandler).toBe(mockErrorHandler);
+      expect(handler.authProvider).toBe(mockAuthProvider);
     });
 
-    test('throws error when required dependencies are missing', () => {
-      expect(() => {
-        new GoogleSheetsFormSubmissionHandler(null, mockFormatter, mockErrorHandler);
-      }).toThrow('Client, formatter, and errorHandler are required parameters');
+    test('throws error when client is missing', () => {
+      expectConstructorToThrow(
+        null,
+        mockFormatter,
+        mockErrorHandler,
+        mockAuthProvider,
+        'Client, formatter, errorHandler, and authProvider are required parameters',
+      );
+    });
 
-      expect(() => {
-        new GoogleSheetsFormSubmissionHandler(mockClient, null, mockErrorHandler);
-      }).toThrow('Client, formatter, and errorHandler are required parameters');
+    test('throws error when formatter is missing', () => {
+      expectConstructorToThrow(
+        mockClient,
+        null,
+        mockErrorHandler,
+        mockAuthProvider,
+        'Client, formatter, errorHandler, and authProvider are required parameters',
+      );
+    });
 
-      expect(() => {
-        new GoogleSheetsFormSubmissionHandler(mockClient, mockFormatter, null);
-      }).toThrow('Client, formatter, and errorHandler are required parameters');
+    test('throws error when errorHandler is missing', () => {
+      expectConstructorToThrow(
+        mockClient,
+        mockFormatter,
+        null,
+        mockAuthProvider,
+        'Client, formatter, errorHandler, and authProvider are required parameters',
+      );
+    });
+
+    test('throws error when authProvider is missing', () => {
+      expectConstructorToThrow(
+        mockClient,
+        mockFormatter,
+        mockErrorHandler,
+        null,
+        'Client, formatter, errorHandler, and authProvider are required parameters',
+      );
     });
 
     test('throws error when client has no spreadsheetId', () => {
       const clientWithoutId = { ...mockClient };
       delete clientWithoutId.spreadsheetId;
 
-      expect(() => {
-        new GoogleSheetsFormSubmissionHandler(
-          clientWithoutId,
-          mockFormatter,
-          mockErrorHandler
-        );
-      }).toThrow('Client must have a valid spreadsheetId');
+      expectConstructorToThrow(
+        clientWithoutId,
+        mockFormatter,
+        mockErrorHandler,
+        mockAuthProvider,
+        'Client must have a valid spreadsheetId',
+      );
+    });
+  });
+
+  describe('configureAuth', () => {
+    test('configures auth using authProvider', () => {
+      const handler = new GoogleSheetsFormSubmissionHandler(
+        mockClient,
+        mockFormatter,
+        mockErrorHandler,
+        mockAuthProvider,
+      );
+
+      handler.configureAuth();
+
+      expect(mockAuthProvider.getSheetsAuthConfig).toHaveBeenCalled();
+      expect(mockClient.sheets.withAuth).toHaveBeenCalledWith('mock-auth');
     });
   });
 
   describe('handle', () => {
-    let handler;
+    const handler = new GoogleSheetsFormSubmissionHandler(
+      mockClient,
+      mockFormatter,
+      mockErrorHandler,
+      mockAuthProvider,
+    );
 
     beforeEach(() => {
-      handler = new GoogleSheetsFormSubmissionHandler(
-        mockClient,
-        mockFormatter,
-        mockErrorHandler,
-        mockAuthProvider
-      );
+      jest.clearAllMocks();
     });
 
     test('successfully handles form submission', async () => {
@@ -120,16 +168,24 @@ describe('GoogleSheetsFormSubmissionHandler', () => {
       };
 
       mockFormatter.formatForSpreadsheet.mockReturnValue(formattedData);
-      retryOperation.mockResolvedValue(true); // needs headers
+
+      retryOperation.mockResolvedValue(true);
       mockClient.appendValues.mockResolvedValue({ success: true });
 
       const result = await handler.handle(formData);
 
       expect(result).toBe(true);
+      expect(mockAuthProvider.getSheetsAuthConfig).toHaveBeenCalled();
+      expect(mockClient.sheets.withAuth).toHaveBeenCalledWith('mock-auth');
       expect(mockFormatter.formatForSpreadsheet).toHaveBeenCalledWith(formData);
-      expect(mockClient.appendValues).toHaveBeenCalledTimes(2); // once for headers, once for data
-      expect(mockClient.appendValues).toHaveBeenCalledWith('Sheet1!A1', [formattedData.headers]);
-      expect(mockClient.appendValues).toHaveBeenCalledWith('Sheet1!A1', [formattedData.rowData]);
+
+      expect(mockClient.appendValues).toHaveBeenCalledTimes(2);
+      expect(mockClient.appendValues).toHaveBeenCalledWith('Sheet1!A1', [
+        formattedData.headers,
+      ]);
+      expect(mockClient.appendValues).toHaveBeenCalledWith('Sheet1!A1', [
+        formattedData.rowData,
+      ]);
     });
 
     test('returns false when headers check fails', async () => {
@@ -138,62 +194,62 @@ describe('GoogleSheetsFormSubmissionHandler', () => {
         headers: ['ID', 'Name'],
         rowData: ['123', 'John'],
       });
-      retryOperation.mockResolvedValue(null); // headers check failed
+
+      retryOperation.mockResolvedValue(null);
 
       const result = await handler.handle(formData);
 
       expect(result).toBe(false);
+      expect(mockAuthProvider.getSheetsAuthConfig).toHaveBeenCalled();
+      expect(mockClient.sheets.withAuth).toHaveBeenCalledWith('mock-auth');
     });
 
     test('handles unexpected errors', async () => {
       const formData = { name: 'John' };
       const error = new Error('Unexpected error');
-      mockFormatter.formatForSpreadsheet.mockImplementation(() => {
+      const throwError = () => {
         throw error;
-      });
+      };
+      mockFormatter.formatForSpreadsheet.mockImplementation(throwError);
 
       const result = await handler.handle(formData);
 
       expect(result).toBe(false);
       expect(mockErrorHandler.logError).toHaveBeenCalledWith(
         'Unexpected error',
-        error
+        error,
       );
+      expect(mockAuthProvider.getSheetsAuthConfig).toHaveBeenCalled();
+      expect(mockClient.sheets.withAuth).toHaveBeenCalledWith('mock-auth');
     });
   });
 
   describe('checkHeadersWithRetry', () => {
-    test('successfully checks headers with retry', async () => {
-      const handler = new GoogleSheetsFormSubmissionHandler(
-        mockClient,
-        mockFormatter,
-        mockErrorHandler,
-        mockAuthProvider
-      );
+    const handler = new GoogleSheetsFormSubmissionHandler(
+      mockClient,
+      mockFormatter,
+      mockErrorHandler,
+      mockAuthProvider,
+    );
 
+    beforeEach(() => {
+      jest.clearAllMocks();
+    });
+
+    test('successfully checks headers with retry', async () => {
       retryOperation.mockResolvedValue(true);
 
       const result = await handler.checkHeadersWithRetry();
 
       expect(result).toBe(true);
-      expect(retryOperation).toHaveBeenCalledWith(
-        expect.any(Function),
-        {
-          self: mockErrorHandler.logger,
-          maxRetries: 3,
-          delayMs: 1000,
-        }
-      );
+      expect(retryOperation).toHaveBeenCalledWith(expect.any(Function), {
+        self: mockErrorHandler.logger,
+        maxRetries: 3,
+        delayMs: 1000,
+      });
     });
 
     test('handles retry failure', async () => {
-      const handler = new GoogleSheetsFormSubmissionHandler(
-        mockClient,
-        mockFormatter,
-        mockErrorHandler,
-        mockAuthProvider
-      );
-
       const error = new Error('Retry failed');
       retryOperation.mockRejectedValue(error);
 
@@ -202,42 +258,8 @@ describe('GoogleSheetsFormSubmissionHandler', () => {
       expect(result).toBe(null);
       expect(mockErrorHandler.logError).toHaveBeenCalledWith(
         'Headers check failed after all attempts',
-        error
+        error,
       );
     });
   });
-
-  describe('backward compatibility methods', () => {
-    let handler;
-
-    beforeEach(() => {
-      handler = new GoogleSheetsFormSubmissionHandler(
-        mockClient,
-        mockFormatter,
-        mockErrorHandler,
-        mockAuthProvider
-      );
-    });
-
-    test('sendFormDataToGoogleSheets delegates to handle', async () => {
-      const formData = { name: 'John' };
-      handler.handle = jest.fn().mockResolvedValue(true);
-
-      const result = await handler.sendFormDataToGoogleSheets(formData);
-
-      expect(result).toBe(true);
-      expect(handler.handle).toHaveBeenCalledWith(formData);
-    });
-
-    test('formatFormData delegates to formatter', () => {
-      const formData = { name: 'John' };
-      const formatted = { headers: ['Name'], rowData: ['John'] };
-      mockFormatter.formatForSpreadsheet.mockReturnValue(formatted);
-
-      const result = handler.formatFormData(formData);
-
-      expect(result).toBe(formatted);
-      expect(mockFormatter.formatForSpreadsheet).toHaveBeenCalledWith(formData);
-    });
-  });
-}); 
+});

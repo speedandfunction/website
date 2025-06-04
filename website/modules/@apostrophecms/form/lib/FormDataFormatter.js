@@ -38,4 +38,4 @@ class FormDataFormatter {
   }
 }
 
-module.exports = FormDataFormatter; 
+module.exports = FormDataFormatter;
