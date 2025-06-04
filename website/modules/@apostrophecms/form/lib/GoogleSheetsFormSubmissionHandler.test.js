@@ -1,7 +1,7 @@
 const GoogleSheetsFormSubmissionHandler = require('./GoogleSheetsFormSubmissionHandler');
 
-jest.mock('./GoogleSheetsAuthProvider');
-jest.mock('./FormDataFormatter');
+jest.mock('./getSheetsAuthConfig');
+jest.mock('./formatForSpreadsheet');
 jest.mock('./GoogleSheetsClient');
 jest.mock('./GoogleSheetsErrorHandler');
 jest.mock('../../../../utils/retryOperation');

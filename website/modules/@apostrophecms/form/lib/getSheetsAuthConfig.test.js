@@ -1,6 +1,6 @@
 const { google } = require('googleapis');
 const getEnv = require('../../../../utils/env');
-const { getSheetsAuthConfig } = require('./GoogleSheetsAuthProvider');
+const { getSheetsAuthConfig } = require('./getSheetsAuthConfig');
 
 jest.mock('../../../../utils/env', () => jest.fn());
 
@@ -12,7 +12,7 @@ jest.mock('googleapis', () => ({
   },
 }));
 
-describe('GoogleSheetsAuthProvider', () => {
+describe('getSheetsAuthConfig', () => {
   const mockConfig = {
     SPREADSHEET_ID: 'test-spreadsheet-id',
     SERVICE_ACCOUNT_EMAIL: 'test@example.com',

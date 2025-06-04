@@ -1,6 +1,6 @@
-const { formatForSpreadsheet } = require('./FormDataFormatter');
+const { formatForSpreadsheet } = require('./formatForSpreadsheet');
 
-describe('FormDataFormatter', () => {
+describe('formatForSpreadsheet', () => {
   const mockTimestamp = 1234567890;
   const mockISOString = '2023-01-01T00:00:00.000Z';
 
