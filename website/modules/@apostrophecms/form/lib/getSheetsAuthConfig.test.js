@@ -59,21 +59,40 @@ describe('getSheetsAuthConfig', () => {
     });
   });
 
-  test('handles missing environment variables', () => {
-    getEnv.mockImplementation(() => undefined);
-
-    expect(() => {
-      getSheetsAuthConfig();
-    }).toThrow("Cannot read properties of undefined (reading 'replace')");
-  });
-
-  test('handles JWT creation error', () => {
-    mockJWT.mockImplementation(() => {
-      throw new Error('JWT creation failed');
+  test('throws error for missing private key', () => {
+    getEnv.mockImplementation((key) => {
+      if (key === 'SERVICE_ACCOUNT_PRIVATE_KEY') {
+        return undefined;
+      }
+      return mockConfig[key];
     });
 
     expect(() => {
       getSheetsAuthConfig();
-    }).toThrow('JWT creation failed');
+    }).toThrow('Invalid service account private key format');
+  });
+
+  test('throws error for non-string private key', () => {
+    getEnv.mockImplementation((key) => {
+      if (key === 'SERVICE_ACCOUNT_PRIVATE_KEY') {
+        // Using a non-string value to test type validation
+        return 123;
+      }
+      return mockConfig[key];
+    });
+
+    expect(() => {
+      getSheetsAuthConfig();
+    }).toThrow('Invalid service account private key format');
+  });
+
+  test('throws error for JWT creation failure', () => {
+    mockJWT.mockImplementation(() => {
+      throw new Error('Invalid key format');
+    });
+
+    expect(() => {
+      getSheetsAuthConfig();
+    }).toThrow('Failed to create JWT authentication: Invalid key format');
   });
 });

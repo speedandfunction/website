@@ -17,13 +17,25 @@ const getConfigFromEnv = () => {
 
 const createAuth = (config) => {
   const { serviceAccountEmail, serviceAccountPrivateKey } = config;
+
+  if (
+    !serviceAccountPrivateKey ||
+    typeof serviceAccountPrivateKey !== 'string'
+  ) {
+    throw new Error('Invalid service account private key format');
+  }
+
   const privateKey = serviceAccountPrivateKey.replace(/\\n/gu, '\n');
 
-  return new google.auth.JWT({
-    email: serviceAccountEmail,
-    key: privateKey,
-    scopes: SCOPES,
-  });
+  try {
+    return new google.auth.JWT({
+      email: serviceAccountEmail,
+      key: privateKey,
+      scopes: SCOPES,
+    });
+  } catch (error) {
+    throw new Error(`Failed to create JWT authentication: ${error.message}`);
+  }
 };
 
 const getSheetsAuthConfig = () => {
