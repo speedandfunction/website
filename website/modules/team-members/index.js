@@ -6,7 +6,6 @@ module.exports = {
     pluralLabel: 'Team Leaders',
     shortcut: 'G,K',
     sort: {
-      order: 1,
       title: 1,
       updatedAt: -1,
     },
@@ -58,13 +57,6 @@ module.exports = {
         placeholder: 'linkedin.com/in/your-profile',
         required: true,
       },
-      order: {
-        label: 'Order',
-        help: 'Use this field to order the team. Sorting is acsending, starting from 1',
-        type: 'integer',
-        min: 1,
-        def: 1,
-      },
     },
     group: {
       basics: {
@@ -72,7 +64,6 @@ module.exports = {
         fields: [
           'title',
           'position',
-          'order',
           'experience',
           'linkedin',
           'headshot',
@@ -86,9 +77,6 @@ module.exports = {
       title: {
         label: 'Name',
         name: 'title',
-      },
-      order: {
-        label: 'Order',
       },
       position: {
         label: 'Position',
