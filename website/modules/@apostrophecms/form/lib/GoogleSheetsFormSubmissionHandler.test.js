@@ -26,9 +26,7 @@ describe('GoogleSheetsFormSubmission Handler', () => {
     },
   };
 
-  const mockFormatter = {
-    formatForSpreadsheet: jest.fn(),
-  };
+  const mockFormatForSpreadsheet = jest.fn();
 
   const mockErrorHandler = {
     logError: jest.fn(),
@@ -36,85 +34,82 @@ describe('GoogleSheetsFormSubmission Handler', () => {
     logger: mockSelf,
   };
 
-  const mockAuthProvider = {
-    getSheetsAuthConfig: jest.fn().mockReturnValue({
-      auth: 'mock-auth',
-    }),
-  };
+  const mockGetSheetsAuthConfig = jest.fn();
 
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  describe('constructor with dependency injection', () => {
-    const expectConstructorToThrow = (
-      client,
-      formatter,
-      errorHandler,
-      authProvider,
-      message,
-    ) => {
-      const constructor = () =>
-        new GoogleSheetsFormSubmissionHandler(
-          client,
-          formatter,
-          errorHandler,
-          authProvider,
-        );
-      expect(constructor).toThrow(message);
-    };
+  const expectConstructorToThrow = (constructor, message) => {
+    expect(() => {
+      constructor();
+    }).toThrow(message);
+  };
 
+  describe('constructor with dependency injection', () => {
     test('uses injected dependencies when provided', () => {
       const handler = new GoogleSheetsFormSubmissionHandler(
         mockClient,
-        mockFormatter,
+        mockFormatForSpreadsheet,
         mockErrorHandler,
-        mockAuthProvider,
+        mockGetSheetsAuthConfig,
       );
 
       expect(handler.client).toBe(mockClient);
-      expect(handler.formatter).toBe(mockFormatter);
+      expect(handler.formatForSpreadsheet).toBe(mockFormatForSpreadsheet);
       expect(handler.errorHandler).toBe(mockErrorHandler);
-      expect(handler.authProvider).toBe(mockAuthProvider);
+      expect(handler.getSheetsAuthConfig).toBe(mockGetSheetsAuthConfig);
     });
 
     test('throws error when client is missing', () => {
       expectConstructorToThrow(
-        null,
-        mockFormatter,
-        mockErrorHandler,
-        mockAuthProvider,
-        'Client, formatter, errorHandler, and authProvider are required parameters',
+        () =>
+          new GoogleSheetsFormSubmissionHandler(
+            undefined,
+            mockFormatForSpreadsheet,
+            mockErrorHandler,
+            mockGetSheetsAuthConfig,
+          ),
+        'Client, formatForSpreadsheet, errorHandler, and getSheetsAuthConfig are required parameters',
       );
     });
 
-    test('throws error when formatter is missing', () => {
+    test('throws error when formatForSpreadsheet is missing', () => {
       expectConstructorToThrow(
-        mockClient,
-        null,
-        mockErrorHandler,
-        mockAuthProvider,
-        'Client, formatter, errorHandler, and authProvider are required parameters',
+        () =>
+          new GoogleSheetsFormSubmissionHandler(
+            mockClient,
+            undefined,
+            mockErrorHandler,
+            mockGetSheetsAuthConfig,
+          ),
+        'Client, formatForSpreadsheet, errorHandler, and getSheetsAuthConfig are required parameters',
       );
     });
 
     test('throws error when errorHandler is missing', () => {
       expectConstructorToThrow(
-        mockClient,
-        mockFormatter,
-        null,
-        mockAuthProvider,
-        'Client, formatter, errorHandler, and authProvider are required parameters',
+        () =>
+          new GoogleSheetsFormSubmissionHandler(
+            mockClient,
+            mockFormatForSpreadsheet,
+            undefined,
+            mockGetSheetsAuthConfig,
+          ),
+        'Client, formatForSpreadsheet, errorHandler, and getSheetsAuthConfig are required parameters',
       );
     });
 
-    test('throws error when authProvider is missing', () => {
+    test('throws error when getSheetsAuthConfig is missing', () => {
       expectConstructorToThrow(
-        mockClient,
-        mockFormatter,
-        mockErrorHandler,
-        null,
-        'Client, formatter, errorHandler, and authProvider are required parameters',
+        () =>
+          new GoogleSheetsFormSubmissionHandler(
+            mockClient,
+            mockFormatForSpreadsheet,
+            mockErrorHandler,
+            undefined,
+          ),
+        'Client, formatForSpreadsheet, errorHandler, and getSheetsAuthConfig are required parameters',
       );
     });
 
@@ -123,27 +118,31 @@ describe('GoogleSheetsFormSubmission Handler', () => {
       delete clientWithoutId.spreadsheetId;
 
       expectConstructorToThrow(
-        clientWithoutId,
-        mockFormatter,
-        mockErrorHandler,
-        mockAuthProvider,
+        () =>
+          new GoogleSheetsFormSubmissionHandler(
+            clientWithoutId,
+            mockFormatForSpreadsheet,
+            mockErrorHandler,
+            mockGetSheetsAuthConfig,
+          ),
         'Client must have a valid spreadsheetId',
       );
     });
   });
 
   describe('configureAuth', () => {
-    test('configures auth using authProvider', () => {
+    test('configures auth using getSheetsAuthConfig', () => {
       const handler = new GoogleSheetsFormSubmissionHandler(
         mockClient,
-        mockFormatter,
+        mockFormatForSpreadsheet,
         mockErrorHandler,
-        mockAuthProvider,
+        mockGetSheetsAuthConfig,
       );
+      mockGetSheetsAuthConfig.mockReturnValue({ auth: 'mock-auth' });
 
       handler.configureAuth();
 
-      expect(mockAuthProvider.getSheetsAuthConfig).toHaveBeenCalled();
+      expect(mockGetSheetsAuthConfig).toHaveBeenCalled();
       expect(mockClient.sheets.withAuth).toHaveBeenCalledWith('mock-auth');
     });
   });
@@ -151,9 +150,9 @@ describe('GoogleSheetsFormSubmission Handler', () => {
   describe('handle', () => {
     const handler = new GoogleSheetsFormSubmissionHandler(
       mockClient,
-      mockFormatter,
+      mockFormatForSpreadsheet,
       mockErrorHandler,
-      mockAuthProvider,
+      mockGetSheetsAuthConfig,
     );
 
     beforeEach(() => {
@@ -167,7 +166,7 @@ describe('GoogleSheetsFormSubmission Handler', () => {
         rowData: ['123', '2023-01-01', 'John', 'john@example.com'],
       };
 
-      mockFormatter.formatForSpreadsheet.mockReturnValue(formattedData);
+      mockFormatForSpreadsheet.mockReturnValue(formattedData);
 
       retryOperation.mockResolvedValue(true);
       mockClient.appendValues.mockResolvedValue({ success: true });
@@ -175,9 +174,9 @@ describe('GoogleSheetsFormSubmission Handler', () => {
       const result = await handler.handle(formData);
 
       expect(result).toBe(true);
-      expect(mockAuthProvider.getSheetsAuthConfig).toHaveBeenCalled();
+      expect(mockGetSheetsAuthConfig).toHaveBeenCalled();
       expect(mockClient.sheets.withAuth).toHaveBeenCalledWith('mock-auth');
-      expect(mockFormatter.formatForSpreadsheet).toHaveBeenCalledWith(formData);
+      expect(mockFormatForSpreadsheet).toHaveBeenCalledWith(formData);
 
       expect(mockClient.appendValues).toHaveBeenCalledTimes(2);
       expect(mockClient.appendValues).toHaveBeenCalledWith('Sheet1!A1', [
@@ -190,7 +189,7 @@ describe('GoogleSheetsFormSubmission Handler', () => {
 
     test('returns false when headers check fails', async () => {
       const formData = { name: 'John' };
-      mockFormatter.formatForSpreadsheet.mockReturnValue({
+      mockFormatForSpreadsheet.mockReturnValue({
         headers: ['ID', 'Name'],
         rowData: ['123', 'John'],
       });
@@ -200,7 +199,7 @@ describe('GoogleSheetsFormSubmission Handler', () => {
       const result = await handler.handle(formData);
 
       expect(result).toBe(false);
-      expect(mockAuthProvider.getSheetsAuthConfig).toHaveBeenCalled();
+      expect(mockGetSheetsAuthConfig).toHaveBeenCalled();
       expect(mockClient.sheets.withAuth).toHaveBeenCalledWith('mock-auth');
     });
 
@@ -210,7 +209,7 @@ describe('GoogleSheetsFormSubmission Handler', () => {
       const throwError = () => {
         throw error;
       };
-      mockFormatter.formatForSpreadsheet.mockImplementation(throwError);
+      mockFormatForSpreadsheet.mockImplementation(throwError);
 
       const result = await handler.handle(formData);
 
@@ -219,7 +218,7 @@ describe('GoogleSheetsFormSubmission Handler', () => {
         'Unexpected error',
         error,
       );
-      expect(mockAuthProvider.getSheetsAuthConfig).toHaveBeenCalled();
+      expect(mockGetSheetsAuthConfig).toHaveBeenCalled();
       expect(mockClient.sheets.withAuth).toHaveBeenCalledWith('mock-auth');
     });
   });
@@ -227,9 +226,9 @@ describe('GoogleSheetsFormSubmission Handler', () => {
   describe('checkHeadersWithRetry', () => {
     const handler = new GoogleSheetsFormSubmissionHandler(
       mockClient,
-      mockFormatter,
+      mockFormatForSpreadsheet,
       mockErrorHandler,
-      mockAuthProvider,
+      mockGetSheetsAuthConfig,
     );
 
     beforeEach(() => {

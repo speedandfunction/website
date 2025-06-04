@@ -4,10 +4,15 @@ const DEFAULT_APPEND_RANGE = 'Sheet1!A1';
 const DEFAULT_HEADER_CHECK_RANGE = 'Sheet1!A1:Z1';
 
 class GoogleSheetsFormSubmissionHandler {
-  constructor(client, formatter, errorHandler, authProvider) {
-    if (!client || !formatter || !errorHandler || !authProvider) {
+  constructor(client, formatForSpreadsheet, errorHandler, getSheetsAuthConfig) {
+    if (
+      !client ||
+      !formatForSpreadsheet ||
+      !errorHandler ||
+      !getSheetsAuthConfig
+    ) {
       throw new Error(
-        'Client, formatter, errorHandler, and authProvider are required parameters',
+        'Client, formatForSpreadsheet, errorHandler, and getSheetsAuthConfig are required parameters',
       );
     }
 
@@ -16,13 +21,13 @@ class GoogleSheetsFormSubmissionHandler {
     }
 
     this.client = client;
-    this.formatter = formatter;
+    this.formatForSpreadsheet = formatForSpreadsheet;
     this.errorHandler = errorHandler;
-    this.authProvider = authProvider;
+    this.getSheetsAuthConfig = getSheetsAuthConfig;
   }
 
   configureAuth() {
-    const authConfig = this.authProvider.getSheetsAuthConfig();
+    const authConfig = this.getSheetsAuthConfig();
     this.client.sheets = this.client.sheets.withAuth(authConfig.auth);
   }
 
@@ -78,8 +83,7 @@ class GoogleSheetsFormSubmissionHandler {
     try {
       this.configureAuth();
 
-      const { headers, rowData } =
-        this.formatter.formatForSpreadsheet(formSubmission);
+      const { headers, rowData } = this.formatForSpreadsheet(formSubmission);
 
       if (!Array.isArray(headers) || !Array.isArray(rowData)) {
         this.errorHandler.logError('Invalid formatter output', {

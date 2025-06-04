@@ -1,39 +1,41 @@
 const { google } = require('googleapis');
-const { getEnv } = require('../../../../utils/env');
+const getEnv = require('../../../../utils/env');
 
-class GoogleSheetsAuthProvider {
-  static getConfigFromEnv() {
-    const spreadsheetId = getEnv('SPREADSHEET_ID');
-    const serviceAccountEmail = getEnv('SERVICE_ACCOUNT_EMAIL');
-    const serviceAccountPrivateKey = getEnv('SERVICE_ACCOUNT_PRIVATE_KEY');
+const SCOPES = ['https://www.googleapis.com/auth/spreadsheets'];
 
-    return {
-      spreadsheetId,
-      serviceAccountEmail,
-      serviceAccountPrivateKey,
-    };
-  }
+const getConfigFromEnv = () => {
+  const spreadsheetId = getEnv('SPREADSHEET_ID');
+  const serviceAccountEmail = getEnv('SERVICE_ACCOUNT_EMAIL');
+  const serviceAccountPrivateKey = getEnv('SERVICE_ACCOUNT_PRIVATE_KEY');
 
-  static createAuth(config) {
-    const { serviceAccountEmail, serviceAccountPrivateKey } = config;
-    const privateKey = serviceAccountPrivateKey.replace(/\\n/gu, '\n');
+  return {
+    spreadsheetId,
+    serviceAccountEmail,
+    serviceAccountPrivateKey,
+  };
+};
 
-    return new google.auth.JWT({
-      email: serviceAccountEmail,
-      key: privateKey,
-      scopes: ['https://www.googleapis.com/auth/spreadsheets'],
-    });
-  }
+const createAuth = (config) => {
+  const { serviceAccountEmail, serviceAccountPrivateKey } = config;
+  const privateKey = serviceAccountPrivateKey.replace(/\\n/gu, '\n');
 
-  static getSheetsAuthConfig() {
-    const config = this.getConfigFromEnv();
-    const auth = this.createAuth(config);
+  return new google.auth.JWT({
+    email: serviceAccountEmail,
+    key: privateKey,
+    scopes: SCOPES,
+  });
+};
 
-    return {
-      spreadsheetId: config.spreadsheetId,
-      auth,
-    };
-  }
-}
+const getSheetsAuthConfig = () => {
+  const config = getConfigFromEnv();
+  const auth = createAuth(config);
 
-module.exports = GoogleSheetsAuthProvider;
+  return {
+    spreadsheetId: config.spreadsheetId,
+    auth,
+  };
+};
+
+module.exports = {
+  getSheetsAuthConfig,
+};

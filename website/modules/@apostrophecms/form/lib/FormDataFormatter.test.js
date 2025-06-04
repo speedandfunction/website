@@ -1,164 +1,117 @@
-const mockTimestamp = 1234567890;
-const mockISOString = '2023-01-01T00:00:00.000Z';
-
-const RealDate = Date;
-
-global.Date = class MockDate {
-  constructor() {
-    this.toISOString = () => mockISOString;
-  }
-
-  static now() {
-    return mockTimestamp;
-  }
-};
-
-const FormDataFormatter = require('./FormDataFormatter');
+const { formatForSpreadsheet } = require('./FormDataFormatter');
 
 describe('FormDataFormatter', () => {
-  afterAll(() => {
-    global.Date = RealDate;
+  const mockTimestamp = 1234567890;
+  const mockISOString = '2023-01-01T00:00:00.000Z';
+
+  beforeEach(() => {
+    jest.spyOn(Date, 'now').mockReturnValue(mockTimestamp);
+    jest.spyOn(Date.prototype, 'toISOString').mockReturnValue(mockISOString);
   });
 
-  describe('generateHeaders', () => {
-    test('generates headers correctly from form data with standard fields', () => {
-      const formData = {
-        '_id': 'form-id-123',
-        'first-name': 'John',
-        'last-name': 'Doe',
-        'email-address': 'john@example.com',
-      };
-
-      const headers = FormDataFormatter.generateHeaders(formData);
-
-      expect(headers).toEqual([
-        'ID',
-        'Timestamp',
-        'First Name',
-        'Last Name',
-        'Email Address',
-      ]);
-    });
-
-    test('excludes _id field from headers', () => {
-      const formData = {
-        _id: 'form-id-123',
-        name: 'John',
-      };
-
-      const headers = FormDataFormatter.generateHeaders(formData);
-
-      expect(headers).toEqual(['ID', 'Timestamp', 'Name']);
-      expect(headers).not.toContain('Id');
-    });
-
-    test('handles empty form data correctly', () => {
-      const formData = {};
-
-      const headers = FormDataFormatter.generateHeaders(formData);
-
-      expect(headers).toEqual(['ID', 'Timestamp']);
-    });
+  afterEach(() => {
+    jest.restoreAllMocks();
   });
 
-  describe('generateRowData', () => {
-    test('generates row data with ID and timestamp first', () => {
+  describe('formatForSpreadsheet', () => {
+    test('formats form data with standard fields correctly', () => {
       const formData = {
-        _id: 'form-id-123',
-        name: 'John',
+        name: 'John Doe',
         email: 'john@example.com',
+        message: 'Hello world',
       };
 
-      const rowData = FormDataFormatter.generateRowData(formData);
+      const result = formatForSpreadsheet(formData);
 
-      expect(rowData[0]).toBe(mockTimestamp.toString());
-      expect(rowData[1]).toBe(mockISOString);
-      expect(rowData[2]).toBe('John');
-      expect(rowData[3]).toBe('john@example.com');
+      expect(result).toEqual({
+        headers: ['ID', 'Timestamp', 'Name', 'Email', 'Message'],
+        rowData: [
+          mockTimestamp.toString(),
+          mockISOString,
+          'John Doe',
+          'john@example.com',
+          'Hello world',
+        ],
+      });
+    });
+
+    test('excludes _id field from output', () => {
+      const formData = {
+        _id: 'form-id-123',
+        name: 'John Doe',
+      };
+
+      const result = formatForSpreadsheet(formData);
+
+      expect(result.headers).toEqual(['ID', 'Timestamp', 'Name']);
+      expect(result.rowData).toEqual([
+        mockTimestamp.toString(),
+        mockISOString,
+        'John Doe',
+      ]);
     });
 
     test('handles array values by joining with comma and space', () => {
       const formData = {
-        choices: ['Option 1', 'Option 2', 'Option 3'],
+        options: ['Option 1', 'Option 2', 'Option 3'],
       };
 
-      const rowData = FormDataFormatter.generateRowData(formData);
+      const result = formatForSpreadsheet(formData);
 
-      expect(rowData[2]).toBe('Option 1, Option 2, Option 3');
+      expect(result.headers).toEqual(['ID', 'Timestamp', 'Options']);
+      expect(result.rowData).toEqual([
+        mockTimestamp.toString(),
+        mockISOString,
+        'Option 1, Option 2, Option 3',
+      ]);
     });
 
     test('handles empty array values', () => {
       const formData = {
-        choices: [],
+        options: [],
       };
 
-      const rowData = FormDataFormatter.generateRowData(formData);
+      const result = formatForSpreadsheet(formData);
 
-      expect(rowData[2]).toBe('');
+      expect(result.headers).toEqual(['ID', 'Timestamp', 'Options']);
+      expect(result.rowData).toEqual([
+        mockTimestamp.toString(),
+        mockISOString,
+        '',
+      ]);
     });
 
     test('handles null and undefined values', () => {
       const formData = {
-        name: null,
-        email: undefined,
+        nullValue: null,
+        undefinedValue: undefined,
       };
 
-      const rowData = FormDataFormatter.generateRowData(formData);
+      const result = formatForSpreadsheet(formData);
 
-      expect(rowData[2]).toBe(null);
-      expect(rowData[3]).toBe(undefined);
-    });
-
-    test('excludes _id field from row data', () => {
-      const formData = {
-        _id: 'form-id-123',
-        name: 'John',
-      };
-
-      const rowData = FormDataFormatter.generateRowData(formData);
-
-      expect(rowData).toHaveLength(3);
-      expect(rowData).not.toContain('form-id-123');
+      expect(result.headers).toEqual([
+        'ID',
+        'Timestamp',
+        'Nullvalue',
+        'Undefinedvalue',
+      ]);
+      expect(result.rowData).toEqual([
+        mockTimestamp.toString(),
+        mockISOString,
+        null,
+        undefined,
+      ]);
     });
 
     test('handles empty form data correctly', () => {
       const formData = {};
 
-      const rowData = FormDataFormatter.generateRowData(formData);
+      const result = formatForSpreadsheet(formData);
 
-      expect(rowData).toHaveLength(2);
-      expect(rowData[0]).toBe(mockTimestamp.toString());
-      expect(rowData[1]).toBe(mockISOString);
-    });
-  });
-
-  describe('formatForSpreadsheet', () => {
-    test('returns both headers and row data in correct format', () => {
-      const formData = {
-        '_id': 'form-id-123',
-        'first-name': 'John',
-        'last-name': 'Doe',
-        'multiple-choice': ['Option 1', 'Option 2'],
-      };
-
-      const result = FormDataFormatter.formatForSpreadsheet(formData);
-
-      expect(result).toHaveProperty('headers');
-      expect(result).toHaveProperty('rowData');
-      expect(result.headers).toHaveLength(5);
-      expect(result.rowData).toHaveLength(5);
-      expect(result.rowData[4]).toBe('Option 1, Option 2');
-    });
-
-    test('handles empty form data correctly', () => {
-      const formData = {};
-
-      const result = FormDataFormatter.formatForSpreadsheet(formData);
-
-      expect(result.headers).toEqual(['ID', 'Timestamp']);
-      expect(result.rowData).toHaveLength(2);
-      expect(result.rowData[0]).toBe(mockTimestamp.toString());
-      expect(result.rowData[1]).toBe(mockISOString);
+      expect(result).toEqual({
+        headers: ['ID', 'Timestamp'],
+        rowData: [mockTimestamp.toString(), mockISOString],
+      });
     });
   });
 });
