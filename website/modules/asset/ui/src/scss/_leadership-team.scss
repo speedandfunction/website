@@ -1,12 +1,18 @@
+.leadership-section {
+  margin-top: 32px;
+
+  @include breakpoint-large {
+    margin-top: 52px;
+  }
+}
+
 .leadership-list {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 32px;
 
   @include breakpoint-large {
     flex-direction: row;
-    margin-top: 52px;
   }
 
   // prevent extra top border when leader-card is hovered in second row
@@ -33,6 +39,7 @@
   width: 100%;
   height: 100%;
   margin-bottom: 24px;
+  position: relative;
 
   @include breakpoint-large {
     max-height: 383px;
@@ -113,6 +120,7 @@
     @include breakpoint-large {
       height: 225px;
       width: 225px;
+      transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1);
     }
   }
 
@@ -145,6 +153,8 @@
 
     @include breakpoint-large {
       color: $gray-500;
+      transform: translateY(100%);
+      transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1);
       display: none;
 
       .bio-inner {
@@ -174,7 +184,16 @@
   &:hover {
     .leader-photo {
       @include breakpoint-large {
-        display: none;
+        opacity: 0;
+        transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1);
+        transform: translateY(0) scale(1);
+        position: absolute;
+      }
+    }
+
+    .leader-title-block {
+      @include breakpoint-large {
+        animation: fadeSlideIn 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
       }
     }
 
@@ -185,9 +204,10 @@
         max-height: 209px;
         height: 100%;
         min-height: 209px;
+        transform: translateY(0);
 
         .bio-inner {
-          animation: fadeSlideIn 0.9s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+          animation: fadeSlideIn 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
         }
       }
     }
