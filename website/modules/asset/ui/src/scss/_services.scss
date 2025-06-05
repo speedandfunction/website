@@ -105,6 +105,7 @@
         max-height: 1000px;
         opacity: 1;
         transform: translateY(0);
+        margin-top: 20px;
       }
   
       .sf-simple-cards__card-expand-button {
@@ -131,7 +132,7 @@
     font-weight: 700;
     color: $gray-500;
     font-size: 16px;
-    margin: 1px 0 20px;
+    margin: 1px 0 0;
     max-width: 90%;
     line-height: 140%;
     @include transition(color);
