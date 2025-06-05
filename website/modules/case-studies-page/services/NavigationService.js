@@ -13,7 +13,7 @@ class NavigationService {
    * @param {Object} apos - ApostropheCMS instance
    * @param {Object} req - Request object
    * @param {Array} slugs - Array of tag slugs
-   * @returns {Array} Array of tag IDs
+   * @returns {Promise<Array>} Promise resolving to array of tag IDs
    */
   static async convertSlugsToIds(apos, req, slugs) {
     const tagPromises = slugs.map(async (slug) => {
@@ -34,7 +34,7 @@ class NavigationService {
    * @param {Object} query - ApostropheCMS query object
    * @param {Object} req - Request object
    * @param {Object} apos - ApostropheCMS instance
-   * @returns {Object} Modified query object
+   * @returns {Promise<Object>} Promise resolving to modified query object
    */
   static async applyFiltersToQuery(query, req, apos) {
     let filteredQuery = query;
@@ -81,7 +81,7 @@ class NavigationService {
    * @param {Object} apos - ApostropheCMS instance
    * @param {boolean} applyFilters - Whether to apply current filters
    * @param {Object} pageModule - Page module for filter application
-   * @returns {Array} Array of case study objects
+   * @returns {Promise<Array>} Promise resolving to array of case study objects
    */
   static async getAllCaseStudies(
     req,
@@ -136,7 +136,7 @@ class NavigationService {
    * @param {Object} apos - ApostropheCMS instance
    * @param {Object} pageModule - Page module for filter application
    * @param {Object} currentPiece - Current case study object
-   * @returns {Object} Navigation data with prev and next
+   * @returns {Promise<Object>} Promise resolving to navigation data with prev and next
    */
   static async getNavigationData(req, apos, pageModule, currentPiece) {
     const allCaseStudies = await this.getAllCaseStudies(

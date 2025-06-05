@@ -105,10 +105,10 @@ module.exports = {
         return tagCounts;
       },
 
-      getNavigationData(req) {
+      async getNavigationData(req) {
         const currentPiece = req.data.piece;
 
-        return NavigationService.getNavigationData(
+        return await NavigationService.getNavigationData(
           req,
           self.apos,
           self,

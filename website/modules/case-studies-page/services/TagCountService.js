@@ -47,7 +47,7 @@ class TagCountService {
    * @param {Object} req - ApostropheCMS request object
    * @param {Object} aposModules - ApostropheCMS modules
    * @param {Object} options - Module options
-   * @returns {Array} [caseStudies, casesTags] arrays
+   * @returns {Promise<Array>} Promise resolving to [caseStudies, casesTags] arrays
    */
   static async fetchCaseStudiesAndTags(req, aposModules, options) {
     const caseStudies = await aposModules[options.pieces].find(req).toArray();
