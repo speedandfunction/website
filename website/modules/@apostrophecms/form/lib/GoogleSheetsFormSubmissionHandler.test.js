@@ -21,9 +21,6 @@ describe('GoogleSheetsFormSubmission Handler', () => {
     spreadsheetId: 'test-spreadsheet-id',
     checkIfEmpty: jest.fn(),
     appendValues: jest.fn(),
-    sheets: {
-      withAuth: jest.fn().mockReturnThis(),
-    },
   };
 
   const mockFormatForSpreadsheet = jest.fn();
@@ -34,7 +31,14 @@ describe('GoogleSheetsFormSubmission Handler', () => {
     logger: mockSelf,
   };
 
-  const mockGetSheetsAuthConfig = jest.fn();
+  const mockSheets = {
+    appendValues: jest.fn(),
+    checkIfEmpty: jest.fn(),
+  };
+
+  const mockGetSheetsAuthConfig = jest
+    .fn()
+    .mockReturnValue({ sheets: mockSheets });
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -138,12 +142,11 @@ describe('GoogleSheetsFormSubmission Handler', () => {
         mockErrorHandler,
         mockGetSheetsAuthConfig,
       );
-      mockGetSheetsAuthConfig.mockReturnValue({ auth: 'mock-auth' });
 
       handler.configureAuth();
 
       expect(mockGetSheetsAuthConfig).toHaveBeenCalled();
-      expect(mockClient.sheets.withAuth).toHaveBeenCalledWith('mock-auth');
+      expect(mockClient.sheets).toBe(mockSheets);
     });
   });
 
@@ -167,7 +170,6 @@ describe('GoogleSheetsFormSubmission Handler', () => {
       };
 
       mockFormatForSpreadsheet.mockReturnValue(formattedData);
-
       retryOperation.mockResolvedValue(true);
       mockClient.appendValues.mockResolvedValue({ success: true });
 
@@ -175,7 +177,7 @@ describe('GoogleSheetsFormSubmission Handler', () => {
 
       expect(result).toBe(true);
       expect(mockGetSheetsAuthConfig).toHaveBeenCalled();
-      expect(mockClient.sheets.withAuth).toHaveBeenCalledWith('mock-auth');
+      expect(mockClient.sheets).toBe(mockSheets);
       expect(mockFormatForSpreadsheet).toHaveBeenCalledWith(formData);
 
       expect(mockClient.appendValues).toHaveBeenCalledTimes(2);
@@ -200,16 +202,15 @@ describe('GoogleSheetsFormSubmission Handler', () => {
 
       expect(result).toBe(false);
       expect(mockGetSheetsAuthConfig).toHaveBeenCalled();
-      expect(mockClient.sheets.withAuth).toHaveBeenCalledWith('mock-auth');
+      expect(mockClient.sheets).toBe(mockSheets);
     });
 
     test('handles unexpected errors', async () => {
       const formData = { name: 'John' };
       const error = new Error('Unexpected error');
-      const throwError = () => {
+      mockFormatForSpreadsheet.mockImplementation(() => {
         throw error;
-      };
-      mockFormatForSpreadsheet.mockImplementation(throwError);
+      });
 
       const result = await handler.handle(formData);
 
@@ -219,7 +220,7 @@ describe('GoogleSheetsFormSubmission Handler', () => {
         error,
       );
       expect(mockGetSheetsAuthConfig).toHaveBeenCalled();
-      expect(mockClient.sheets.withAuth).toHaveBeenCalledWith('mock-auth');
+      expect(mockClient.sheets).toBe(mockSheets);
     });
   });
 
@@ -249,16 +250,16 @@ describe('GoogleSheetsFormSubmission Handler', () => {
     });
 
     test('handles retry failure', async () => {
-      const error = new Error('Retry failed');
-      retryOperation.mockRejectedValue(error);
+      retryOperation.mockResolvedValue(false);
 
       const result = await handler.checkHeadersWithRetry();
 
-      expect(result).toBe(null);
-      expect(mockErrorHandler.logError).toHaveBeenCalledWith(
-        'Headers check failed after all attempts',
-        error,
-      );
+      expect(result).toBe(false);
+      expect(retryOperation).toHaveBeenCalledWith(expect.any(Function), {
+        self: mockErrorHandler.logger,
+        maxRetries: 3,
+        delayMs: 1000,
+      });
     });
   });
 });
