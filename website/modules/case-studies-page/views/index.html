@@ -8,9 +8,9 @@ main %}
       <div id="filter" class="filter-anchor"></div>
     </div>
 
-    {% set hasActiveFilters = data.query.industry or data.query.stack or
-    data.query.caseStudyType %} {% if hasActiveFilters %}
     <div class="cs_filter-info">
+      {% set hasActiveFilters = data.query.industry or data.query.stack or
+      data.query.caseStudyType %} {% if hasActiveFilters %}
       <p class="items-count">
         {{ data.totalPieces }} Ite{% if data.totalPieces == 1 %}m{% else %}ms{%
         endif %} found
@@ -71,8 +71,8 @@ main %}
           {% endif %} {% endfor %} {% endif %} {% endfor %}
         </ul>
       </div>
+      {% endif %}
     </div>
-    {% endif %}
 
     <div class="cs_list">
       <div class="tags-filter">
