@@ -207,13 +207,10 @@
 }
 
 .filter-content {
-  margin-bottom: 0;
   max-height: 0;
   opacity: 0;
-  overflow: hidden;
   transform: translateY(-10px);
   transition: max-height 0.5s ease, opacity 0.3s ease 0.1s, transform 0.3s ease 0.1s, padding-bottom 0.5s ease;
-  padding-bottom: 0;
 
   .tag-search {
     @include font-settings(11px, 140%, $font-weight-medium);
