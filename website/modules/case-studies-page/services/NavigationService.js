@@ -16,9 +16,15 @@ class NavigationService {
    * @returns {Array} Array of tag IDs
    */
   static async convertSlugsToIds(apos, req, slugs) {
-    const tagPromises = slugs.map((slug) =>
-      apos.modules['cases-tags'].find(req, { slug }).toObject(),
-    );
+    const tagPromises = slugs.map(async (slug) => {
+      const results = await apos.modules['cases-tags']
+        .find(req, { slug })
+        .toArray();
+      if (results.length > 0) {
+        return results[0];
+      }
+      return null;
+    });
     const tags = await Promise.all(tagPromises);
     return tags.filter((tag) => tag).map((tag) => tag.aposDocId);
   }
