@@ -38,12 +38,13 @@ const setupFilterLinkDetection = function () {
   };
 };
 
-// Accessibility enhancements for filter expand/collapse
-const setupFilterAccessibility = function () {
-  const filterButtons = document.querySelectorAll(
-    '.filter-category__expand-button',
-  );
+// Empty cleanup function constant
+const emptyCleanup = function () {
+  // No cleanup needed
+};
 
+// Setup keyboard event handlers for filter buttons
+const setupKeydownHandlers = function (filterButtons) {
   const handleKeyDown = function (event) {
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault();
@@ -56,6 +57,19 @@ const setupFilterAccessibility = function () {
     }
   };
 
+  filterButtons.forEach(function (button) {
+    button.addEventListener('keydown', handleKeyDown);
+  });
+
+  return function () {
+    filterButtons.forEach(function (button) {
+      button.removeEventListener('keydown', handleKeyDown);
+    });
+  };
+};
+
+// Setup aria-expanded attribute updates
+const setupAriaExpandedHandlers = function (checkboxes) {
   const updateAriaExpanded = function (event) {
     const checkbox = event.target;
     const button = document.querySelector(`label[for="${checkbox.id}"]`);
@@ -64,24 +78,40 @@ const setupFilterAccessibility = function () {
     }
   };
 
-  filterButtons.forEach(function (button) {
-    button.addEventListener('keydown', handleKeyDown);
-  });
-
-  // Listen for checkbox changes to update aria-expanded
-  const checkboxes = document.querySelectorAll('.filter-category__toggle');
   checkboxes.forEach(function (checkbox) {
     checkbox.addEventListener('change', updateAriaExpanded);
   });
 
-  // Return cleanup function
   return function () {
-    filterButtons.forEach(function (button) {
-      button.removeEventListener('keydown', handleKeyDown);
-    });
     checkboxes.forEach(function (checkbox) {
       checkbox.removeEventListener('change', updateAriaExpanded);
     });
+  };
+};
+
+// Accessibility enhancements for filter expand/collapse
+const setupFilterAccessibility = function () {
+  const filterButtons = document.querySelectorAll(
+    '.filter-category__expand-button',
+  );
+
+  // Early return if no filter buttons found
+  if (filterButtons.length === 0) {
+    return emptyCleanup;
+  }
+
+  const checkboxes = document.querySelectorAll('.filter-category__toggle');
+  if (checkboxes.length === 0) {
+    return emptyCleanup;
+  }
+
+  const keydownCleanup = setupKeydownHandlers(filterButtons);
+  const ariaCleanup = setupAriaExpandedHandlers(checkboxes);
+
+  // Return combined cleanup function
+  return function () {
+    keydownCleanup();
+    ariaCleanup();
   };
 };
 
