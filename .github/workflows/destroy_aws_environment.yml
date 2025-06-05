@@ -1,0 +1,193 @@
+name: 'Destroy AWS Environment'
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to destroy'
+        required: true
+        type: choice
+        options:
+        - Development
+        default: Development
+      destroy-plan-only:
+        description: 'Plan only (show what would be destroyed without destroying)'
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  issues: write
+
+jobs:
+  destroy-plan:
+    runs-on: ubuntu-latest
+    environment: Development
+    steps:
+      - name: Get Environment Name for ${{ vars.ENV_NAME }}
+        id: get_env_name
+        uses: Entepotenz/change-string-case-action-min-dependencies@v1
+        with:
+          string: ${{ vars.ENV_NAME }}
+
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Checkout config repository
+        uses: actions/checkout@v4
+        with:
+          repository: 'speedandfunction/website-ci-secret'
+          path: 'terraform-config'
+          token: ${{ secrets.PAT }}
+
+      - name: Copy tfvars for ${{ vars.ENV_NAME }}
+        run: |
+          cat "terraform-config/${{ vars.ENV_NAME }}.tfvars"  "deployment/environments/${{ vars.ENV_NAME }}.tfvars"  > "deployment/terraform.tfvars"
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.12.0
+          terraform_wrapper: false
+
+      - name: Terraform Destroy Plan for ${{ vars.ENV_NAME }}
+        run: |
+          cd deployment
+          terraform init -backend-config="environments/backend-${{ vars.ENV_NAME }}.hcl"
+          terraform plan -destroy -out="${{ vars.ENV_NAME }}-destroy.tfplan"
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.TF_AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.TF_AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: "us-east-1"
+
+      - name: Show Destroy Plan Summary
+        run: |
+          cd deployment
+          echo "## 🚨 DESTROY PLAN SUMMARY FOR ${{ vars.ENV_NAME }} 🚨" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "The following resources will be **DESTROYED**:" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          terraform show -no-color "${{ vars.ENV_NAME }}-destroy.tfplan" | head -50 >> $GITHUB_STEP_SUMMARY
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.TF_AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.TF_AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: "us-east-1"
+
+      - name: Copy destroy plan to S3 bucket for ${{ vars.ENV_NAME }}
+        if: ${{ inputs.destroy-plan-only == false }}
+        run: aws s3 cp "deployment/${{ vars.ENV_NAME }}-destroy.tfplan" "s3://${{ env.SETTINGS_BUCKET }}/destroy-plans/${{ vars.ENV_NAME }}-destroy.tfplan"
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.TF_AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.TF_AWS_SECRET_ACCESS_KEY }}
+          SETTINGS_BUCKET: sf-website-infrastructure
+          AWS_DEFAULT_REGION: "us-east-1"
+
+      - name: Copy lock file to S3 bucket for ${{ vars.ENV_NAME }}
+        if: ${{ inputs.destroy-plan-only == false }}
+        run: aws s3 cp "deployment/.terraform.lock.hcl" "s3://${{ env.SETTINGS_BUCKET }}/destroy-plans/${{ vars.ENV_NAME }}.terraform.lock.hcl"
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.TF_AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.TF_AWS_SECRET_ACCESS_KEY }}
+          SETTINGS_BUCKET: sf-website-infrastructure
+          AWS_DEFAULT_REGION: "us-east-1"
+
+  manual-approval:
+    needs: [destroy-plan]
+    runs-on: ubuntu-latest
+    if: ${{ inputs.destroy-plan-only == false }}
+    steps:
+      - name: Wait for approval to destroy ${{ vars.ENV_NAME }}
+        uses: trstringer/manual-approval@v1
+        with:
+          secret: ${{ github.TOKEN }}
+          approvers: killev
+          minimum-approvals: 1
+          issue-title: "🚨 DESTROY ${{ vars.ENV_NAME }} AWS Environment 🚨"
+          issue-body: |
+            ## ⚠️ CRITICAL: Infrastructure Destruction Request ⚠️
+            
+            **Environment**: ${{ vars.ENV_NAME }}
+            **Requested by**: @${{ github.actor }}
+            **Workflow run**: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+            
+            ### 🚨 WARNING: This action will PERMANENTLY DESTROY the following infrastructure:
+            - VPC and all networking components
+            - ECS cluster and services
+            - DocumentDB cluster and all data
+            - ElastiCache Redis cluster and all data
+            - Application Load Balancer
+            - CloudFront distribution
+            - S3 buckets and all stored files
+            - ECR repository and all images
+            - IAM roles and policies
+            - CloudWatch logs and metrics
+            - Parameter Store secrets
+            
+            ### 📋 Before approving, please verify:
+            - [ ] This is the correct environment to destroy
+            - [ ] All important data has been backed up
+            - [ ] Team has been notified of the destruction
+            - [ ] No critical services depend on this infrastructure
+            
+            **To approve**: Comment "approve" or "approved"
+            **To deny**: Comment "deny" or "denied"
+            
+            **⚠️ THIS ACTION CANNOT BE UNDONE ⚠️**
+
+  destroy-apply:
+    needs: [manual-approval]
+    runs-on: ubuntu-latest
+    if: ${{ inputs.destroy-plan-only == false }}
+    steps:
+      - name: Get Environment Name for ${{ vars.ENV_NAME }}
+        id: get_env_name
+        uses: Entepotenz/change-string-case-action-min-dependencies@v1
+        with:
+          string: ${{ vars.ENV_NAME }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.12.0
+          terraform_wrapper: false
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Get destroy plan from S3 bucket for ${{ vars.ENV_NAME }}
+        run: aws s3 cp "s3://${{ env.SETTINGS_BUCKET }}/destroy-plans/${{ vars.ENV_NAME }}-destroy.tfplan" "deployment/${{ vars.ENV_NAME }}-destroy.tfplan"
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.TF_AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.TF_AWS_SECRET_ACCESS_KEY }}
+          SETTINGS_BUCKET: sf-website-infrastructure
+          AWS_DEFAULT_REGION: "us-east-1"
+
+      - name: Get lock file from S3 bucket for ${{ vars.ENV_NAME }}
+        run: aws s3 cp "s3://${{ env.SETTINGS_BUCKET }}/destroy-plans/${{ vars.ENV_NAME }}.terraform.lock.hcl" "deployment/.terraform.lock.hcl"
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.TF_AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.TF_AWS_SECRET_ACCESS_KEY }}
+          SETTINGS_BUCKET: sf-website-infrastructure
+          AWS_DEFAULT_REGION: "us-east-1"
+
+      - name: 🚨 DESTROY Infrastructure for ${{ vars.ENV_NAME }} 🚨
+        run: |
+          cd deployment
+          terraform init -backend-config="environments/backend-${{ vars.ENV_NAME }}.hcl"
+          echo "🚨 DESTROYING INFRASTRUCTURE FOR ${{ vars.ENV_NAME }} - THIS CANNOT BE UNDONE! 🚨"
+          terraform apply "${{ vars.ENV_NAME }}-destroy.tfplan"
+          echo "✅ Infrastructure for ${{ vars.ENV_NAME }} has been destroyed"
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.TF_AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.TF_AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: "us-east-1"
+
+      - name: Clean up destroy plan files
+        run: |
+          aws s3 rm "s3://${{ env.SETTINGS_BUCKET }}/destroy-plans/${{ vars.ENV_NAME }}-destroy.tfplan" || true
+          aws s3 rm "s3://${{ env.SETTINGS_BUCKET }}/destroy-plans/${{ vars.ENV_NAME }}.terraform.lock.hcl" || true
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.TF_AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.TF_AWS_SECRET_ACCESS_KEY }}
+          SETTINGS_BUCKET: sf-website-infrastructure
+          AWS_DEFAULT_REGION: "us-east-1" 
