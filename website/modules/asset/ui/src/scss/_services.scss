@@ -10,8 +10,10 @@
     margin: 0 auto;
     
     &:not(.has-even) {
-      .sf-simple-cards__card:last-child {
-        width: 100%;
+      .sf-simple-cards__card {
+        &:last-child {
+          width: 100%;
+        }
       }
     }
   }
@@ -20,11 +22,13 @@
     counter-reset: none;
 
     .sf-simple-cards__card {
-      &-wrap::before {
-        display: none;
+      &-wrap {
+        &::before {
+          display: none;
+        }
       }
       
-      &__expand-button {
+      &-expand-button {
         top: 20px;
       }
     }
@@ -32,11 +36,11 @@
   
   &--no-expandable {
     .sf-simple-cards__card {
-      &__expand-button {
+      &-expand-button {
         display: none;
       }
       
-      &__text {
+      &-text {
         display: block;
         max-height: none;
         opacity: 1;
@@ -93,18 +97,17 @@
     }
   }
   
-  &__toggle {
+  &-toggle {
     display: none;
     
     &:checked ~ .sf-simple-cards__card-wrap {
-      .sf-simple-cards__card__text {
+      .sf-simple-cards__card-text {
         max-height: 1000px;
         opacity: 1;
-        margin-top: 10px;
         transform: translateY(0);
       }
   
-      .sf-simple-cards__card__expand-button::before {
+      .sf-simple-cards__card-expand-button::before {
         transform: rotate(225deg);
       }
     }
@@ -122,7 +125,7 @@
     }
   }
   
-  &__title {
+  &-title {
     font-weight: 700;
     color: $gray-500;
     font-size: 16px;
@@ -138,7 +141,7 @@
     }
   }
   
-  &__text {
+  &-text {
     font-weight: 500;
     font-size: 14px;
     line-height: 20px;
@@ -163,7 +166,7 @@
     }
   }
   
-  &__expand-button {
+  &-expand-button {
     position: absolute;
     top: 40px;
     right: 24px;
@@ -212,11 +215,11 @@
       transform: scale3d(1.03, 1.03, 1);
       z-index: 10;
       
-      .sf-simple-cards__card__title {
+      .sf-simple-cards__card-title {
         color: $gray-100;
       }
       
-      .sf-simple-cards__card__text,
+      .sf-simple-cards__card-text,
       .sf-button_underline {
         color: $gray-200;
       }
@@ -242,11 +245,11 @@
       transform: scale3d(1.02, 1.02, 1);
       z-index: 10;
       
-      .sf-simple-cards__card__title {
+      .sf-simple-cards__card-title {
         color: $gray-100;
       }
       
-      .sf-simple-cards__card__text,
+      .sf-simple-cards__card-text,
       .sf-button_underline {
         color: $gray-200;
       }
