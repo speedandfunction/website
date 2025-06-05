@@ -796,6 +796,62 @@
   }
 }
 
+// Case Study Navigation
+.cs_navigation {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0;
+  gap: 44px;
+  position: absolute;
+  width: 261px;
+  height: 13px;
+  right: 20px;
+  top: 20px;
+  z-index: 2;
+
+  @include breakpoint-medium {
+    right: 40px;
+    top: 40px;
+  }
+}
+
+.cs_nav-item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0;
+  gap: 12px;
+  height: 13px;
+  flex: none;
+  flex-grow: 0;
+}
+
+.cs_nav-text {
+  font-family: 'Poppins', sans-serif;
+  font-style: normal;
+  font-weight: $font-weight-300;
+  font-size: 11px;
+  line-height: 120%;
+  text-transform: lowercase;
+  text-decoration: none;
+  flex: none;
+  flex-grow: 0;
+
+  &--active {
+    color: $gray-500;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  &--disabled {
+    color: $gray-300;
+    cursor: default;
+  }
+}
+
 // Keyframes for smooth animations
 @keyframes fadeInUp {
   from {

@@ -1,116 +1,195 @@
 {% extends "layout.html" %} {% block main %}
 
-<div class="cs_full-details">
-  <article class="cs_full-details-card">
-    {% set picture = apos.image.first(data.piece.picture) %} {% if picture is
-    defined %}
+<div>
+  <!-- Back to all projects link -->
+  <div class="cs_back-to-all">
+    {% set backUrl = '/cases' %} {% if data.query.industry or data.query.stack
+    or data.query.caseStudyType or data.query.search %} {% set queryParams = []
+    %} {% if data.query.industry %} {% for industry in data.query.industry %} {%
+    set queryParams = queryParams.concat(['industry%5B' + loop.index0 + '%5D=' +
+    industry]) %} {% endfor %} {% endif %} {% if data.query.stack %} {% for
+    stack in data.query.stack %} {% set queryParams =
+    queryParams.concat(['stack%5B' + loop.index0 + '%5D=' + stack]) %} {% endfor
+    %} {% endif %} {% if data.query.caseStudyType %} {% for caseStudyType in
+    data.query.caseStudyType %} {% set queryParams =
+    queryParams.concat(['caseStudyType%5B' + loop.index0 + '%5D=' +
+    caseStudyType]) %} {% endfor %} {% endif %} {% if data.query.search %} {%
+    set queryParams = queryParams.concat(['search=' + data.query.search]) %} {%
+    endif %} {% if queryParams.length > 0 %} {% set backUrl = backUrl + '?' +
+    queryParams.join('&') %} {% endif %} {% endif %}
+    <a href="{{ backUrl }}" class="cs_back-link">
+      <span class="cs_back-text">Back to all projects</span>
+    </a>
+  </div>
 
-    <img
-      class="image"
-      loading="lazy"
-      src="{{ apos.attachment.url(picture, { size: 'full' }) }}"
-      alt="{{ picture._alt or '' }}"
-      width="{{ apos.attachment.getWidth(picture) }}"
-      height="{{ apos.attachment.getHeight(picture) }}"
-    />
-
-    {% else %}
-
-    <div class="placeholder-image-container">
-      <img
-        class="placeholder-image"
-        loading="lazy"
-        src="/images/logo.svg"
-        alt="Placeholder banner"
-        width="160"
-        height="50"
-      />
+  <!-- Navigation buttons -->
+  <div class="cs_navigation">
+    <div class="cs_nav-item">
+      {% if data.prev %} {% set prevUrl = data.prev._url %} {% if
+      data.query.industry or data.query.stack or data.query.caseStudyType or
+      data.query.search %} {% set queryParams = [] %} {% if data.query.industry
+      %} {% for industry in data.query.industry %} {% set queryParams =
+      queryParams.concat(['industry%5B' + loop.index0 + '%5D=' + industry]) %}
+      {% endfor %} {% endif %} {% if data.query.stack %} {% for stack in
+      data.query.stack %} {% set queryParams = queryParams.concat(['stack%5B' +
+      loop.index0 + '%5D=' + stack]) %} {% endfor %} {% endif %} {% if
+      data.query.caseStudyType %} {% for caseStudyType in
+      data.query.caseStudyType %} {% set queryParams =
+      queryParams.concat(['caseStudyType%5B' + loop.index0 + '%5D=' +
+      caseStudyType]) %} {% endfor %} {% endif %} {% if data.query.search %} {%
+      set queryParams = queryParams.concat(['search=' + data.query.search]) %}
+      {% endif %} {% set prevUrl = prevUrl + '?' + queryParams.join('&') %} {%
+      endif %}
+      <a href="{{ prevUrl }}" class="cs_nav-text cs_nav-text--active"
+        >previous project</a
+      >
+      {% else %}
+      <span class="cs_nav-text cs_nav-text--disabled">previous</span>
+      {% endif %}
     </div>
 
-    {% endif %}
-    <div class="cs_info">
-      <div class="cs_info-primary">
-        <div class="truncate-wrapper">
-          {% if data.piece.clientWebsite %}
-          <h1 class="cname">
+    <div class="cs_nav-item">
+      {% if data.next %} {% set nextUrl = data.next._url %} {% if
+      data.query.industry or data.query.stack or data.query.caseStudyType or
+      data.query.search %} {% set queryParams = [] %} {% if data.query.industry
+      %} {% for industry in data.query.industry %} {% set queryParams =
+      queryParams.concat(['industry%5B' + loop.index0 + '%5D=' + industry]) %}
+      {% endfor %} {% endif %} {% if data.query.stack %} {% for stack in
+      data.query.stack %} {% set queryParams = queryParams.concat(['stack%5B' +
+      loop.index0 + '%5D=' + stack]) %} {% endfor %} {% endif %} {% if
+      data.query.caseStudyType %} {% for caseStudyType in
+      data.query.caseStudyType %} {% set queryParams =
+      queryParams.concat(['caseStudyType%5B' + loop.index0 + '%5D=' +
+      caseStudyType]) %} {% endfor %} {% endif %} {% if data.query.search %} {%
+      set queryParams = queryParams.concat(['search=' + data.query.search]) %}
+      {% endif %} {% set nextUrl = nextUrl + '?' + queryParams.join('&') %} {%
+      endif %}
+      <a href="{{ nextUrl }}" class="cs_nav-text cs_nav-text--active"
+        >next project</a
+      >
+      {% else %}
+      <span class="cs_nav-text cs_nav-text--disabled">next project</span>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="cs_full-details">
+    <article class="cs_full-details-card">
+      {% set picture = apos.image.first(data.piece.picture) %} {% if picture is
+      defined %}
+
+      <img
+        class="image"
+        loading="lazy"
+        src="{{ apos.attachment.url(picture, { size: 'full' }) }}"
+        alt="{{ picture._alt or '' }}"
+        width="{{ apos.attachment.getWidth(picture) }}"
+        height="{{ apos.attachment.getHeight(picture) }}"
+      />
+
+      {% else %}
+
+      <div class="placeholder-image-container">
+        <img
+          class="placeholder-image"
+          loading="lazy"
+          src="/images/logo.svg"
+          alt="Placeholder banner"
+          width="160"
+          height="50"
+        />
+      </div>
+
+      {% endif %}
+
+      <div class="cs_info">
+        <div class="cs_info-primary">
+          <div class="truncate-wrapper">
+            {% if data.piece.clientWebsite %}
+            <h1 class="cname">
+              <a
+                href="{{ data.piece.clientWebsite }}"
+                target="_blank"
+                rel="noopener noreferrer"
+                >{{ data.piece.title }}</a
+              >
+            </h1>
+            {% else %}
+            <h1 class="cname">{{ data.piece.title }}</h1>
+            {% endif %} {% if data.piece._industry and
+            data.piece._industry.length %}
+            <div class="industry">
+              {% for industry in data.piece._industry %} {{ industry.title |
+              e}}{% if not loop.last %}, {% endif %} {% endfor %}
+            </div>
+            {% endif %} {% if data.piece.portfolioTitle %}
+            <h2 class="portfolio-title">{{ data.piece.portfolioTitle }}</h2>
+            {% endif %} {% if data.piece.descriptor %}
+            <p class="descriptor">{{ data.piece.descriptor }}</p>
+            {% endif %} {% if data.piece._caseStudyType and
+            data.piece._caseStudyType.length %}
+            <div class="type">
+              {% for type in data.piece._caseStudyType %} {{ type.title | e }}{%
+              if not loop.last %}, {% endif %} {% endfor %}
+            </div>
+            {% endif %}
+          </div>
+
+          <div class="links-area">
+            {% if data.piece.fullStoryUrl %}
             <a
-              href="{{ data.piece.clientWebsite }}"
+              href="{{ data.piece.fullStoryUrl }}"
               target="_blank"
               rel="noopener noreferrer"
-              >{{ data.piece.title }}</a
+              class="full-story_btn"
+              >Read The Full Story</a
             >
-          </h1>
-          {% else %}
-          <h1 class="cname">{{ data.piece.title }}</h1>
-          {% endif %} {% if data.piece._industry and data.piece._industry.length
-          %}
-          <div class="industry">
-            {% for industry in data.piece._industry %} {{ industry.title | e}}{%
-            if not loop.last %}, {% endif %} {% endfor %}
+            {% endif %} {% if data.piece.prodLink %}
+            <a
+              href="{{ data.piece.prodLink }}"
+              target="_blank"
+              class="prod-link"
+              >{{ data.piece.prodLink }}</a
+            >
+            {% endif %}
           </div>
-          {% endif %} {% if data.piece.portfolioTitle %}
-          <h2 class="portfolio-title">{{ data.piece.portfolioTitle }}</h2>
-          {% endif %} {% if data.piece.descriptor %}
-          <p class="descriptor">{{ data.piece.descriptor }}</p>
-          {% endif %} {% if data.piece._caseStudyType and
-          data.piece._caseStudyType.length %}
-          <div class="type">
-            {% for type in data.piece._caseStudyType %} {{ type.title | e }}{%
-            if not loop.last %}, {% endif %} {% endfor %}
+        </div>
+
+        <div class="cs_info-secondary">
+          {% if data.piece.objective %}
+          <div>
+            <h3>Objective</h3>
+            <p>{{ data.piece.objective }}</p>
+          </div>
+          {% endif %} {% if data.piece.challenge %}
+          <div>
+            <h3>Challenge</h3>
+            <p>{{ data.piece.challenge }}</p>
+          </div>
+          {% endif %} {% if data.piece.solution %}
+          <div>
+            <h3>Solution</h3>
+            <p>{{ data.piece.solution }}</p>
+          </div>
+          {% endif %} {% if data.piece.results %}
+          <div>
+            <h3>Results</h3>
+            <p>{{ data.piece.results }}</p>
+          </div>
+          {% endif %} {% if data.piece._stack and data.piece._stack.length %}
+          <div>
+            <h3>Tech stack</h3>
+            <p>
+              {% for tech in data.piece._stack %} {{ tech.title | e }}{% if not
+              loop.last %}, {% endif %} {% endfor %}
+            </p>
           </div>
           {% endif %}
         </div>
-
-        <div class="links-area">
-          {% if data.piece.fullStoryUrl %}
-          <a
-            href="{{ data.piece.fullStoryUrl }}"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="full-story_btn"
-            >Read The Full Story</a
-          >
-          {% endif %} {% if data.piece.prodLink %}
-          <a href="{{ data.piece.prodLink }}" target="_blank" class="prod-link"
-            >{{ data.piece.prodLink }}</a
-          >
-          {% endif %}
-        </div>
       </div>
-
-      <div class="cs_info-secondary">
-        {% if data.piece.objective %}
-        <div>
-          <h3>Objective</h3>
-          <p>{{ data.piece.objective }}</p>
-        </div>
-        {% endif %} {% if data.piece.challenge %}
-        <div>
-          <h3>Challenge</h3>
-          <p>{{ data.piece.challenge }}</p>
-        </div>
-        {% endif %} {% if data.piece.solution %}
-        <div>
-          <h3>Solution</h3>
-          <p>{{ data.piece.solution }}</p>
-        </div>
-        {% endif %} {% if data.piece.results %}
-        <div>
-          <h3>Results</h3>
-          <p>{{ data.piece.results }}</p>
-        </div>
-        {% endif %} {% if data.piece._stack and data.piece._stack.length %}
-        <div>
-          <h3>Tech stack</h3>
-          <p>
-            {% for tech in data.piece._stack %} {{ tech.title | e }}{% if not
-            loop.last %}, {% endif %} {% endfor %}
-          </p>
-        </div>
-        {% endif %}
-      </div>
-    </div>
-  </article>
+    </article>
+  </div>
+  <div class="cs_testimonials">{% area data.piece, 'testimonials' %}</div>
 </div>
-<div class="cs_testimonials">{% area data.piece, 'testimonials' %}</div>
+
 {% endblock main %}

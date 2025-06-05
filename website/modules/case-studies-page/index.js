@@ -1,50 +1,6 @@
 const mainWidgets = require('../../lib/mainWidgets');
-
-// Helper utility functions for tag counting
-const tagCountHelpers = {
-  createTagMap(casesTags) {
-    const tagMap = {};
-    casesTags.forEach((tag) => {
-      tagMap[tag.aposDocId] = tag.slug;
-    });
-    return tagMap;
-  },
-
-  countTagsOfType(tagIds, tagMap, countsForType) {
-    if (!tagIds?.length) {
-      return;
-    }
-    tagIds.forEach((tagId) => {
-      const tagSlug = tagMap[tagId];
-      if (tagSlug && !countsForType[tagSlug]) {
-        countsForType[tagSlug] = 0;
-      }
-      if (tagSlug) {
-        countsForType[tagSlug] += 1;
-      }
-    });
-  },
-
-  async fetchCaseStudiesAndTags(req, aposModules, options) {
-    const caseStudies = await aposModules[options.pieces].find(req).toArray();
-    const casesTags = await aposModules['cases-tags'].find(req).toArray();
-    return [caseStudies, casesTags];
-  },
-
-  processCaseStudies(caseStudies, tagMap, tagCounts) {
-    caseStudies.forEach((study) => {
-      this.countTagsOfType(study.industryIds, tagMap, tagCounts.industry);
-
-      this.countTagsOfType(study.stackIds, tagMap, tagCounts.stack);
-
-      this.countTagsOfType(
-        study.caseStudyTypeIds,
-        tagMap,
-        tagCounts.caseStudyType,
-      );
-    });
-  },
-};
+const TagCountService = require('./services/TagCountService');
+const NavigationService = require('./services/NavigationService');
 
 module.exports = {
   extend: '@apostrophecms/piece-page-type',
@@ -100,6 +56,30 @@ module.exports = {
         };
       }
     };
+
+    self.beforeShow = async (req) => {
+      try {
+        const navigation = await self.getNavigationData(req);
+
+        const reqCopy = req;
+        if (!reqCopy.data) {
+          reqCopy.data = {};
+        }
+        reqCopy.data.prev = navigation.prev;
+        reqCopy.data.next = navigation.next;
+        reqCopy.data.query = req.query || {};
+      } catch (error) {
+        self.apos.util.error('Error calculating navigation data:', error);
+
+        const reqCopy = req;
+        if (!reqCopy.data) {
+          reqCopy.data = {};
+        }
+        reqCopy.data.prev = null;
+        reqCopy.data.next = null;
+        reqCopy.data.query = req.query || {};
+      }
+    };
   },
 
   methods(self) {
@@ -112,17 +92,28 @@ module.exports = {
         };
 
         const [caseStudies, casesTags] =
-          await tagCountHelpers.fetchCaseStudiesAndTags(
+          await TagCountService.fetchCaseStudiesAndTags(
             req,
             self.apos.modules,
             self.options,
           );
 
-        const tagMap = tagCountHelpers.createTagMap(casesTags);
+        const tagMap = TagCountService.createTagMap(casesTags);
 
-        tagCountHelpers.processCaseStudies(caseStudies, tagMap, tagCounts);
+        TagCountService.processCaseStudies(caseStudies, tagMap, tagCounts);
 
         return tagCounts;
+      },
+
+      async getNavigationData(req) {
+        const currentPiece = req.data.piece;
+
+        return await NavigationService.getNavigationData(
+          req,
+          self.apos,
+          self,
+          currentPiece,
+        );
       },
     };
   },
