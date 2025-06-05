@@ -180,7 +180,6 @@
 
     &:checked {
       ~ .filter-category {
-        margin-bottom: 16px;
 
         &::before,
         &::after {
@@ -216,7 +215,7 @@
     @include font-settings(11px, 140%, $font-weight-medium);
     border: 1px solid rgba($gray-200, 0.4);
     padding: 12px;
-    margin-bottom: 11px;
+    margin: 16px 0 11px;
     color: $gray-300;
     width: 100%;
 
