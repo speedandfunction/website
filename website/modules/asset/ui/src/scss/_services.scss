@@ -107,8 +107,10 @@
         transform: translateY(0);
       }
   
-      .sf-simple-cards__card-expand-button::before {
-        transform: rotate(225deg);
+      .sf-simple-cards__card-expand-button {
+        &::before {
+          transform: rotate(225deg);
+        }
       }
     }
   }
