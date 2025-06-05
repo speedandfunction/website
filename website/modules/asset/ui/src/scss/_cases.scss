@@ -188,6 +188,8 @@
         }
         
         .filter-category__expand-button {
+          top: 8px;
+          
           &::before {
             transform: rotate(225deg);
           }
