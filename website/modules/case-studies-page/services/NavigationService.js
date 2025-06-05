@@ -9,6 +9,67 @@
  */
 class NavigationService {
   /**
+   * Converts tag slugs to IDs
+   * @param {Object} apos - ApostropheCMS instance
+   * @param {Object} req - Request object
+   * @param {Array} slugs - Array of tag slugs
+   * @returns {Array} Array of tag IDs
+   */
+  static async convertSlugsToIds(apos, req, slugs) {
+    const tagPromises = slugs.map((slug) =>
+      apos.modules['cases-tags'].find(req, { slug }).toObject(),
+    );
+    const tags = await Promise.all(tagPromises);
+    return tags.filter((tag) => tag).map((tag) => tag.aposDocId);
+  }
+
+  /**
+   * Applies filters to a query based on request parameters
+   * @param {Object} query - ApostropheCMS query object
+   * @param {Object} req - Request object
+   * @param {Object} apos - ApostropheCMS instance
+   * @returns {Object} Modified query object
+   */
+  static async applyFiltersToQuery(query, req, apos) {
+    let filteredQuery = query;
+
+    if (req.query.industry && req.query.industry.length > 0) {
+      const industryIds = await this.convertSlugsToIds(
+        apos,
+        req,
+        req.query.industry,
+      );
+      if (industryIds.length > 0) {
+        filteredQuery = filteredQuery.and({
+          industryIds: { $in: industryIds },
+        });
+      }
+    }
+
+    if (req.query.stack && req.query.stack.length > 0) {
+      const stackIds = await this.convertSlugsToIds(apos, req, req.query.stack);
+      if (stackIds.length > 0) {
+        filteredQuery = filteredQuery.and({ stackIds: { $in: stackIds } });
+      }
+    }
+
+    if (req.query.caseStudyType && req.query.caseStudyType.length > 0) {
+      const caseStudyTypeIds = await this.convertSlugsToIds(
+        apos,
+        req,
+        req.query.caseStudyType,
+      );
+      if (caseStudyTypeIds.length > 0) {
+        filteredQuery = filteredQuery.and({
+          caseStudyTypeIds: { $in: caseStudyTypeIds },
+        });
+      }
+    }
+
+    return filteredQuery;
+  }
+
+  /**
    * Gets all case studies with optional filtering applied
    * @param {Object} req - ApostropheCMS request object
    * @param {Object} apos - ApostropheCMS instance
@@ -24,11 +85,10 @@ class NavigationService {
   ) {
     let query = apos.modules['case-studies'].find(req);
 
-    if (applyFilters && pageModule) {
-      query = pageModule.indexQuery(req, query) || query;
+    if (applyFilters && req.query) {
+      query = await this.applyFiltersToQuery(query, req, apos);
     }
 
-    // Use the same sorting as the case-studies piece type (updatedAt: -1)
     return await query.sort({ updatedAt: -1 }).toArray();
   }
 
@@ -53,12 +113,10 @@ class NavigationService {
     let prev = null;
     let next = null;
 
-    // Previous: lower index (currentIndex - 1)
     if (currentIndex > 0) {
       prev = allCaseStudies[currentIndex - 1];
     }
 
-    // Next: higher index (currentIndex + 1)
     if (currentIndex < allCaseStudies.length - 1) {
       next = allCaseStudies[currentIndex + 1];
     }
