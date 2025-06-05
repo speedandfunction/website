@@ -8,6 +8,7 @@ on:
         required: true
         type: choice
         options:
+          # Environment choices mirror deploy_to_aws.yml
           - Development
         default: Development
 
