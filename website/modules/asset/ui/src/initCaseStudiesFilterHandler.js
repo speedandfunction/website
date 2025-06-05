@@ -38,10 +38,63 @@ const setupFilterLinkDetection = function () {
   };
 };
 
+// Accessibility enhancements for filter expand/collapse
+const setupFilterAccessibility = function () {
+  const filterButtons = document.querySelectorAll(
+    '.filter-category__expand-button',
+  );
+
+  const handleKeyDown = function (event) {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      // Find the associated checkbox and trigger click
+      const checkboxId = event.target.getAttribute('for');
+      const checkbox = document.getElementById(checkboxId);
+      if (checkbox) {
+        checkbox.click();
+      }
+    }
+  };
+
+  const updateAriaExpanded = function (event) {
+    const checkbox = event.target;
+    const button = document.querySelector(`label[for="${checkbox.id}"]`);
+    if (button) {
+      button.setAttribute('aria-expanded', checkbox.checked.toString());
+    }
+  };
+
+  filterButtons.forEach(function (button) {
+    button.addEventListener('keydown', handleKeyDown);
+  });
+
+  // Listen for checkbox changes to update aria-expanded
+  const checkboxes = document.querySelectorAll('.filter-category__toggle');
+  checkboxes.forEach(function (checkbox) {
+    checkbox.addEventListener('change', updateAriaExpanded);
+  });
+
+  // Return cleanup function
+  return function () {
+    filterButtons.forEach(function (button) {
+      button.removeEventListener('keydown', handleKeyDown);
+    });
+    checkboxes.forEach(function (checkbox) {
+      checkbox.removeEventListener('change', updateAriaExpanded);
+    });
+  };
+};
+
 // Initialization - Single responsibility: Set up all filter-related functionality
 const initCaseStudiesFilterHandler = function () {
-  const cleanup = setupFilterLinkDetection();
-  return cleanup;
+  const filterCleanup = setupFilterLinkDetection();
+  const accessibilityCleanup = setupFilterAccessibility();
+
+  // Return combined cleanup function
+  return function () {
+    filterCleanup();
+    accessibilityCleanup();
+  };
 };
 
 // Public API

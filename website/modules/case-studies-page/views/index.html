@@ -81,12 +81,12 @@ main %}
         'Technology'] ] %} {% set tags = data.piecesFilters[filterType] %} {% if
         tags and tags.length %}
         <div class="filter-section">
-          <input type="checkbox" id="filter-toggle-{{ filterType }}" class="filter-category__toggle" {% if loop.first %}checked{% endif %}>
-          <div class="filter-category">
+          <input type="checkbox" id="filter-toggle-{{ filterType }}" class="filter-category__toggle" {% if loop.first %}checked{% endif %} aria-labelledby="filter-category-{{ filterType }}">
+          <div class="filter-category" id="filter-category-{{ filterType }}">
             <span class="filter-category__title">{{ filterLabel }}:</span>
-            <label for="filter-toggle-{{ filterType }}" class="filter-category__expand-button"></label>
+            <label for="filter-toggle-{{ filterType }}" class="filter-category__expand-button" role="button" tabindex="0" aria-expanded="{% if loop.first %}true{% else %}false{% endif %}" aria-controls="filter-content-{{ filterType }}" aria-label="Toggle {{ filterLabel }} filter section"></label>
           </div>
-          <div class="filter-content">
+          <div class="filter-content" id="filter-content-{{ filterType }}">
             <input
               type="text"
               class="tag-search"
