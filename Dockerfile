@@ -4,7 +4,7 @@ FROM node:23-alpine
 WORKDIR /app
 
 # Install dependencies needed for health checks with pinned version
- RUN apk add --no-cache wget=1.25.0-r0
+ RUN apk add --no-cache wget=1.25.0-r1
 
  RUN wget https://truststore.pki.rds.amazonaws.com/global/global-bundle.pem
  RUN chmod 600 global-bundle.pem
