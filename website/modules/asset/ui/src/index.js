@@ -60,66 +60,6 @@ function initCaseStudiesTagFilter({
   );
 }
 
-// Case Studies sticky functionality
-function initCaseStudiesSticky() {
-  const csList = document.querySelector('.cs_list');
-  const filterInfo = document.querySelector('.cs_filter-info');
-  const csGrid = document.querySelector('.cs_grid');
-  const footer = document.querySelector('footer');
-
-  if (!csList || !csGrid) return;
-
-  // Create placeholder element
-  const placeholder = document.createElement('div');
-  placeholder.style.display = 'none';
-  csList.parentNode.insertBefore(placeholder, csList.nextSibling);
-
-  // Get initial position of cs_list
-  const csListRect = csList.getBoundingClientRect();
-  const initialTop = csListRect.top + window.scrollY;
-
-  // Function to update the fixed position based on scroll
-  const updatePosition = () => {
-    const { scrollY } = window;
-    // Default header height
-    const headerHeight = 100;
-    const filterInfoHeight = filterInfo ? filterInfo.offsetHeight : 0;
-    const offset = Math.max(headerHeight, filterInfoHeight);
-
-    if (scrollY >= initialTop - offset) {
-      csList.classList.add('is-fixed');
-      csList.style.top = `${offset}px`;
-
-      // Show placeholder with the same height as cs_list
-      placeholder.style.display = 'block';
-      placeholder.style.height = `${csList.offsetHeight}px`;
-
-      // Calculate available height for grid
-      const viewportHeight = window.innerHeight;
-      const footerHeight = footer ? footer.offsetHeight : 0;
-      const footerTop = footer
-        ? footer.getBoundingClientRect().top
-        : viewportHeight;
-      const availableHeight = footerTop - offset - 32; // 32px for margin
-
-      // Update grid max height
-      csGrid.style.maxHeight = `${availableHeight}px`;
-    } else {
-      csList.classList.remove('is-fixed');
-      csList.style.top = 'auto';
-      placeholder.style.display = 'none';
-      csGrid.style.maxHeight = 'none';
-    }
-  };
-
-  // Initial calculation
-  updatePosition();
-
-  // Update on scroll and resize
-  window.addEventListener('scroll', updatePosition);
-  window.addEventListener('resize', updatePosition);
-}
-
 // Wrapper function
 function initializeAllComponents() {
   initImageLozad();
@@ -127,7 +67,6 @@ function initializeAllComponents() {
   initSmoothCounters();
   initFontChanger();
   initCaseStudiesTagFilter();
-  initCaseStudiesSticky();
 }
 
 // Barba pages
