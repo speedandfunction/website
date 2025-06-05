@@ -68,13 +68,10 @@
     display: flex;
     flex-direction: column;
     gap: 32px;
-    border-top: 1px solid $gray-border;
-    padding-top: 24px;
     align-items: center;
 
     @include breakpoint-medium {
       flex-direction: row;
-      padding-top: 32px;
       align-items: flex-start;
     }
   }
@@ -355,11 +352,19 @@
   flex-wrap: wrap;
   gap: 16px;
   justify-content: space-between;
+  min-height: 28px;
+  background: $white;
+  border-bottom: 1px solid $gray-border;
+  padding-bottom: 32px;
+  position: sticky;
+  z-index: 1;
+  top: $mobile-header-height;
 
   @include breakpoint-medium {
     flex-wrap: nowrap;
     align-items: flex-start;
     justify-content: flex-start;
+    top: $desktop-header-height;
   }
 }
 
