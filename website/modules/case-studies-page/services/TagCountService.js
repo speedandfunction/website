@@ -74,6 +74,33 @@ class TagCountService {
       );
     });
   }
+
+  /**
+   * Calculates tag counts for case studies
+   * @param {Object} req - ApostropheCMS request object
+   * @param {Object} aposModules - ApostropheCMS modules
+   * @param {Object} options - Module options
+   * @returns {Promise<Object>} Tag counts by type
+   */
+  static async calculateTagCounts(req, aposModules, options) {
+    const tagCounts = {
+      industry: {},
+      stack: {},
+      caseStudyType: {},
+    };
+
+    const [caseStudies, casesTags] = await this.fetchCaseStudiesAndTags(
+      req,
+      aposModules,
+      options,
+    );
+
+    const tagMap = this.createTagMap(casesTags);
+
+    this.processCaseStudies(caseStudies, tagMap, tagCounts);
+
+    return tagCounts;
+  }
 }
 
 module.exports = TagCountService;

@@ -150,6 +150,19 @@ class NavigationService {
 
     return this.calculatePrevNext(allCaseStudies, currentIndex);
   }
+
+  /**
+   * Gets navigation data for page module
+   * @param {Object} req - ApostropheCMS request object
+   * @param {Object} apos - ApostropheCMS instance
+   * @param {Object} pageModule - Page module for filter application
+   * @returns {Promise<Object>} Promise resolving to navigation data with prev and next
+   */
+  static async getNavigationDataForPage(req, apos, pageModule) {
+    const currentPiece = req.data.piece;
+
+    return await this.getNavigationData(req, apos, pageModule, currentPiece);
+  }
 }
 
 module.exports = NavigationService;

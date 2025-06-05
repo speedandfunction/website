@@ -171,22 +171,7 @@ main %}
 
       <div class="cs_grid">
         {% for article in data.pieces %} {# CARD START: {{ article.title }} #}
-        {% set cardUrl = article._url %} {% if data.query.industry or
-        data.query.stack or data.query.caseStudyType or data.query.search %} {%
-        set queryParams = [] %} {% if data.query.industry %} {% for industry in
-        data.query.industry %} {% set queryParams =
-        queryParams.concat(['industry%5B' + loop.index0 + '%5D=' + industry]) %}
-        {% endfor %} {% endif %} {% if data.query.stack %} {% for stack in
-        data.query.stack %} {% set queryParams = queryParams.concat(['stack%5B'
-        + loop.index0 + '%5D=' + stack]) %} {% endfor %} {% endif %} {% if
-        data.query.caseStudyType %} {% for caseStudyType in
-        data.query.caseStudyType %} {% set queryParams =
-        queryParams.concat(['caseStudyType%5B' + loop.index0 + '%5D=' +
-        caseStudyType]) %} {% endfor %} {% endif %} {% if data.query.search %}
-        {% set queryParams = queryParams.concat(['search=' + data.query.search])
-        %} {% endif %} {% if queryParams.length > 0 %} {% set cardUrl = cardUrl
-        + '?' + queryParams.join('&') %} {% endif %} {% endif %}
-        <a href="{{ cardUrl }}" class="cs_card">
+        <a href="{{ data.buildCaseStudyUrl(article._url) }}" class="cs_card">
           {% set picture = apos.image.first(article.picture) %} {% if picture is
           defined %}
           <img
