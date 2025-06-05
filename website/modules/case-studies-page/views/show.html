@@ -1,22 +1,20 @@
-{% extends "layout.html" %} {% block main %}
+{% extends "layout.html" %} {% macro buildQueryString(query) %} {% set
+queryParams = [] %} {% if query.industry %} {% for industry in query.industry %}
+{% set queryParams = queryParams.concat(['industry%5B' + loop.index0 + '%5D=' +
+industry]) %} {% endfor %} {% endif %} {% if query.stack %} {% for stack in
+query.stack %} {% set queryParams = queryParams.concat(['stack%5B' + loop.index0
++ '%5D=' + stack]) %} {% endfor %} {% endif %} {% if query.caseStudyType %} {%
+for caseStudyType in query.caseStudyType %} {% set queryParams =
+queryParams.concat(['caseStudyType%5B' + loop.index0 + '%5D=' + caseStudyType])
+%} {% endfor %} {% endif %} {% if query.search %} {% set queryParams =
+queryParams.concat(['search=' + query.search]) %} {% endif %} {{ '?' +
+queryParams.join('&') if queryParams.length > 0 else '' }} {% endmacro %} {%
+block main %}
 
 <div>
   <!-- Back to all projects link -->
   <div class="cs_back-to-all">
-    {% set backUrl = '/cases' %} {% if data.query.industry or data.query.stack
-    or data.query.caseStudyType or data.query.search %} {% set queryParams = []
-    %} {% if data.query.industry %} {% for industry in data.query.industry %} {%
-    set queryParams = queryParams.concat(['industry%5B' + loop.index0 + '%5D=' +
-    industry]) %} {% endfor %} {% endif %} {% if data.query.stack %} {% for
-    stack in data.query.stack %} {% set queryParams =
-    queryParams.concat(['stack%5B' + loop.index0 + '%5D=' + stack]) %} {% endfor
-    %} {% endif %} {% if data.query.caseStudyType %} {% for caseStudyType in
-    data.query.caseStudyType %} {% set queryParams =
-    queryParams.concat(['caseStudyType%5B' + loop.index0 + '%5D=' +
-    caseStudyType]) %} {% endfor %} {% endif %} {% if data.query.search %} {%
-    set queryParams = queryParams.concat(['search=' + data.query.search]) %} {%
-    endif %} {% if queryParams.length > 0 %} {% set backUrl = backUrl + '?' +
-    queryParams.join('&') %} {% endif %} {% endif %}
+    {% set backUrl = '/cases' + buildQueryString(data.query) %}
     <a href="{{ backUrl }}" class="cs_back-link">
       <span class="cs_back-text">Back to all projects</span>
     </a>
@@ -25,21 +23,8 @@
   <!-- Navigation buttons -->
   <div class="cs_navigation">
     <div class="cs_nav-item">
-      {% if data.prev %} {% set prevUrl = data.prev._url %} {% if
-      data.query.industry or data.query.stack or data.query.caseStudyType or
-      data.query.search %} {% set queryParams = [] %} {% if data.query.industry
-      %} {% for industry in data.query.industry %} {% set queryParams =
-      queryParams.concat(['industry%5B' + loop.index0 + '%5D=' + industry]) %}
-      {% endfor %} {% endif %} {% if data.query.stack %} {% for stack in
-      data.query.stack %} {% set queryParams = queryParams.concat(['stack%5B' +
-      loop.index0 + '%5D=' + stack]) %} {% endfor %} {% endif %} {% if
-      data.query.caseStudyType %} {% for caseStudyType in
-      data.query.caseStudyType %} {% set queryParams =
-      queryParams.concat(['caseStudyType%5B' + loop.index0 + '%5D=' +
-      caseStudyType]) %} {% endfor %} {% endif %} {% if data.query.search %} {%
-      set queryParams = queryParams.concat(['search=' + data.query.search]) %}
-      {% endif %} {% set prevUrl = prevUrl + '?' + queryParams.join('&') %} {%
-      endif %}
+      {% if data.prev %} {% set prevUrl = data.prev._url +
+      buildQueryString(data.query) %}
       <a href="{{ prevUrl }}" class="cs_nav-text cs_nav-text--active"
         >previous project</a
       >
@@ -49,21 +34,8 @@
     </div>
 
     <div class="cs_nav-item">
-      {% if data.next %} {% set nextUrl = data.next._url %} {% if
-      data.query.industry or data.query.stack or data.query.caseStudyType or
-      data.query.search %} {% set queryParams = [] %} {% if data.query.industry
-      %} {% for industry in data.query.industry %} {% set queryParams =
-      queryParams.concat(['industry%5B' + loop.index0 + '%5D=' + industry]) %}
-      {% endfor %} {% endif %} {% if data.query.stack %} {% for stack in
-      data.query.stack %} {% set queryParams = queryParams.concat(['stack%5B' +
-      loop.index0 + '%5D=' + stack]) %} {% endfor %} {% endif %} {% if
-      data.query.caseStudyType %} {% for caseStudyType in
-      data.query.caseStudyType %} {% set queryParams =
-      queryParams.concat(['caseStudyType%5B' + loop.index0 + '%5D=' +
-      caseStudyType]) %} {% endfor %} {% endif %} {% if data.query.search %} {%
-      set queryParams = queryParams.concat(['search=' + data.query.search]) %}
-      {% endif %} {% set nextUrl = nextUrl + '?' + queryParams.join('&') %} {%
-      endif %}
+      {% if data.next %} {% set nextUrl = data.next._url +
+      buildQueryString(data.query) %}
       <a href="{{ nextUrl }}" class="cs_nav-text cs_nav-text--active"
         >next project</a
       >
