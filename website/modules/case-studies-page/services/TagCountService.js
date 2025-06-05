@@ -63,11 +63,15 @@ class TagCountService {
    */
   static processCaseStudies(caseStudies, tagMap, tagCounts) {
     caseStudies.forEach((study) => {
-      this.countTagsOfType(study.industryIds, tagMap, tagCounts.industry);
+      TagCountService.countTagsOfType(
+        study.industryIds,
+        tagMap,
+        tagCounts.industry,
+      );
 
-      this.countTagsOfType(study.stackIds, tagMap, tagCounts.stack);
+      TagCountService.countTagsOfType(study.stackIds, tagMap, tagCounts.stack);
 
-      this.countTagsOfType(
+      TagCountService.countTagsOfType(
         study.caseStudyTypeIds,
         tagMap,
         tagCounts.caseStudyType,
@@ -89,15 +93,12 @@ class TagCountService {
       caseStudyType: {},
     };
 
-    const [caseStudies, casesTags] = await this.fetchCaseStudiesAndTags(
-      req,
-      aposModules,
-      options,
-    );
+    const [caseStudies, casesTags] =
+      await TagCountService.fetchCaseStudiesAndTags(req, aposModules, options);
 
-    const tagMap = this.createTagMap(casesTags);
+    const tagMap = TagCountService.createTagMap(casesTags);
 
-    this.processCaseStudies(caseStudies, tagMap, tagCounts);
+    TagCountService.processCaseStudies(caseStudies, tagMap, tagCounts);
 
     return tagCounts;
   }

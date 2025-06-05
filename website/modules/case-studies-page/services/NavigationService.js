@@ -40,7 +40,7 @@ class NavigationService {
     let filteredQuery = query;
 
     if (req.query.industry && req.query.industry.length > 0) {
-      const industryIds = await this.convertSlugsToIds(
+      const industryIds = await NavigationService.convertSlugsToIds(
         apos,
         req,
         req.query.industry,
@@ -53,14 +53,18 @@ class NavigationService {
     }
 
     if (req.query.stack && req.query.stack.length > 0) {
-      const stackIds = await this.convertSlugsToIds(apos, req, req.query.stack);
+      const stackIds = await NavigationService.convertSlugsToIds(
+        apos,
+        req,
+        req.query.stack,
+      );
       if (stackIds.length > 0) {
         filteredQuery = filteredQuery.and({ stackIds: { $in: stackIds } });
       }
     }
 
     if (req.query.caseStudyType && req.query.caseStudyType.length > 0) {
-      const caseStudyTypeIds = await this.convertSlugsToIds(
+      const caseStudyTypeIds = await NavigationService.convertSlugsToIds(
         apos,
         req,
         req.query.caseStudyType,
@@ -92,7 +96,7 @@ class NavigationService {
     let query = apos.modules['case-studies'].find(req);
 
     if (applyFilters && req.query) {
-      query = await this.applyFiltersToQuery(query, req, apos);
+      query = await NavigationService.applyFiltersToQuery(query, req, apos);
     }
 
     return await query.sort({ updatedAt: -1 }).toArray();
@@ -139,16 +143,19 @@ class NavigationService {
    * @returns {Promise<Object>} Promise resolving to navigation data with prev and next
    */
   static async getNavigationData(req, apos, pageModule, currentPiece) {
-    const allCaseStudies = await this.getAllCaseStudies(
+    const allCaseStudies = await NavigationService.getAllCaseStudies(
       req,
       apos,
       true,
       pageModule,
     );
 
-    const currentIndex = this.findCurrentIndex(allCaseStudies, currentPiece);
+    const currentIndex = NavigationService.findCurrentIndex(
+      allCaseStudies,
+      currentPiece,
+    );
 
-    return this.calculatePrevNext(allCaseStudies, currentIndex);
+    return NavigationService.calculatePrevNext(allCaseStudies, currentIndex);
   }
 
   /**
@@ -161,7 +168,12 @@ class NavigationService {
   static async getNavigationDataForPage(req, apos, pageModule) {
     const currentPiece = req.data.piece;
 
-    return await this.getNavigationData(req, apos, pageModule, currentPiece);
+    return await NavigationService.getNavigationData(
+      req,
+      apos,
+      pageModule,
+      currentPiece,
+    );
   }
 }
 

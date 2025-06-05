@@ -19,7 +19,7 @@ class UrlService {
 
     // Add industry parameters
     if (query.industry) {
-      const industries = this.ensureArray(query.industry);
+      const industries = UrlService.ensureArray(query.industry);
       industries.forEach((industry, index) => {
         params.append(`industry[${index}]`, industry);
       });
@@ -27,7 +27,7 @@ class UrlService {
 
     // Add stack parameters
     if (query.stack) {
-      const stacks = this.ensureArray(query.stack);
+      const stacks = UrlService.ensureArray(query.stack);
       stacks.forEach((stack, index) => {
         params.append(`stack[${index}]`, stack);
       });
@@ -35,7 +35,7 @@ class UrlService {
 
     // Add case study type parameters
     if (query.caseStudyType) {
-      const caseStudyTypes = this.ensureArray(query.caseStudyType);
+      const caseStudyTypes = UrlService.ensureArray(query.caseStudyType);
       caseStudyTypes.forEach((caseStudyType, index) => {
         params.append(`caseStudyType[${index}]`, caseStudyType);
       });
@@ -78,7 +78,7 @@ class UrlService {
     }
     reqCopy.data.tagCounts = tagCounts;
     reqCopy.data.buildCaseStudyUrl = (caseStudyUrl) =>
-      this.buildCaseStudyUrl(caseStudyUrl, req.query);
+      UrlService.buildCaseStudyUrl(caseStudyUrl, req.query);
   }
 
   /**
