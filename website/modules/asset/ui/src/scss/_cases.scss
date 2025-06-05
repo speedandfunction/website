@@ -143,11 +143,16 @@
       justify-content: center;
       cursor: pointer;
       flex-shrink: 0;
-      top: 4px;
+      top: 6px;
 
       &:focus {
-        outline: 2px solid rgba($gray-400, 0.5);
-        outline-offset: 2px;
+        outline: none;
+        box-shadow: 0 0 0 2px rgba($gray-400, 0.5);
+        border-radius: 3px;
+      }
+
+      &:focus:not(:focus-visible) {
+        box-shadow: none;
       }
 
       &:hover {
@@ -187,7 +192,7 @@
         }
         
         .filter-category__expand-button {
-          top: 8px;
+          top: 6px;
           
           &::before {
             transform: rotate(225deg);
