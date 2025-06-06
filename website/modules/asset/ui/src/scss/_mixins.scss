@@ -172,3 +172,16 @@
     white-space: normal;
   }
 }
+
+// Universal background decorative circle mixin
+@mixin decorative-background-circle($bg-color, $border-radius, $width, $height, $position, $z-index) {
+  display: block;
+  z-index: $z-index;
+  background-color: $bg-color;
+  border-radius: $border-radius;
+  width: $width;
+  height: $height;
+  position: absolute;
+  inset: $position;
+  @include transition(all, 0.5s);
+}
