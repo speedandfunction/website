@@ -70,7 +70,7 @@ module.exports = {
         label: 'URL',
         type: 'string',
         help: 'Site url (must include http(s) protocol).',
-        placeholder: 'wikimediafoundation.org',
+        placeholder: 'https://wikimediafoundation.org',
       },
       feedback: {
         label: 'Feedback',
