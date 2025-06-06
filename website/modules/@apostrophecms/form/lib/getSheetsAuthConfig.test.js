@@ -1,14 +1,17 @@
 const { google } = require('googleapis');
-const getEnv = require('../../../../utils/env');
+const { getEnv } = require('../../../../utils/env');
 const { getSheetsAuthConfig } = require('./getSheetsAuthConfig');
 
-jest.mock('../../../../utils/env', () => jest.fn());
+jest.mock('../../../../utils/env', () => ({
+  getEnv: jest.fn(),
+}));
 
 jest.mock('googleapis', () => ({
   google: {
     auth: {
       JWT: jest.fn(),
     },
+    sheets: jest.fn().mockReturnValue('mock-sheets'),
   },
 }));
 
@@ -32,6 +35,7 @@ describe('getSheetsAuthConfig', () => {
     expect(result).toEqual({
       spreadsheetId: 'test-spreadsheet-id',
       auth: expect.any(Object),
+      sheets: 'mock-sheets',
     });
 
     expect(mockJWT).toHaveBeenCalledWith({
@@ -75,7 +79,6 @@ describe('getSheetsAuthConfig', () => {
   test('throws error for non-string private key', () => {
     getEnv.mockImplementation((key) => {
       if (key === 'SERVICE_ACCOUNT_PRIVATE_KEY') {
-        // Using a non-string value to test type validation
         return 123;
       }
       return mockConfig[key];
