@@ -53,7 +53,7 @@ module.exports = {
       linkedin: {
         label: 'LinkedIn',
         type: 'string',
-        help: 'Site url without http protocol.',
+        help: 'Site url (must include http(s) protocol).',
         placeholder: 'linkedin.com/in/your-profile',
         required: true,
       },
