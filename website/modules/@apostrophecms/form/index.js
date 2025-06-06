@@ -33,26 +33,33 @@ module.exports = {
   },
 
   init(self) {
-    const config = getSheetsAuthConfig();
-    const { spreadsheetId, sheets } = config;
-    const googleSheetsClient = new GoogleSheetsClient(sheets, spreadsheetId);
-    const errorHandler = new GoogleSheetsErrorHandler(self);
+    try {
+      const config = getSheetsAuthConfig();
+      const { spreadsheetId, sheets } = config;
+      const googleSheetsClient = new GoogleSheetsClient(sheets, spreadsheetId);
+      const errorHandler = new GoogleSheetsErrorHandler(self);
 
-    const formSubmissionHandler = new GoogleSheetsFormSubmissionHandler(
-      googleSheetsClient,
-      formatForSpreadsheet,
-      errorHandler,
-      getSheetsAuthConfig,
-    );
+      const formSubmissionHandler = new GoogleSheetsFormSubmissionHandler(
+        googleSheetsClient,
+        formatForSpreadsheet,
+        errorHandler,
+        getSheetsAuthConfig,
+      );
 
-    const originalSubmitForm = self.submitForm;
-    self.submitForm = async function (req, data, options) {
-      const result = await originalSubmitForm.call(self, req, data, options);
-      await this.handleFormSubmission(req);
-      return result;
-    };
+      const originalSubmitForm = self.submitForm;
+      self.submitForm = async function (req, data, options) {
+        const result = await originalSubmitForm.call(self, req, data, options);
+        await this.handleFormSubmission(req);
+        return result;
+      };
 
-    self.formSubmissionHandler = formSubmissionHandler;
+      self.formSubmissionHandler = formSubmissionHandler;
+    } catch (error) {
+      self.apos.util.error(
+        'Failed to initialize Google Sheets integration:',
+        error,
+      );
+    }
   },
 
   methods(self) {

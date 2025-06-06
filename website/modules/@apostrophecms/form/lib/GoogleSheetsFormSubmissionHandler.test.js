@@ -250,11 +250,16 @@ describe('GoogleSheetsFormSubmission Handler', () => {
     });
 
     test('handles retry failure', async () => {
-      retryOperation.mockResolvedValue(false);
+      const error = new Error('Retry failed');
+      retryOperation.mockRejectedValue(error);
 
       const result = await handler.checkHeadersWithRetry();
 
-      expect(result).toBe(false);
+      expect(result).toBe(null);
+      expect(mockErrorHandler.logError).toHaveBeenCalledWith(
+        'Headers check failed after all attempts',
+        error,
+      );
       expect(retryOperation).toHaveBeenCalledWith(expect.any(Function), {
         self: mockErrorHandler.logger,
         maxRetries: 3,
