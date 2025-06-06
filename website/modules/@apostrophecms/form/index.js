@@ -23,10 +23,6 @@ const validateSubmissionSuccess = (result) => {
   }
 };
 
-const sendToGoogleSheets = async (formSubmissionHandler, formData) => {
-  return await formSubmissionHandler.handle(formData);
-};
-
 module.exports = {
   options: {
     label: 'Form',
@@ -70,10 +66,7 @@ module.exports = {
           return null;
         }
 
-        const result = await sendToGoogleSheets(
-          self.formSubmissionHandler,
-          formData,
-        );
+        const result = await self.formSubmissionHandler.handle(formData);
         validateSubmissionSuccess(result);
         return result;
       },
