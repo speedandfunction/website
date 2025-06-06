@@ -1,5 +1,5 @@
 const { google } = require('googleapis');
-const getEnv = require('../../../../utils/env');
+const { getEnv } = require('../../../../utils/env');
 
 const SCOPES = ['https://www.googleapis.com/auth/spreadsheets'];
 
@@ -41,10 +41,12 @@ const createAuth = (config) => {
 const getSheetsAuthConfig = () => {
   const config = getConfigFromEnv();
   const auth = createAuth(config);
+  const sheets = google.sheets({ version: 'v4', auth });
 
   return {
     spreadsheetId: config.spreadsheetId,
     auth,
+    sheets,
   };
 };
 
