@@ -28,7 +28,7 @@ class GoogleSheetsFormSubmissionHandler {
 
   configureAuth() {
     const authConfig = this.getSheetsAuthConfig();
-    this.client.sheets = this.client.sheets.withAuth(authConfig.auth);
+    this.client.sheets = authConfig.sheets;
   }
 
   async checkHeadersWithRetry() {
