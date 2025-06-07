@@ -9,14 +9,13 @@ main %}
     </div>
 
     <div class="cs_filter-info">
+      <div class="filters-cta">Filter Case Studies</div>
       {% set hasActiveFilters = data.query.industry or data.query.stack or
       data.query.caseStudyType %} {% if hasActiveFilters %}
       <p class="items-count">
         {{ data.totalPieces }} Ite{% if data.totalPieces == 1 %}m{% else %}ms{%
         endif %} found
       </p>
-
-      <div class="filters-cta">Filter Case Studies</div>
 
       <div class="clear-all">
         <a
@@ -247,6 +246,21 @@ main %}
     <div class="pagination-container">
       {{ pager.render({ page: data.currentPage, total: data.totalPages, class:
       'cs-pager' }, data.url) }}
+    </div>
+
+    <div id="filter-modal" class="filter-modal">
+      <div class="filter-modal__backdrop"></div>
+      <div class="filter-modal__content">
+        <span
+          class="filter-modal__close"
+          tabindex="0"
+          aria-label="Close filter modal"
+        >
+          <i class="back-icon"></i>
+          back to all projects
+        </span>
+        <div class="filter-modal__body"></div>
+      </div>
     </div>
   </div>
 </div>

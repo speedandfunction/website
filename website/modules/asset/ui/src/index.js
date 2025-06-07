@@ -208,3 +208,79 @@ export default () => {
     initSmoothCounters();
   }
 };
+
+class FilterModal {
+  constructor({
+    modalSelector,
+    openBtnSelector,
+    closeBtnSelector,
+    backdropSelector,
+    clearAllSelector,
+    selectedTagsSelector,
+    tagsFilterSelector,
+  }) {
+    this.modal = document.querySelector(modalSelector);
+    this.modalBody = this.modal.querySelector('.filter-modal__body');
+    this.openBtn = document.querySelector(openBtnSelector);
+    this.closeBtn = this.modal.querySelector(closeBtnSelector);
+    this.backdrop = this.modal.querySelector(backdropSelector);
+    this.clearAll = document.querySelector(clearAllSelector);
+    this.selectedTags = document.querySelector(selectedTagsSelector);
+    this.tagsFilter = document.querySelector(tagsFilterSelector);
+
+    this.originalParents = {
+      clearAll: this.clearAll ? this.clearAll.parentNode : null,
+      selectedTags: this.selectedTags ? this.selectedTags.parentNode : null,
+      tagsFilter: this.tagsFilter ? this.tagsFilter.parentNode : null,
+    };
+
+    this.init();
+  }
+
+  open() {
+    this.modalBody.innerHTML = '';
+    if (this.clearAll) this.modalBody.appendChild(this.clearAll);
+    if (this.selectedTags) this.modalBody.appendChild(this.selectedTags);
+    if (this.tagsFilter) this.modalBody.appendChild(this.tagsFilter);
+    this.modal.classList.add('active');
+  }
+
+  close() {
+    if (this.clearAll && this.originalParents.clearAll) {
+      this.originalParents.clearAll.appendChild(this.clearAll);
+    }
+    if (this.selectedTags && this.originalParents.selectedTags) {
+      this.originalParents.selectedTags.appendChild(this.selectedTags);
+    }
+    if (this.tagsFilter && this.originalParents.tagsFilter) {
+      this.originalParents.tagsFilter.appendChild(this.tagsFilter);
+    }
+    this.modal.classList.remove('active');
+    this.modalBody.innerHTML = '';
+  }
+
+  init() {
+    if (this.openBtn) this.openBtn.addEventListener('click', () => this.open());
+    if (this.closeBtn)
+      this.closeBtn.addEventListener('click', () => this.close());
+    if (this.backdrop)
+      this.backdrop.addEventListener('click', () => this.close());
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && this.modal.classList.contains('active')) {
+        this.close();
+      }
+    });
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  new FilterModal({
+    modalSelector: '#filter-modal',
+    openBtnSelector: '.filters-cta',
+    closeBtnSelector: '.filter-modal__close',
+    backdropSelector: '.filter-modal__backdrop',
+    clearAllSelector: '.clear-all',
+    selectedTagsSelector: '.selected-tags',
+    tagsFilterSelector: '.tags-filter',
+  });
+});
