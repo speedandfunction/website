@@ -109,7 +109,7 @@ function initBarbaPageTransitions() {
           return false;
         }
 
-        if (!window.apos || !window.apos.aposForm) {
+        if (!window?.apos?.aposForm) {
           return false;
         }
 
