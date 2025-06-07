@@ -35,10 +35,46 @@
   width: 100%;
   border: 1px solid $gray-200;
   padding: 24px;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  @include transition(all, 0.5s);
+  transform: scale3d(1, 1, 1);
 
   &:not(:last-child) {
     border-bottom: none;
   }
+
+  .background-circle {
+    display: none;
+    @include decorative-background-circle($gray-500, 25%, 130%, 100%, -100% -60% auto auto, -10);
+  }
+
+  &:hover,
+  &:focus {
+    transform: scale3d(1.03, 1.03, 1);
+    z-index: 10;
+    outline: none;
+    border-color: black;
+
+    .sf-table-title,
+    .sf-table-cell-title {
+      color: $gray-100;
+    }
+
+    .sf-table-cell-description,
+    .sf-table-link a {
+      color: $gray-200;
+    }
+
+    .background-circle {
+      display: block;
+      width: 150em;
+      height: 50em;
+      transform: translate3d(-5%, -10%, 0);
+    }
+  }
+
   @include breakpoint-medium {
     padding: 40px;
     margin: 0 -1px 0 0;
@@ -46,6 +82,57 @@
 
     &:not(:last-child) {
       border: 1px solid $gray-200;
+    }
+
+    .background-circle {
+      @include decorative-background-circle($gray-500, 25%, 130%, 100%, -100% -60% auto auto, -10);
+    }
+
+    &:hover {
+      transform: scale3d(1.03, 1.03, 1);
+      z-index: 10;
+      border-color: black;
+
+      .sf-table-title,
+      .sf-table-cell-title {
+        color: $gray-100;
+      }
+
+      .sf-table-cell-description,
+      .sf-table-link a {
+        color: $gray-200;
+      }
+
+      .background-circle {
+        width: 150em;
+        height: 50em;
+        transform: translate3d(-5%, -10%, 0);
+      }
+    }
+
+    // Remove focus effect on desktop (only hover)
+    &:focus {
+      transform: scale3d(1, 1, 1);
+      z-index: auto;
+
+      .sf-table-title,
+      .sf-table-cell-title {
+        color: $gray-500;
+      }
+
+      .sf-table-cell-description {
+        color: $gray-300;
+      }
+
+      .sf-table-link a {
+        color: $gray-300;
+      }
+
+      .background-circle {
+        width: 130%;
+        height: 100%;
+        transform: none;
+      }
     }
 
     // prettier-ignore
@@ -68,6 +155,7 @@
   font-weight: 700;
   font-size: 14px;
   color: $gray-500;
+  @include transition(color);
 
   @include breakpoint-medium {
     font-size: 22px;
@@ -79,6 +167,7 @@
   font-size: 18px;
   color: $gray-500;
   margin: 0;
+  @include transition(color);
 
   @include breakpoint-medium {
     font-size: 22px;
@@ -90,6 +179,7 @@
   font-weight: 500;
   font-size: 14px;
   color: $gray-300;
+  @include transition(color);
 
   p {
     margin: 24px 0 0;
@@ -110,6 +200,7 @@
     text-decoration: underline;
     font-weight: 300;
     font-size: 11px;
+    @include transition(color);
 
     &:hover {
       text-decoration: none;
