@@ -1,50 +1,7 @@
 const mainWidgets = require('../../lib/mainWidgets');
-
-// Helper utility functions for tag counting
-const tagCountHelpers = {
-  createTagMap(casesTags) {
-    const tagMap = {};
-    casesTags.forEach((tag) => {
-      tagMap[tag.aposDocId] = tag.slug;
-    });
-    return tagMap;
-  },
-
-  countTagsOfType(tagIds, tagMap, countsForType) {
-    if (!tagIds?.length) {
-      return;
-    }
-    tagIds.forEach((tagId) => {
-      const tagSlug = tagMap[tagId];
-      if (tagSlug && !countsForType[tagSlug]) {
-        countsForType[tagSlug] = 0;
-      }
-      if (tagSlug) {
-        countsForType[tagSlug] += 1;
-      }
-    });
-  },
-
-  async fetchCaseStudiesAndTags(req, aposModules, options) {
-    const caseStudies = await aposModules[options.pieces].find(req).toArray();
-    const casesTags = await aposModules['cases-tags'].find(req).toArray();
-    return [caseStudies, casesTags];
-  },
-
-  processCaseStudies(caseStudies, tagMap, tagCounts) {
-    caseStudies.forEach((study) => {
-      this.countTagsOfType(study.industryIds, tagMap, tagCounts.industry);
-
-      this.countTagsOfType(study.stackIds, tagMap, tagCounts.stack);
-
-      this.countTagsOfType(
-        study.caseStudyTypeIds,
-        tagMap,
-        tagCounts.caseStudyType,
-      );
-    });
-  },
-};
+const TagCountService = require('./services/TagCountService');
+const NavigationService = require('./services/NavigationService');
+const UrlService = require('./services/UrlService');
 
 module.exports = {
   extend: '@apostrophecms/piece-page-type',
@@ -78,51 +35,46 @@ module.exports = {
 
   init(self) {
     self.beforeIndex = async (req) => {
-      try {
-        const tagCounts = await self.calculateTagCounts(req);
+      await self.setupIndexData(req);
+    };
 
-        const reqCopy = req;
-        if (!reqCopy.data) {
-          reqCopy.data = {};
-        }
-        reqCopy.data.tagCounts = tagCounts;
-      } catch (error) {
-        self.apos.util.error('Error calculating tag counts:', error);
-
-        const reqCopy = req;
-        if (!reqCopy.data) {
-          reqCopy.data = {};
-        }
-        reqCopy.data.tagCounts = {
-          industry: {},
-          stack: {},
-          caseStudyType: {},
-        };
-      }
+    self.beforeShow = async (req) => {
+      await self.setupShowData(req);
     };
   },
 
   methods(self) {
     return {
-      async calculateTagCounts(req) {
-        const tagCounts = {
-          industry: {},
-          stack: {},
-          caseStudyType: {},
-        };
-
-        const [caseStudies, casesTags] =
-          await tagCountHelpers.fetchCaseStudiesAndTags(
+      async setupIndexData(req) {
+        try {
+          const tagCounts = await TagCountService.calculateTagCounts(
             req,
             self.apos.modules,
             self.options,
           );
+          UrlService.attachIndexData(req, tagCounts);
+        } catch (error) {
+          self.apos.util.error('Error calculating tag counts:', error);
+          UrlService.attachIndexData(req, {
+            industry: {},
+            stack: {},
+            caseStudyType: {},
+          });
+        }
+      },
 
-        const tagMap = tagCountHelpers.createTagMap(casesTags);
-
-        tagCountHelpers.processCaseStudies(caseStudies, tagMap, tagCounts);
-
-        return tagCounts;
+      async setupShowData(req) {
+        try {
+          const navigation = await NavigationService.getNavigationDataForPage(
+            req,
+            self.apos,
+            self,
+          );
+          UrlService.attachShowData(req, navigation);
+        } catch (error) {
+          self.apos.util.error('Error calculating navigation data:', error);
+          UrlService.attachShowData(req, { prev: null, next: null });
+        }
       },
     };
   },
