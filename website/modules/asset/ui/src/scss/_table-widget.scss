@@ -51,10 +51,9 @@
   }
 
   &:hover,
-  &:focus {
+  &:focus-visible {
     transform: scale3d(1.03, 1.03, 1);
     z-index: 10;
-    outline: none;
     border-color: black;
 
     .sf-table-title,
@@ -110,28 +109,26 @@
       }
     }
 
-    // Remove focus effect on desktop (only hover)
-    &:focus {
-      transform: scale3d(1, 1, 1);
-      z-index: auto;
+    &:focus-visible {
+      transform: scale3d(1.02, 1.02, 1);
+      z-index: 10;
+      border-color: black;
 
       .sf-table-title,
       .sf-table-cell-title {
-        color: $gray-500;
+        color: $gray-100;
       }
 
-      .sf-table-cell-description {
-        color: $gray-300;
-      }
-
+      .sf-table-cell-description,
       .sf-table-link a {
-        color: $gray-300;
+        color: $gray-200;
       }
 
       .background-circle {
-        width: 130%;
-        height: 100%;
-        transform: none;
+        display: block;
+        width: 150em;
+        height: 50em;
+        transform: translate3d(-5%, -10%, 0);
       }
     }
 
