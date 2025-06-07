@@ -22,30 +22,30 @@ permissions:
 jobs:
   destroy-plan:
     runs-on: ubuntu-latest
-    environment: Development
+    environment: ${{ inputs.environment }}
     steps:
-      - name: Placeholder - Destroy plan step
-        run: |
-          echo "This step is empty - destroy plan functionality not implemented on main branch"
-          echo "Environment: ${{ inputs.environment }}"
-          echo "Plan only: ${{ inputs.plan_only }}"
+    - name: Placeholder - Destroy plan step
+      run: |
+        echo "This step is empty - destroy plan functionality not implemented on main branch"
+        echo "Environment: ${{ inputs.environment }}"
+        echo "Plan only: ${{ inputs.plan_only }}"
 
   manual-approval:
     needs: [destroy-plan]
     runs-on: ubuntu-latest
-    if: ${{ inputs.plan_only == false }}
+    if: ${{ !inputs.plan_only }}
     steps:
-      - name: Placeholder - Manual approval step
-        run: |
-          echo "This step is empty - manual approval functionality not implemented on main branch"
-          echo "Would wait for approval to destroy ${{ inputs.environment }}"
+    - name: Placeholder - Manual approval step
+      run: |
+        echo "This step is empty - manual approval functionality not implemented on main branch"
+        echo "Would wait for approval to destroy ${{ inputs.environment }}"
 
   destroy-apply:
     needs: [manual-approval]
     runs-on: ubuntu-latest
-    if: ${{ inputs.plan_only == false }}
+    if: ${{ !inputs.plan_only }}
     steps:
-      - name: Placeholder - Destroy apply step
-        run: |
-          echo "This step is empty - destroy apply functionality not implemented on main branch"
-          echo "Would destroy infrastructure for ${{ inputs.environment }}" 
+    - name: Placeholder - Destroy apply step
+      run: |
+        echo "This step is empty - destroy apply functionality not implemented on main branch"
+        echo "Would destroy infrastructure for ${{ inputs.environment }}"
