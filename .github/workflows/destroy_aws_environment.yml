@@ -94,7 +94,7 @@ jobs:
   manual-approval:
     needs: [destroy-plan]
     runs-on: ubuntu-latest
-    if: ${{ inputs.plan_only == false }}
+    if: ${{ inputs.plan_only == false && inputs.environment != 'Development' }}
     steps:
       - name: Wait for approval to destroy ${{ vars.ENV_NAME }}
         uses: trstringer/manual-approval@v1
@@ -135,9 +135,9 @@ jobs:
             **⚠️ THIS ACTION CANNOT BE UNDONE ⚠️**
 
   destroy-apply:
-    needs: [manual-approval]
+    needs: [destroy-plan, manual-approval]
     runs-on: ubuntu-latest
-    if: ${{ inputs.plan_only == false }}
+    if: ${{ inputs.plan_only == false && (inputs.environment == 'Development' || needs.manual-approval.result == 'success') }}
     steps:
       - name: Get Environment Name for ${{ vars.ENV_NAME }}
         id: get_env_name
