@@ -38,6 +38,7 @@
   position: relative;
   overflow: hidden;
   cursor: pointer;
+  background-color:$white;
   @include transition(all, 0.5s);
   transform: scale3d(1, 1, 1);
 
@@ -69,7 +70,7 @@
     .background-circle {
       display: block;
       width: 150em;
-      height: 50em;
+      height: 70em;
       transform: translate3d(-5%, -10%, 0);
     }
   }
@@ -104,7 +105,7 @@
 
       .background-circle {
         width: 150em;
-        height: 50em;
+        height: 70em;
         transform: translate3d(-5%, -10%, 0);
       }
     }
@@ -127,7 +128,7 @@
       .background-circle {
         display: block;
         width: 150em;
-        height: 50em;
+        height: 70em;
         transform: translate3d(-5%, -10%, 0);
       }
     }
