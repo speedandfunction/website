@@ -1,0 +1,5 @@
+Refactor destroy workflow input parameter naming
+
+- Rename destroy-plan-only to plan_only for consistency
+- Update all references to use snake_case naming convention
+- Improve parameter name readability in workflow conditions

@@ -10,7 +10,7 @@ on:
         options:
         - Development
         default: Development
-      destroy-plan-only:
+      plan_only:
         description: 'Plan only (show what would be destroyed without destroying)'
         required: false
         type: boolean
@@ -28,12 +28,12 @@ jobs:
         run: |
           echo "This step is empty - destroy plan functionality not implemented on main branch"
           echo "Environment: ${{ inputs.environment }}"
-          echo "Plan only: ${{ inputs.destroy-plan-only }}"
+          echo "Plan only: ${{ inputs.plan_only }}"
 
   manual-approval:
     needs: [destroy-plan]
     runs-on: ubuntu-latest
-    if: ${{ inputs.destroy-plan-only == false }}
+    if: ${{ inputs.plan_only == false }}
     steps:
       - name: Placeholder - Manual approval step
         run: |
@@ -43,7 +43,7 @@ jobs:
   destroy-apply:
     needs: [manual-approval]
     runs-on: ubuntu-latest
-    if: ${{ inputs.destroy-plan-only == false }}
+    if: ${{ inputs.plan_only == false }}
     steps:
       - name: Placeholder - Destroy apply step
         run: |
