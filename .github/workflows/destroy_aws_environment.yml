@@ -83,7 +83,7 @@ jobs:
           AWS_DEFAULT_REGION: "us-east-1"
 
       - name: Copy lock file to S3 bucket for ${{ vars.ENV_NAME }}
-        if: ${{ inputs.plan_only == false }}
+        if: ${{ !inputs.plan_only }}
         run: aws s3 cp "deployment/.terraform.lock.hcl" "s3://${{ env.SETTINGS_BUCKET }}/destroy-plans/${{ vars.ENV_NAME }}.terraform.lock.hcl"
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.TF_AWS_ACCESS_KEY_ID }}
@@ -95,9 +95,9 @@ jobs:
     needs: [destroy-plan]
     runs-on: ubuntu-latest
     environment: Development
-    if: ${{ inputs.plan_only == false && inputs.environment != 'Development' }}
     steps:
       - name: Wait for approval to destroy ${{ vars.ENV_NAME }}
+        if: ${{ !inputs.plan_only }}
         uses: trstringer/manual-approval@v1
         with:
           secret: ${{ github.TOKEN }}
@@ -136,7 +136,7 @@ jobs:
             **⚠️ THIS ACTION CANNOT BE UNDONE ⚠️**
 
   destroy-apply:
-    needs: [destroy-plan, manual-approval]
+    needs: [manual-approval]
     runs-on: ubuntu-latest
     environment: Development
     if: ${{ inputs.plan_only == false && (inputs.environment == 'Development' || needs.manual-approval.result == 'success') }}
