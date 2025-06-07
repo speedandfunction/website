@@ -1,4 +1,8 @@
 .sf-contact-form {
+  margin-top: 32px;
+  @include breakpoint-medium {
+    margin-top: 52px;
+  }
   .sf-form {
     position: relative;
     min-width: 295px;
@@ -11,6 +15,17 @@
     @include breakpoint-medium {
       padding: 24px 44px 6px;
       margin-bottom: 248px;
+    }
+    .sf-button {
+      min-width: 93px;
+      margin: 0 auto;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: -65px;
+      @include breakpoint-medium {
+        bottom: -136px;
+      }
     }
   }
 }
@@ -63,18 +78,6 @@ label {
   display: block;
   margin-bottom: 12px;
   color: $gray-500;
-}
-
-.sf-button {
-  min-width: 93px;
-  margin: 0 auto;
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  bottom: -65px;
-  @include breakpoint-medium {
-    bottom: -136px;
-  }
 }
 
 .apos-form-input-wrapper {

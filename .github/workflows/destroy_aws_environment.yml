@@ -10,7 +10,7 @@ on:
         options:
         - Development
         default: Development
-      destroy-plan-only:
+      plan_only:
         description: 'Plan only (show what would be destroyed without destroying)'
         required: false
         type: boolean
@@ -74,7 +74,7 @@ jobs:
           AWS_DEFAULT_REGION: "us-east-1"
 
       - name: Copy destroy plan to S3 bucket for ${{ vars.ENV_NAME }}
-        if: ${{ inputs.destroy-plan-only == false }}
+        if: ${{ inputs.plan_only == false }}
         run: aws s3 cp "deployment/${{ vars.ENV_NAME }}-destroy.tfplan" "s3://${{ env.SETTINGS_BUCKET }}/destroy-plans/${{ vars.ENV_NAME }}-destroy.tfplan"
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.TF_AWS_ACCESS_KEY_ID }}
@@ -83,7 +83,7 @@ jobs:
           AWS_DEFAULT_REGION: "us-east-1"
 
       - name: Copy lock file to S3 bucket for ${{ vars.ENV_NAME }}
-        if: ${{ inputs.destroy-plan-only == false }}
+        if: ${{ inputs.plan_only == false }}
         run: aws s3 cp "deployment/.terraform.lock.hcl" "s3://${{ env.SETTINGS_BUCKET }}/destroy-plans/${{ vars.ENV_NAME }}.terraform.lock.hcl"
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.TF_AWS_ACCESS_KEY_ID }}
@@ -94,7 +94,7 @@ jobs:
   manual-approval:
     needs: [destroy-plan]
     runs-on: ubuntu-latest
-    if: ${{ inputs.destroy-plan-only == false }}
+    if: ${{ inputs.plan_only == false }}
     steps:
       - name: Wait for approval to destroy ${{ vars.ENV_NAME }}
         uses: trstringer/manual-approval@v1
@@ -137,7 +137,7 @@ jobs:
   destroy-apply:
     needs: [manual-approval]
     runs-on: ubuntu-latest
-    if: ${{ inputs.destroy-plan-only == false }}
+    if: ${{ inputs.plan_only == false }}
     steps:
       - name: Get Environment Name for ${{ vars.ENV_NAME }}
         id: get_env_name
@@ -190,4 +190,4 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.TF_AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.TF_AWS_SECRET_ACCESS_KEY }}
           SETTINGS_BUCKET: sf-website-infrastructure
-          AWS_DEFAULT_REGION: "us-east-1" 
+          AWS_DEFAULT_REGION: "us-east-1"

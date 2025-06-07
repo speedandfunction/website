@@ -1,5 +1,3 @@
-const headingToolbar = require('../../lib/headingToolbar');
-
 module.exports = {
   extend: '@apostrophecms/piece-type',
   options: {
@@ -21,7 +19,7 @@ module.exports = {
       clientWebsite: {
         label: 'Client Website',
         type: 'string',
-        help: "Link to client's official website.",
+        help: "Link to client's official website (must include http(s) protocol).",
         placeholder: 'https://example.com',
       },
       picture: {
@@ -47,10 +45,8 @@ module.exports = {
           project: {
             title: 1,
             slug: 1,
-            _category: 1,
           },
         },
-        withRelationships: ['_category'],
         help: 'Select technologies utilized in the project.',
       },
       _caseStudyType: {
@@ -62,10 +58,8 @@ module.exports = {
           project: {
             title: 1,
             slug: 1,
-            _category: 1,
           },
         },
-        withRelationships: ['_category'],
         help: 'The nature of the project identifying the projectʼs scope and requirements, relationship, or key characteristics.',
       },
       _industry: {
@@ -77,16 +71,14 @@ module.exports = {
           project: {
             title: 1,
             slug: 1,
-            _category: 1,
           },
         },
-        withRelationships: ['_category'],
         help: "Select client's industry or sector.",
       },
       portfolioTitle: {
         label: 'Portfolio Title',
         type: 'string',
-        help: 'The official product name or a concise, descriptive project name if confidentiality is necessary',
+        help: 'The official product name or a concise, descriptive project name if confidentiality is necessary.',
         required: true,
       },
       descriptor: {
@@ -98,8 +90,14 @@ module.exports = {
       prodLink: {
         label: 'Link to Prod',
         type: 'string',
-        help: 'Public link referring to the delivered result.',
+        help: 'Public link referring to the delivered result (must include http(s) protocol).',
         placeholder: 'https://example.com/project',
+      },
+      fullStoryUrl: {
+        label: 'Full Story URL',
+        type: 'string',
+        help: 'Link to the full case study article or story (must include http(s) protocol).',
+        placeholder: 'https://example.com/full-story',
       },
       objective: {
         label: 'Objective',
@@ -125,17 +123,6 @@ module.exports = {
         help: '2-4 bullet points summarizing quantifiable improvements in performance, efficiency, cost savings, or business outcomes achieved.',
         textarea: true,
       },
-      content: {
-        label: 'Content',
-        type: 'area',
-        options: {
-          widgets: {
-            '@apostrophecms/rich-text': {
-              ...headingToolbar,
-            },
-          },
-        },
-      },
       testimonials: {
         label: 'Testimonials',
         type: 'area',
@@ -159,6 +146,7 @@ module.exports = {
           'portfolioTitle',
           'descriptor',
           'prodLink',
+          'fullStoryUrl',
         ],
       },
       details: {
@@ -167,7 +155,7 @@ module.exports = {
       },
       content: {
         label: 'Content',
-        fields: ['content', 'testimonials'],
+        fields: ['testimonials'],
       },
     },
   },

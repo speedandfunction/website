@@ -67,6 +67,7 @@ module.exports = {
         options: mainWidgets,
       },
     },
+    remove: ['orphan'],
     group: {
       mainArea: {
         label: 'Main page content',

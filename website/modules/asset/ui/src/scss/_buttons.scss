@@ -25,6 +25,14 @@
   max-width: 270px;
   text-align: center;
   @include responsive-font(12px, 20px);
+  transform: scale(1);
+  @include transition(transform, 0.3s);
+    
+  &:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    transform: scale(1.05); 
+    z-index: 1;
+  }
 
   @include breakpoint-medium {
     padding: 24px 92px;
@@ -53,6 +61,8 @@
     display: inline-flex;
     justify-content: space-evenly;
     flex-direction: column;
+    position: relative;
+    z-index: 0;
 
     @include breakpoint-medium {
       display: flex;
@@ -86,6 +96,7 @@
         border: 1px solid $gray-500;
         box-sizing: border-box;
         text-decoration: none;
+        background-color: $white;
 
         @include breakpoint-medium {
           span {
