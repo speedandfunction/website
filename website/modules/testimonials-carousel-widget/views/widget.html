@@ -39,10 +39,7 @@
                   {{ card.organization }}
                 </h5>
                 {% endif %} {% if card.url %}
-                <a
-                  href="https://{{ card.url }}/"
-                  target="_blank"
-                  class="sf-person__url"
+                <a href="{{ card.url }}" target="_blank" class="sf-person__url"
                   >{{ card.url }}</a
                 >
                 {% endif %}
