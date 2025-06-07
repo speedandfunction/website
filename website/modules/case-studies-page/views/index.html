@@ -3,11 +3,14 @@
 main %}
 <div class="cs_container">
   <div class="cs_content">
-    <div class="page-main_content">{% area data.page, 'main' %}</div>
+    <div class="page-main_content">
+      {% area data.page, 'main' %}
+      <div id="filter" class="filter-anchor"></div>
+    </div>
 
-    {% set hasActiveFilters = data.query.industry or data.query.stack or
-    data.query.caseStudyType %} {% if hasActiveFilters %}
     <div class="cs_filter-info">
+      {% set hasActiveFilters = data.query.industry or data.query.stack or
+      data.query.caseStudyType %} {% if hasActiveFilters %}
       <p class="items-count">
         {{ data.totalPieces }} Ite{% if data.totalPieces == 1 %}m{% else %}ms{%
         endif %} found
@@ -16,7 +19,7 @@ main %}
       <div class="clear-all">
         <a
           class="clear-all-link"
-          href="{{ data.url | build({ industry: null, stack: null, caseStudyType: null }) }}"
+          href="{{ data.url | build({ industry: null, stack: null, caseStudyType: null }) }}#filter"
           aria-label="Clear all filters"
         >
           <span class="clear-all-content">
@@ -42,7 +45,7 @@ main %}
             {{ tag.label }} {% if filterType == 'industry' %}
             <a
               class="remove-tag"
-              href="{{ data.url | build({}, { industry: { $pull: tag.value } }) }}"
+              href="{{ data.url | build({}, { industry: { $pull: tag.value } }) }}#filter"
               aria-label="Remove industry tag {{ tag.label }}"
             >
               <img src="/images/close.svg" alt="Close Icon" />
@@ -50,7 +53,7 @@ main %}
             {% elif filterType == 'stack' %}
             <a
               class="remove-tag"
-              href="{{ data.url | build({}, { stack: { $pull: tag.value } }) }}"
+              href="{{ data.url | build({}, { stack: { $pull: tag.value } }) }}#filter"
               aria-label="Remove stack tag {{ tag.label }}"
             >
               <img src="/images/close.svg" alt="Close Icon" />
@@ -58,7 +61,7 @@ main %}
             {% elif filterType == 'caseStudyType' %}
             <a
               class="remove-tag"
-              href="{{ data.url | build({}, { caseStudyType: { $pull: tag.value } }) }}"
+              href="{{ data.url | build({}, { caseStudyType: { $pull: tag.value } }) }}#filter"
               aria-label="Remove case study type tag {{ tag.label }}"
             >
               <img src="/images/close.svg" alt="Close Icon" />
@@ -68,8 +71,8 @@ main %}
           {% endif %} {% endfor %} {% endif %} {% endfor %}
         </ul>
       </div>
+      {% endif %}
     </div>
-    {% endif %}
 
     <div class="cs_list">
       <div class="tags-filter">
@@ -78,8 +81,12 @@ main %}
         'Technology'] ] %} {% set tags = data.piecesFilters[filterType] %} {% if
         tags and tags.length %}
         <div class="filter-section">
-          <p class="filter-category">{{ filterLabel }}:</p>
-          <div class="filter-content">
+          <input type="checkbox" id="filter-toggle-{{ filterType }}" class="filter-category__toggle" {% if loop.first %}checked{% endif %} aria-labelledby="filter-category-{{ filterType }}">
+          <div class="filter-category" id="filter-category-{{ filterType }}">
+            <span class="filter-category__title">{{ filterLabel }}:</span>
+            <label for="filter-toggle-{{ filterType }}" class="filter-category__expand-button" role="button" tabindex="0" aria-expanded="{% if loop.first %}true{% else %}false{% endif %}" aria-controls="filter-content-{{ filterType }}" aria-label="Toggle {{ filterLabel }} filter section" onkeydown="return true;"></label>
+          </div>
+          <div class="filter-content" id="filter-content-{{ filterType }}">
             <input
               type="text"
               class="tag-search"
@@ -113,21 +120,21 @@ main %}
                 {% if filterType == 'industry' %}
                 <a
                   class="tag-link"
-                  href="{{ data.url | build({}, { industry: { $pull: tag.value } }) }}"
+                  href="{{ data.url | build({}, { industry: { $pull: tag.value } }) }}#filter"
                 >
                   {{ tag.label }} <span>[ {{ count }} ]</span>
                 </a>
                 {% elif filterType == 'caseStudyType' %}
                 <a
                   class="tag-link"
-                  href="{{ data.url | build({}, { caseStudyType: { $pull: tag.value } }) }}"
+                  href="{{ data.url | build({}, { caseStudyType: { $pull: tag.value } }) }}#filter"
                 >
                   {{ tag.label }} <span>[ {{ count }} ]</span>
                 </a>
                 {% elif filterType == 'stack' %}
                 <a
                   class="tag-link"
-                  href="{{ data.url | build({}, { stack: { $pull: tag.value } }) }}"
+                  href="{{ data.url | build({}, { stack: { $pull: tag.value } }) }}#filter"
                 >
                   {{ tag.label }} <span>[ {{ count }} ]</span>
                 </a>
@@ -138,21 +145,21 @@ main %}
                 {% if filterType == 'industry' %}
                 <a
                   class="tag-link"
-                  href="{{ data.url | build({}, { industry: { $addToSet: tag.value } }) }}"
+                  href="{{ data.url | build({}, { industry: { $addToSet: tag.value } }) }}#filter"
                 >
                   {{ tag.label }} <span>[ {{ count }} ]</span>
                 </a>
                 {% elif filterType == 'caseStudyType' %}
                 <a
                   class="tag-link"
-                  href="{{ data.url | build({}, { caseStudyType: { $addToSet: tag.value } }) }}"
+                  href="{{ data.url | build({}, { caseStudyType: { $addToSet: tag.value } }) }}#filter"
                 >
                   {{ tag.label }} <span>[ {{ count }} ]</span>
                 </a>
                 {% elif filterType == 'stack' %}
                 <a
                   class="tag-link"
-                  href="{{ data.url | build({}, { stack: { $addToSet: tag.value } }) }}"
+                  href="{{ data.url | build({}, { stack: { $addToSet: tag.value } }) }}#filter"
                 >
                   {{ tag.label }} <span>[ {{ count }} ]</span>
                 </a>
