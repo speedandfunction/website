@@ -103,7 +103,7 @@ function initBarbaPageTransitions() {
       initializeAllComponents();
 
       // Initialize Apostrophe forms before removing old content
-      const initializeForm = (container) => {
+      const initializeApostropheForm = (container) => {
         const form = container.querySelector('form[data-apos-form-form]');
         if (!form) {
           return false;
@@ -121,12 +121,10 @@ function initBarbaPageTransitions() {
         return true;
       };
 
-      // Wait for Apostrophe to be ready
-      apos.util.onReady(() => {
-        if (!initializeForm(data.next.container)) {
-          window.location.reload();
-        }
-      });
+      // Initialize Apostrophe forms (already inside apos.util.onReady)
+      if (!initializeApostropheForm(data.next.container)) {
+        window.location.reload();
+      }
 
       // Remove the previous page container to avoid blinking
       data.current.container.remove();
