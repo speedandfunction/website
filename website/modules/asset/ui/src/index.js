@@ -102,6 +102,36 @@ function initBarbaPageTransitions() {
       // Call the wrapper function to initialize all components
       initializeAllComponents();
 
+      // Initialize Apostrophe forms before removing old content
+      const form = data.next.container.querySelector(
+        'form[data-apos-form-form]',
+      );
+      if (form) {
+        // Wait for Apostrophe to be ready
+        apos.util.onReady(() => {
+          // Get form element
+          const formElement = document.querySelector(
+            'form[data-apos-form-form]',
+          );
+          if (!formElement) {
+            window.location.reload();
+            return;
+          }
+
+          // Initialize form with Apostrophe
+          if (window.apos && window.apos.aposForm) {
+            // Try to initialize form
+            if (typeof window.apos.aposForm.enableAll === 'function') {
+              window.apos.aposForm.enableAll();
+            } else {
+              window.location.reload();
+            }
+          } else {
+            window.location.reload();
+          }
+        });
+      }
+
       // Remove the previous page container to avoid blinking
       data.current.container.remove();
 
