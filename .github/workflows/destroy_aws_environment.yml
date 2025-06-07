@@ -95,9 +95,10 @@ jobs:
     needs: [destroy-plan]
     runs-on: ubuntu-latest
     environment: Development
+    if: ${{ !inputs.plan_only }}
     steps:
       - name: Wait for approval to destroy ${{ vars.ENV_NAME }}
-        if: ${{ !inputs.plan_only }}
+        if: ${{ inputs.environment != 'Development' }}
         uses: trstringer/manual-approval@v1
         with:
           secret: ${{ github.TOKEN }}
