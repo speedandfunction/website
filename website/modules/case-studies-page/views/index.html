@@ -9,6 +9,7 @@ main %}
     </div>
 
     <div class="cs_filter-info">
+      <div class="filters-cta">Filter Case Studies</div>
       {% set hasActiveFilters = data.query.industry or data.query.stack or
       data.query.caseStudyType %} {% if hasActiveFilters %}
       <p class="items-count">
@@ -81,10 +82,26 @@ main %}
         'Technology'] ] %} {% set tags = data.piecesFilters[filterType] %} {% if
         tags and tags.length %}
         <div class="filter-section">
-          <input type="checkbox" id="filter-toggle-{{ filterType }}" class="filter-category__toggle" {% if loop.first %}checked{% endif %} aria-labelledby="filter-category-{{ filterType }}">
+          <!-- prettier-ignore -->
+          <input
+            type="checkbox"
+            id="filter-toggle-{{ filterType }}"
+            class="filter-category__toggle"
+            {% if loop.first %}checked{% endif %}
+            aria-labelledby="filter-category-{{ filterType }}"
+          />
           <div class="filter-category" id="filter-category-{{ filterType }}">
             <span class="filter-category__title">{{ filterLabel }}:</span>
-            <label for="filter-toggle-{{ filterType }}" class="filter-category__expand-button" role="button" tabindex="0" aria-expanded="{% if loop.first %}true{% else %}false{% endif %}" aria-controls="filter-content-{{ filterType }}" aria-label="Toggle {{ filterLabel }} filter section" onkeydown="return true;"></label>
+            <label
+              for="filter-toggle-{{ filterType }}"
+              class="filter-category__expand-button"
+              role="button"
+              tabindex="0"
+              aria-expanded="{% if loop.first %}true{% else %}false{% endif %}"
+              aria-controls="filter-content-{{ filterType }}"
+              aria-label="Toggle {{ filterLabel }} filter section"
+              onkeydown="return true;"
+            ></label>
           </div>
           <div class="filter-content" id="filter-content-{{ filterType }}">
             <input
@@ -229,6 +246,21 @@ main %}
     <div class="pagination-container">
       {{ pager.render({ page: data.currentPage, total: data.totalPages, class:
       'cs-pager' }, data.url) }}
+    </div>
+
+    <div id="filter-modal" class="filter-modal">
+      <div class="filter-modal__backdrop"></div>
+      <div class="filter-modal__content">
+        <span
+          class="filter-modal__close"
+          tabindex="0"
+          aria-label="Close filter modal"
+        >
+          <i class="back-icon"></i>
+          back to all projects
+        </span>
+        <div class="filter-modal__body"></div>
+      </div>
     </div>
   </div>
 </div>
