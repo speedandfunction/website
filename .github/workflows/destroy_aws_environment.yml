@@ -94,6 +94,7 @@ jobs:
   manual-approval:
     needs: [destroy-plan]
     runs-on: ubuntu-latest
+    environment: Development
     if: ${{ inputs.plan_only == false && inputs.environment != 'Development' }}
     steps:
       - name: Wait for approval to destroy ${{ vars.ENV_NAME }}
@@ -137,6 +138,7 @@ jobs:
   destroy-apply:
     needs: [destroy-plan, manual-approval]
     runs-on: ubuntu-latest
+    environment: Development
     if: ${{ inputs.plan_only == false && (inputs.environment == 'Development' || needs.manual-approval.result == 'success') }}
     steps:
       - name: Get Environment Name for ${{ vars.ENV_NAME }}
