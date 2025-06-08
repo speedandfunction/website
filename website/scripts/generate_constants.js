@@ -10,12 +10,12 @@ const path = require('path');
 // Path to the server-side constants file
 const serverConstantsPath = path.resolve(
   __dirname,
-  '../modules/shared-constants/index.js',
+  '../modules/@apostrophecms/shared-constants/index.js',
 );
 // Path to the output client-side constants file
 const clientConstantsPath = path.resolve(
   __dirname,
-  '../modules/shared-constants/ui/src/index.js',
+  '../modules/@apostrophecms/shared-constants/ui/src/index.js',
 );
 
 try {
@@ -28,6 +28,13 @@ try {
 
   // Extract the constants we want to share
   const { STANDARD_FORM_FIELD_NAMES } = self;
+
+  // Validate that constants were properly extracted
+  if (!STANDARD_FORM_FIELD_NAMES) {
+    throw new Error(
+      'STANDARD_FORM_FIELD_NAMES not found in server constants module',
+    );
+  }
 
   // Generate client-side constants file content
   const clientFileContent = `/*
@@ -46,6 +53,9 @@ export default () => {
   };
 };
 `;
+
+  // Ensure the output directory exists
+  fs.mkdirSync(path.dirname(clientConstantsPath), { recursive: true });
 
   // Write the client-side constants file
   fs.writeFileSync(clientConstantsPath, clientFileContent);
