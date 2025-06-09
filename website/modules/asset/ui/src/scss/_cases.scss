@@ -361,6 +361,7 @@
 .cs_filter-info {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   gap: 16px;
   justify-content: space-between;
   min-height: 28px;
@@ -385,7 +386,7 @@
   margin: 0;
   white-space: nowrap;
   @include responsive-font(24px, 22px);
-  @include responsive-line-height(110%, 140%);
+  @include responsive-line-height(110%, 127%);
 }
 
 .items-count__mobile {
