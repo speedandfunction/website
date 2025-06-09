@@ -195,6 +195,28 @@ function initMenuToggle() {
   });
 }
 
+// Filter Case Studies modal for Case Studies mobile page
+function initFilterModal() {
+  new FilterModal({
+    modalSelector: '#filter-modal',
+    openBtnSelector: '.filters-cta',
+    closeBtnSelector: '.filter-modal__close',
+    backdropSelector: '.filter-modal__backdrop',
+    clearAllSelector: '.clear-all',
+    selectedTagsSelector: '.selected-tags',
+    tagsFilterSelector: '.tags-filter',
+  });
+}
+
+document.addEventListener('DOMContentLoaded', initFilterModal);
+
+// Initialize after Barba transitions
+if (typeof barba !== 'undefined') {
+  barba.hooks.after(() => {
+    initFilterModal();
+  });
+}
+
 export default () => {
   // Init all scripts after first visiting the page
   initializeAllComponents();
@@ -272,15 +294,3 @@ class FilterModal {
     });
   }
 }
-
-document.addEventListener('DOMContentLoaded', () => {
-  new FilterModal({
-    modalSelector: '#filter-modal',
-    openBtnSelector: '.filters-cta',
-    closeBtnSelector: '.filter-modal__close',
-    backdropSelector: '.filter-modal__backdrop',
-    clearAllSelector: '.clear-all',
-    selectedTagsSelector: '.selected-tags',
-    tagsFilterSelector: '.tags-filter',
-  });
-});
