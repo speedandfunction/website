@@ -91,9 +91,32 @@ class UrlService {
     if (!reqCopy.data) {
       reqCopy.data = {};
     }
+
+    const queryParams = req.query || {};
+
+    // Build complete URLs server-side to avoid template encoding issues
     reqCopy.data.prev = navigation.prev;
     reqCopy.data.next = navigation.next;
-    reqCopy.data.query = req.query || {};
+
+    // Generate URLs with query parameters server-side
+    if (navigation.prev) {
+      reqCopy.data.prevUrl = UrlService.buildCaseStudyUrl(
+        // eslint-disable-next-line no-underscore-dangle
+        navigation.prev._url,
+        queryParams,
+      );
+    }
+
+    if (navigation.next) {
+      reqCopy.data.nextUrl = UrlService.buildCaseStudyUrl(
+        // eslint-disable-next-line no-underscore-dangle
+        navigation.next._url,
+        queryParams,
+      );
+    }
+
+    reqCopy.data.backUrl = UrlService.buildCaseStudyUrl('/cases', queryParams);
+    reqCopy.data.query = queryParams;
   }
 }
 
