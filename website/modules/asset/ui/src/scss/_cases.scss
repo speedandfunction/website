@@ -1063,6 +1063,18 @@
       @include font-settings(11px, 120%, $font-weight-300);
     }
 
+    &__body {
+      margin-top: 43px;
+    }
+
+    .filter-header {
+      color: $gray-500;
+      margin: 0 0 32px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba($gray-200, 0.4);
+      @include font-settings(14px, 150%, $font-weight-extra-bold);
+    }
+
     &:not(.active) {
       pointer-events: none;
       opacity: 0;
