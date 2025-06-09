@@ -27,32 +27,39 @@ export class FilterModal {
     tagsFilterSelector,
   }) {
     this.modal = document.querySelector(modalSelector);
+    if (!this.modal) {
+      throw new Error(`Modal element not found: ${modalSelector}`);
+    }
     this.modalBody = this.modal.querySelector('.filter-modal__body');
+    if (!this.modalBody) {
+      throw new Error('Modal body element not found');
+    }
     this.openBtn = document.querySelector(openBtnSelector);
+    if (!this.openBtn) {
+      throw new Error(`Open button not found: ${openBtnSelector}`);
+    }
     this.closeBtn = this.modal.querySelector(closeBtnSelector);
+    if (!this.closeBtn) {
+      throw new Error(`Close button not found: ${closeBtnSelector}`);
+    }
     this.backdrop = this.modal.querySelector(backdropSelector);
+    if (!this.backdrop) {
+      throw new Error(`Backdrop element not found: ${backdropSelector}`);
+    }
     this.clearAll = document.querySelector(clearAllSelector);
     this.selectedTags = document.querySelector(selectedTagsSelector);
     this.tagsFilter = document.querySelector(tagsFilterSelector);
 
-    this.originalParents = {};
-    if (this.clearAll) {
-      this.originalParents.clearAll = this.clearAll.parentNode;
-    } else {
-      this.originalParents.clearAll = null;
-    }
-    if (this.selectedTags) {
-      this.originalParents.selectedTags = this.selectedTags.parentNode;
-    } else {
-      this.originalParents.selectedTags = null;
-    }
-    if (this.tagsFilter) {
-      this.originalParents.tagsFilter = this.tagsFilter.parentNode;
-    } else {
-      this.originalParents.tagsFilter = null;
-    }
-
+    this.originalParents = this.initializeOriginalParents();
     this.init();
+  }
+
+  initializeOriginalParents() {
+    return {
+      clearAll: this.clearAll?.parentNode || null,
+      selectedTags: this.selectedTags?.parentNode || null,
+      tagsFilter: this.tagsFilter?.parentNode || null,
+    };
   }
 
   open() {
