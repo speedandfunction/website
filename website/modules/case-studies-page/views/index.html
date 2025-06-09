@@ -8,9 +8,9 @@ main %}
       <div id="filter" class="filter-anchor"></div>
     </div>
 
-    {% set hasActiveFilters = data.query.industry or data.query.stack or
-    data.query.caseStudyType %} {% if hasActiveFilters %}
     <div class="cs_filter-info">
+      {% set hasActiveFilters = data.query.industry or data.query.stack or
+      data.query.caseStudyType %} {% if hasActiveFilters %}
       <p class="items-count">
         {{ data.totalPieces }} Ite{% if data.totalPieces == 1 %}m{% else %}ms{%
         endif %} found
@@ -71,8 +71,8 @@ main %}
           {% endif %} {% endfor %} {% endif %} {% endfor %}
         </ul>
       </div>
+      {% endif %}
     </div>
-    {% endif %}
 
     <div class="cs_list">
       <div class="tags-filter">
@@ -81,8 +81,12 @@ main %}
         'Technology'] ] %} {% set tags = data.piecesFilters[filterType] %} {% if
         tags and tags.length %}
         <div class="filter-section">
-          <p class="filter-category">{{ filterLabel }}:</p>
-          <div class="filter-content">
+          <input type="checkbox" id="filter-toggle-{{ filterType }}" class="filter-category__toggle" {% if loop.first %}checked{% endif %} aria-labelledby="filter-category-{{ filterType }}">
+          <div class="filter-category" id="filter-category-{{ filterType }}">
+            <span class="filter-category__title">{{ filterLabel }}:</span>
+            <label for="filter-toggle-{{ filterType }}" class="filter-category__expand-button" role="button" tabindex="0" aria-expanded="{% if loop.first %}true{% else %}false{% endif %}" aria-controls="filter-content-{{ filterType }}" aria-label="Toggle {{ filterLabel }} filter section" onkeydown="return true;"></label>
+          </div>
+          <div class="filter-content" id="filter-content-{{ filterType }}">
             <input
               type="text"
               class="tag-search"

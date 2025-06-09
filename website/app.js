@@ -37,6 +37,9 @@ function createAposConfig() {
       // Add global data module
       'global-data': {},
 
+      // Shared constants module
+      'shared-constants': {},
+
       // Configure page types
       '@apostrophecms/rich-text-widget': {},
       '@apostrophecms/image-widget': {
@@ -77,14 +80,7 @@ function createAposConfig() {
       // Form field widgets, used by the main form module to build forms.
       '@apostrophecms/form-text-field-widget': {},
       '@apostrophecms/form-textarea-field-widget': {},
-      '@apostrophecms/form-select-field-widget': {},
-      '@apostrophecms/form-radio-field-widget': {},
-      '@apostrophecms/form-file-field-widget': {},
       '@apostrophecms/form-checkboxes-field-widget': {},
-      '@apostrophecms/form-boolean-field-widget': {},
-      '@apostrophecms/form-conditional-widget': {},
-      '@apostrophecms/form-divider-widget': {},
-      '@apostrophecms/form-group-widget': {},
 
       // Custom Pieces
       'team-members': {},

@@ -3,6 +3,7 @@ import { enhanceBarbaWithFilterHandling } from './enhanceBarbaWithFilterHandling
 import { gsap } from 'gsap';
 import { initAllSwipers } from './swipers';
 import { initCaseStudiesFilterHandler } from './initCaseStudiesFilterHandler';
+import { initPhoneFormatting } from './js/phoneFormat';
 import { initSmoothCounters } from './smoothCounters';
 import lozad from 'lozad';
 import { setupTagSearchForInput } from './searchInputHandler';
@@ -66,6 +67,7 @@ function initializeAllComponents() {
   initAllSwipers();
   initSmoothCounters();
   initFontChanger();
+  initPhoneFormatting();
   initCaseStudiesTagFilter();
 }
 
@@ -101,6 +103,30 @@ function initBarbaPageTransitions() {
 
       // Call the wrapper function to initialize all components
       initializeAllComponents();
+
+      // Initialize Apostrophe forms before removing old content
+      const initializeApostropheForm = (container) => {
+        const form = container.querySelector('form[data-apos-form-form]');
+        if (!form) {
+          return false;
+        }
+
+        if (!window?.apos?.aposForm) {
+          return false;
+        }
+
+        if (typeof window.apos.aposForm.enableAll !== 'function') {
+          return false;
+        }
+
+        window.apos.aposForm.enableAll();
+        return true;
+      };
+
+      // Initialize Apostrophe forms (already inside apos.util.onReady)
+      if (!initializeApostropheForm(data.next.container)) {
+        window.location.reload();
+      }
 
       // Remove the previous page container to avoid blinking
       data.current.container.remove();

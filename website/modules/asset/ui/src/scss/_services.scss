@@ -10,32 +10,37 @@
     margin: 0 auto;
     
     &:not(.has-even) {
-      .sf-simple-card:last-child {
-        width: 100%;
+      .sf-simple-cards__card {
+        &:last-child {
+          width: 100%;
+        }
       }
     }
   }
   
-  &.no-counter {
+  &--no-counter {
     counter-reset: none;
 
-    .sf-simple-card-wrap {
-      &::before {
-        display: none;
+    .sf-simple-cards__card {
+      &-wrap {
+        &::before {
+          display: none;
+        }
       }
-    }
-    .sf-simple-card {
-      &__expand-button {
+      
+      &-expand-button {
         top: 20px;
       }
     }
   }
-  &.no-expandable {
-    .sf-simple-card {
-      &__expand-button {
+  
+  &--no-expandable {
+    .sf-simple-cards__card {
+      &-expand-button {
         display: none;
       }
-      &__text {
+      
+      &-text {
         display: block;
         max-height: none;
         opacity: 1;
@@ -44,10 +49,9 @@
       }
     }
   }
-
 }
 
-.sf-simple-card {
+.sf-simple-cards__card {
   width: 100%;
   position: relative;
   display: flex;
@@ -82,7 +86,7 @@
       width: 100%;
       margin-right: 1px;
 
-      .sf-simple-card-wrap {
+      .sf-simple-cards__card-wrap {
         padding: 40px;
 
         &:hover {
@@ -93,22 +97,20 @@
     }
   }
   
-  &__toggle {
+  &-toggle {
     display: none;
     
-    &:checked {
-      ~ .sf-simple-card-wrap {
-        .sf-simple-card__text {
-          max-height: 1000px;
-          opacity: 1;
-          margin-top: 10px;
-          transform: translateY(0);
-        }
-    
-        .sf-simple-card__expand-button {
-          &::before {
-            transform: rotate(225deg);
-          }
+    &:checked ~ .sf-simple-cards__card-wrap {
+      .sf-simple-cards__card-text {
+        max-height: 1000px;
+        opacity: 1;
+        transform: translateY(0);
+        margin-top: 20px;
+      }
+  
+      .sf-simple-cards__card-expand-button {
+        &::before {
+          transform: rotate(225deg);
         }
       }
     }
@@ -117,26 +119,21 @@
   .background-circle {
     display: none;
     
+    .sf-simple-cards--no-expandable & {
+      @include decorative-background-circle($gray-500, 25%, 130%, 100%, -100% -60% auto auto, -10);
+    }
+    
     @include breakpoint-medium {
-      display: block;
-      z-index: -10;
-      background-color: $gray-500;
-      border-radius: 25%;
-      width: 130%;
-      height: 100%;
-      position: absolute;
-      inset: -100% -60% auto auto;
-      @include transition(all, 0.5s);
+      @include decorative-background-circle($gray-500, 25%, 130%, 100%, -100% -60% auto auto, -10);
     }
   }
   
-  &__title {
+  &-title {
     font-weight: 700;
     color: $gray-500;
     font-size: 16px;
-    margin: 1px 0;
+    margin: 1px 0 0;
     max-width: 90%;
-    margin-bottom: 20px;
     line-height: 140%;
     @include transition(color);
     
@@ -147,7 +144,7 @@
     }
   }
   
-  &__text {
+  &-text {
     font-weight: 500;
     font-size: 14px;
     line-height: 20px;
@@ -165,7 +162,6 @@
     }
     
     @include breakpoint-medium {
-      display: block;
       max-height: none;
       opacity: 1;
       overflow: visible;
@@ -173,7 +169,7 @@
     }
   }
   
-  &__expand-button {
+  &-expand-button {
     position: absolute;
     top: 40px;
     right: 24px;
@@ -206,13 +202,42 @@
   }
 }
 
-.sf-simple-card-wrap {
+.sf-simple-cards__card-wrap {
   padding: 24px;
   position: relative;
   display: flex;
   flex-direction: column;
   overflow: hidden;
   height: 100%;
+  
+  .sf-simple-cards--no-expandable & {
+    @include transition(all, 0.5s);
+    transform: scale3d(1, 1, 1);
+    
+    &:hover {
+      transform: scale3d(1.03, 1.03, 1);
+      z-index: 10;
+      
+      .sf-simple-cards__card-title {
+        color: $gray-100;
+      }
+      
+      .sf-simple-cards__card-text,
+      .sf-button_underline {
+        color: $gray-200;
+      }
+      
+      .background-circle {
+        width: 150em;
+        height: 50em;
+        transform: translate3d(-5%, -10%, 0);
+      }
+      
+      &::before {
+        color: $gray-300;
+      }
+    }
+  }
   
   @include breakpoint-medium {
     padding: 40px;
@@ -223,11 +248,11 @@
       transform: scale3d(1.02, 1.02, 1);
       z-index: 10;
       
-      .sf-simple-card__title {
+      .sf-simple-cards__card-title {
         color: $gray-100;
       }
       
-      .sf-simple-card__text,
+      .sf-simple-cards__card-text,
       .sf-button_underline {
         color: $gray-200;
       }
@@ -254,4 +279,4 @@
     margin-bottom: 6px;
     @include transition(color);
   }
-}
+} 
