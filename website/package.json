@@ -4,9 +4,9 @@
   "description": "Apostrophe CMS website",
   "main": "app.js",
   "scripts": {
-    "start": "node app @apostrophecms/asset:build && node app.js",
-    "dev": "nodemon",
-    "build": "NODE_ENV=production node app.js apostrophe:generation",
+    "start": "node scripts/generate_constants.js && node app @apostrophecms/asset:build && node app.js",
+    "dev": "node scripts/generate_constants.js && nodemon",
+    "build": "node scripts/generate_constants.js && NODE_ENV=production node app.js apostrophe:generation",
     "serve": "NODE_ENV=production node app.js",
     "test": "jest",
     "test:coverage": "jest --coverage",
