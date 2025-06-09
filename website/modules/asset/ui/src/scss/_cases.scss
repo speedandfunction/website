@@ -408,8 +408,17 @@
   border: 1px solid $gray-400;
   font-style: $font-style-normal;
   color: $gray-400;
+  cursor: pointer;
   text-transform: uppercase;
+  transform: scale(1);
+  @include transition(transform, 0.3s);
   @include font-settings(10px, 140%, $font-weight-extra-bold);
+
+  &:hover,
+  &:focus {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    transform: scale(1.05);
+  }
 
   @include breakpoint-medium {
     display: none;
