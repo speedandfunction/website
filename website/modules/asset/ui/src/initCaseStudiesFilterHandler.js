@@ -121,6 +121,44 @@ const setupFilterAccessibility = function () {
   };
 };
 
+// Helper function to collapse tags with animation
+const collapseTagsWithAnimation = function (allItems, button, textElement) {
+  if (!allItems || !button || !textElement) return;
+
+  let hiddenCounter = 0;
+  allItems.forEach(function (item, index) {
+    if (index >= getDefaultVisibleTagsCount()) {
+      // Add small delay for staggered animation effect
+      setTimeout(function () {
+        item.classList.add('tag-item--hidden');
+      }, hiddenCounter * 30);
+      hiddenCounter += 1;
+    }
+  });
+  button.classList.remove('tags__show-more--expanded');
+  textElement.textContent = 'Show more';
+};
+
+// Helper function to expand tags with animation
+const expandTagsWithAnimation = function (allItems, button, textElement) {
+  if (!allItems || !button || !textElement) return;
+
+  let expandCounter = 0;
+  allItems.forEach(function (item, index) {
+    if (index >= getDefaultVisibleTagsCount()) {
+      // Add small delay for staggered animation effect
+      setTimeout(function () {
+        item.classList.remove('tag-item--hidden');
+      }, expandCounter * 50);
+      expandCounter += 1;
+    } else {
+      item.classList.remove('tag-item--hidden');
+    }
+  });
+  button.classList.add('tags__show-more--expanded');
+  textElement.textContent = 'Show less';
+};
+
 // Setup Show More/Show Less functionality for tags
 const setupShowMoreHandlers = function () {
   const showMoreButtons = document.querySelectorAll('.tags__show-more');
@@ -138,21 +176,9 @@ const setupShowMoreHandlers = function () {
     const textElement = button.querySelector('.tags__show-more__text');
 
     if (button.classList.contains('tags__show-more--expanded')) {
-      // Collapse - hide items beyond DEFAULT_VISIBLE_TAGS_COUNT
-      allItems.forEach(function (item, index) {
-        if (index >= getDefaultVisibleTagsCount()) {
-          item.classList.add('tag-item--hidden');
-        }
-      });
-      button.classList.remove('tags__show-more--expanded');
-      textElement.textContent = 'Show more';
+      collapseTagsWithAnimation(allItems, button, textElement);
     } else {
-      // Expand - show all items
-      allItems.forEach(function (item) {
-        item.classList.remove('tag-item--hidden');
-      });
-      button.classList.add('tags__show-more--expanded');
-      textElement.textContent = 'Show less';
+      expandTagsWithAnimation(allItems, button, textElement);
     }
   };
 

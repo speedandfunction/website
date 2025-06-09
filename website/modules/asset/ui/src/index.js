@@ -9,13 +9,19 @@ import { setupTagSearchForInput } from './searchInputHandler';
 
 // Initialize configuration from data attributes
 function initConfiguration() {
+  // Set default fallback value first
+  window.DEFAULT_VISIBLE_TAGS_COUNT = 5;
+
   const container = document.querySelector('.cs_container');
   if (container) {
     const defaultVisibleTags = container.getAttribute(
       'data-default-visible-tags',
     );
     if (defaultVisibleTags) {
-      window.DEFAULT_VISIBLE_TAGS_COUNT = parseInt(defaultVisibleTags, 10);
+      const parsed = parseInt(defaultVisibleTags, 10);
+      if (!isNaN(parsed) && parsed > 0) {
+        window.DEFAULT_VISIBLE_TAGS_COUNT = parsed;
+      }
     }
   }
 }
@@ -75,7 +81,6 @@ function initCaseStudiesTagFilter({
 
 // Wrapper function
 function initializeAllComponents() {
-  initConfiguration();
   initImageLozad();
   initAllSwipers();
   initSmoothCounters();
@@ -239,6 +244,11 @@ export default () => {
 
   // Init all scripts after first visiting the page
   initializeAllComponents();
+
+  // Initialize case studies filter handler when DOM is ready
+  apos.util.onReady(() => {
+    initCaseStudiesFilterHandler();
+  });
 
   initBarbaPageTransitions();
   initAnchorNavigation();

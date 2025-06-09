@@ -78,7 +78,6 @@
 }
 
 // Tags styling
-
 .tags-filter {
   border: 1px solid $gray-border;
   font-style: $font-style-normal;
@@ -217,7 +216,6 @@
     opacity 0.3s ease 0.1s,
     transform 0.3s ease 0.1s,
     padding-bottom 0.5s ease;
-  // overflow: hidden;
 
   .tag-search {
     @include font-settings(11px, 140%, $font-weight-medium);
@@ -249,6 +247,9 @@
     opacity: 0;
     transform: translateY(10px);
     animation: fadeInUp 0.4s ease-out forwards;
+    max-height: 50px;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     @for $i from 1 through 20 {
       &:nth-child(#{$i}) {
         animation-delay: #{0.1 + ($i * 0.05)}s;
@@ -266,7 +267,11 @@
     }
 
     &--hidden {
-      display: none;
+      opacity: 0;
+      max-height: 0;
+      margin-bottom: 0;
+      transform: translateY(-10px);
+      pointer-events: none;
     }
   }
 
@@ -348,6 +353,7 @@
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   border-radius: 4px;
   margin: 0 -8px;
+  position: relative;
 
   &:hover {
     background-color: rgba($gray-100, 0.6);
@@ -368,17 +374,22 @@
     height: 16px;
     font-size: 12px;
     font-weight: bold;
-    transition: transform 0.3s ease;
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   &__text {
     text-transform: capitalize;
+    transition: opacity 0.2s ease;
   }
 
   &--expanded {
     .tags__show-more__icon {
       transform: rotate(45deg);
     }
+  }
+
+  &:active {
+    transform: scale(0.98);
   }
 }
 
@@ -413,7 +424,6 @@
 }
 
 // Filter info
-
 .cs_filter-info {
   display: flex;
   flex-wrap: wrap;
@@ -1001,6 +1011,24 @@
   }
 }
 
+// Keyframe for tag show/hide animation
+@keyframes tagSlideIn {
+  0% {
+    opacity: 0;
+    max-height: 0;
+    transform: translateY(-10px);
+  }
+  50% {
+    opacity: 0.5;
+    transform: translateY(-5px);
+  }
+  100% {
+    opacity: 1;
+    max-height: 50px;
+    transform: translateY(0);
+  }
+}
+
 // Animation for reduced motion users (accessibility)
 @media (prefers-reduced-motion: reduce) {
   .cs_grid,
@@ -1013,10 +1041,41 @@
     filter: none;
   }
 
+  .tag-item {
+    transition: none;
+    
+    &--hidden {
+      display: none;
+      opacity: 1;
+      max-height: auto;
+      transform: none;
+    }
+  }
+
   .tags__link {
     transition: none;
 
     &:hover {
+      transform: none;
+    }
+  }
+
+  .tags__show-more {
+    transition: none;
+
+    &__icon {
+      transition: none;
+    }
+
+    &__text {
+      transition: none;
+    }
+
+    &:hover {
+      transform: none;
+    }
+
+    &:active {
       transform: none;
     }
   }
@@ -1032,94 +1091,6 @@
   .filter-category__expand-button {
     &::before {
       transition: none;
-    }
-  }
-}
-
-.tags {
-  &__list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    opacity: 0;
-    animation: fadeInUp 0.6s ease-out 0.2s forwards;
-  }
-
-  &__item {
-    margin-bottom: 6px;
-    opacity: 0;
-    transform: translateY(10px);
-    animation: fadeInUp 0.4s ease-out forwards;
-    @for $i from 1 through 20 {
-      &:nth-child(#{$i}) {
-        animation-delay: #{0.1 + ($i * 0.05)}s;
-      }
-    }
-
-    &--active {
-      .tags__link {
-        &::before {
-          content: '';
-          background-color: $gray-500;
-          background-image: var(--check-mark-url, url(/images/check_mark.svg));
-        }
-      }
-    }
-
-    &--hidden {
-      display: none;
-    }
-  }
-
-  &__link {
-    @include truncate-lines(1);
-    @include font-settings(11px, 140%, $font-weight-medium);
-    text-transform: capitalize;
-    color: $gray-300;
-    display: block;
-    text-decoration: none;
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    border-radius: 4px;
-    margin: 0 -8px;
-    padding: 8px 8px;
-
-    &:hover {
-      background-color: rgba($gray-100, 0.6);
-      color: $gray-500;
-      transform: translateX(4px);
-
-      &::before {
-        background-color: rgba($gray-200, 0.8);
-        transform: scale(1.1);
-        box-shadow: 0 2px 4px rgba($gray-300, 0.2);
-      }
-    }
-
-    &:focus {
-      outline: 2px solid rgba($gray-400, 0.5);
-      outline-offset: 2px;
-    }
-
-    &::before {
-      content: '';
-      display: inline-block;
-      width: 14px;
-      height: 14px;
-      background-color: $gray-100;
-      background-repeat: no-repeat;
-      background-position: center;
-      background-size: 10px 10px;
-      margin-right: 10px;
-      vertical-align: middle;
-      margin-top: -1px;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      border-radius: 2px;
-    }
-
-    span {
-      margin-left: 5px;
-      transition: color 0.3s ease;
     }
   }
 }
