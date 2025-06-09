@@ -6,14 +6,14 @@
 
 // Direct export of constants for import { STANDARD_FORM_FIELD_NAMES } from '...'
 export const STANDARD_FORM_FIELD_NAMES = {
-  "FULL_NAME": "full-name",
-  "EMAIL_ADDRESS": "email-address",
-  "PHONE_NUMBER": "phone-number"
+  FULL_NAME: 'full-name',
+  EMAIL_ADDRESS: 'email-address',
+  PHONE_NUMBER: 'phone-number',
 };
 
 // Default export function for backwards compatibility
 export default () => {
   return {
-    STANDARD_FORM_FIELD_NAMES
+    STANDARD_FORM_FIELD_NAMES,
   };
 };
