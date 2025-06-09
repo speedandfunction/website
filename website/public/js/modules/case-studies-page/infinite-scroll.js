@@ -33,6 +33,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             currentPage = nextPage;
             errorCount = 0;
+            isLoading = false;
 
             if (currentPage >= totalPages) {
               observer.unobserve(trigger);
@@ -49,6 +50,7 @@ document.addEventListener('DOMContentLoaded', function () {
               errorMessage.textContent =
                 'Unable to load more case studies. Please refresh the page to try again.';
               grid.parentNode.insertBefore(errorMessage, grid.nextSibling);
+              isLoading = false;
               return;
             }
 
@@ -56,8 +58,6 @@ document.addEventListener('DOMContentLoaded', function () {
               isLoading = false;
               currentPage--;
             }, 1000);
-          } finally {
-            isLoading = false;
           }
         }
       },
