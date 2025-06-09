@@ -1,7 +1,7 @@
 {# modules/case-studies-page/views/index.new.html #} {% extends "layout.html" %}
 {% import '@apostrophecms/pager:macros.html' as pager with context %} {% block
 main %}
-<div class="cs_container">
+<div class="cs_container" data-default-visible-tags="{{ data.defaultVisibleTagsCount }}">
   <div class="cs_content">
     <div class="page-main_content">
       {% area data.page, 'main' %}
@@ -116,7 +116,7 @@ main %}
 
               {% endif %} 
               {% if isTagSelected %}
-              <li class="tag-item active" data-label="{{ tag.label | lower }}">
+              <li class="tag-item active{% if loop.index > data.defaultVisibleTagsCount %} tag-item--hidden{% endif %}" data-label="{{ tag.label | lower }}">
                 {% if filterType == 'industry' %}
                 <a
                   class="tag-link"
@@ -141,7 +141,7 @@ main %}
                 {% endif %}
               </li>
               {% else %}
-              <li class="tag-item" data-label="{{ tag.label | lower }}">
+              <li class="tag-item{% if loop.index > data.defaultVisibleTagsCount %} tag-item--hidden{% endif %}" data-label="{{ tag.label | lower }}">
                 {% if filterType == 'industry' %}
                 <a
                   class="tag-link"
@@ -167,6 +167,12 @@ main %}
               </li>
               {% endif %} {% endfor %}
             </ul>
+            {% if tags.length > data.defaultVisibleTagsCount %}
+            <button class="tags__show-more" data-filter-type="{{ filterType }}" type="button">
+              <span class="tags__show-more__icon">+</span>
+              <span class="tags__show-more__text">Show more</span>
+            </button>
+            {% endif %}
             <p class="no-tags-message">No Results Found</p>
           </div>
         </div>
@@ -232,4 +238,5 @@ main %}
     </div>
   </div>
 </div>
+
 {% endblock main %}

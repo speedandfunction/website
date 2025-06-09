@@ -202,7 +202,7 @@
         max-height: 1000px;
         opacity: 1;
         transform: translateY(0);
-        padding-bottom: 32px;
+        padding-bottom: 24px;
       }
     }
   }
@@ -217,7 +217,7 @@
     opacity 0.3s ease 0.1s,
     transform 0.3s ease 0.1s,
     padding-bottom 0.5s ease;
-  overflow: hidden;
+  // overflow: hidden;
 
   .tag-search {
     @include font-settings(11px, 140%, $font-weight-medium);
@@ -263,6 +263,10 @@
           background-image: var(--check-mark-url, url(/images/check_mark.svg));
         }
       }
+    }
+
+    &--hidden {
+      display: none;
     }
   }
 
@@ -326,6 +330,58 @@
   @include font-settings(11px, 140%, $font-weight-medium);
 }
 
+.tags__show-more {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: none;
+  color: $gray-400;
+  font-weight: $font-weight-medium;
+  font-size: 11px;
+  line-height: 140%;
+  cursor: pointer;
+  padding: 8px;
+  width: 100%;
+  min-width: 228px;
+  justify-content: flex-start;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 4px;
+  margin: 0 -8px;
+
+  &:hover {
+    background-color: rgba($gray-100, 0.6);
+    color: $gray-500;
+    transform: translateX(4px);
+  }
+
+  &:focus {
+    outline: 2px solid rgba($gray-400, 0.5);
+    outline-offset: 2px;
+  }
+
+  &__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    font-size: 12px;
+    font-weight: bold;
+    transition: transform 0.3s ease;
+  }
+
+  &__text {
+    text-transform: capitalize;
+  }
+
+  &--expanded {
+    .tags__show-more__icon {
+      transform: rotate(45deg);
+    }
+  }
+}
+
 // Pagination
 .pagination-container {
   margin-top: 3rem;
@@ -366,7 +422,7 @@
   min-height: 28px;
   background: $white;
   border-bottom: 1px solid $gray-border;
-  padding-bottom: 32px;
+  padding-bottom: 16px;
   position: sticky;
   z-index: 1;
   top: $mobile-header-height;
@@ -949,15 +1005,15 @@
 @media (prefers-reduced-motion: reduce) {
   .cs_grid,
   .cs_card,
-  .tags-list,
-  .tag-item {
+  .tags__list,
+  .tags__item {
     animation: none;
     opacity: 1;
     transform: none;
     filter: none;
   }
 
-  .tag-link {
+  .tags__link {
     transition: none;
 
     &:hover {
@@ -976,6 +1032,94 @@
   .filter-category__expand-button {
     &::before {
       transition: none;
+    }
+  }
+}
+
+.tags {
+  &__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    opacity: 0;
+    animation: fadeInUp 0.6s ease-out 0.2s forwards;
+  }
+
+  &__item {
+    margin-bottom: 6px;
+    opacity: 0;
+    transform: translateY(10px);
+    animation: fadeInUp 0.4s ease-out forwards;
+    @for $i from 1 through 20 {
+      &:nth-child(#{$i}) {
+        animation-delay: #{0.1 + ($i * 0.05)}s;
+      }
+    }
+
+    &--active {
+      .tags__link {
+        &::before {
+          content: '';
+          background-color: $gray-500;
+          background-image: var(--check-mark-url, url(/images/check_mark.svg));
+        }
+      }
+    }
+
+    &--hidden {
+      display: none;
+    }
+  }
+
+  &__link {
+    @include truncate-lines(1);
+    @include font-settings(11px, 140%, $font-weight-medium);
+    text-transform: capitalize;
+    color: $gray-300;
+    display: block;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 4px;
+    margin: 0 -8px;
+    padding: 8px 8px;
+
+    &:hover {
+      background-color: rgba($gray-100, 0.6);
+      color: $gray-500;
+      transform: translateX(4px);
+
+      &::before {
+        background-color: rgba($gray-200, 0.8);
+        transform: scale(1.1);
+        box-shadow: 0 2px 4px rgba($gray-300, 0.2);
+      }
+    }
+
+    &:focus {
+      outline: 2px solid rgba($gray-400, 0.5);
+      outline-offset: 2px;
+    }
+
+    &::before {
+      content: '';
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      background-color: $gray-100;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: 10px 10px;
+      margin-right: 10px;
+      vertical-align: middle;
+      margin-top: -1px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      border-radius: 2px;
+    }
+
+    span {
+      margin-left: 5px;
+      transition: color 0.3s ease;
     }
   }
 }

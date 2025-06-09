@@ -7,6 +7,19 @@ import { initSmoothCounters } from './smoothCounters';
 import lozad from 'lozad';
 import { setupTagSearchForInput } from './searchInputHandler';
 
+// Initialize configuration from data attributes
+function initConfiguration() {
+  const container = document.querySelector('.cs_container');
+  if (container) {
+    const defaultVisibleTags = container.getAttribute(
+      'data-default-visible-tags',
+    );
+    if (defaultVisibleTags) {
+      window.DEFAULT_VISIBLE_TAGS_COUNT = parseInt(defaultVisibleTags, 10);
+    }
+  }
+}
+
 // Lazy loading
 function initImageLozad() {
   // Lazy loads elements with default selector as '.lozad'
@@ -62,6 +75,7 @@ function initCaseStudiesTagFilter({
 
 // Wrapper function
 function initializeAllComponents() {
+  initConfiguration();
   initImageLozad();
   initAllSwipers();
   initSmoothCounters();
@@ -220,6 +234,9 @@ function initMenuToggle() {
 }
 
 export default () => {
+  // Initialize configuration first
+  initConfiguration();
+
   // Init all scripts after first visiting the page
   initializeAllComponents();
 
