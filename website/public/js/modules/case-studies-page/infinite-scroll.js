@@ -20,13 +20,17 @@ document.addEventListener('DOMContentLoaded', function () {
           try {
             const response = await fetch(url.toString());
             if (!response.ok) {
-              throw new Error(`HTTP error! status: ${response.status}`);
+              throw new Error('Network response was not ok');
             }
             const html = await response.text();
             const parser = new DOMParser();
             const doc = parser.parseFromString(html, 'text/html');
 
             const newCards = doc.querySelectorAll('.cs_card');
+            if (newCards.length === 0) {
+              throw new Error('No new case studies found');
+            }
+
             newCards.forEach((card) => {
               grid.appendChild(card.cloneNode(true));
             });
@@ -47,8 +51,16 @@ document.addEventListener('DOMContentLoaded', function () {
               const errorMessage = document.createElement('div');
               errorMessage.style.cssText =
                 'text-align: center; padding: 20px; color: #666; font-size: 14px;';
-              errorMessage.textContent =
-                'Unable to load more case studies. Please refresh the page to try again.';
+
+              let errorText = 'Unable to load more case studies. ';
+              if (error.message === 'Network response was not ok') {
+                errorText += 'Server error occurred. ';
+              } else if (error.message === 'No new case studies found') {
+                errorText += 'No more case studies available. ';
+              }
+              errorText += 'Please refresh the page to try again.';
+
+              errorMessage.textContent = errorText;
               grid.parentNode.insertBefore(errorMessage, grid.nextSibling);
               isLoading = false;
               return;
