@@ -57,10 +57,23 @@ export class FilterModal {
 
   open() {
     this.modalBody.innerHTML = '';
-
     this.modalBody.appendChild(createFilterHeader());
 
-    if (this.clearAll) this.modalBody.appendChild(this.clearAll);
+    const topRow = document.createElement('div');
+    topRow.className = 'filter-modal__top-row';
+
+    const itemsCount = document.querySelector('.items-count__mobile');
+    if (itemsCount) {
+      topRow.appendChild(itemsCount);
+      itemsCount.classList.add('is-visible');
+    }
+
+    if (this.clearAll) {
+      topRow.appendChild(this.clearAll);
+    }
+
+    this.modalBody.appendChild(topRow);
+
     if (this.selectedTags) this.modalBody.appendChild(this.selectedTags);
     if (this.tagsFilter) this.modalBody.appendChild(this.tagsFilter);
     this.modal.classList.add('active');
@@ -75,6 +88,13 @@ export class FilterModal {
     }
     if (this.tagsFilter && this.originalParents.tagsFilter) {
       this.originalParents.tagsFilter.appendChild(this.tagsFilter);
+    }
+
+    const itemsCount = this.modalBody.querySelector('.items-count__mobile');
+    if (itemsCount) {
+      itemsCount.classList.remove('is-visible');
+      const filterInfo = document.querySelector('.cs_filter-info');
+      if (filterInfo) filterInfo.appendChild(itemsCount);
     }
     this.modal.classList.remove('active');
     this.modalBody.innerHTML = '';

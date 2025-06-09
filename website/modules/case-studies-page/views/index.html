@@ -14,8 +14,12 @@ main %}
       data.query.caseStudyType %} {% if hasActiveFilters %}
       <p class="items-count">
         {{ data.totalPieces }} Ite{% if data.totalPieces == 1 %}m{% else %}ms{%
-        endif %} found
+        endif %} Found
       </p>
+      <div class="items-count__mobile">
+        {{ data.totalPieces }} Ite{% if data.totalPieces == 1 %}m{% else %}ms{%
+        endif %} Found
+      </div>
 
       <div class="clear-all">
         <a
