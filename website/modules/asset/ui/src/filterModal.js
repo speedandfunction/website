@@ -87,15 +87,17 @@ export class FilterModal {
   }
 
   close() {
-    if (this.clearAll && this.originalParents.clearAll) {
-      this.originalParents.clearAll.appendChild(this.clearAll);
-    }
-    if (this.selectedTags && this.originalParents.selectedTags) {
-      this.originalParents.selectedTags.appendChild(this.selectedTags);
-    }
-    if (this.tagsFilter && this.originalParents.tagsFilter) {
-      this.originalParents.tagsFilter.appendChild(this.tagsFilter);
-    }
+    const elementsToRestore = [
+      { element: this.clearAll, parent: this.originalParents.clearAll },
+      { element: this.selectedTags, parent: this.originalParents.selectedTags },
+      { element: this.tagsFilter, parent: this.originalParents.tagsFilter },
+    ];
+
+    elementsToRestore.forEach(({ element, parent }) => {
+      if (element && parent && document.contains(parent)) {
+        parent.appendChild(element);
+      }
+    });
 
     const itemsCount = this.modalBody.querySelector('.items-count__mobile');
     if (itemsCount) {
