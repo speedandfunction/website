@@ -1,3 +1,4 @@
+/* eslint-disable sort-imports */
 import barba from '@barba/core';
 import { enhanceBarbaWithFilterHandling } from './enhanceBarbaWithFilterHandling';
 import { gsap } from 'gsap';
@@ -8,6 +9,7 @@ import { initSmoothCounters } from './smoothCounters';
 import lozad from 'lozad';
 import { setupTagSearchForInput } from './searchInputHandler';
 import { FilterModal } from './filterModal';
+/* eslint-enable sort-imports */
 
 // Lazy loading
 function initImageLozad() {
