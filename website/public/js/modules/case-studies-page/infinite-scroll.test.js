@@ -28,11 +28,14 @@ describe('Infinite Scroll', () => {
 
     // Mock window.totalPages
     window.totalPages = 3;
+
+    jest.useFakeTimers();
   });
 
   afterEach(() => {
     jest.clearAllMocks();
     document.body.innerHTML = '';
+    jest.useRealTimers();
   });
 
   it('should initialize IntersectionObserver when elements exist', () => {
@@ -61,6 +64,7 @@ describe('Infinite Scroll', () => {
             <div class="cs_card">Card 2</div>
         `;
     global.fetch.mockResolvedValueOnce({
+      ok: true,
       text: () => Promise.resolve(mockHtml),
     });
 
@@ -91,6 +95,7 @@ describe('Infinite Scroll', () => {
     window.totalPages = 1;
     const mockHtml = '<div class="cs_card">Card 1</div>';
     global.fetch.mockResolvedValueOnce({
+      ok: true,
       text: () => Promise.resolve(mockHtml),
     });
 
@@ -105,20 +110,62 @@ describe('Infinite Scroll', () => {
     );
   });
 
-  it('should handle fetch errors gracefully', async () => {
-    const consoleSpy = jest.spyOn(console, 'error').mockImplementation();
-    global.fetch.mockRejectedValueOnce(new Error('Network error'));
+  it('should retry loading on error', async () => {
+    global.fetch
+      .mockRejectedValueOnce(new Error('Network error'))
+      .mockResolvedValueOnce({
+        ok: true,
+        text: () => Promise.resolve('<div class="cs_card">Card 1</div>'),
+      });
 
     require('./infinite-scroll');
 
-    // Simulate intersection
     const callback = mockIntersectionObserver.mock.calls[0][0];
     await callback([{ isIntersecting: true }]);
 
-    expect(consoleSpy).toHaveBeenCalledWith(
-      'Error loading more case studies:',
-      expect.any(Error),
+    jest.advanceTimersByTime(1000);
+    await Promise.resolve();
+
+    expect(global.fetch).toHaveBeenCalledTimes(2);
+  });
+
+  it('should show error message after max retries', async () => {
+    global.fetch.mockRejectedValue(new Error('Network error'));
+
+    require('./infinite-scroll');
+
+    const callback = mockIntersectionObserver.mock.calls[0][0];
+
+    for (let i = 0; i < 3; i++) {
+      await callback([{ isIntersecting: true }]);
+      jest.advanceTimersByTime(1000);
+      await Promise.resolve();
+    }
+
+    const errorMessage = document.querySelector(
+      'div[style*="text-align: center"]',
     );
-    consoleSpy.mockRestore();
+    expect(errorMessage).toBeTruthy();
+    expect(errorMessage.textContent).toBe(
+      'Unable to load more case studies. Please refresh the page to try again.',
+    );
+    expect(mockUnobserve).toHaveBeenCalled();
+  });
+
+  it('should handle non-ok response status', async () => {
+    global.fetch.mockResolvedValueOnce({
+      ok: false,
+      status: 500,
+    });
+
+    require('./infinite-scroll');
+
+    const callback = mockIntersectionObserver.mock.calls[0][0];
+    await callback([{ isIntersecting: true }]);
+
+    jest.advanceTimersByTime(1000);
+    await Promise.resolve();
+
+    expect(global.fetch).toHaveBeenCalledTimes(2);
   });
 });

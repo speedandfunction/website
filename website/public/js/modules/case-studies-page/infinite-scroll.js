@@ -4,6 +4,8 @@ document.addEventListener('DOMContentLoaded', function () {
   let currentPage = 1;
   const totalPages = window.totalPages;
   let isLoading = false;
+  let errorCount = 0;
+  const MAX_RETRIES = 3;
 
   if (trigger && grid) {
     const observer = new IntersectionObserver(
@@ -17,6 +19,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
           try {
             const response = await fetch(url.toString());
+            if (!response.ok) {
+              throw new Error(`HTTP error! status: ${response.status}`);
+            }
             const html = await response.text();
             const parser = new DOMParser();
             const doc = parser.parseFromString(html, 'text/html');
@@ -27,12 +32,30 @@ document.addEventListener('DOMContentLoaded', function () {
             });
 
             currentPage = nextPage;
+            errorCount = 0;
 
             if (currentPage >= totalPages) {
               observer.unobserve(trigger);
             }
           } catch (error) {
-            console.error('Error loading more case studies:', error);
+            errorCount++;
+
+            if (errorCount >= MAX_RETRIES) {
+              observer.unobserve(trigger);
+
+              const errorMessage = document.createElement('div');
+              errorMessage.style.cssText =
+                'text-align: center; padding: 20px; color: #666; font-size: 14px;';
+              errorMessage.textContent =
+                'Unable to load more case studies. Please refresh the page to try again.';
+              grid.parentNode.insertBefore(errorMessage, grid.nextSibling);
+              return;
+            }
+
+            setTimeout(() => {
+              isLoading = false;
+              currentPage--;
+            }, 1000);
           } finally {
             isLoading = false;
           }

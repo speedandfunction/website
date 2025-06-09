@@ -979,3 +979,33 @@
     }
   }
 }
+
+.infinite-scroll-error {
+  text-align: center;
+  padding: 20px;
+  margin: 20px 0;
+  background-color: rgba($gray-400, 0.1);
+  border-radius: 4px;
+
+  p {
+    color: $gray-500;
+    margin-bottom: 15px;
+    font-size: 14px;
+  }
+
+  .retry-button {
+    background-color: $white;
+    border: 1px solid $gray-300;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    color: $gray-500;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background-color: $gray-100;
+      border-color: $gray-400;
+    }
+  }
+}

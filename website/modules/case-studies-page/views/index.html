@@ -253,7 +253,7 @@ main %}
 </div>
 
 <script>
-  window.totalPages = {{ data.totalPages }};
+  window.totalPages = {{ data.totalPages | json }};
 </script>
 <script src="/js/modules/case-studies-page/infinite-scroll.js"></script>
 {% endblock main %}
