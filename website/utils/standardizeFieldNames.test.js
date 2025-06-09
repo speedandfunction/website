@@ -1,7 +1,11 @@
 const { standardizeFieldNames } = require('./standardizeFieldNames');
+const {
+  STANDARD_FORM_FIELD_NAMES,
+} = require('../modules/@apostrophecms/shared-constants/ui/src/index');
 
 describe('standardizeFieldNames', () => {
   it('should standardize field names according to the standard list', () => {
+    const fieldNames = Object.values(STANDARD_FORM_FIELD_NAMES);
     const doc = {
       contents: {
         items: [
@@ -14,12 +18,13 @@ describe('standardizeFieldNames', () => {
 
     standardizeFieldNames(doc);
 
-    expect(doc.contents.items[0].fieldName).toBe('full-name');
-    expect(doc.contents.items[1].fieldName).toBe('email-address');
-    expect(doc.contents.items[2].fieldName).toBe('phone-number');
+    expect(doc.contents.items[0].fieldName).toBe(fieldNames[0]);
+    expect(doc.contents.items[1].fieldName).toBe(fieldNames[1]);
+    expect(doc.contents.items[2].fieldName).toBe(fieldNames[2]);
   });
 
   it('should handle fewer items than standard names', () => {
+    const fieldNames = Object.values(STANDARD_FORM_FIELD_NAMES);
     const doc = {
       contents: {
         items: [{ fieldName: 'name' }, { fieldName: 'email' }],
@@ -28,12 +33,13 @@ describe('standardizeFieldNames', () => {
 
     standardizeFieldNames(doc);
 
-    expect(doc.contents.items[0].fieldName).toBe('full-name');
-    expect(doc.contents.items[1].fieldName).toBe('email-address');
+    expect(doc.contents.items[0].fieldName).toBe(fieldNames[0]);
+    expect(doc.contents.items[1].fieldName).toBe(fieldNames[1]);
     expect(doc.contents.items.length).toBe(2);
   });
 
   it('should handle more items than standard names', () => {
+    const fieldNames = Object.values(STANDARD_FORM_FIELD_NAMES);
     const doc = {
       contents: {
         items: [
@@ -47,9 +53,9 @@ describe('standardizeFieldNames', () => {
 
     standardizeFieldNames(doc);
 
-    expect(doc.contents.items[0].fieldName).toBe('full-name');
-    expect(doc.contents.items[1].fieldName).toBe('email-address');
-    expect(doc.contents.items[2].fieldName).toBe('phone-number');
+    expect(doc.contents.items[0].fieldName).toBe(fieldNames[0]);
+    expect(doc.contents.items[1].fieldName).toBe(fieldNames[1]);
+    expect(doc.contents.items[2].fieldName).toBe(fieldNames[2]);
     expect(doc.contents.items[3].fieldName).toBe('extra');
   });
 
@@ -82,24 +88,26 @@ describe('standardizeFieldNames', () => {
   });
 
   it('should not modify field names that already match standard names', () => {
+    const fieldNames = Object.values(STANDARD_FORM_FIELD_NAMES);
     const doc = {
       contents: {
         items: [
-          { fieldName: 'full-name' },
-          { fieldName: 'email-address' },
-          { fieldName: 'phone-number' },
+          { fieldName: fieldNames[0] },
+          { fieldName: fieldNames[1] },
+          { fieldName: fieldNames[2] },
         ],
       },
     };
 
     standardizeFieldNames(doc);
 
-    expect(doc.contents.items[0].fieldName).toBe('full-name');
-    expect(doc.contents.items[1].fieldName).toBe('email-address');
-    expect(doc.contents.items[2].fieldName).toBe('phone-number');
+    expect(doc.contents.items[0].fieldName).toBe(fieldNames[0]);
+    expect(doc.contents.items[1].fieldName).toBe(fieldNames[1]);
+    expect(doc.contents.items[2].fieldName).toBe(fieldNames[2]);
   });
 
   it('should handle items without fieldName property', () => {
+    const fieldNames = Object.values(STANDARD_FORM_FIELD_NAMES);
     const doc = {
       contents: {
         items: [{}, { fieldName: 'email' }, { otherProp: 'value' }],
@@ -109,7 +117,7 @@ describe('standardizeFieldNames', () => {
     standardizeFieldNames(doc);
 
     expect(doc.contents.items[0]).toEqual({});
-    expect(doc.contents.items[1].fieldName).toBe('email-address');
+    expect(doc.contents.items[1].fieldName).toBe(fieldNames[1]);
     expect(doc.contents.items[2]).toEqual({ otherProp: 'value' });
   });
 });
