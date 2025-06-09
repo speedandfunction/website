@@ -1,15 +1,15 @@
 {% extends "layout.html" %} {% macro buildQueryString(query) %} {% set
 queryParams = [] %} {% if query.industry %} {% for industry in query.industry %}
 {% set queryParams = queryParams.concat(['industry%5B' + loop.index0 + '%5D=' +
-industry]) %} {% endfor %} {% endif %} {% if query.stack %} {% for stack in
-query.stack %} {% set queryParams = queryParams.concat(['stack%5B' + loop.index0
-+ '%5D=' + stack]) %} {% endfor %} {% endif %} {% if query.caseStudyType %} {%
-for caseStudyType in query.caseStudyType %} {% set queryParams =
-queryParams.concat(['caseStudyType%5B' + loop.index0 + '%5D=' + caseStudyType])
-%} {% endfor %} {% endif %} {% if query.search %} {% set queryParams =
-queryParams.concat(['search=' + query.search]) %} {% endif %} {{ '?' +
-queryParams.join('&') if queryParams.length > 0 else '' }} {% endmacro %} {%
-block main %}
+(industry | urlencode)]) %} {% endfor %} {% endif %} {% if query.stack %} {% for
+stack in query.stack %} {% set queryParams = queryParams.concat(['stack%5B' +
+loop.index0 + '%5D=' + (stack | urlencode)]) %} {% endfor %} {% endif %} {% if
+query.caseStudyType %} {% for caseStudyType in query.caseStudyType %} {% set
+queryParams = queryParams.concat(['caseStudyType%5B' + loop.index0 + '%5D=' +
+(caseStudyType | urlencode)]) %} {% endfor %} {% endif %} {% if query.search %}
+{% set queryParams = queryParams.concat(['search=' + (query.search |
+urlencode)]) %} {% endif %} {{ '?' + queryParams.join('&') if queryParams.length
+> 0 else '' }} {% endmacro %} {% block main %}
 
 <div>
   <div class="cs_nav-container">
