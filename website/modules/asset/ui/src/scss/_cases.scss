@@ -797,22 +797,61 @@
 }
 
 // Case Study Navigation
+.cs_nav-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.cs_back-link {
+  font-weight: $font-weight-300;
+  font-size: 11px;
+  line-height: 120%;
+  text-decoration: none;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0px;
+  gap: 8px;
+  color: $gray-300;
+  @include breakpoint-medium {
+    gap: 12px;
+  }
+  &:hover {
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
+  .cs_back-arrow {
+    transition: opacity 0.2s ease;
+    flex-shrink: 0;
+
+    &--desktop {
+      display: none;
+
+      @include breakpoint-medium {
+        display: block;
+      }
+    }
+
+    &--mobile {
+      display: block;
+
+      @include breakpoint-medium {
+        display: none;
+      }
+    }
+  }
+}
+
 .cs_navigation {
   display: flex;
   flex-direction: row;
   align-items: center;
   padding: 0;
-  gap: 44px;
-  position: absolute;
-  width: 261px;
-  height: 13px;
-  right: 20px;
-  top: 20px;
-  z-index: 2;
-
+  gap: 20px;
   @include breakpoint-medium {
-    right: 40px;
-    top: 40px;
+    gap: 44px;
   }
 }
 
@@ -827,28 +866,59 @@
   flex-grow: 0;
 }
 
-.cs_nav-text {
-  font-family: 'Poppins', sans-serif;
-  font-style: normal;
+.cs_nav-link {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
   font-weight: $font-weight-300;
   font-size: 11px;
   line-height: 120%;
-  text-transform: lowercase;
   text-decoration: none;
-  flex: none;
-  flex-grow: 0;
+  transition: all 0.2s ease;
 
   &--active {
     color: $gray-500;
 
     &:hover {
       text-decoration: underline;
+
+      .cs_nav-arrow[src*='arrow-left'] {
+        opacity: 0.7;
+        transform: translateX(2px);
+      }
+
+      .cs_nav-arrow[src*='arrow-right'] {
+        opacity: 0.7;
+        transform: translateX(-2px);
+      }
+    }
+
+    .cs_nav-arrow {
+      opacity: 1;
     }
   }
 
   &--disabled {
     color: $gray-300;
     cursor: default;
+
+    .cs_nav-arrow {
+      opacity: 0.4;
+    }
+  }
+}
+
+.cs_nav-arrow {
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.cs_nav-text {
+  display: none;
+
+  @include breakpoint-medium {
+    display: block;
   }
 }
 

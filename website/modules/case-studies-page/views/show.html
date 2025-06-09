@@ -12,36 +12,108 @@ queryParams.join('&') if queryParams.length > 0 else '' }} {% endmacro %} {%
 block main %}
 
 <div>
-  <!-- Back to all projects link -->
-  <div class="cs_back-to-all">
-    {% set backUrl = '/cases' + buildQueryString(data.query) %}
-    <a href="{{ backUrl }}" class="cs_back-link">
-      <span class="cs_back-text">Back to all projects</span>
-    </a>
-  </div>
-
-  <!-- Navigation buttons -->
-  <div class="cs_navigation">
-    <div class="cs_nav-item">
-      {% if data.prev %} {% set prevUrl = data.prev._url +
-      buildQueryString(data.query) %}
-      <a href="{{ prevUrl }}" class="cs_nav-text cs_nav-text--active"
-        >previous project</a
+  <div class="cs_nav-container">
+    <!-- Back to all projects link -->
+    <div class="cs_back-to-all">
+      {% set backUrl = '/cases' + buildQueryString(data.query) %}
+      <a
+        href="{{ backUrl }}"
+        class="cs_back-link"
+        aria-label="Back to all projects"
       >
-      {% else %}
-      <span class="cs_nav-text cs_nav-text--disabled">previous project</span>
-      {% endif %}
+        <img
+          src="/images/arrow-back-desktop.svg"
+          alt=""
+          role="presentation"
+          class="cs_back-arrow cs_back-arrow--desktop"
+          width="16"
+          height="16"
+        />
+        <img
+          src="/images/arrow-left.svg"
+          alt=""
+          role="presentation"
+          class="cs_back-arrow cs_back-arrow--mobile"
+          width="21"
+          height="7"
+        />
+        <span class="cs_back-text">back to all projects</span>
+      </a>
     </div>
 
-    <div class="cs_nav-item">
-      {% if data.next %} {% set nextUrl = data.next._url +
-      buildQueryString(data.query) %}
-      <a href="{{ nextUrl }}" class="cs_nav-text cs_nav-text--active"
-        >next project</a
-      >
-      {% else %}
-      <span class="cs_nav-text cs_nav-text--disabled">next project</span>
-      {% endif %}
+    <!-- Navigation buttons -->
+    <div class="cs_navigation">
+      <div class="cs_nav-item">
+        {% if data.prev %} {% set prevUrl = data.prev._url +
+        buildQueryString(data.query) %}
+        <a
+          href="{{ prevUrl }}"
+          class="cs_nav-link cs_nav-link--active"
+          aria-label="Navigate to previous project"
+        >
+          <img
+            src="/images/arrow-left.svg"
+            alt=""
+            role="presentation"
+            class="cs_nav-arrow"
+            width="21"
+            height="7"
+          />
+          <span class="cs_nav-text">previous project</span>
+        </a>
+        {% else %}
+        <span
+          class="cs_nav-link cs_nav-link--disabled"
+          aria-label="Previous project (unavailable)"
+        >
+          <img
+            src="/images/arrow-left.svg"
+            alt=""
+            role="presentation"
+            class="cs_nav-arrow"
+            width="21"
+            height="7"
+          />
+          <span class="cs_nav-text">previous project</span>
+        </span>
+        {% endif %}
+      </div>
+
+      <div class="cs_nav-item">
+        {% if data.next %} {% set nextUrl = data.next._url +
+        buildQueryString(data.query) %}
+        <a
+          href="{{ nextUrl }}"
+          class="cs_nav-link cs_nav-link--active"
+          aria-label="Navigate to next project"
+        >
+          <span class="cs_nav-text">next project</span>
+          <img
+            src="/images/arrow-right.svg"
+            alt=""
+            role="presentation"
+            class="cs_nav-arrow"
+            width="21"
+            height="6"
+          />
+        </a>
+        {% else %}
+        <span
+          class="cs_nav-link cs_nav-link--disabled"
+          aria-label="Next project (unavailable)"
+        >
+          <span class="cs_nav-text">next project</span>
+          <img
+            src="/images/arrow-right.svg"
+            alt=""
+            role="presentation"
+            class="cs_nav-arrow"
+            width="21"
+            height="6"
+          />
+        </span>
+        {% endif %}
+      </div>
     </div>
   </div>
 
