@@ -1011,6 +1011,10 @@
       transition: none;
     }
   }
+
+  .filter-modal__backdrop {
+    transition: none;
+  }
 }
 
 // Styles for Filters in modal popup for mobile version
@@ -1050,10 +1054,10 @@
   &__backdrop {
     position: absolute;
     inset: 0;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba($black, 0.5);
     z-index: 1;
     opacity: 1;
-    transition: opacity 0.2s;
+    transition: opacity 0.2s ease-in-out;
   }
 
   &__content {
@@ -1069,7 +1073,7 @@
     padding: 24px 16px;
     max-height: 90vh;
     overflow-y: auto;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+    box-shadow: 0 8px 32px rgba($black, 0.18);
   }
 
   &__close {
