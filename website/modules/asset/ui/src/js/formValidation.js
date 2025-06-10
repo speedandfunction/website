@@ -39,11 +39,18 @@ const { showError: showValidationErrorFn, clearError: clearValidationErrorFn } =
 
 const addFieldValidationHandlers = (field, validateFieldFn) => {
   field.addEventListener('blur', async (event) => {
-    const result = await validateFieldFn(event.target);
-    if (result.isValid) {
-      clearValidationErrorFn(event.target);
-    } else {
-      showValidationErrorFn(event.target, result.message);
+    try {
+      const result = await validateFieldFn(event.target);
+      if (result.isValid) {
+        clearValidationErrorFn(event.target);
+      } else {
+        showValidationErrorFn(event.target, result.message);
+      }
+    } catch {
+      showValidationErrorFn(
+        event.target,
+        'Validation failed. Please try again.',
+      );
     }
   });
 
@@ -68,25 +75,24 @@ const handleFormSubmit = (form, validateFieldFn) => async (event) => {
 
 const validateForm = async (form, validateFieldFn) => {
   const fields = form.querySelectorAll('input, textarea, select');
-  let isFormValid = true;
 
   fields.forEach((field) => {
     clearValidationErrorFn(field);
   });
 
-  const validationPromises = Array.from(fields)
-    .filter((field) => !['submit', 'button', 'hidden'].includes(field.type))
-    .map(async (field) => {
-      const result = await validateFieldFn(field);
-      if (!result.isValid) {
-        showValidationErrorFn(field, result.message);
-        isFormValid = false;
-      }
-    });
+  const validationResults = await Promise.all(
+    Array.from(fields)
+      .filter((field) => !['submit', 'button', 'hidden'].includes(field.type))
+      .map(async (field) => {
+        const result = await validateFieldFn(field);
+        if (!result.isValid) {
+          showValidationErrorFn(field, result.message);
+        }
+        return result.isValid;
+      }),
+  );
 
-  await Promise.all(validationPromises);
-
-  return isFormValid;
+  return validationResults.every(Boolean);
 };
 
 const initFormValidation = (form, validateFieldFn) => {
@@ -98,7 +104,7 @@ const initFormValidation = (form, validateFieldFn) => {
     document.addEventListener('DOMContentLoaded', () => {
       const forms = document.querySelectorAll('.sf-form');
       forms.forEach((formElement) =>
-        initFormWithValidation(formElement, validateField),
+        initFormWithValidation(formElement, validateFieldFn || validateField),
       );
     });
   }
