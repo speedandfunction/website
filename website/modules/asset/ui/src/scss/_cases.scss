@@ -83,6 +83,9 @@
   font-style: $font-style-normal;
   max-width: 262px;
   width: 100%;
+  max-height: 1076px;
+  overflow-y: auto;
+  overflow-x: hidden;
 
   .filter-section {
     &:first-of-type {
