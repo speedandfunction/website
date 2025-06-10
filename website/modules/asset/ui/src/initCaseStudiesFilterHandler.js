@@ -125,38 +125,65 @@ const setupFilterAccessibility = function () {
 const collapseTagsWithAnimation = function (allItems, button, textElement) {
   if (!allItems || !button || !textElement) return;
 
-  let hiddenCounter = 0;
-  allItems.forEach(function (item, index) {
-    if (index >= getDefaultVisibleTagsCount()) {
-      // Add small delay for staggered animation effect
-      setTimeout(function () {
-        item.classList.add('tag-item--hidden');
-      }, hiddenCounter * 30);
-      hiddenCounter += 1;
-    }
-  });
+  // Prevent double-clicking during animation
+  if (button.dataset.animating === 'true') {
+    return;
+  }
+
+  button.dataset.animating = 'true';
+
+  // Update button state immediately
   button.classList.remove('tags__show-more--expanded');
   textElement.textContent = 'Show more';
+
+  // Immediately hide items that should be hidden (no animation delay)
+  allItems.forEach(function (item, index) {
+    if (index >= getDefaultVisibleTagsCount()) {
+      item.classList.add('tag-item--hidden');
+    }
+  });
+
+  // Remove animation lock after CSS transition completes
+  setTimeout(function () {
+    button.dataset.animating = 'false';
+  }, 500);
 };
 
 // Helper function to expand tags with animation
 const expandTagsWithAnimation = function (allItems, button, textElement) {
   if (!allItems || !button || !textElement) return;
 
+  // Prevent double-clicking during animation
+  if (button.dataset.animating === 'true') {
+    return;
+  }
+
+  button.dataset.animating = 'true';
+
+  // Update button state immediately
+  button.classList.add('tags__show-more--expanded');
+  textElement.textContent = 'Show less';
+
+  // Show all items with staggered animation for smooth effect
   let expandCounter = 0;
+  let maxDelay = 0;
   allItems.forEach(function (item, index) {
     if (index >= getDefaultVisibleTagsCount()) {
-      // Add small delay for staggered animation effect
+      const delay = expandCounter * 50;
+      maxDelay = Math.max(maxDelay, delay);
       setTimeout(function () {
         item.classList.remove('tag-item--hidden');
-      }, expandCounter * 50);
+      }, delay);
       expandCounter += 1;
     } else {
       item.classList.remove('tag-item--hidden');
     }
   });
-  button.classList.add('tags__show-more--expanded');
-  textElement.textContent = 'Show less';
+
+  // Remove animation lock after all expand animations complete
+  setTimeout(function () {
+    button.dataset.animating = 'false';
+  }, maxDelay + 500);
 };
 
 // Setup Show More/Show Less functionality for tags
@@ -173,7 +200,7 @@ const setupShowMoreHandlers = function () {
 
     const filterContent = button.closest('.filter-content');
     const allItems = filterContent.querySelectorAll('.tag-item');
-    const textElement = button.querySelector('.tags__show-more__text');
+    const textElement = button.querySelector('.tags__show-more--text');
 
     if (button.classList.contains('tags__show-more--expanded')) {
       collapseTagsWithAnimation(allItems, button, textElement);

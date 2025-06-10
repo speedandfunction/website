@@ -216,6 +216,7 @@
     opacity 0.3s ease 0.1s,
     transform 0.3s ease 0.1s,
     padding-bottom 0.5s ease;
+  overflow: hidden;
 
   .tag-search {
     @include font-settings(11px, 140%, $font-weight-medium);
@@ -224,6 +225,11 @@
     margin: 16px 0 11px;
     color: $gray-300;
     width: 100%;
+
+    &:focus-visible {
+      box-shadow: 0 0 0 2px rgba($gray-400, 0.5);
+      border-radius: 4px;
+    }
 
     &:focus {
       outline: 0;
@@ -283,7 +289,10 @@
     display: block;
     text-decoration: none;
     cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: 
+      background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+      color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+      transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     border-radius: 4px;
     margin: 0 -8px;
     padding: 8px 8px;
@@ -300,9 +309,9 @@
       }
     }
 
-    &:focus {
-      outline: 2px solid rgba($gray-400, 0.5);
-      outline-offset: 2px;
+    &:focus-visible {
+      box-shadow: 0 0 0 2px rgba($gray-400, 0.5) !important;
+      border-radius: 4px;
     }
 
     &::before {
@@ -338,7 +347,7 @@
 .tags__show-more {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 12px;
   background: none;
   border: none;
   color: $gray-400;
@@ -350,7 +359,10 @@
   width: 100%;
   min-width: 228px;
   justify-content: flex-start;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: 
+    background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   border-radius: 4px;
   margin: 0 -8px;
   position: relative;
@@ -361,12 +373,12 @@
     transform: translateX(4px);
   }
 
-  &:focus {
-    outline: 2px solid rgba($gray-400, 0.5);
-    outline-offset: 2px;
+  &:focus-visible {
+    box-shadow: 0 0 0 2px rgba($gray-400, 0.5) !important;
+    border-radius: 4px;
   }
 
-  &__icon {
+  &--icon {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -375,15 +387,21 @@
     font-size: 12px;
     font-weight: bold;
     transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+
+    img {
+      width: 10px;
+      height: 10px;
+    }
   }
 
-  &__text {
+  &--text {
     text-transform: capitalize;
     transition: opacity 0.2s ease;
+    line-height: 1.1;
   }
 
   &--expanded {
-    .tags__show-more__icon {
+    .tags__show-more-icon {
       transform: rotate(45deg);
     }
   }

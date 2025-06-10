@@ -169,8 +169,10 @@ main %}
             </ul>
             {% if tags.length > data.defaultVisibleTagsCount %}
             <button class="tags__show-more" data-filter-type="{{ filterType }}" type="button">
-              <span class="tags__show-more__icon">+</span>
-              <span class="tags__show-more__text">Show more</span>
+              <span class="tags__show-more--icon">
+                <img src="/images/plus.svg" alt="Plus icon" />
+              </span>
+              <span class="tags__show-more--text">Show more</span>
             </button>
             {% endif %}
             <p class="no-tags-message">No Results Found</p>

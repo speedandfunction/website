@@ -88,6 +88,7 @@ function initializeAllComponents() {
   initFontChanger();
   initPhoneFormatting();
   initCaseStudiesTagFilter();
+  initCaseStudiesFilterHandler();
 }
 
 // Barba pages
