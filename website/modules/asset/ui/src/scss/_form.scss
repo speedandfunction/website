@@ -124,3 +124,9 @@ label {
     color: $gray-300;
   }
 }
+
+.apos-field--instructions {
+  .apos-input[disabled] {
+    background-color: $gray-100;
+  }
+}
