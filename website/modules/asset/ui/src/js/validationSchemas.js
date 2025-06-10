@@ -9,10 +9,17 @@ const fieldSpecificSchemas = {
     .trim()
     .required('Name is required')
     .min(2, 'Name must contain at least 2 characters')
-    .max(50, 'Name cannot be longer than 50 characters'),
+    .max(50, 'Name cannot be longer than 50 characters')
+    .matches(
+      /^[\s'A-Za-zЄІЇА-яєіїҐґ-]+$/u,
+      'Enter a valid full name (letters, spaces, apostrophes, or hyphens only)',
+    ),
 
   [STANDARD_FORM_FIELD_NAMES.EMAIL_ADDRESS]: yup
     .string()
+    .trim()
+    .required('Email is required')
+    .max(254, 'Email cannot be longer than 254 characters')
     .email('Enter a valid email address')
     .test('domain-check', 'Check the domain part of the email', (value) => {
       if (!value) return true;
@@ -22,11 +29,11 @@ const fieldSpecificSchemas = {
         parts[1].includes('.') &&
         parts[1].split('.').pop().length >= 2
       );
-    })
-    .required('Email is required'),
+    }),
 
   [STANDARD_FORM_FIELD_NAMES.PHONE_NUMBER]: yup
     .string()
+    .required('Phone number is required')
     .test(
       'is-valid-international-phone',
       'Enter a valid phone number',
