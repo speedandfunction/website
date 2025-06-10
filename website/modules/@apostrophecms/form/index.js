@@ -24,6 +24,26 @@ const validateSubmissionSuccess = (result) => {
 };
 
 module.exports = {
+  improve: '@apostrophecms/form',
+  fields: {
+    add: {
+      instructions: {
+        label: 'Instructions',
+        type: 'string',
+        required: false,
+        textarea: true,
+        def: 'For proper validation, place the name, email, and phone number fields at the beginning of the form, in this exact order. All three must have the text type. Add all other fields afterward.',
+        readOnly: true,
+      },
+    },
+    group: {
+      basics: {
+        label: 'Form',
+        fields: ['title', 'instructions', 'contents'],
+      },
+    },
+  },
+
   options: {
     label: 'Form',
   },
