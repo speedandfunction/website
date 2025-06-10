@@ -194,7 +194,7 @@ main %}
         {% endif %} {% endfor %}
       </div>
 
-      <div class="cs_grid">
+      <div class="cs_grid" id="case-studies-grid">
         {% for article in data.pieces %} {# CARD START: {{ article.title }} #}
         <a href="{{ article._url }}" class="cs_card">
           {% set picture = apos.image.first(article.picture) %} {% if picture is
@@ -247,11 +247,6 @@ main %}
       </div>
     </div>
 
-    <div class="pagination-container">
-      {{ pager.render({ page: data.currentPage, total: data.totalPages, class:
-      'cs-pager' }, data.url) }}
-    </div>
-
     <div id="filter-modal" class="filter-modal">
       <div class="filter-modal__backdrop"></div>
       <div class="filter-modal__content">
@@ -266,6 +261,14 @@ main %}
         <div class="filter-modal__body"></div>
       </div>
     </div>
+    {% if data.totalPages > 1 %}
+    <div id="infinite-scroll-trigger" style="height: 1px; width: 100%"></div>
+    {% endif %}
   </div>
 </div>
+
+<script>
+  window.totalPages = {{ data.totalPages | json }};
+</script>
+<script src="/js/modules/case-studies-page/infinite-scroll.js"></script>
 {% endblock main %}
