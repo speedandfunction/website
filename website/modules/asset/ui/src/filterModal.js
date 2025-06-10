@@ -84,6 +84,7 @@ export class FilterModal {
     if (this.selectedTags) this.modalBody.appendChild(this.selectedTags);
     if (this.tagsFilter) this.modalBody.appendChild(this.tagsFilter);
     this.modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
   }
 
   close() {
@@ -107,6 +108,7 @@ export class FilterModal {
     }
     this.modal.classList.remove('active');
     this.modalBody.innerHTML = '';
+    document.body.style.overflow = '';
   }
 
   init() {
