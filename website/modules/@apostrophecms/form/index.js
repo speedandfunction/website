@@ -4,6 +4,9 @@ const GoogleSheetsErrorHandler = require('./lib/GoogleSheetsErrorHandler');
 const { formatForSpreadsheet } = require('./lib/formatForSpreadsheet');
 const { getSheetsAuthConfig } = require('./lib/getSheetsAuthConfig');
 
+const VALIDATION_INSTRUCTIONS =
+  'For proper validation, place the name, email, and phone number fields at the beginning of the form, in this exact order. Use a text input for each. Add all other fields afterward.';
+
 const parseFormData = (req) => {
   const rawData = req?.body?.data;
   if (!rawData) {
@@ -32,7 +35,7 @@ module.exports = {
         type: 'string',
         required: false,
         textarea: true,
-        def: 'For proper validation, place the name, email, and phone number fields at the beginning of the form, in this exact order. All three must have the text type. Add all other fields afterward.',
+        def: VALIDATION_INSTRUCTIONS,
         readOnly: true,
       },
     },
