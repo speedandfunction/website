@@ -226,6 +226,11 @@ function initMenuToggle() {
 
 // Filter Case Studies modal for Case Studies mobile page
 function initFilterModal() {
+  // Only initialize if we're on the case studies page
+  if (!document.querySelector('.cs_list')) {
+    return;
+  }
+
   window.caseStudiesFilterModal = new FilterModal({
     modalSelector: '#filter-modal',
     openBtnSelector: '.filters-cta',
