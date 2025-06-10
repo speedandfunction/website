@@ -6,7 +6,7 @@ module.exports = {
     sort: {
       updatedAt: -1,
     },
-    perPage: 9,
+    perPage: 6,
     alias: 'caseStudy',
   },
   fields: {
