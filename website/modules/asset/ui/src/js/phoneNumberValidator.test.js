@@ -4,9 +4,13 @@ const {
 } = require('../../../../@apostrophecms/shared-constants/ui/src/index');
 
 describe('Phone Number Validator', () => {
-  const phoneInput = document.createElement('input');
-  phoneInput.type = 'tel';
-  phoneInput.name = STANDARD_FORM_FIELD_NAMES.PHONE_NUMBER;
+  let phoneInput = null;
+
+  beforeEach(() => {
+    phoneInput = document.createElement('input');
+    phoneInput.type = 'tel';
+    phoneInput.name = STANDARD_FORM_FIELD_NAMES.PHONE_NUMBER;
+  });
 
   it('rejects too short phone number', async () => {
     phoneInput.value = '123';

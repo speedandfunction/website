@@ -11,8 +11,8 @@ const fieldSpecificSchemas = {
     .min(2, 'Name must contain at least 2 characters')
     .max(50, 'Name cannot be longer than 50 characters')
     .matches(
-      /^[\s'A-Za-zЄІЇА-яєіїҐґ-]+$/u,
-      'Enter a valid full name (letters, spaces, apostrophes, or hyphens only)',
+      /^[\p{L}\p{M}'\-\s]+$/u,
+      'Enter a valid full name (letters, diacritics, spaces, apostrophes, or hyphens only)',
     ),
 
   [STANDARD_FORM_FIELD_NAMES.EMAIL_ADDRESS]: yup
