@@ -226,11 +226,6 @@
     color: $gray-300;
     width: 100%;
 
-    &:focus-visible {
-      box-shadow: 0 0 0 2px rgba($gray-400, 0.5);
-      border-radius: 4px;
-    }
-
     &:focus {
       outline: 0;
       border-left: 0;
@@ -293,7 +288,6 @@
       background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
       color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
       transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    border-radius: 4px;
     margin: 0 -8px;
     padding: 8px 8px;
 
@@ -310,8 +304,15 @@
     }
 
     &:focus-visible {
-      box-shadow: 0 0 0 2px rgba($gray-400, 0.5) !important;
-      border-radius: 4px;
+      background-color: rgba($gray-100, 0.6);
+      color: $gray-500;
+      transform: translateX(4px);
+
+      &::before {
+        background-color: rgba($gray-200, 0.8);
+        transform: scale(1.1);
+        box-shadow: 0 2px 4px rgba($gray-300, 0.2);
+      }
     }
 
     &::before {
@@ -363,7 +364,6 @@
     background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
     color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
     transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  border-radius: 4px;
   margin: 0 -8px;
   position: relative;
 
@@ -374,8 +374,17 @@
   }
 
   &:focus-visible {
-    box-shadow: 0 0 0 2px rgba($gray-400, 0.5) !important;
-    border-radius: 4px;
+    background-color: rgba($gray-100, 0.6);
+    color: $gray-500;
+    transform: translateX(4px);
+    outline: none;
+
+    .tags__show-more--icon {
+      img {
+        transform: scale(1.1);
+        filter: drop-shadow(0 2px 4px rgba($gray-300, 0.2));
+      }
+    }
   }
 
   &--icon {
