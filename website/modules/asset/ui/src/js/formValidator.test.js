@@ -13,6 +13,7 @@ const TEST_CONSTANTS = {
     EMAIL_REQUIRED: 'Email is required',
     EMAIL_INVALID: 'Enter a valid email address',
     EMAIL_DOMAIN_INVALID: 'Check the domain part of the email',
+    PHONE_REQUIRED: 'Phone number is required',
     PHONE_INVALID: 'Enter a valid phone number',
     TEXT_TOO_LONG: 'Maximum 50 characters',
     TEXT_TOO_SHORT: 'Minimum 2 characters',
@@ -186,7 +187,7 @@ const testPhoneNumber = () =>
       },
     ],
     emptyTest: {
-      errorMessage: TEST_CONSTANTS.MESSAGES.PHONE_INVALID,
+      errorMessage: TEST_CONSTANTS.MESSAGES.PHONE_REQUIRED,
     },
     additionalTests: [
       {

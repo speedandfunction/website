@@ -93,7 +93,7 @@ describe('Phone Number Schema', () => {
 
   test('rejects empty phone number', async () => {
     await expect(schema.validate('')).rejects.toThrow(
-      'Enter a valid phone number',
+      'Phone number is required',
     );
   });
 

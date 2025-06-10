@@ -1,20 +1,19 @@
 const { initFormValidation } = require('./formValidation');
+const { validateField } = require('./formValidator');
+const { showValidationError, clearValidationError } = require('./domHelpers');
+const {
+  STANDARD_FORM_FIELD_NAMES,
+} = require('../../../../@apostrophecms/shared-constants/ui/src/index');
 
 jest.mock('./formValidator');
 jest.mock('./domHelpers');
-jest.mock('../../../../shared-constants/ui/src/index', () => ({
+jest.mock('../../../../@apostrophecms/shared-constants/ui/src/index', () => ({
   STANDARD_FORM_FIELD_NAMES: {
     FULL_NAME: 'full-name',
     EMAIL_ADDRESS: 'email-address',
     PHONE_NUMBER: 'phone-number',
   },
 }));
-
-const { validateField } = require('./formValidator');
-const { showValidationError, clearValidationError } = require('./domHelpers');
-const {
-  STANDARD_FORM_FIELD_NAMES,
-} = require('../../../../@apostrophecms/shared-constants/ui/src/index');
 
 describe('Form Validation', () => {
   let form = document.createElement('form');
