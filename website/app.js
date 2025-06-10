@@ -101,6 +101,7 @@ function createAposConfig() {
       'container-widget': {},
       'leadership-team-widget': {},
       'table-widget': {},
+      'form-field-standardizer': {},
     },
   };
 }

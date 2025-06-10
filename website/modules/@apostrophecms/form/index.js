@@ -4,6 +4,9 @@ const GoogleSheetsErrorHandler = require('./lib/GoogleSheetsErrorHandler');
 const { formatForSpreadsheet } = require('./lib/formatForSpreadsheet');
 const { getSheetsAuthConfig } = require('./lib/getSheetsAuthConfig');
 
+const VALIDATION_INSTRUCTIONS =
+  'For proper validation, place the name, email, and phone number fields at the beginning of the form, in this exact order. Use a text input for each. Add all other fields afterward.';
+
 const parseFormData = (req) => {
   const rawData = req?.body?.data;
   if (!rawData) {
@@ -24,6 +27,26 @@ const validateSubmissionSuccess = (result) => {
 };
 
 module.exports = {
+  improve: '@apostrophecms/form',
+  fields: {
+    add: {
+      instructions: {
+        label: 'Instructions',
+        type: 'string',
+        required: false,
+        textarea: true,
+        def: VALIDATION_INSTRUCTIONS,
+        readOnly: true,
+      },
+    },
+    group: {
+      basics: {
+        label: 'Form',
+        fields: ['title', 'instructions', 'contents'],
+      },
+    },
+  },
+
   options: {
     label: 'Form',
   },
