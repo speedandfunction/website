@@ -1,3 +1,4 @@
+/* eslint-disable sort-imports */
 import barba from '@barba/core';
 import { enhanceBarbaWithFilterHandling } from './enhanceBarbaWithFilterHandling';
 import { gsap } from 'gsap';
@@ -7,6 +8,8 @@ import { initPhoneFormatting } from './js/phoneFormat';
 import { initSmoothCounters } from './smoothCounters';
 import lozad from 'lozad';
 import { setupTagSearchForInput } from './searchInputHandler';
+import { FilterModal } from './filterModal';
+/* eslint-enable sort-imports */
 
 // Initialize configuration from data attributes
 function initConfiguration() {
@@ -238,6 +241,33 @@ function initMenuToggle() {
         menuButton.classList.remove('open');
       });
     });
+  });
+}
+
+// Filter Case Studies modal for Case Studies mobile page
+function initFilterModal() {
+  // Only initialize if we're on the case studies page
+  if (!document.querySelector('.cs_list')) {
+    return;
+  }
+
+  window.caseStudiesFilterModal = new FilterModal({
+    modalSelector: '#filter-modal',
+    openBtnSelector: '.filters-cta',
+    closeBtnSelector: '.filter-modal__close',
+    backdropSelector: '.filter-modal__backdrop',
+    clearAllSelector: '.clear-all',
+    selectedTagsSelector: '.selected-tags',
+    tagsFilterSelector: '.tags-filter',
+  });
+}
+
+document.addEventListener('DOMContentLoaded', initFilterModal);
+
+// Initialize after Barba transitions
+if (typeof barba !== 'undefined') {
+  barba.hooks.after(() => {
+    initFilterModal();
   });
 }
 

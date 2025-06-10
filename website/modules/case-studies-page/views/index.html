@@ -9,12 +9,17 @@ main %}
     </div>
 
     <div class="cs_filter-info">
+      <div class="filters-cta">Filter Case Studies</div>
       {% set hasActiveFilters = data.query.industry or data.query.stack or
       data.query.caseStudyType %} {% if hasActiveFilters %}
       <p class="items-count">
         {{ data.totalPieces }} Ite{% if data.totalPieces == 1 %}m{% else %}ms{%
-        endif %} found
+        endif %} Found
       </p>
+      <div class="items-count__mobile">
+        {{ data.totalPieces }} Ite{% if data.totalPieces == 1 %}m{% else %}ms{%
+        endif %} Found
+      </div>
 
       <div class="clear-all">
         <a
@@ -81,16 +86,12 @@ main %}
         'Technology'] ] %} {% set tags = data.piecesFilters[filterType] %} {% if
         tags and tags.length %}
         <div class="filter-section">
+          <!-- prettier-ignore -->
           <input
             type="checkbox"
             id="filter-toggle-{{ filterType }}"
             class="filter-category__toggle"
-            {%
-            if
-            loop.first
-            %}checked{%
-            endif
-            %}
+            {% if loop.first %}checked{% endif %}
             aria-labelledby="filter-category-{{ filterType }}"
           />
           <div class="filter-category" id="filter-category-{{ filterType }}">
@@ -254,6 +255,20 @@ main %}
       </div>
     </div>
 
+    <div id="filter-modal" class="filter-modal">
+      <div class="filter-modal__backdrop"></div>
+      <div class="filter-modal__content">
+        <button
+          type="button"
+          class="filter-modal__close"
+          aria-label="Close filter modal"
+        >
+          <i class="back-icon"></i>
+          back to all projects
+        </button>
+        <div class="filter-modal__body"></div>
+      </div>
+    </div>
     {% if data.totalPages > 1 %}
     <div id="infinite-scroll-trigger" style="height: 1px; width: 100%"></div>
     {% endif %}
