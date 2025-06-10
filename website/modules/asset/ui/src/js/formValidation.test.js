@@ -26,13 +26,13 @@ describe('Form Validation', () => {
       <form id="test-form">
         <div class="apos-form-input-wrapper">
           <input type="text" name="fullName" id="fullName" />
-          <div class="validation-error"></div>
+          <div class="error-message"></div>
         </div>
       </form>
     `;
     form = document.getElementById('test-form');
     fullNameInput = document.getElementById('fullName');
-    errorMessage = form.querySelector('.validation-error');
+    errorMessage = form.querySelector('.error-message');
     validateField = jest.fn();
     initFormValidation(form, validateField);
   });

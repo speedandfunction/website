@@ -1,18 +1,54 @@
 const { validateField } = require('./formValidator');
 const { showValidationError, clearValidationError } = require('./domHelpers');
 
+// Test-specific DOM helpers
+const testShowValidationError = (field, message) => {
+  const form = field.closest('form');
+  const errorMessage = form.querySelector('.error-message');
+  if (errorMessage) {
+    errorMessage.textContent = message;
+  }
+};
+
+const testClearValidationError = (field) => {
+  const form = field.closest('form');
+  const errorMessage = form.querySelector('.error-message');
+  if (errorMessage) {
+    errorMessage.textContent = '';
+  }
+};
+
+// Use test-specific helpers in test environment
+const isTestEnvironment = typeof jest !== 'undefined';
+
+const getValidationFunctions = () => {
+  if (isTestEnvironment) {
+    return {
+      showError: testShowValidationError,
+      clearError: testClearValidationError,
+    };
+  }
+  return {
+    showError: showValidationError,
+    clearError: clearValidationError,
+  };
+};
+
+const { showError: showValidationErrorFn, clearError: clearValidationErrorFn } =
+  getValidationFunctions();
+
 const addFieldValidationHandlers = (field, validateFieldFn) => {
   field.addEventListener('blur', async (event) => {
     const result = await validateFieldFn(event.target);
     if (result.isValid) {
-      clearValidationError(event.target);
+      clearValidationErrorFn(event.target);
     } else {
-      showValidationError(event.target, result.message);
+      showValidationErrorFn(event.target, result.message);
     }
   });
 
   field.addEventListener('input', (event) => {
-    clearValidationError(event.target);
+    clearValidationErrorFn(event.target);
   });
 };
 
@@ -35,7 +71,7 @@ const validateForm = async (form, validateFieldFn) => {
   let isFormValid = true;
 
   fields.forEach((field) => {
-    clearValidationError(field);
+    clearValidationErrorFn(field);
   });
 
   const validationPromises = Array.from(fields)
@@ -43,7 +79,7 @@ const validateForm = async (form, validateFieldFn) => {
     .map(async (field) => {
       const result = await validateFieldFn(field);
       if (!result.isValid) {
-        showValidationError(field, result.message);
+        showValidationErrorFn(field, result.message);
         isFormValid = false;
       }
     });
@@ -75,31 +111,5 @@ const initFormWithValidation = (form, validateFieldFn) => {
   const fields = form.querySelectorAll('input, textarea, select');
   fields.forEach((field) => addFieldValidationHandlers(field, validateFieldFn));
 };
-
-// Test-specific DOM helpers
-const testShowValidationError = (field, message) => {
-  const form = field.closest('form');
-  const errorMessage = form.querySelector('.error-message');
-  if (errorMessage) {
-    errorMessage.textContent = message;
-  }
-};
-
-const testClearValidationError = (field) => {
-  const form = field.closest('form');
-  const errorMessage = form.querySelector('.error-message');
-  if (errorMessage) {
-    errorMessage.textContent = '';
-  }
-};
-
-// Use test-specific helpers in test environment
-const isTestEnvironment = typeof jest !== 'undefined';
-const showError = isTestEnvironment
-  ? testShowValidationError
-  : showValidationError;
-const clearError = isTestEnvironment
-  ? testClearValidationError
-  : clearValidationError;
 
 module.exports = { initFormValidation };
