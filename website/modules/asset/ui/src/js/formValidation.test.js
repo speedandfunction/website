@@ -7,7 +7,10 @@ describe('Form Validation', () => {
   let validateField = null;
 
   const createEventWithTarget = (eventType, target) => {
-    const event = new Event(eventType);
+    let event = new Event(eventType);
+    if (eventType === 'submit') {
+      event = new SubmitEvent(eventType, { cancelable: true });
+    }
     Object.defineProperty(event, 'target', { value: target, enumerable: true });
     return event;
   };

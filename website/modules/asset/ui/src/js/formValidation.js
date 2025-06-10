@@ -17,15 +17,16 @@ const addFieldValidationHandlers = (field, validateFieldFn) => {
 };
 
 const handleFormSubmit = (form, validateFieldFn) => async (event) => {
-  event.preventDefault();
-
   const isValid = await validateForm(form, validateFieldFn);
 
-  if (isValid) {
-    // Don't call form.submit() in test environment
-    if (typeof jest === 'undefined') {
-      form.submit();
-    }
+  if (!isValid) {
+    event.preventDefault();
+    return;
+  }
+
+  // Don't call form.submit() in test environment
+  if (typeof jest === 'undefined') {
+    form.submit();
   }
 };
 
