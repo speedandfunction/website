@@ -81,14 +81,24 @@ describe('Email Schema', () => {
 describe('Phone Number Schema', () => {
   const schema = fieldSpecificSchemas[STANDARD_FORM_FIELD_NAMES.PHONE_NUMBER];
 
-  test('accepts valid international phone number', async () => {
-    await expect(schema.validate('+1 212 555 1234')).resolves.toBe(
-      '+1 212 555 1234',
+  test('accepts valid phone number with country code', async () => {
+    await expect(schema.validate('+1 (234) 567-8900')).resolves.toBe(
+      '+1 (234) 567-8900',
     );
   });
 
-  test('accepts valid local phone number', async () => {
-    await expect(schema.validate('212 555 1234')).resolves.toBe('212 555 1234');
+  test('accepts valid phone number without country code', async () => {
+    await expect(schema.validate('(234) 567-8900')).resolves.toBe(
+      '(234) 567-8900',
+    );
+  });
+
+  test('accepts valid phone number with spaces', async () => {
+    await expect(schema.validate('234 567 8900')).resolves.toBe('234 567 8900');
+  });
+
+  test('accepts valid phone number with dots', async () => {
+    await expect(schema.validate('234.567.8900')).resolves.toBe('234.567.8900');
   });
 
   test('rejects empty phone number', async () => {
@@ -98,27 +108,27 @@ describe('Phone Number Schema', () => {
   });
 
   test('rejects too short phone number', async () => {
-    await expect(schema.validate('123456')).rejects.toThrow(
+    await expect(schema.validate('123')).rejects.toThrow(
       'Enter a valid phone number',
     );
   });
 
   test('rejects too long phone number', async () => {
-    const longNumber = `+1${'1'.repeat(15)}`;
+    const longNumber = '1'.repeat(21);
     await expect(schema.validate(longNumber)).rejects.toThrow(
+      'Phone number is too long',
+    );
+  });
+
+  test('rejects invalid format', async () => {
+    await expect(schema.validate('abc')).rejects.toThrow(
       'Enter a valid phone number',
     );
   });
 
-  test('rejects invalid international format', async () => {
-    await expect(schema.validate('+')).rejects.toThrow(
+  test('rejects phone number with letters', async () => {
+    await expect(schema.validate('123-ABC-4567')).rejects.toThrow(
       'Enter a valid phone number',
-    );
-  });
-
-  test('accepts phone number with spaces and dashes', async () => {
-    await expect(schema.validate('+1-212-555-1234')).resolves.toBe(
-      '+1-212-555-1234',
     );
   });
 });

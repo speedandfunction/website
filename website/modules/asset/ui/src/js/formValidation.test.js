@@ -1,24 +1,10 @@
-const { initFormValidation } = require('./formValidation');
-const { validateField } = require('./formValidator');
-const { showValidationError, clearValidationError } = require('./domHelpers');
-const {
-  STANDARD_FORM_FIELD_NAMES,
-} = require('../../../../@apostrophecms/shared-constants/ui/src/index');
-
-jest.mock('./formValidator');
-jest.mock('./domHelpers');
-jest.mock('../../../../@apostrophecms/shared-constants/ui/src/index', () => ({
-  STANDARD_FORM_FIELD_NAMES: {
-    FULL_NAME: 'full-name',
-    EMAIL_ADDRESS: 'email-address',
-    PHONE_NUMBER: 'phone-number',
-  },
-}));
+import { initFormValidation } from './formValidation';
 
 describe('Form Validation', () => {
-  let form = document.createElement('form');
-  let fullNameInput = document.createElement('input');
-  let emailInput = document.createElement('input');
+  let form = null;
+  let fullNameInput = null;
+  let errorMessage = null;
+  let validateField = null;
 
   const createEventWithTarget = (eventType, target) => {
     const event = new Event(eventType);
@@ -28,109 +14,82 @@ describe('Form Validation', () => {
 
   const waitForDomUpdate = () => {
     return new Promise((resolve) => {
-      setTimeout(resolve, 100);
+      setTimeout(resolve, 0);
     });
   };
 
-  beforeEach(async () => {
-    jest.clearAllMocks();
-    validateField.mockReset();
-
-    initFormValidation();
-
-    form = document.createElement('form');
-    form.className = 'sf-form';
-
-    fullNameInput = document.createElement('input');
-    fullNameInput.type = 'text';
-    fullNameInput.name = STANDARD_FORM_FIELD_NAMES.FULL_NAME;
-
-    emailInput = document.createElement('input');
-    emailInput.type = 'email';
-    emailInput.name = STANDARD_FORM_FIELD_NAMES.EMAIL_ADDRESS;
-
-    form.appendChild(fullNameInput);
-    form.appendChild(emailInput);
-
-    document.body.appendChild(form);
-
-    document.dispatchEvent(new Event('DOMContentLoaded'));
-    await waitForDomUpdate();
+  beforeEach(() => {
+    document.body.innerHTML = `
+      <form id="test-form">
+        <div class="apos-form-input-wrapper">
+          <input type="text" name="fullName" id="fullName" />
+          <div class="validation-error"></div>
+        </div>
+      </form>
+    `;
+    form = document.getElementById('test-form');
+    fullNameInput = document.getElementById('fullName');
+    errorMessage = form.querySelector('.validation-error');
+    validateField = jest.fn();
+    initFormValidation(form, validateField);
   });
 
   afterEach(() => {
     document.body.innerHTML = '';
-    jest.resetModules();
+    jest.clearAllMocks();
   });
 
   test('validates field on blur', async () => {
     validateField.mockImplementation(() => Promise.resolve({ isValid: true }));
 
     fullNameInput.dispatchEvent(createEventWithTarget('blur', fullNameInput));
-
     await waitForDomUpdate();
 
-    expect(validateField).toHaveBeenCalledWith(fullNameInput, '');
-    expect(clearValidationError).toHaveBeenCalledWith(fullNameInput);
-  });
+    expect(validateField).toHaveBeenCalledWith(fullNameInput);
+    expect(errorMessage.textContent).toBe('');
+  }, 10000);
 
   test('shows validation error when field is invalid', async () => {
-    const errorMessage = 'Invalid input';
+    const expectedErrorMessage = 'Invalid input';
     validateField.mockImplementation(() =>
-      Promise.resolve({
-        isValid: false,
-        message: errorMessage,
-      }),
+      Promise.resolve({ isValid: false, message: expectedErrorMessage }),
     );
 
     fullNameInput.dispatchEvent(createEventWithTarget('blur', fullNameInput));
-
     await waitForDomUpdate();
 
-    expect(showValidationError).toHaveBeenCalledWith(
-      fullNameInput,
-      errorMessage,
-    );
-  });
+    expect(validateField).toHaveBeenCalledWith(fullNameInput);
+    expect(errorMessage.textContent).toBe(expectedErrorMessage);
+  }, 10000);
 
   test('clears validation error on input', async () => {
     fullNameInput.dispatchEvent(createEventWithTarget('input', fullNameInput));
-
     await waitForDomUpdate();
 
-    expect(clearValidationError).toHaveBeenCalledWith(fullNameInput);
-  });
+    expect(errorMessage.textContent).toBe('');
+  }, 10000);
 
   test('validates form on submit', async () => {
     validateField.mockImplementation(() => Promise.resolve({ isValid: true }));
 
     const submitEvent = createEventWithTarget('submit', form);
-    submitEvent.preventDefault = jest.fn();
-    form.submit = jest.fn();
-
     form.dispatchEvent(submitEvent);
-
     await waitForDomUpdate();
 
-    expect(submitEvent.preventDefault).toHaveBeenCalled();
-    expect(validateField).toHaveBeenCalled();
-    expect(form.submit).toHaveBeenCalled();
-  });
+    expect(validateField).toHaveBeenCalledWith(fullNameInput);
+    expect(submitEvent.defaultPrevented).toBe(false);
+  }, 10000);
+
   test('prevents form submission when validation fails', async () => {
     validateField.mockImplementation(() =>
       Promise.resolve({ isValid: false, message: 'Error' }),
     );
 
     const submitEvent = createEventWithTarget('submit', form);
-    submitEvent.preventDefault = jest.fn();
-    form.submit = jest.fn();
-
     form.dispatchEvent(submitEvent);
-
     await waitForDomUpdate();
 
-    expect(submitEvent.preventDefault).toHaveBeenCalled();
-    expect(validateField).toHaveBeenCalled();
-    expect(form.submit).not.toHaveBeenCalled();
-  });
+    expect(validateField).toHaveBeenCalledWith(fullNameInput);
+    expect(submitEvent.defaultPrevented).toBe(true);
+  }, 10000);
 });

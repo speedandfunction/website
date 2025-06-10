@@ -134,13 +134,18 @@ label {
 
 .validation-error {
   position: absolute;
-  bottom: -6px;
-  left: 25px;
+  top: 75px;
+  left: 5px;
+  @include breakpoint-medium {
+    top: 94px;
+    left: 25px;
+  }
   color: $error-color;
   font-size: 12px;
   margin-top: -5px;
   margin-bottom: 10px;
   font-weight: 500;
+  line-height: 110%;
 }
 
 .apos-form-error {

@@ -14,7 +14,7 @@ const TEST_CONSTANTS = {
     EMAIL_INVALID: 'Enter a valid email address',
     EMAIL_DOMAIN_INVALID: 'Check the domain part of the email',
     PHONE_REQUIRED: 'Phone number is required',
-    PHONE_INVALID: 'Enter a valid phone number',
+    PHONE_INVALID: 'Enter a valid phone number (e.g., +1 (234) 567-8900)',
     TEXT_TOO_LONG: 'Maximum 50 characters',
     TEXT_TOO_SHORT: 'Minimum 2 characters',
     TEXTAREA_TOO_LONG: 'Maximum 200 characters',
@@ -46,10 +46,12 @@ const TEST_CONSTANTS = {
 const createField = (name, tag = 'input') => ({
   getAttribute: jest.fn().mockReturnValue(name),
   tagName: tag.toUpperCase(),
+  value: '',
 });
 
 const runCommonEmptyTests = async (field, errorMessage) => {
-  const result = await validateField(field, '');
+  field.value = '';
+  const result = await validateField(field);
   expect(result).toEqual({
     isValid: !errorMessage,
     ...(errorMessage && { message: errorMessage }),
@@ -61,7 +63,8 @@ const runCommonLengthTests = async (
   { min, max, tooShortMsg, tooLongMsg },
 ) => {
   if (min) {
-    const result = await validateField(field, 'a');
+    const shortField = { ...field, value: 'a' };
+    const result = await validateField(shortField);
     expect(result).toEqual({
       isValid: false,
       message: tooShortMsg,
@@ -69,8 +72,8 @@ const runCommonLengthTests = async (
   }
 
   if (max) {
-    const longText = 'a'.repeat(max + 1);
-    const result = await validateField(field, longText);
+    const longField = { ...field, value: 'a'.repeat(max + 1) };
+    const result = await validateField(longField);
     expect(result).toEqual({
       isValid: false,
       message: tooLongMsg,
@@ -79,12 +82,14 @@ const runCommonLengthTests = async (
 };
 
 const runValidInputTest = async (field, value) => {
-  const result = await validateField(field, value);
+  field.value = value;
+  const result = await validateField(field);
   expect(result).toEqual({ isValid: true });
 };
 
 const runInvalidInputTest = async (field, value, message) => {
-  const result = await validateField(field, value);
+  field.value = value;
+  const result = await validateField(field);
   expect(result).toEqual({
     isValid: false,
     message,

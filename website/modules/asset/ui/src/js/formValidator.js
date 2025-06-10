@@ -6,6 +6,14 @@ const {
 const validateField = async (field, value) => {
   try {
     const name = field.getAttribute('name');
+    let fieldValue = '';
+
+    if (value !== undefined) {
+      fieldValue = value;
+    } else if (field.value !== undefined) {
+      fieldValue = field.value;
+    }
+
     let schema = fieldSpecificSchemas[name];
 
     if (!schema) {
@@ -17,7 +25,7 @@ const validateField = async (field, value) => {
       schema = fallbackSchemas[type];
     }
 
-    await schema.validate(value);
+    await schema.validate(fieldValue);
     return { isValid: true };
   } catch (error) {
     return { isValid: false, message: error.message };
