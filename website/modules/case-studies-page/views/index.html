@@ -136,7 +136,7 @@ main %}
 
               {% endif %} 
               {% if isTagSelected %}
-              <li class="tag-item active{% if loop.index > data.defaultVisibleTagsCount %} tag-item--hidden{% endif %}" data-label="{{ tag.label | lower }}">
+              <li class="tag-item active" data-label="{{ tag.label | lower }}">
                 {% if filterType == 'industry' %}
                 <a
                   class="tag-link"
