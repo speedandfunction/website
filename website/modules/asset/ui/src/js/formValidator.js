@@ -4,16 +4,19 @@ const {
 } = require('./validationSchemas');
 
 const validateField = async (field, value) => {
+  if (!field || typeof field.getAttribute !== 'function') {
+    return { isValid: false, message: 'Invalid field parameter' };
+  }
+
+  let fieldValue = '';
+  if (value !== null && value !== undefined) {
+    fieldValue = value;
+  } else if (field.value !== undefined) {
+    fieldValue = field.value;
+  }
+
   try {
     const name = field.getAttribute('name');
-    let fieldValue = '';
-
-    if (value !== undefined) {
-      fieldValue = value;
-    } else if (field.value !== undefined) {
-      fieldValue = field.value;
-    }
-
     let schema = fieldSpecificSchemas[name];
 
     if (!schema) {
@@ -23,6 +26,10 @@ const validateField = async (field, value) => {
         type = 'textarea';
       }
       schema = fallbackSchemas[type];
+    }
+
+    if (!schema) {
+      return { isValid: false, message: 'No validation schema found' };
     }
 
     await schema.validate(fieldValue);
