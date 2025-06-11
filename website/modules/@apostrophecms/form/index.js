@@ -49,6 +49,21 @@ module.exports = {
 
   options: {
     label: 'Form',
+    formWidgets: {
+      '@apostrophecms/form-text-field': {},
+      '@apostrophecms/form-textarea-field': {},
+      '@apostrophecms/form-checkboxes-field': {},
+      '@apostrophecms/rich-text': {
+        toolbar: [
+          'styles',
+          'bold',
+          'italic',
+          'link',
+          'orderedList',
+          'bulletList',
+        ],
+      },
+    },
   },
 
   init(self) {
