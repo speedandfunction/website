@@ -1,4 +1,5 @@
 const mainWidgets = require('../../lib/mainWidgets');
+const DEFAULT_VISIBLE_TAGS_COUNT = 5;
 
 // Helper utility functions for tag counting
 const tagCountHelpers = {
@@ -86,6 +87,7 @@ module.exports = {
           reqCopy.data = {};
         }
         reqCopy.data.tagCounts = tagCounts;
+        reqCopy.data.defaultVisibleTagsCount = DEFAULT_VISIBLE_TAGS_COUNT;
       } catch (error) {
         self.apos.util.error('Error calculating tag counts:', error);
 
@@ -98,6 +100,7 @@ module.exports = {
           stack: {},
           caseStudyType: {},
         };
+        reqCopy.data.defaultVisibleTagsCount = DEFAULT_VISIBLE_TAGS_COUNT;
       }
     };
   },
