@@ -204,7 +204,7 @@ main %}
 
       <div class="cs_grid" id="case-studies-grid">
         {% for article in data.pieces %} {# CARD START: {{ article.title }} #}
-        <a href="{{ article._url }}" class="cs_card">
+        <a href="{{ data.buildCaseStudyUrl(article._url) }}" class="cs_card">
           {% set picture = apos.image.first(article.picture) %} {% if picture is
           defined %}
           <img

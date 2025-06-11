@@ -1,116 +1,225 @@
 {% extends "layout.html" %} {% block main %}
 
-<div class="cs_full-details">
-  <article class="cs_full-details-card">
-    {% set picture = apos.image.first(data.piece.picture) %} {% if picture is
-    defined %}
-
-    <img
-      class="image"
-      loading="lazy"
-      src="{{ apos.attachment.url(picture, { size: 'full' }) }}"
-      alt="{{ picture._alt or '' }}"
-      width="{{ apos.attachment.getWidth(picture) }}"
-      height="{{ apos.attachment.getHeight(picture) }}"
-    />
-
-    {% else %}
-
-    <div class="placeholder-image-container">
-      <img
-        class="placeholder-image"
-        loading="lazy"
-        src="/images/logo.svg"
-        alt="Placeholder banner"
-        width="160"
-        height="50"
-      />
+<div>
+  <div class="cs_nav-container">
+    <!-- Back to all projects link -->
+    <div class="cs_back-to-all">
+      <a
+        href="{{ (data.backUrl or '/cases') | safe }}"
+        class="cs_back-link"
+        aria-label="Back to all projects"
+      >
+        <img
+          src="/images/arrow-back-desktop.svg"
+          alt=""
+          role="presentation"
+          class="cs_back-arrow cs_back-arrow--desktop"
+          width="16"
+          height="16"
+        />
+        <img
+          src="/images/arrow-left.svg"
+          alt=""
+          role="presentation"
+          class="cs_back-arrow cs_back-arrow--mobile"
+          width="21"
+          height="7"
+        />
+        <span class="cs_back-text">back to all projects</span>
+      </a>
     </div>
 
-    {% endif %}
-    <div class="cs_info">
-      <div class="cs_info-primary">
-        <div class="truncate-wrapper">
-          {% if data.piece.clientWebsite %}
-          <h1 class="cname">
-            <a
-              href="{{ data.piece.clientWebsite }}"
-              target="_blank"
-              rel="noopener noreferrer"
-              >{{ data.piece.title }}</a
-            >
-          </h1>
-          {% else %}
-          <h1 class="cname">{{ data.piece.title }}</h1>
-          {% endif %} {% if data.piece._industry and data.piece._industry.length
-          %}
-          <div class="industry">
-            {% for industry in data.piece._industry %} {{ industry.title | e}}{%
-            if not loop.last %}, {% endif %} {% endfor %}
-          </div>
-          {% endif %} {% if data.piece.portfolioTitle %}
-          <h2 class="portfolio-title">{{ data.piece.portfolioTitle }}</h2>
-          {% endif %} {% if data.piece.descriptor %}
-          <p class="descriptor">{{ data.piece.descriptor }}</p>
-          {% endif %} {% if data.piece._caseStudyType and
-          data.piece._caseStudyType.length %}
-          <div class="type">
-            {% for type in data.piece._caseStudyType %} {{ type.title | e }}{%
-            if not loop.last %}, {% endif %} {% endfor %}
-          </div>
-          {% endif %}
-        </div>
-
-        <div class="links-area">
-          {% if data.piece.fullStoryUrl %}
-          <a
-            href="{{ data.piece.fullStoryUrl }}"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="full-story_btn"
-            >Read The Full Story</a
-          >
-          {% endif %} {% if data.piece.prodLink %}
-          <a href="{{ data.piece.prodLink }}" target="_blank" class="prod-link"
-            >{{ data.piece.prodLink }}</a
-          >
-          {% endif %}
-        </div>
+    <!-- Navigation buttons -->
+    <div class="cs_navigation">
+      <div class="cs_nav-item">
+        {% if data.prev %}
+        <a
+          href="{{ (data.prevUrl or data.prev._url) | safe }}"
+          class="cs_nav-link cs_nav-link--active"
+          aria-label="Navigate to previous project"
+        >
+          <img
+            src="/images/arrow-left.svg"
+            alt=""
+            role="presentation"
+            class="cs_nav-arrow"
+            width="21"
+            height="7"
+          />
+          <span class="cs_nav-text">previous project</span>
+        </a>
+        {% else %}
+        <span
+          class="cs_nav-link cs_nav-link--disabled"
+          aria-label="Previous project (unavailable)"
+        >
+          <img
+            src="/images/arrow-left.svg"
+            alt=""
+            role="presentation"
+            class="cs_nav-arrow"
+            width="21"
+            height="7"
+          />
+          <span class="cs_nav-text">previous project</span>
+        </span>
+        {% endif %}
       </div>
 
-      <div class="cs_info-secondary">
-        {% if data.piece.objective %}
-        <div>
-          <h3>Objective</h3>
-          <p>{{ data.piece.objective }}</p>
-        </div>
-        {% endif %} {% if data.piece.challenge %}
-        <div>
-          <h3>Challenge</h3>
-          <p>{{ data.piece.challenge }}</p>
-        </div>
-        {% endif %} {% if data.piece.solution %}
-        <div>
-          <h3>Solution</h3>
-          <p>{{ data.piece.solution }}</p>
-        </div>
-        {% endif %} {% if data.piece.results %}
-        <div>
-          <h3>Results</h3>
-          <p>{{ data.piece.results }}</p>
-        </div>
-        {% endif %} {% if data.piece._stack and data.piece._stack.length %}
-        <div>
-          <h3>Tech stack</h3>
-          <p>
-            {% for tech in data.piece._stack %} {{ tech.title | e }}{% if not
-            loop.last %}, {% endif %} {% endfor %}
-          </p>
-        </div>
+      <div class="cs_nav-item">
+        {% if data.next %}
+        <a
+          href="{{ (data.nextUrl or data.next._url) | safe }}"
+          class="cs_nav-link cs_nav-link--active"
+          aria-label="Navigate to next project"
+        >
+          <span class="cs_nav-text">next project</span>
+          <img
+            src="/images/arrow-right.svg"
+            alt=""
+            role="presentation"
+            class="cs_nav-arrow"
+            width="21"
+            height="6"
+          />
+        </a>
+        {% else %}
+        <span
+          class="cs_nav-link cs_nav-link--disabled"
+          aria-label="Next project (unavailable)"
+        >
+          <span class="cs_nav-text">next project</span>
+          <img
+            src="/images/arrow-right.svg"
+            alt=""
+            role="presentation"
+            class="cs_nav-arrow"
+            width="21"
+            height="6"
+          />
+        </span>
         {% endif %}
       </div>
     </div>
-  </article>
+  </div>
+
+  <div class="cs_full-details">
+    <article class="cs_full-details-card">
+      {% set picture = apos.image.first(data.piece.picture) %} {% if picture is
+      defined %}
+
+      <img
+        class="image"
+        loading="lazy"
+        src="{{ apos.attachment.url(picture, { size: 'full' }) }}"
+        alt="{{ picture._alt or '' }}"
+        width="{{ apos.attachment.getWidth(picture) }}"
+        height="{{ apos.attachment.getHeight(picture) }}"
+      />
+
+      {% else %}
+
+      <div class="placeholder-image-container">
+        <img
+          class="placeholder-image"
+          loading="lazy"
+          src="/images/logo.svg"
+          alt="Placeholder banner"
+          width="160"
+          height="50"
+        />
+      </div>
+
+      {% endif %}
+
+      <div class="cs_info">
+        <div class="cs_info-primary">
+          <div class="truncate-wrapper">
+            {% if data.piece.clientWebsite %}
+            <h1 class="cname">
+              <a
+                href="{{ data.piece.clientWebsite }}"
+                target="_blank"
+                rel="noopener noreferrer"
+                >{{ data.piece.title }}</a
+              >
+            </h1>
+            {% else %}
+            <h1 class="cname">{{ data.piece.title }}</h1>
+            {% endif %} {% if data.piece._industry and
+            data.piece._industry.length %}
+            <div class="industry">
+              {% for industry in data.piece._industry %} {{ industry.title |
+              e}}{% if not loop.last %}, {% endif %} {% endfor %}
+            </div>
+            {% endif %} {% if data.piece.portfolioTitle %}
+            <h2 class="portfolio-title">{{ data.piece.portfolioTitle }}</h2>
+            {% endif %} {% if data.piece.descriptor %}
+            <p class="descriptor">{{ data.piece.descriptor }}</p>
+            {% endif %} {% if data.piece._caseStudyType and
+            data.piece._caseStudyType.length %}
+            <div class="type">
+              {% for type in data.piece._caseStudyType %} {{ type.title | e }}{%
+              if not loop.last %}, {% endif %} {% endfor %}
+            </div>
+            {% endif %}
+          </div>
+
+          <div class="links-area">
+            {% if data.piece.fullStoryUrl %}
+            <a
+              href="{{ data.piece.fullStoryUrl }}"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="full-story_btn"
+              >Read The Full Story</a
+            >
+            {% endif %} {% if data.piece.prodLink %}
+            <a
+              href="{{ data.piece.prodLink }}"
+              target="_blank"
+              class="prod-link"
+              >{{ data.piece.prodLink }}</a
+            >
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="cs_info-secondary">
+          {% if data.piece.objective %}
+          <div>
+            <h3>Objective</h3>
+            <p>{{ data.piece.objective }}</p>
+          </div>
+          {% endif %} {% if data.piece.challenge %}
+          <div>
+            <h3>Challenge</h3>
+            <p>{{ data.piece.challenge }}</p>
+          </div>
+          {% endif %} {% if data.piece.solution %}
+          <div>
+            <h3>Solution</h3>
+            <p>{{ data.piece.solution }}</p>
+          </div>
+          {% endif %} {% if data.piece.results %}
+          <div>
+            <h3>Results</h3>
+            <p>{{ data.piece.results }}</p>
+          </div>
+          {% endif %} {% if data.piece._stack and data.piece._stack.length %}
+          <div>
+            <h3>Tech stack</h3>
+            <p>
+              {% for tech in data.piece._stack %} {{ tech.title | e }}{% if not
+              loop.last %}, {% endif %} {% endfor %}
+            </p>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </article>
+  </div>
+  <div class="cs_testimonials">{% area data.piece, 'testimonials' %}</div>
 </div>
-<div class="cs_testimonials">{% area data.piece, 'testimonials' %}</div>
+
 {% endblock main %}

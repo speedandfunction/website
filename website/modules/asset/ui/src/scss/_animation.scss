@@ -55,20 +55,3 @@
     filter: blur(0);
   }
 }
-
-@keyframes tagSlideIn {
-  0% {
-    opacity: 0;
-    max-height: 0;
-    transform: translateY(-10px);
-  }
-  50% {
-    opacity: 0.5;
-    transform: translateY(-5px);
-  }
-  100% {
-    opacity: 1;
-    max-height: 50px;
-    transform: translateY(0);
-  }
-}
