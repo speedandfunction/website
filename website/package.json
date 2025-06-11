@@ -52,7 +52,8 @@
     "lozad": "^1.16.0",
     "normalize.css": "^8.0.1",
     "postmark": "^4.0.5",
-    "swiper": "^11.2.6"
+    "swiper": "^11.2.6",
+    "yup": "^1.6.1"
   },
   "devDependencies": {
     "@babel/core": "^7.23.9",

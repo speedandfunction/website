@@ -4,6 +4,7 @@ import { enhanceBarbaWithFilterHandling } from './enhanceBarbaWithFilterHandling
 import { gsap } from 'gsap';
 import { initAllSwipers } from './swipers';
 import { initCaseStudiesFilterHandler } from './initCaseStudiesFilterHandler';
+import { initFormValidation } from './js/formValidation';
 import { initPhoneFormatting } from './js/phoneFormat';
 import { initSmoothCounters } from './smoothCounters';
 import lozad from 'lozad';
@@ -89,6 +90,7 @@ function initializeAllComponents() {
   initAllSwipers();
   initSmoothCounters();
   initFontChanger();
+  initFormValidation();
   initPhoneFormatting();
   initCaseStudiesTagFilter();
   initCaseStudiesFilterHandler();

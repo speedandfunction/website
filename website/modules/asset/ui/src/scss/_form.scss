@@ -96,8 +96,9 @@
 }
 
 .apos-form-input-wrapper {
+  position: relative;
   display: flex;
-  flex-direction: column-reverse;
+  flex-direction: column;
 }
 
 .sf-field-textarea {
@@ -144,4 +145,24 @@
   .apos-input[disabled] {
     background-color: $gray-100;
   }
+}
+
+.validation-error {
+  position: absolute;
+  top: 75px;
+  left: 5px;
+  @include breakpoint-medium {
+    top: 94px;
+    left: 25px;
+  }
+  color: $error-color;
+  font-size: 12px;
+  margin-top: -5px;
+  margin-bottom: 10px;
+  font-weight: 500;
+  line-height: 110%;
+}
+
+.apos-form-error {
+  font-size: 12px;
 }
