@@ -1,5 +1,11 @@
 import { setShouldScrollToFilter } from './enhanceBarbaWithFilterHandling';
 
+// Get configuration from backend (set in case-studies-page/index.js)
+const getDefaultVisibleTagsCount = function () {
+  // Fallback to 5 if not set
+  return window.DEFAULT_VISIBLE_TAGS_COUNT || 5;
+};
+
 // Filter link detection - Single responsibility: Identify filter-related links
 const isFilterLink = function (link, href) {
   if (!href) return false;
@@ -89,7 +95,7 @@ const setupAriaExpandedHandlers = function (checkboxes) {
   };
 };
 
-// Accessibility enhancements for filter expand/collapse
+// Setup accessibility enhancements for filter expand/collapse
 const setupFilterAccessibility = function () {
   const filterButtons = document.querySelectorAll(
     '.filter-category__expand-button',
@@ -115,17 +121,118 @@ const setupFilterAccessibility = function () {
   };
 };
 
+// Helper function to collapse tags with animation
+const collapseTagsWithAnimation = function (allItems, button, textElement) {
+  if (!allItems || !button || !textElement) return;
+
+  // Prevent double-clicking during animation
+  if (button.dataset.animating === 'true') {
+    return;
+  }
+
+  button.dataset.animating = 'true';
+
+  // Update button state immediately
+  button.classList.remove('tags__show-more--expanded');
+  textElement.textContent = 'Show more';
+
+  // Immediately hide items that should be hidden (no animation delay)
+  allItems.forEach(function (item, index) {
+    if (index >= getDefaultVisibleTagsCount()) {
+      item.classList.add('tag-item--hidden');
+    }
+  });
+
+  // Remove animation lock after CSS transition completes
+  setTimeout(function () {
+    button.dataset.animating = 'false';
+  }, 500);
+};
+
+// Helper function to expand tags with animation
+const expandTagsWithAnimation = function (allItems, button, textElement) {
+  if (!allItems || !button || !textElement) return;
+
+  // Prevent double-clicking during animation
+  if (button.dataset.animating === 'true') {
+    return;
+  }
+
+  button.dataset.animating = 'true';
+
+  // Update button state immediately
+  button.classList.add('tags__show-more--expanded');
+  textElement.textContent = 'Show less';
+
+  // Show all items with staggered animation for smooth effect
+  let expandCounter = 0;
+  let maxDelay = 0;
+  allItems.forEach(function (item, index) {
+    if (index >= getDefaultVisibleTagsCount()) {
+      const delay = expandCounter * 50;
+      maxDelay = Math.max(maxDelay, delay);
+      setTimeout(function () {
+        item.classList.remove('tag-item--hidden');
+      }, delay);
+      expandCounter += 1;
+    } else {
+      item.classList.remove('tag-item--hidden');
+    }
+  });
+
+  // Remove animation lock after all expand animations complete
+  setTimeout(function () {
+    button.dataset.animating = 'false';
+  }, maxDelay + 500);
+};
+
+// Setup Show More/Show Less functionality for tags
+const setupShowMoreHandlers = function () {
+  const showMoreButtons = document.querySelectorAll('.tags__show-more');
+
+  if (showMoreButtons.length === 0) {
+    return emptyCleanup;
+  }
+
+  const handleShowMoreClick = function (event) {
+    const button = event.target.closest('.tags__show-more');
+    if (!button) return;
+
+    const filterContent = button.closest('.filter-content');
+    const allItems = filterContent.querySelectorAll('.tag-item');
+    const textElement = button.querySelector('.tags__show-more--text');
+
+    if (button.classList.contains('tags__show-more--expanded')) {
+      collapseTagsWithAnimation(allItems, button, textElement);
+    } else {
+      expandTagsWithAnimation(allItems, button, textElement);
+    }
+  };
+
+  showMoreButtons.forEach(function (button) {
+    button.addEventListener('click', handleShowMoreClick);
+  });
+
+  return function () {
+    showMoreButtons.forEach(function (button) {
+      button.removeEventListener('click', handleShowMoreClick);
+    });
+  };
+};
+
 // Initialization - Single responsibility: Set up all filter-related functionality
 const initCaseStudiesFilterHandler = function () {
   const filterCleanup = setupFilterLinkDetection();
   const accessibilityCleanup = setupFilterAccessibility();
+  const showMoreCleanup = setupShowMoreHandlers();
 
   // Return combined cleanup function
   return function () {
     filterCleanup();
     accessibilityCleanup();
+    showMoreCleanup();
   };
 };
 
 // Public API
-export { initCaseStudiesFilterHandler };
+export { initCaseStudiesFilterHandler, getDefaultVisibleTagsCount };

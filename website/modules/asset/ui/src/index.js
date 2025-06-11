@@ -11,6 +11,25 @@ import { setupTagSearchForInput } from './searchInputHandler';
 import { FilterModal } from './filterModal';
 /* eslint-enable sort-imports */
 
+// Initialize configuration from data attributes
+function initConfiguration() {
+  // Set default fallback value first
+  window.DEFAULT_VISIBLE_TAGS_COUNT = 5;
+
+  const container = document.querySelector('.cs_container');
+  if (container) {
+    const defaultVisibleTags = container.getAttribute(
+      'data-default-visible-tags',
+    );
+    if (defaultVisibleTags) {
+      const parsed = parseInt(defaultVisibleTags, 10);
+      if (!isNaN(parsed) && parsed > 0) {
+        window.DEFAULT_VISIBLE_TAGS_COUNT = parsed;
+      }
+    }
+  }
+}
+
 // Lazy loading
 function initImageLozad() {
   // Lazy loads elements with default selector as '.lozad'
@@ -72,6 +91,7 @@ function initializeAllComponents() {
   initFontChanger();
   initPhoneFormatting();
   initCaseStudiesTagFilter();
+  initCaseStudiesFilterHandler();
 }
 
 // Barba pages
@@ -252,8 +272,16 @@ if (typeof barba !== 'undefined') {
 }
 
 export default () => {
+  // Initialize configuration first
+  initConfiguration();
+
   // Init all scripts after first visiting the page
   initializeAllComponents();
+
+  // Initialize case studies filter handler when DOM is ready
+  apos.util.onReady(() => {
+    initCaseStudiesFilterHandler();
+  });
 
   initBarbaPageTransitions();
   initAnchorNavigation();

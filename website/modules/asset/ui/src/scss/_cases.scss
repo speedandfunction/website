@@ -79,12 +79,14 @@
 }
 
 // Tags styling
-
 .tags-filter {
   border: 1px solid $gray-border;
   font-style: $font-style-normal;
   max-width: 262px;
   width: 100%;
+  max-height: 1076px;
+  overflow-y: auto;
+  overflow-x: hidden;
 
   .filter-section {
     &:first-of-type {
@@ -134,14 +136,12 @@
 
     &__expand-button {
       width: 16px;
-      height: 21px;
-      position: relative;
+      height: 16px;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
       flex-shrink: 0;
-      top: 6px;
 
       &:focus {
         outline: none;
@@ -191,8 +191,6 @@
         }
 
         .filter-category__expand-button {
-          top: 6px;
-
           &::before {
             transform: rotate(225deg);
           }
@@ -203,7 +201,7 @@
         max-height: 1000px;
         opacity: 1;
         transform: translateY(0);
-        padding-bottom: 32px;
+        padding-bottom: 24px;
       }
     }
   }
@@ -250,6 +248,9 @@
     opacity: 0;
     transform: translateY(10px);
     animation: fadeInUp 0.4s ease-out forwards;
+    max-height: 50px;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     @for $i from 1 through 20 {
       &:nth-child(#{$i}) {
         animation-delay: #{0.1 + ($i * 0.05)}s;
@@ -265,6 +266,14 @@
         }
       }
     }
+
+    &--hidden {
+      opacity: 0;
+      max-height: 0;
+      margin-bottom: 0;
+      transform: translateY(-10px);
+      pointer-events: none;
+    }
   }
 
   .tag-link {
@@ -275,8 +284,10 @@
     display: block;
     text-decoration: none;
     cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    border-radius: 4px;
+    transition:
+      background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+      color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+      transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     margin: 0 -8px;
     padding: 8px 8px;
 
@@ -292,9 +303,16 @@
       }
     }
 
-    &:focus {
-      outline: 2px solid rgba($gray-400, 0.5);
-      outline-offset: 2px;
+    &:focus-visible {
+      background-color: rgba($gray-100, 0.6);
+      color: $gray-500;
+      transform: translateX(4px);
+
+      &::before {
+        background-color: rgba($gray-200, 0.8);
+        transform: scale(1.1);
+        box-shadow: 0 2px 4px rgba($gray-300, 0.2);
+      }
     }
 
     &::before {
@@ -325,6 +343,81 @@
   margin: 0;
   color: $gray-300;
   @include font-settings(11px, 140%, $font-weight-medium);
+}
+
+.tags__show-more {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: none;
+  border: none;
+  color: $gray-400;
+  font-weight: $font-weight-medium;
+  font-size: 11px;
+  line-height: 140%;
+  cursor: pointer;
+  padding: 8px;
+  width: 100%;
+  min-width: 228px;
+  justify-content: flex-start;
+  transition:
+    background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  margin: 0 -8px;
+  position: relative;
+
+  &:hover {
+    background-color: rgba($gray-100, 0.6);
+    color: $gray-500;
+    transform: translateX(4px);
+  }
+
+  &:focus-visible {
+    background-color: rgba($gray-100, 0.6);
+    color: $gray-500;
+    transform: translateX(4px);
+    outline: none;
+
+    .tags__show-more--icon {
+      img {
+        transform: scale(1.1);
+        filter: drop-shadow(0 2px 4px rgba($gray-300, 0.2));
+      }
+    }
+  }
+
+  &--icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    font-size: 12px;
+    font-weight: bold;
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+
+    img {
+      width: 10px;
+      height: 10px;
+    }
+  }
+
+  &--text {
+    text-transform: capitalize;
+    transition: opacity 0.2s ease;
+    line-height: 1.1;
+  }
+
+  &--expanded {
+    .tags__show-more-icon {
+      transform: rotate(45deg);
+    }
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
 }
 
 // Pagination
@@ -358,7 +451,6 @@
 }
 
 // Filter info
-
 .cs_filter-info {
   display: flex;
   flex-wrap: wrap;
@@ -368,7 +460,7 @@
   min-height: 28px;
   background: $white;
   border-bottom: 1px solid $gray-border;
-  padding-bottom: 32px;
+  padding-bottom: 16px;
   position: sticky;
   z-index: 1;
   top: $mobile-header-height;
@@ -1067,60 +1159,47 @@
   }
 }
 
-// Keyframe for cs_grid
-@keyframes smoothFadeInUp {
-  0% {
-    opacity: 0;
-    transform: translateY(30px);
-    filter: blur(2px);
-  }
-  60% {
-    opacity: 0.8;
-    transform: translateY(10px);
-    filter: blur(1px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-    filter: blur(0);
-  }
-}
-
-// Keyframe for individual cards
-@keyframes cardFadeInUp {
-  0% {
-    opacity: 0;
-    transform: translateY(25px);
-    filter: blur(1px);
-  }
-  70% {
-    opacity: 0.9;
-    transform: translateY(5px);
-    filter: blur(0.5px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-    filter: blur(0);
-  }
-}
-
 // Animation for reduced motion users (accessibility)
 @media (prefers-reduced-motion: reduce) {
   .cs_grid,
   .cs_card,
-  .tags-list,
-  .tag-item {
+  .tags__list,
+  .tags__item {
     animation: none;
     opacity: 1;
     transform: none;
     filter: none;
   }
 
-  .tag-link {
+  .tag-item {
+    transition: none;
+
+    &--hidden {
+      display: none;
+      opacity: 1;
+      max-height: auto;
+      transform: none;
+    }
+  }
+
+  .tags__link {
     transition: none;
 
     &:hover {
+      transform: none;
+    }
+  }
+
+  .tags__show-more {
+    transition: none;
+
+    &__icon,
+    &__text {
+      transition: none;
+    }
+
+    &:hover,
+    &:active {
       transform: none;
     }
   }
