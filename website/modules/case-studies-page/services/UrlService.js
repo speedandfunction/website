@@ -77,6 +77,8 @@ class UrlService {
       reqCopy.data = {};
     }
     reqCopy.data.tagCounts = tagCounts;
+    // Set default visible tags count
+    reqCopy.data.defaultVisibleTagsCount = 5;
     reqCopy.data.buildCaseStudyUrl = (caseStudyUrl) =>
       UrlService.buildCaseStudyUrl(caseStudyUrl, req.query);
   }
