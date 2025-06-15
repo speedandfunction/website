@@ -8,7 +8,8 @@ const getFieldValue = (field, value) => {
     return value;
   }
   if (field.type === 'checkbox') {
-    const checkboxes = document.querySelectorAll(
+    const form = field.form || field.closest('form');
+    const checkboxes = (form ?? document).querySelectorAll(
       `input[name="${field.getAttribute('name')}"]`,
     );
     return Array.from(checkboxes).some((cb) => cb.checked);

@@ -43,6 +43,7 @@ const clearValidationError = (field) => {
 
 const showError = (field, message) => {
   const form = field.closest('form');
+  if (!form) return;
   const errorMessage = form.querySelector('.error-message');
   if (errorMessage) {
     errorMessage.textContent = message;
@@ -51,6 +52,7 @@ const showError = (field, message) => {
 
 const clearError = (field) => {
   const form = field.closest('form');
+  if (!form) return;
   const errorMessage = form.querySelector('.error-message');
   if (errorMessage) {
     errorMessage.textContent = '';

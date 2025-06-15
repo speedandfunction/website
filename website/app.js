@@ -13,6 +13,7 @@ function createAposConfig() {
       '@apostrophecms/express': {
         options: {
           session: {
+            // If using Redis (recommended for production)
             secret: getEnv('SESSION_SECRET'),
             store: {
               connect: require('connect-redis'),

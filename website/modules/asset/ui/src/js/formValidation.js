@@ -170,7 +170,12 @@ const sendFormData = (form, formData) => {
     headers: {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
+      'CSRF-Token':
+        document
+          .querySelector('meta[name="csrf-token"]')
+          ?.getAttribute('content') || '',
     },
+    credentials: 'same-origin',
   });
 };
 

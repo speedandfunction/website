@@ -1,6 +1,5 @@
 import { initFormValidation } from './formValidation';
 
-// Мокаємо fetch для всіх тестів
 if (!global.fetch) {
   global.fetch = jest.fn(() =>
     Promise.resolve({

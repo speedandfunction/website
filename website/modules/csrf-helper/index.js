@@ -2,7 +2,9 @@ module.exports = {
   extend: '@apostrophecms/module',
   init(self) {
     self.extendTemplateData = function (req, data) {
-      data.csrfToken = req.csrfToken();
+      if (typeof req.csrfToken === 'function') {
+        data.csrfToken = req.csrfToken();
+      }
     };
   },
   extendMethods(self) {
