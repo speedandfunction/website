@@ -97,21 +97,16 @@ const initFormValidation = (form, validateFieldFn) => {
 };
 
 const collectFormData = (form) => {
-  const formElements = form.elements;
-  const formData = {};
-  let index = 0;
-  while (index < formElements.length) {
-    const element = formElements[index];
-    if (
-      element.name &&
-      element.type !== 'submit' &&
-      element.type !== 'button'
-    ) {
-      formData[element.name] = element.value;
+  const data = {};
+  const fd = new FormData(form);
+  for (const [key, value] of fd.entries()) {
+    if (key in data) {
+      data[key] = [].concat(data[key], value);
+    } else {
+      data[key] = value;
     }
-    index += 1;
   }
-  return formData;
+  return data;
 };
 
 const scrollToFirstInvalidField = (form) => {
