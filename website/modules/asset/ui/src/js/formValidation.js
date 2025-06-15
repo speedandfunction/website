@@ -137,7 +137,14 @@ const onValidateForm = (isValid, form, validateFieldFn) => {
   const formData = collectFormData(form);
   return sendFormData(form, formData)
     .then((response) => onSendFormDataResponse(response, form))
-    .catch(() => null);
+    .catch(() => {
+      const errorMessage = form.querySelector('.error-message');
+      if (errorMessage) {
+        errorMessage.textContent =
+          'Failed to submit form. Please try again later.';
+      }
+      return null;
+    });
 };
 
 const onSendFormDataResponse = (response, form) => {
@@ -152,15 +159,16 @@ const onHandleServerResponse = (data, form) => {
       thankYou.style.display = 'block';
     }
     form.style.display = 'none';
+    return true;
   }
-  return null;
+  return false;
 };
 
 const handleServerResponse = (response, form) => {
   return response
     .json()
     .then((data) => onHandleServerResponse(data, form))
-    .catch(() => null);
+    .catch(() => false);
 };
 
 const sendFormData = (form, formData) => {
@@ -183,7 +191,7 @@ const handleFormSubmit = (event, form, validateFieldFn) => {
   event.preventDefault();
   validateForm(form, validateFieldFn)
     .then((isValid) => onValidateForm(isValid, form, validateFieldFn))
-    .catch(() => null);
+    .catch(() => false);
 };
 
 const initFormWithValidation = (form, validateFieldFn) => {

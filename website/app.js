@@ -22,19 +22,14 @@ function createAposConfig() {
               },
             },
           },
-        },
-      },
-
-      // CSRF protection
-      '@apostrophecms/csrf': {
-        options: {
-          secret: getEnv('SESSION_SECRET'),
-          cookie: {
-            key: '_csrf',
-            path: '/',
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            maxAge: 3600,
+          csrf: {
+            cookie: {
+              key: '_csrf',
+              path: '/',
+              httpOnly: true,
+              secure: process.env.NODE_ENV === 'production',
+              maxAge: 3600,
+            },
           },
         },
       },
