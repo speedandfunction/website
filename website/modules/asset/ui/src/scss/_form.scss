@@ -40,18 +40,24 @@
   }
 }
 
+.sf-input {
+  height: 37px;
+
+  @include breakpoint-medium {
+    height: 53px;
+  }
+}
+
 .sf-textarea,
 .sf-input {
   box-sizing: border-box;
   border-radius: 0;
   border: 1px solid $whisper;
   padding: 8px 16px;
-  height: 37px;
   line-height: 140%;
   margin-bottom: 24px;
 
   @include breakpoint-medium {
-    height: 53px;
     padding: 16px 25px;
   }
 

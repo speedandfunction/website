@@ -13,7 +13,6 @@ function createAposConfig() {
       '@apostrophecms/express': {
         options: {
           session: {
-            // If using Redis (recommended for production)
             secret: getEnv('SESSION_SECRET'),
             store: {
               connect: require('connect-redis'),
@@ -21,6 +20,20 @@ function createAposConfig() {
                 url: getEnv('REDIS_URI'),
               },
             },
+          },
+        },
+      },
+
+      // CSRF protection
+      '@apostrophecms/csrf': {
+        options: {
+          secret: getEnv('SESSION_SECRET'),
+          cookie: {
+            key: '_csrf',
+            path: '/',
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            maxAge: 3600,
           },
         },
       },

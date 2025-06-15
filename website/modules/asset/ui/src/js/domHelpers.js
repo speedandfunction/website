@@ -2,11 +2,15 @@ const showValidationError = (field, message) => {
   const wrapper = field.closest('.apos-form-input-wrapper');
   if (!wrapper) return;
 
-  let errorElement = wrapper.querySelector('.validation-error');
+  let errorClass = 'validation-error';
+  if (field.type === 'checkbox') {
+    errorClass = 'apos-form-error';
+  }
+  let errorElement = wrapper.querySelector(`.${errorClass}`);
 
   if (!errorElement) {
     errorElement = document.createElement('div');
-    errorElement.className = 'validation-error';
+    errorElement.className = errorClass;
 
     const dateHelp = wrapper.querySelector('.apos-form-help');
     if (dateHelp?.parentElement) {
@@ -25,7 +29,11 @@ const clearValidationError = (field) => {
   const wrapper = field.closest('.apos-form-input-wrapper');
   if (!wrapper) return;
 
-  const errorElement = wrapper.querySelector('.validation-error');
+  let errorClass = 'validation-error';
+  if (field.type === 'checkbox') {
+    errorClass = 'apos-form-error';
+  }
+  const errorElement = wrapper.querySelector(`.${errorClass}`);
   if (errorElement) {
     errorElement.textContent = '';
   }
@@ -33,4 +41,25 @@ const clearValidationError = (field) => {
   field.classList.remove('has-error');
 };
 
-module.exports = { showValidationError, clearValidationError };
+const showError = (field, message) => {
+  const form = field.closest('form');
+  const errorMessage = form.querySelector('.error-message');
+  if (errorMessage) {
+    errorMessage.textContent = message;
+  }
+};
+
+const clearError = (field) => {
+  const form = field.closest('form');
+  const errorMessage = form.querySelector('.error-message');
+  if (errorMessage) {
+    errorMessage.textContent = '';
+  }
+};
+
+module.exports = {
+  showValidationError,
+  clearValidationError,
+  showError,
+  clearError,
+};

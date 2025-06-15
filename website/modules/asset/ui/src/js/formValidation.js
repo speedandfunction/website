@@ -60,22 +60,22 @@ const addFieldValidationHandlers = (field, validateFieldFn) => {
 };
 
 const validateForm = async (form, validateFieldFn) => {
-  const fields = form.querySelectorAll('input, textarea, select');
+  const fields = form.querySelectorAll(
+    'input:not([type="submit"]):not([type="button"]):not([type="hidden"]), textarea, select',
+  );
 
   fields.forEach((field) => {
     clearValidationErrorFn(field);
   });
 
   const validationResults = await Promise.all(
-    Array.from(fields)
-      .filter((field) => !['submit', 'button', 'hidden'].includes(field.type))
-      .map(async (field) => {
-        const result = await validateFieldFn(field);
-        if (!result.isValid) {
-          showValidationErrorFn(field, result.message);
-        }
-        return result.isValid;
-      }),
+    Array.from(fields).map(async (field) => {
+      const result = await validateFieldFn(field);
+      if (!result.isValid) {
+        showValidationErrorFn(field, result.message);
+      }
+      return result.isValid;
+    }),
   );
 
   return validationResults.every(Boolean);
@@ -183,7 +183,9 @@ const handleFormSubmit = (event, form, validateFieldFn) => {
 
 const initFormWithValidation = (form, validateFieldFn) => {
   // Initialize validation for all fields in the form
-  const fields = form.querySelectorAll('input, textarea, select');
+  const fields = form.querySelectorAll(
+    'input:not([type="submit"]):not([type="button"]):not([type="hidden"]), textarea, select',
+  );
   fields.forEach((field) => addFieldValidationHandlers(field, validateFieldFn));
 
   // Add validation before form submission
