@@ -14,5 +14,8 @@ module.exports = {
         },
       },
     },
+    assets: {
+      scripts: ['module:asset/ui/src/index.js'],
+    },
   },
 };

@@ -59,37 +59,23 @@ const addFieldValidationHandlers = (field, validateFieldFn) => {
   });
 };
 
-const handleFormSubmit = (form, validateFieldFn) => async (event) => {
-  const isValid = await validateForm(form, validateFieldFn);
-
-  if (!isValid) {
-    event.preventDefault();
-    return;
-  }
-
-  // Don't call form.submit() in test environment
-  if (typeof jest === 'undefined') {
-    form.submit();
-  }
-};
-
 const validateForm = async (form, validateFieldFn) => {
-  const fields = form.querySelectorAll('input, textarea, select');
+  const fields = form.querySelectorAll(
+    'input:not([type="submit"]):not([type="button"]):not([type="hidden"]), textarea, select',
+  );
 
   fields.forEach((field) => {
     clearValidationErrorFn(field);
   });
 
   const validationResults = await Promise.all(
-    Array.from(fields)
-      .filter((field) => !['submit', 'button', 'hidden'].includes(field.type))
-      .map(async (field) => {
-        const result = await validateFieldFn(field);
-        if (!result.isValid) {
-          showValidationErrorFn(field, result.message);
-        }
-        return result.isValid;
-      }),
+    Array.from(fields).map(async (field) => {
+      const result = await validateFieldFn(field);
+      if (!result.isValid) {
+        showValidationErrorFn(field, result.message);
+      }
+      return result.isValid;
+    }),
   );
 
   return validationResults.every(Boolean);
@@ -110,12 +96,114 @@ const initFormValidation = (form, validateFieldFn) => {
   }
 };
 
-const initFormWithValidation = (form, validateFieldFn) => {
-  form.addEventListener('submit', handleFormSubmit(form, validateFieldFn));
+const collectFormData = (form) => {
+  const data = {};
+  const fd = new FormData(form);
+  for (const [key, value] of fd.entries()) {
+    if (key in data) {
+      data[key] = [].concat(data[key], value);
+    } else {
+      data[key] = value;
+    }
+  }
+  return data;
+};
 
-  // Initialize validation for all fields in the form
+const scrollToFirstInvalidField = (form) => {
   const fields = form.querySelectorAll('input, textarea, select');
+  for (let i = 0; i < fields.length; i += 1) {
+    const field = fields[i];
+    const error = field
+      .closest('.sf-field')
+      ?.querySelector('.validation-error');
+    if (error && error.textContent && error.textContent.trim() !== '') {
+      field.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      field.focus();
+      break;
+    }
+  }
+};
+
+const onValidateForm = (isValid, form, validateFieldFn) => {
+  if (!isValid) {
+    scrollToFirstInvalidField(form);
+    return null;
+  }
+  const formData = collectFormData(form);
+  return sendFormData(form, formData)
+    .then((response) => onSendFormDataResponse(response, form))
+    .catch(() => {
+      const errorMessage = form.querySelector('.error-message');
+      if (errorMessage) {
+        errorMessage.textContent =
+          'Failed to submit form. Please try again later.';
+      }
+      return null;
+    });
+};
+
+const onSendFormDataResponse = (response, form) => {
+  return handleServerResponse(response, form);
+};
+
+const onHandleServerResponse = (data, form) => {
+  if (data && (data.success || data.ok)) {
+    form.reset();
+    const thankYou = document.querySelector('[data-apos-form-thank-you]');
+    if (thankYou) {
+      thankYou.style.display = 'block';
+    }
+    form.style.display = 'none';
+    return true;
+  }
+  return false;
+};
+
+const handleServerResponse = (response, form) => {
+  return response
+    .json()
+    .then((data) => onHandleServerResponse(data, form))
+    .catch(() => false);
+};
+
+const sendFormData = (form, formData) => {
+  return fetch(form.action, {
+    method: 'POST',
+    body: JSON.stringify({ data: formData }),
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'CSRF-Token':
+        document
+          .querySelector('meta[name="csrf-token"]')
+          ?.getAttribute('content') || '',
+    },
+    credentials: 'same-origin',
+  });
+};
+
+const handleFormSubmit = (event, form, validateFieldFn) => {
+  event.preventDefault();
+  validateForm(form, validateFieldFn)
+    .then((isValid) => onValidateForm(isValid, form, validateFieldFn))
+    .catch(() => false);
+};
+
+const initFormWithValidation = (form, validateFieldFn) => {
+  // Initialize validation for all fields in the form
+  const fields = form.querySelectorAll(
+    'input:not([type="submit"]):not([type="button"]):not([type="hidden"]), textarea, select',
+  );
   fields.forEach((field) => addFieldValidationHandlers(field, validateFieldFn));
+
+  // Add validation before form submission
+  form.addEventListener(
+    'submit',
+    function (event) {
+      handleFormSubmit(event, form, validateFieldFn);
+    },
+    true,
+  );
 };
 
 module.exports = { initFormValidation };
