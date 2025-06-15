@@ -17,6 +17,7 @@ onSubmitSuccess = form.onSubmitSuccess %}
     class="sf-form {{ prependIfPrefix('__form') }}"
     autocomplete="off"
     novalidate
+    method="post"
     action="/api/v1/@apostrophecms/form/submit"
   >
     {% area form, 'contents' %} {% if recaptchaReady %}
