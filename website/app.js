@@ -82,6 +82,9 @@ function createAposConfig() {
       '@apostrophecms/form-textarea-field-widget': {},
       '@apostrophecms/form-checkboxes-field-widget': {},
 
+      // Custom form widgets
+      'custom-form-widget': {},
+
       // Custom Pieces
       'team-members': {},
       'testimonials': {},
