@@ -144,3 +144,6 @@ website/public/apos-frontend
 dump.archive
 .prettierrc
 aposUsersSafe.json
+
+# Generated files
+website/modules/@apostrophecms/shared-constants/ui/src/index.js
