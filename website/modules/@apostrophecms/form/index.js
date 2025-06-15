@@ -101,6 +101,10 @@ module.exports = {
       post: {
         submit: async (req, res) => {
           try {
+            if (!self.apos.csrf.verify(req)) {
+              return res.status(403).json({ error: 'Invalid CSRF token' });
+            }
+
             const formData = parseFormData(req);
             if (!formData) {
               return res.status(400).json({ error: 'Invalid form data' });
