@@ -131,16 +131,10 @@ function scrollToFirstInvalidField(form) {
 }
 
 function onValidateForm(isValid, form, validateFieldFn) {
-  // eslint-disable-next-line no-console
-  console.log('Form isValid:', isValid);
   if (!isValid) {
-    // eslint-disable-next-line no-console
-    console.log('Form is NOT valid, submission blocked');
     scrollToFirstInvalidField(form);
     return null;
   }
-  // eslint-disable-next-line no-console
-  console.log('Form is valid, preparing to send via AJAX');
   const formData = collectFormData(form);
   return sendFormData(form, formData)
     .then(function (response) {
@@ -154,14 +148,10 @@ function onSendFormDataResponse(response, form) {
 }
 
 function onSendFormDataError(err) {
-  // eslint-disable-next-line no-console
-  console.log('AJAX fetch threw error:', err);
   return null;
 }
 
 function onHandleServerResponse(data, form) {
-  // eslint-disable-next-line no-console
-  console.log('Server response:', data);
   if (data && (data.success || data.ok)) {
     form.reset();
     const thankYou = document.querySelector('[data-apos-form-thank-you]');
@@ -169,22 +159,15 @@ function onHandleServerResponse(data, form) {
       thankYou.style.display = 'block';
     }
     form.style.display = 'none';
-  } else {
-    // eslint-disable-next-line no-console
-    console.log('AJAX error or server returned error:', data);
   }
   return null;
 }
 
 function onHandleServerResponseError(error) {
-  // eslint-disable-next-line no-console
-  console.log('Response is not valid JSON:', error);
   return null;
 }
 
 function handleServerResponse(response, form) {
-  // eslint-disable-next-line no-console
-  console.log('Fetch response status:', response.status);
   return response
     .json()
     .then(function (data) {
@@ -194,8 +177,6 @@ function handleServerResponse(response, form) {
 }
 
 function sendFormData(form, formData) {
-  // eslint-disable-next-line no-console
-  console.log('Form data to be sent:', { data: formData });
   return fetch(form.action, {
     method: 'POST',
     body: JSON.stringify({ data: formData }),
@@ -207,8 +188,6 @@ function sendFormData(form, formData) {
 }
 
 function handleFormSubmit(event, form, validateFieldFn) {
-  // eslint-disable-next-line no-console
-  console.log('SUBMIT HANDLER FIRED');
   event.preventDefault();
   validateForm(form, validateFieldFn).then(function (isValid) {
     return onValidateForm(isValid, form, validateFieldFn);
@@ -229,12 +208,5 @@ const initFormWithValidation = (form, validateFieldFn) => {
     true,
   );
 };
-
-// GLOBAL DIAGNOSTICS
-// eslint-disable-next-line no-console
-console.log(
-  'Number of forms on page:',
-  document.querySelectorAll('form[data-apos-form-form]').length,
-);
 
 module.exports = { initFormValidation };
