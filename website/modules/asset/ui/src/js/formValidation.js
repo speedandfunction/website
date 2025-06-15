@@ -96,7 +96,7 @@ const initFormValidation = (form, validateFieldFn) => {
   }
 };
 
-function collectFormData(form) {
+const collectFormData = (form) => {
   const formElements = form.elements;
   const formData = {};
   let index = 0;
@@ -112,13 +112,12 @@ function collectFormData(form) {
     index += 1;
   }
   return formData;
-}
+};
 
-function scrollToFirstInvalidField(form) {
+const scrollToFirstInvalidField = (form) => {
   const fields = form.querySelectorAll('input, textarea, select');
   for (let i = 0; i < fields.length; i += 1) {
     const field = fields[i];
-    // Шукаємо .validation-error у найближчому .sf-field
     const error = field
       .closest('.sf-field')
       ?.querySelector('.validation-error');
@@ -128,30 +127,24 @@ function scrollToFirstInvalidField(form) {
       break;
     }
   }
-}
+};
 
-function onValidateForm(isValid, form, validateFieldFn) {
+const onValidateForm = (isValid, form, validateFieldFn) => {
   if (!isValid) {
     scrollToFirstInvalidField(form);
     return null;
   }
   const formData = collectFormData(form);
   return sendFormData(form, formData)
-    .then(function (response) {
-      return onSendFormDataResponse(response, form);
-    })
-    .catch(onSendFormDataError);
-}
+    .then((response) => onSendFormDataResponse(response, form))
+    .catch(() => null);
+};
 
-function onSendFormDataResponse(response, form) {
+const onSendFormDataResponse = (response, form) => {
   return handleServerResponse(response, form);
-}
+};
 
-function onSendFormDataError(err) {
-  return null;
-}
-
-function onHandleServerResponse(data, form) {
+const onHandleServerResponse = (data, form) => {
   if (data && (data.success || data.ok)) {
     form.reset();
     const thankYou = document.querySelector('[data-apos-form-thank-you]');
@@ -161,22 +154,16 @@ function onHandleServerResponse(data, form) {
     form.style.display = 'none';
   }
   return null;
-}
+};
 
-function onHandleServerResponseError(error) {
-  return null;
-}
-
-function handleServerResponse(response, form) {
+const handleServerResponse = (response, form) => {
   return response
     .json()
-    .then(function (data) {
-      return onHandleServerResponse(data, form);
-    })
-    .catch(onHandleServerResponseError);
-}
+    .then((data) => onHandleServerResponse(data, form))
+    .catch(() => null);
+};
 
-function sendFormData(form, formData) {
+const sendFormData = (form, formData) => {
   return fetch(form.action, {
     method: 'POST',
     body: JSON.stringify({ data: formData }),
@@ -185,14 +172,14 @@ function sendFormData(form, formData) {
       'Accept': 'application/json',
     },
   });
-}
+};
 
-function handleFormSubmit(event, form, validateFieldFn) {
+const handleFormSubmit = (event, form, validateFieldFn) => {
   event.preventDefault();
-  validateForm(form, validateFieldFn).then(function (isValid) {
-    return onValidateForm(isValid, form, validateFieldFn);
-  });
-}
+  validateForm(form, validateFieldFn)
+    .then((isValid) => onValidateForm(isValid, form, validateFieldFn))
+    .catch(() => null);
+};
 
 const initFormWithValidation = (form, validateFieldFn) => {
   // Initialize validation for all fields in the form
