@@ -155,7 +155,7 @@ const onHandleServerResponse = (data, form) => {
     return true;
   }
   // Show server validation errors if they exist
-  if (data && data.errors) {
+  if (data?.errors) {
     showValidationErrorFn(form, data.errors.join(', '));
   } else {
     showValidationErrorFn(form, 'Submission failed. Please try again.');
