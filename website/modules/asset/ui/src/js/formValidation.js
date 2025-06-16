@@ -96,27 +96,17 @@ const initFormValidation = (form, validateFieldFn) => {
   }
 };
 
-const collectFormData = (form) => {
-  const data = {};
-  const fd = new FormData(form);
-  for (const [key, value] of fd.entries()) {
-    if (key in data) {
-      data[key] = [].concat(data[key], value);
-    } else {
-      data[key] = value;
-    }
-  }
-  return data;
-};
+const collectFormData = (form) => new FormData(form);
 
 const scrollToFirstInvalidField = (form) => {
   const fields = form.querySelectorAll('input, textarea, select');
-  for (let i = 0; i < fields.length; i += 1) {
-    const field = fields[i];
-    const error = field
+  for (const field of fields) {
+    const errorText = field
       .closest('.sf-field')
-      ?.querySelector('.validation-error');
-    if (error && error.textContent && error.textContent.trim() !== '') {
+      ?.querySelector('.validation-error')
+      ?.textContent?.trim();
+
+    if (errorText) {
       field.scrollIntoView({ behavior: 'smooth', block: 'center' });
       field.focus();
       break;
@@ -143,7 +133,15 @@ const onValidateForm = (isValid, form, validateFieldFn) => {
 };
 
 const onSendFormDataResponse = (response, form) => {
-  return handleServerResponse(response, form);
+  return handleServerResponse(response, form).then((ok) => {
+    if (!ok) {
+      showValidationErrorFn(
+        form,
+        'Submission failed. Please check the form and try again.',
+      );
+    }
+    return ok;
+  });
 };
 
 const onHandleServerResponse = (data, form) => {
@@ -156,20 +154,48 @@ const onHandleServerResponse = (data, form) => {
     form.style.display = 'none';
     return true;
   }
+  // Show server validation errors if they exist
+  if (data && data.errors) {
+    showValidationErrorFn(form, data.errors.join(', '));
+  } else {
+    showValidationErrorFn(form, 'Submission failed. Please try again.');
+  }
   return false;
 };
 
 const handleServerResponse = (response, form) => {
-  return response
-    .json()
-    .then((data) => onHandleServerResponse(data, form))
-    .catch(() => false);
+  if (!response.ok) {
+    return response
+      .json()
+      .then((data) => {
+        showValidationErrorFn(
+          form,
+          data.message || 'Submission failed. Please try again.',
+        );
+        return false;
+      })
+      .catch(() => {
+        showValidationErrorFn(form, 'Submission failed. Please try again.');
+        return false;
+      });
+  }
+  return response.json().then((data) => onHandleServerResponse(data, form));
 };
 
 const sendFormData = (form, formData) => {
+  // Convert FormData to a plain object for the server
+  const data = {};
+  for (const [key, value] of formData.entries()) {
+    if (key in data) {
+      data[key] = [].concat(data[key], value);
+    } else {
+      data[key] = value;
+    }
+  }
+
   return fetch(form.action, {
     method: 'POST',
-    body: JSON.stringify({ data: formData }),
+    body: JSON.stringify({ data }),
     headers: {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
