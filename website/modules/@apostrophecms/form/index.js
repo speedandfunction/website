@@ -83,7 +83,7 @@ module.exports = {
       const originalSubmitForm = self.submitForm;
       self.submitForm = async function (req, data, options) {
         const result = await originalSubmitForm.call(self, req, data, options);
-        await this.handleFormSubmission(req);
+        await self.handleFormSubmission(req);
         return result;
       };
 
@@ -94,6 +94,31 @@ module.exports = {
         error,
       );
     }
+  },
+
+  routes(self) {
+    return {
+      post: {
+        submit: async (req, res) => {
+          try {
+            const formData = parseFormData(req);
+            if (!formData) {
+              return res.status(400).json({ error: 'Invalid form data' });
+            }
+
+            const result = await self.formSubmissionHandler.handle(formData);
+            if (!result) {
+              return res.status(500).json({ error: 'Form submission failed' });
+            }
+
+            return res.json({ success: true });
+          } catch (error) {
+            self.apos.util.error('Form submission error:', error);
+            return res.status(500).json({ error: 'An error occurred' });
+          }
+        },
+      },
+    };
   },
 
   methods(self) {
