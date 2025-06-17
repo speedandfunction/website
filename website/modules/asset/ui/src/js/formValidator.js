@@ -9,8 +9,9 @@ const getFieldValue = (field, value) => {
   }
   if (field.type === 'checkbox') {
     const form = field.form || field.closest('form');
-    const checkboxes = (form ?? document).querySelectorAll(
-      `input[name="${field.getAttribute('name')}"]`,
+    const scope = form ?? field.closest('.apos-form-input-wrapper') ?? document;
+    const checkboxes = scope.querySelectorAll(
+      `input[type="checkbox"][name="${CSS.escape(field.getAttribute('name'))}"]`,
     );
     return Array.from(checkboxes).some((cb) => cb.checked);
   }
