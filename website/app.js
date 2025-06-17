@@ -28,6 +28,7 @@ function createAposConfig() {
               path: '/',
               httpOnly: true,
               secure: process.env.NODE_ENV === 'production',
+              sameSite: 'lax',
               maxAge: 3600,
             },
           },
@@ -47,7 +48,7 @@ function createAposConfig() {
       'global-data': {},
 
       // Shared constants module
-      '@apostrophecms/shared-constants': {},
+      'shared-constants': {},
 
       // Configure page types
       '@apostrophecms/rich-text-widget': {},
