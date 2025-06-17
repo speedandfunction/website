@@ -44,19 +44,29 @@ const clearValidationError = (field) => {
 const showError = (field, message) => {
   const form = field.closest('form');
   if (!form) return;
-  const errorMessage = form.querySelector('.error-message');
-  if (errorMessage) {
-    errorMessage.textContent = message;
+
+  let errorMessage = form.querySelector('.error-message');
+  if (!errorMessage) {
+    errorMessage = document.createElement('div');
+    errorMessage.className = 'error-message';
+    errorMessage.setAttribute('role', 'alert');
+    form.prepend(errorMessage);
   }
+  errorMessage.textContent = message;
 };
 
 const clearError = (field) => {
   const form = field.closest('form');
   if (!form) return;
-  const errorMessage = form.querySelector('.error-message');
-  if (errorMessage) {
-    errorMessage.textContent = '';
+
+  let errorMessage = form.querySelector('.error-message');
+  if (!errorMessage) {
+    errorMessage = document.createElement('div');
+    errorMessage.className = 'error-message';
+    errorMessage.setAttribute('role', 'alert');
+    form.prepend(errorMessage);
   }
+  errorMessage.textContent = '';
 };
 
 module.exports = {
