@@ -22,6 +22,15 @@ function createAposConfig() {
               },
             },
           },
+          csrf: {
+            cookie: {
+              key: '_csrf',
+              path: '/',
+              httpOnly: true,
+              secure: process.env.NODE_ENV === 'production',
+              maxAge: 3600,
+            },
+          },
         },
       },
 
@@ -38,7 +47,7 @@ function createAposConfig() {
       'global-data': {},
 
       // Shared constants module
-      'shared-constants': {},
+      '@apostrophecms/shared-constants': {},
 
       // Configure page types
       '@apostrophecms/rich-text-widget': {},
