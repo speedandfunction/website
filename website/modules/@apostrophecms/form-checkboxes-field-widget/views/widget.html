@@ -1,0 +1,35 @@
+{# ids must be unique doc-wide #} {% set id = apos.util.generateId() %} {% set
+widget = data.widget %} {% set prependIfPrefix =
+apos.modules['@apostrophecms/form'].prependIfPrefix %} {% import
+"fragments/utility.html" as utils with context %}
+
+<div
+  data-apos-form-checkboxes
+  class="apos-form-input-wrapper sf-field"
+  {%
+  if
+  widget.required
+  %}data-required="true"
+  {%
+  endif
+  %}
+>
+  <fieldset class="apos-form-fieldset">
+    <legend class="apos-form-label {{ prependIfPrefix('__label') }}">
+      {{ widget.fieldLabel }} {% if widget.required %}
+      <span class="apos-form-field-required">*</span>
+      {% endif %}
+    </legend>
+    {% for choice in widget.choices %}
+    <div>
+      <input
+        type="checkbox"
+        id="{{ id }}-{{ loop.index }}"
+        name="{{ widget.fieldName }}"
+        value="{{ choice.value }}"
+      />
+      <label for="{{ id }}-{{ loop.index }}">{{ choice.label }}</label>
+    </div>
+    {% endfor %}
+  </fieldset>
+</div>
