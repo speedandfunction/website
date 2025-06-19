@@ -617,10 +617,11 @@
 
 .filter-anchor {
   position: relative;
-  top: -64px;
+  top: -$mobile-header-height;
   height: 0;
+  visibility: hidden;
   @include breakpoint-medium {
-    top: -95px;
+    top: -$desktop-header-height;
   }
 }
 
