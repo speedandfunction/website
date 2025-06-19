@@ -7,10 +7,6 @@ const { getSheetsAuthConfig } = require('./lib/getSheetsAuthConfig');
 const VALIDATION_INSTRUCTIONS =
   'For proper validation, place the name, email, and phone number fields at the beginning of the form, in this exact order. Use a text input for each. Add all other fields afterward.';
 
-const parseFormData = (req) => {
-  return req?.body?.data ?? null;
-};
-
 const validateSubmissionSuccess = (result) => {
   if (!result) {
     throw new Error('Form submission failed');
@@ -19,7 +15,6 @@ const validateSubmissionSuccess = (result) => {
 
 module.exports = {
   improve: '@apostrophecms/form',
-  parseFormData,
   fields: {
     add: {
       instructions: {
@@ -93,7 +88,7 @@ module.exports = {
       post: {
         submit: async (req, res) => {
           try {
-            const formData = parseFormData(req);
+            const formData = req?.body?.data ?? null;
             if (!formData) {
               return res.status(400).json({ error: 'Invalid form data' });
             }
@@ -116,7 +111,7 @@ module.exports = {
   methods(self) {
     return {
       async handleFormSubmission(req) {
-        const formData = parseFormData(req);
+        const formData = req?.body?.data ?? null;
         if (!formData) {
           return null;
         }
