@@ -22,6 +22,16 @@ function createAposConfig() {
               },
             },
           },
+          csrf: {
+            cookie: {
+              key: '_csrf',
+              path: '/',
+              httpOnly: true,
+              secure: process.env.NODE_ENV === 'production',
+              sameSite: 'lax',
+              maxAge: 3600,
+            },
+          },
         },
       },
 
