@@ -8,16 +8,7 @@ const VALIDATION_INSTRUCTIONS =
   'For proper validation, place the name, email, and phone number fields at the beginning of the form, in this exact order. Use a text input for each. Add all other fields afterward.';
 
 const parseFormData = (req) => {
-  const rawData = req?.body?.data;
-  if (!rawData) {
-    return null;
-  }
-
-  if (typeof rawData === 'string') {
-    return JSON.parse(rawData);
-  }
-
-  return rawData;
+  return req?.body?.data ?? null;
 };
 
 const validateSubmissionSuccess = (result) => {
@@ -28,6 +19,7 @@ const validateSubmissionSuccess = (result) => {
 
 module.exports = {
   improve: '@apostrophecms/form',
+  parseFormData,
   fields: {
     add: {
       instructions: {
