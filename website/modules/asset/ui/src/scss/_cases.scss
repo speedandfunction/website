@@ -625,6 +625,11 @@
   }
 }
 
+// Loading state for client-side filtering
+.cs_grid {
+  transition: opacity 0.3s ease;
+}
+
 // Case Study preview card
 .cs_grid {
   display: grid;

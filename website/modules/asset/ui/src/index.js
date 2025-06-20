@@ -10,6 +10,7 @@ import { initSmoothCounters } from './smoothCounters';
 import lozad from 'lozad';
 import { setupTagSearchForInput } from './searchInputHandler';
 import { FilterModal } from './filterModal';
+import { initClientSideFiltering } from './clientSideFiltering';
 
 /* eslint-enable sort-imports */
 
@@ -88,6 +89,7 @@ function initializeAllComponents() {
   initPhoneFormatting();
   initCaseStudiesTagFilter();
   initCaseStudiesFilterHandler();
+  initClientSideFiltering();
 }
 
 // Barba pages
@@ -240,7 +242,6 @@ function initMenuToggle() {
 
 // Filter Case Studies modal for Case Studies mobile page
 function initFilterModal() {
-  // Only initialize if we're on the case studies page
   if (!document.querySelector('.cs_list')) {
     return;
   }
@@ -258,7 +259,6 @@ function initFilterModal() {
 
 document.addEventListener('DOMContentLoaded', initFilterModal);
 
-// Initialize after Barba transitions
 if (typeof barba !== 'undefined') {
   barba.hooks.after(() => {
     initFilterModal();
