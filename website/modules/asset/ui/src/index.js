@@ -10,13 +10,11 @@ import { initSmoothCounters } from './smoothCounters';
 import lozad from 'lozad';
 import { setupTagSearchForInput } from './searchInputHandler';
 import { FilterModal } from './filterModal';
+
 /* eslint-enable sort-imports */
 
-// Initialize configuration from data attributes
 function initConfiguration() {
-  // Set default fallback value first
   window.DEFAULT_VISIBLE_TAGS_COUNT = 5;
-
   const container = document.querySelector('.cs_container');
   if (container) {
     const defaultVisibleTags = container.getAttribute(
@@ -31,14 +29,11 @@ function initConfiguration() {
   }
 }
 
-// Lazy loading
 function initImageLozad() {
-  // Lazy loads elements with default selector as '.lozad'
   const observer = lozad();
   observer.observe();
 }
 
-// Change fonts for the hero FUTURE word
 function initFontChanger() {
   const heroContent = document.querySelector('.sf-hero-content strong');
   if (!heroContent) return;
@@ -84,7 +79,6 @@ function initCaseStudiesTagFilter({
   );
 }
 
-// Wrapper function
 function initializeAllComponents() {
   initImageLozad();
   initAllSwipers();
@@ -114,7 +108,6 @@ function initBarbaPageTransitions() {
       // Close menu if it's open
       const menuButton = document.getElementById('nav-icon');
       const menu = document.querySelector('[data-menu]');
-
       if (menuButton && menu) {
         menu.classList.remove('open');
         menuButton.classList.remove('open');
@@ -126,7 +119,6 @@ function initBarbaPageTransitions() {
         video.play();
       }
 
-      // Call the wrapper function to initialize all components
       initializeAllComponents();
 
       // Initialize Apostrophe forms before removing old content
@@ -289,8 +281,20 @@ export default () => {
   initAnchorNavigation();
   initMenuToggle();
 
-  // Check if in edit mode
-  if (apos.adminBar) {
-    initSmoothCounters();
-  }
+  // Case studies anchor fix
+  setTimeout(() => {
+    const url = window.location.href;
+    if (
+      url.includes('/cases') &&
+      (url.includes('#filter') ||
+        url.includes('industry') ||
+        url.includes('stack') ||
+        url.includes('caseStudyType'))
+    ) {
+      const filterAnchor = document.getElementById('filter');
+      if (filterAnchor) filterAnchor.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, 300);
+
+  if (apos.adminBar) initSmoothCounters();
 };
