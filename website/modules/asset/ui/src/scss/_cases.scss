@@ -625,12 +625,7 @@
   }
 }
 
-// Loading state for client-side filtering
-.cs_grid {
-  transition: opacity 0.3s ease;
-}
-
-// Case Study preview card
+// Case Study preview card with loading state transition
 .cs_grid {
   display: grid;
   grid-template-columns: 1fr;
@@ -639,6 +634,7 @@
   opacity: 0;
   transform: translateY(30px);
   filter: blur(2px);
+  transition: opacity 0.3s ease;
   animation: smoothFadeInUp 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s
     forwards;
 

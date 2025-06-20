@@ -266,13 +266,10 @@ if (typeof barba !== 'undefined') {
 }
 
 export default () => {
-  // Initialize configuration first
   initConfiguration();
 
-  // Init all scripts after first visiting the page
   initializeAllComponents();
 
-  // Initialize case studies filter handler when DOM is ready
   apos.util.onReady(() => {
     initCaseStudiesFilterHandler();
   });
@@ -283,14 +280,15 @@ export default () => {
 
   // Case studies anchor fix
   setTimeout(() => {
-    const url = window.location.href;
-    if (
-      url.includes('/cases') &&
-      (url.includes('#filter') ||
-        url.includes('industry') ||
-        url.includes('stack') ||
-        url.includes('caseStudyType'))
-    ) {
+    const { pathname, search, hash } = window.location;
+    const isCasesPage = pathname.includes('/cases');
+    const hasFilterParams =
+      search.includes('industry') ||
+      search.includes('stack') ||
+      search.includes('caseStudyType') ||
+      hash.includes('filter');
+
+    if (isCasesPage && hasFilterParams) {
       const filterAnchor = document.getElementById('filter');
       if (filterAnchor) filterAnchor.scrollIntoView({ behavior: 'smooth' });
     }

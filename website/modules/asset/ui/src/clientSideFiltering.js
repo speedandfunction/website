@@ -25,15 +25,20 @@ const handleFilterClick = function (event) {
   event.preventDefault();
 
   const href = filterLink.getAttribute('href');
-  const url = new URL(href, window.location.origin);
-  const newUrl = url.pathname + url.search + url.hash;
+  try {
+    const url = new URL(href, window.location.origin);
+    const newUrl = url.pathname + url.search + url.hash;
 
-  history.pushState({ clientSideFilter: true, url: newUrl }, '', newUrl);
-  window.location.reload();
+    history.pushState({ clientSideFilter: true, url: newUrl }, '', newUrl);
+    window.location.reload();
+  } catch {
+    // Fallback to default navigation if URL construction fails
+    window.location.href = href;
+  }
 };
 
 const handlePopState = function (event) {
-  if (event.state && event.state.clientSideFilter) {
+  if (event.state?.clientSideFilter) {
     window.location.reload();
   }
 };
