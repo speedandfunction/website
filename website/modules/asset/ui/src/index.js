@@ -10,13 +10,12 @@ import { initSmoothCounters } from './smoothCounters';
 import lozad from 'lozad';
 import { setupTagSearchForInput } from './searchInputHandler';
 import { FilterModal } from './filterModal';
+import { initClientSideFiltering } from './clientSideFiltering';
+
 /* eslint-enable sort-imports */
 
-// Initialize configuration from data attributes
 function initConfiguration() {
-  // Set default fallback value first
   window.DEFAULT_VISIBLE_TAGS_COUNT = 5;
-
   const container = document.querySelector('.cs_container');
   if (container) {
     const defaultVisibleTags = container.getAttribute(
@@ -31,14 +30,11 @@ function initConfiguration() {
   }
 }
 
-// Lazy loading
 function initImageLozad() {
-  // Lazy loads elements with default selector as '.lozad'
   const observer = lozad();
   observer.observe();
 }
 
-// Change fonts for the hero FUTURE word
 function initFontChanger() {
   const heroContent = document.querySelector('.sf-hero-content strong');
   if (!heroContent) return;
@@ -84,7 +80,6 @@ function initCaseStudiesTagFilter({
   );
 }
 
-// Wrapper function
 function initializeAllComponents() {
   initImageLozad();
   initAllSwipers();
@@ -94,6 +89,7 @@ function initializeAllComponents() {
   initPhoneFormatting();
   initCaseStudiesTagFilter();
   initCaseStudiesFilterHandler();
+  initClientSideFiltering();
 }
 
 // Barba pages
@@ -114,7 +110,6 @@ function initBarbaPageTransitions() {
       // Close menu if it's open
       const menuButton = document.getElementById('nav-icon');
       const menu = document.querySelector('[data-menu]');
-
       if (menuButton && menu) {
         menu.classList.remove('open');
         menuButton.classList.remove('open');
@@ -126,7 +121,6 @@ function initBarbaPageTransitions() {
         video.play();
       }
 
-      // Call the wrapper function to initialize all components
       initializeAllComponents();
 
       // Initialize Apostrophe forms before removing old content
@@ -248,7 +242,6 @@ function initMenuToggle() {
 
 // Filter Case Studies modal for Case Studies mobile page
 function initFilterModal() {
-  // Only initialize if we're on the case studies page
   if (!document.querySelector('.cs_list')) {
     return;
   }
@@ -266,7 +259,6 @@ function initFilterModal() {
 
 document.addEventListener('DOMContentLoaded', initFilterModal);
 
-// Initialize after Barba transitions
 if (typeof barba !== 'undefined') {
   barba.hooks.after(() => {
     initFilterModal();
@@ -274,13 +266,10 @@ if (typeof barba !== 'undefined') {
 }
 
 export default () => {
-  // Initialize configuration first
   initConfiguration();
 
-  // Init all scripts after first visiting the page
   initializeAllComponents();
 
-  // Initialize case studies filter handler when DOM is ready
   apos.util.onReady(() => {
     initCaseStudiesFilterHandler();
   });
@@ -289,8 +278,21 @@ export default () => {
   initAnchorNavigation();
   initMenuToggle();
 
-  // Check if in edit mode
-  if (apos.adminBar) {
-    initSmoothCounters();
-  }
+  // Case studies anchor fix
+  setTimeout(() => {
+    const { pathname, search, hash } = window.location;
+    const isCasesPage = pathname.includes('/cases');
+    const hasFilterParams =
+      search.includes('industry') ||
+      search.includes('stack') ||
+      search.includes('caseStudyType') ||
+      hash.includes('filter');
+
+    if (isCasesPage && hasFilterParams) {
+      const filterAnchor = document.getElementById('filter');
+      if (filterAnchor) filterAnchor.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, 300);
+
+  if (apos.adminBar) initSmoothCounters();
 };
