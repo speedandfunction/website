@@ -6,6 +6,7 @@ module.exports = {
     label: 'Testimonial',
     pluralLabel: 'Testimonials',
     searchable: false,
+    shortcut: false,
   },
   fields: {
     add: {

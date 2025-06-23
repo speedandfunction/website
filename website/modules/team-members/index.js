@@ -2,9 +2,9 @@ module.exports = {
   cascades: ['batchOperations'],
   extend: '@apostrophecms/piece-type',
   options: {
-    label: 'Team Leader',
-    pluralLabel: 'Team Leaders',
-    shortcut: 'G,K',
+    label: 'Team Member',
+    pluralLabel: 'Team Members',
+    shortcut: false,
     sort: {
       title: 1,
       updatedAt: -1,
