@@ -42,7 +42,7 @@ try {
     const entries = Object.entries(obj)
       .map(
         ([key, value]) =>
-          `${spaces}${key}: '${String(value).replace(/'/gu, "\\'")}'`,
+          `${spaces}${key}: '${String(value).replace(/\\/gu, '\\\\').replace(/'/gu, "\\'")}'`,
       )
       .join(',\n');
     return `{\n${entries}\n${' '.repeat(indent - 2)}}`;
