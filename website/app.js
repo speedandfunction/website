@@ -48,7 +48,7 @@ function createAposConfig() {
       'global-data': {},
 
       // Shared constants module
-      'shared-constants': {},
+      '@apostrophecms/shared-constants': {},
 
       // Configure page types
       '@apostrophecms/rich-text-widget': {},
