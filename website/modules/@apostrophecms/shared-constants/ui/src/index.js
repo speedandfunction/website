@@ -8,7 +8,7 @@
 export const STANDARD_FORM_FIELD_NAMES = {
   FULL_NAME: 'full-name',
   EMAIL_ADDRESS: 'email-address',
-  PHONE_NUMBER: 'phone-number',
+  PHONE_NUMBER: 'phone-number'
 };
 
 // Default export function for backwards compatibility
