@@ -44,11 +44,7 @@ try {
  */
 
 // Direct export of constants for import { STANDARD_FORM_FIELD_NAMES } from '...'
-export const STANDARD_FORM_FIELD_NAMES = {
-  ${Object.entries(STANDARD_FORM_FIELD_NAMES)
-    .map(([key, value]) => `${key}: '${value}'`)
-    .join(',\n  ')},
-};
+export const STANDARD_FORM_FIELD_NAMES = ${JSON.stringify(STANDARD_FORM_FIELD_NAMES, null, 2)};
 
 // Default export function for backwards compatibility
 export default () => {
