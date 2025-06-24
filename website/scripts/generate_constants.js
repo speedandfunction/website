@@ -45,7 +45,7 @@ try {
           `${spaces}${key}: '${String(value).replace(/\\/gu, '\\\\').replace(/'/gu, "\\'")}'`,
       )
       .join(',\n');
-    return `{\n${entries}\n${' '.repeat(indent - 2)}}`;
+    return `{\n${entries},\n${' '.repeat(indent - 2)}}`;
   };
 
   // Generate client-side constants file content
