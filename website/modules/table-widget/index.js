@@ -1,4 +1,3 @@
-const extendedToolbar = require('../../lib/extendedToolbar');
 const headingToolbar = require('../../lib/headingToolbar');
 const linkSchema = require('../../lib/linkSchema');
 
