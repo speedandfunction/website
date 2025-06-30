@@ -37,14 +37,8 @@ module.exports = {
             },
             description: {
               label: 'Description',
-              type: 'area',
-              options: {
-                widgets: {
-                  '@apostrophecms/rich-text': {
-                    ...extendedToolbar,
-                  },
-                },
-              },
+              type: 'string',
+              textarea: true,
               required: true,
             },
             ...linkSchema.fields.add,
