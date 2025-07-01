@@ -6,6 +6,9 @@ module.exports = {
     slugPrefix: 'cases-tag-',
     shortcut: 'G,H',
     withRelationships: ['_category'],
+    sort: {
+      title: 1,
+    },
   },
   fields: {
     add: {
