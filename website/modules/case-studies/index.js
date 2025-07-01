@@ -8,6 +8,7 @@ module.exports = {
     },
     perPage: 6,
     alias: 'caseStudy',
+    shortcut: false,
   },
   fields: {
     add: {
