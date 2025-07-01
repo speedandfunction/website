@@ -149,7 +149,6 @@
     font-size: 14px;
     line-height: 20px;
     color: $gray-300;
-    margin-top: 20px;
     display: block;
     max-height: 0;
     opacity: 0;
@@ -162,6 +161,7 @@
     }
     
     @include breakpoint-medium {
+      margin-top: 20px;
       max-height: none;
       opacity: 1;
       overflow: visible;
