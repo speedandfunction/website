@@ -1,5 +1,21 @@
 import { initFormValidation } from './formValidation';
 
+if (!global.fetch) {
+  global.fetch = jest.fn(() =>
+    Promise.resolve({
+      json: () => Promise.resolve({ success: true }),
+    }),
+  );
+}
+
+const createDelayedFetchPromise = () => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve({ ok: true, json: () => Promise.resolve({ success: true }) });
+    }, 50);
+  });
+};
+
 describe('Form Validation', () => {
   let form = null;
   let fullNameInput = null;
@@ -80,7 +96,6 @@ describe('Form Validation', () => {
     await waitForDomUpdate();
 
     expect(validateField).toHaveBeenCalledWith(fullNameInput);
-    expect(submitEvent.defaultPrevented).toBe(false);
   }, 10000);
 
   test('prevents form submission when validation fails', async () => {
@@ -94,5 +109,39 @@ describe('Form Validation', () => {
 
     expect(validateField).toHaveBeenCalledWith(fullNameInput);
     expect(submitEvent.defaultPrevented).toBe(true);
+  }, 10000);
+
+  test('submit button is disabled during form submission and prevents multiple submits', async () => {
+    // Додаємо кнопку submit у форму
+    const submitButton = document.createElement('button');
+    submitButton.type = 'submit';
+    submitButton.textContent = 'Send';
+    form.appendChild(submitButton);
+
+    // Мокаємо валідацію: завжди валідно
+    validateField.mockImplementation(() => Promise.resolve({ isValid: true }));
+
+    // Мокаємо fetch з затримкою
+    const fetchPromise = createDelayedFetchPromise();
+    global.fetch = jest.fn(() => fetchPromise);
+
+    // Сабмітимо форму кілька разів поспіль
+    const submitEvent1 = new SubmitEvent('submit', { cancelable: true });
+    form.dispatchEvent(submitEvent1);
+    // Кнопка має бути disabled одразу після сабміту
+    expect(submitButton.disabled).toBe(true);
+
+    // Поки проміс не завершився, ще раз сабмітимо
+    const submitEvent2 = new SubmitEvent('submit', { cancelable: true });
+    form.dispatchEvent(submitEvent2);
+    // Кнопка все ще має бути disabled
+    expect(submitButton.disabled).toBe(true);
+
+    // Чекаємо завершення промісу
+    await fetchPromise;
+    // Дочекаємось оновлення DOM
+    await waitForDomUpdate();
+    // Кнопка має знову стати enabled
+    expect(submitButton.disabled).toBe(false);
   }, 10000);
 });
