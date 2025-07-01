@@ -73,7 +73,7 @@ module.exports = {
       feedback: {
         label: 'Feedback',
         type: 'string',
-        help: 'Insert the text **without** quotation marks. They will be added automatically.',
+        help: 'Insert the text without quotation marks. They will be added automatically.',
       },
     },
     group: {
