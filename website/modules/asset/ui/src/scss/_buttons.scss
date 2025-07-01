@@ -21,13 +21,14 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  min-width: 0;
-  max-width: 270px;
   text-align: center;
   @include responsive-font(12px, 20px);
   transform: scale(1);
   @include transition(transform, 0.3s);
 
+  @include breakpoint-medium {
+    letter-spacing: -0.01em;
+  }
   &:hover {
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
     transform: scale(1.05);
