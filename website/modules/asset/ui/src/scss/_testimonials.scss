@@ -106,7 +106,7 @@
               margin-bottom: 10px;
               @include font-settings(22px, 110%, 700);
             }
-            @include truncate-lines(1);
+            @include truncate-lines(2);
           }
 
           &__position {
@@ -156,7 +156,6 @@
             }
             &__bio {
               width: 100%;
-              padding: 12px 12px 12px 24px;
               @include breakpoint-medium {
                 padding: 0;
               }
