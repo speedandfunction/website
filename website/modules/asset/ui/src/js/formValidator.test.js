@@ -45,6 +45,7 @@ const TEST_CONSTANTS = {
 // Test Utilities
 const createField = (name, tag = 'input') => ({
   getAttribute: jest.fn().mockReturnValue(name),
+  hasAttribute: jest.fn().mockReturnValue(false),
   tagName: tag.toUpperCase(),
   value: '',
 });
