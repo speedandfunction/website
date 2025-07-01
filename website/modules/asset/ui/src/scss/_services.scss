@@ -29,7 +29,7 @@
       }
       
       &-expand-button {
-        top: 20px;
+        top: 25px;
       }
     }
   }
@@ -46,6 +46,11 @@
         opacity: 1;
         overflow: visible;
         transform: none;
+        padding-top: 20px;
+
+        @include breakpoint-medium {
+          padding-top: 0;
+        }
       }
     }
   }
@@ -161,11 +166,14 @@
     }
     
     @include breakpoint-medium {
-      margin-top: 20px;
       max-height: none;
       opacity: 1;
       overflow: visible;
       transform: none;
+      
+      p {
+        padding-top: 20px;
+      }
     }
   }
   
