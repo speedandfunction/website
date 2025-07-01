@@ -4,11 +4,11 @@ module.exports = {
     label: 'Case Study Tag',
     pluralLabel: 'Case Studies Tags',
     slugPrefix: 'cases-tag-',
-    shortcut: 'G,H',
     withRelationships: ['_category'],
     sort: {
       title: 1,
     },
+    shortcut: false,
   },
   fields: {
     add: {
