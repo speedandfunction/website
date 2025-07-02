@@ -10,6 +10,7 @@
   }
 
   &__content {
+    position: relative;
     width: min(1280px, 100%);
     margin: 0 auto;
     padding: 0 40px;
@@ -101,16 +102,14 @@
   overflow: hidden;
   overflow-y: auto;
   width: 100%;
+  top: 64px;
+  right: 0;
 
   @include breakpoint-medium {
     top: 40px;
     right: 30px;
     width: 230px;
     padding-right: 10px;
-  }
-
-  @include breakpoint-extra-extra-large {
-    right: 120px;
   }
 
   &.open {
