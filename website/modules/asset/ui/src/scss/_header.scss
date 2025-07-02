@@ -102,7 +102,7 @@
   overflow: hidden;
   overflow-y: auto;
   width: 100%;
-  top: 64px;
+  top: $mobile-header-height;
   right: 0;
 
   @include breakpoint-medium {
