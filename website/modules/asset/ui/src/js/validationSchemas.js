@@ -79,6 +79,30 @@ const fallbackSchemas = {
     ),
 
   textarea: yup.string().trim().max(200, 'Maximum 200 characters'),
+
+  checkbox: yup
+    .boolean()
+    .test(
+      'required-checkbox',
+      'Please select at least one option',
+      (value, context) => {
+        // If the field is not required, always return true
+        if (!context.options?.context?.isRequired) {
+          return true;
+        }
+
+        // If the value is true (checkbox is checked), return true
+        if (value === true) {
+          return true;
+        }
+
+        // If we get here, the field is required but not checked
+        return context.createError({
+          path: context.path,
+          message: 'Please select at least one option',
+        });
+      },
+    ),
 };
 
 module.exports = {
