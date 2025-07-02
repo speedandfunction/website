@@ -13,10 +13,10 @@
           </div>
           
           <div class="sf-table-cell sf-table-cell-description">
-            {% area row, 'description' %}
+            <p>{{ row.description }}</p>
             
             {% if row.linkTitle %}
-              <div class="sf-table-link">
+
                 {% set linkUrl = '' %}
                 {% if row.linkType == 'page' and row._page[0] %}
                   {% set linkUrl = row._page[0]._url %}
@@ -29,14 +29,14 @@
                 {% if linkUrl %}
                   <a
                     href="{{ linkUrl }}"
-                    class="sf-link"
+                    class="sf-table-link"
                     {% if '_blank' in (row.target or []) %}
                       target="_blank"
                       rel="noopener noreferrer"
                     {% endif %}
                   >{{ row.linkTitle }}</a>
                 {% endif %}
-              </div>
+
             {% endif %}
           </div>
           <div class="background-circle" aria-hidden="true"></div>

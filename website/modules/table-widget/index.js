@@ -1,4 +1,3 @@
-const extendedToolbar = require('../../lib/extendedToolbar');
 const headingToolbar = require('../../lib/headingToolbar');
 const linkSchema = require('../../lib/linkSchema');
 
@@ -37,14 +36,8 @@ module.exports = {
             },
             description: {
               label: 'Description',
-              type: 'area',
-              options: {
-                widgets: {
-                  '@apostrophecms/rich-text': {
-                    ...extendedToolbar,
-                  },
-                },
-              },
+              type: 'string',
+              textarea: true,
               required: true,
             },
             ...linkSchema.fields.add,
