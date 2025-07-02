@@ -38,12 +38,18 @@
                 <h5 class="sf-person__position sf-person__organization">
                   {{ card.organization }}
                 </h5>
-                {% endif %} {% set domain = card.url and
-                card.url.split('://')[1] and
-                card.url.split('://')[1].split('/')[0] %}
-                <a href="{{ card.url }}" target="_blank" class="sf-person__url">
-                  {{ domain or card.url }}
+                {% endif %} {% if card.url %} {% set domain =
+                card.url.split('://')|length > 1 and
+                card.url.split('://')[1].split('/')[0] or card.url %}
+                <a
+                  href="{{ card.url }}"
+                  target="_blank"
+                  class="sf-person__url"
+                  rel="noopener noreferrer"
+                >
+                  {{ domain }}
                 </a>
+                {% endif %}
               </div>
             </div>
             <div class="sf-person-wrapper">
