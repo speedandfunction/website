@@ -1,5 +1,21 @@
 import { initFormValidation } from './formValidation';
 
+if (!global.fetch) {
+  global.fetch = jest.fn(() =>
+    Promise.resolve({
+      json: () => Promise.resolve({ success: true }),
+    }),
+  );
+}
+
+const createDelayedFetchPromise = () => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve({ ok: true, json: () => Promise.resolve({ success: true }) });
+    }, 50);
+  });
+};
+
 describe('Form Validation', () => {
   let form = null;
   let fullNameInput = null;
@@ -80,7 +96,6 @@ describe('Form Validation', () => {
     await waitForDomUpdate();
 
     expect(validateField).toHaveBeenCalledWith(fullNameInput);
-    expect(submitEvent.defaultPrevented).toBe(false);
   }, 10000);
 
   test('prevents form submission when validation fails', async () => {
@@ -94,5 +109,29 @@ describe('Form Validation', () => {
 
     expect(validateField).toHaveBeenCalledWith(fullNameInput);
     expect(submitEvent.defaultPrevented).toBe(true);
+  }, 10000);
+
+  test('submit button is disabled during form submission and prevents multiple submits', async () => {
+    const submitButton = document.createElement('button');
+    submitButton.type = 'submit';
+    submitButton.textContent = 'Send';
+    form.appendChild(submitButton);
+
+    validateField.mockImplementation(() => Promise.resolve({ isValid: true }));
+
+    const fetchPromise = createDelayedFetchPromise();
+    global.fetch = jest.fn(() => fetchPromise);
+
+    const submitEvent1 = new SubmitEvent('submit', { cancelable: true });
+    form.dispatchEvent(submitEvent1);
+    expect(submitButton.disabled).toBe(true);
+
+    const submitEvent2 = new SubmitEvent('submit', { cancelable: true });
+    form.dispatchEvent(submitEvent2);
+    expect(submitButton.disabled).toBe(true);
+
+    await fetchPromise;
+    await waitForDomUpdate();
+    expect(submitButton.disabled).toBe(false);
   }, 10000);
 });
