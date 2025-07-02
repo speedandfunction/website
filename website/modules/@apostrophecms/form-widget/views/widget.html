@@ -75,11 +75,7 @@ onSubmitSuccess = form.onSubmitSuccess %}
     <h3>{{ form.thankYouHeading or __t('aposForm:defaultThankYou') }}</h3>
 
     {% if not apos.area.isEmpty(form, 'thankYouBody') %} {% area form,
-    'thankYouBody' %} {% endif %} {% if onSubmitSuccess %}
-    <script>
-      alert('Thanks!');
-    </script>
-    {% endif %}
+    'thankYouBody' %} {% endif %} {% if onSubmitSuccess %} {% endif %}
   </div>
   {% endif %}
 </div>
