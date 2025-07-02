@@ -145,21 +145,24 @@ main %}
                   class="tag-link"
                   href="{{ data.url | build({}, { industry: { $pull: tag.value } }) }}#filter"
                 >
-                  {{ tag.label }} <span>[ {{ count }} ]</span>
+                  <span class="tag-label">{{ tag.label }}</span>
+                  <span class="tag-count">[ {{ count }} ]</span>
                 </a>
                 {% elif filterType == 'caseStudyType' %}
                 <a
                   class="tag-link"
                   href="{{ data.url | build({}, { caseStudyType: { $pull: tag.value } }) }}#filter"
                 >
-                  {{ tag.label }} <span>[ {{ count }} ]</span>
+                  <span class="tag-label">{{ tag.label }}</span>
+                  <span class="tag-count">[ {{ count }} ]</span>
                 </a>
                 {% elif filterType == 'stack' %}
                 <a
                   class="tag-link"
                   href="{{ data.url | build({}, { stack: { $pull: tag.value } }) }}#filter"
                 >
-                  {{ tag.label }} <span>[ {{ count }} ]</span>
+                  <span class="tag-label">{{ tag.label }}</span>
+                  <span class="tag-count">[ {{ count }} ]</span>
                 </a>
                 {% endif %}
               </li>
@@ -173,21 +176,24 @@ main %}
                   class="tag-link"
                   href="{{ data.url | build({}, { industry: { $addToSet: tag.value } }) }}#filter"
                 >
-                  {{ tag.label }} <span>[ {{ count }} ]</span>
+                  <span class="tag-label">{{ tag.label }}</span>
+                  <span class="tag-count">[ {{ count }} ]</span>
                 </a>
                 {% elif filterType == 'caseStudyType' %}
                 <a
                   class="tag-link"
                   href="{{ data.url | build({}, { caseStudyType: { $addToSet: tag.value } }) }}#filter"
                 >
-                  {{ tag.label }} <span>[ {{ count }} ]</span>
+                  <span class="tag-label">{{ tag.label }}</span>
+                  <span class="tag-count">[ {{ count }} ]</span>
                 </a>
                 {% elif filterType == 'stack' %}
                 <a
                   class="tag-link"
                   href="{{ data.url | build({}, { stack: { $addToSet: tag.value } }) }}#filter"
                 >
-                  {{ tag.label }} <span>[ {{ count }} ]</span>
+                  <span class="tag-label">{{ tag.label }}</span>
+                  <span class="tag-count">[ {{ count }} ]</span>
                 </a>
                 {% endif %}
               </li>

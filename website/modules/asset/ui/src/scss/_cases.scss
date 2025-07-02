@@ -278,44 +278,35 @@
   }
 
   .tag-link {
-    @include truncate-lines(1);
-    @include font-settings(11px, 140%, $font-weight-medium);
-    text-transform: capitalize;
-    color: $gray-300;
-    display: block;
+    display: flex;
+    align-items: center;
+    gap: 6px;
     text-decoration: none;
     cursor: pointer;
+    padding: 8px 8px;
+    margin-left: -8px;
+    margin-right: 0;
+    color: $gray-300;
+    @include font-settings(11px, 140%, $font-weight-medium);
+    text-transform: capitalize;
     transition:
       background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
       color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
       transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    margin: 0 -8px;
-    padding: 8px 8px;
-
-    &:hover {
-      background-color: rgba($gray-100, 0.6);
-      color: $gray-500;
-      transform: translateX(4px);
-
-      &::before {
-        background-color: rgba($gray-200, 0.8);
-        transform: scale(1.1);
-        box-shadow: 0 2px 4px rgba($gray-300, 0.2);
-      }
-    }
-
+  
+    &:hover,
     &:focus-visible {
       background-color: rgba($gray-100, 0.6);
       color: $gray-500;
       transform: translateX(4px);
-
+  
       &::before {
         background-color: rgba($gray-200, 0.8);
         transform: scale(1.1);
         box-shadow: 0 2px 4px rgba($gray-300, 0.2);
       }
     }
-
+  
     &::before {
       content: '';
       display: inline-block;
@@ -330,13 +321,20 @@
       margin-top: -1px;
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       border-radius: 2px;
+      flex-shrink: 0;
     }
-
-    span {
-      margin-left: 5px;
-      transition: color 0.3s ease;
+  
+    .tag-label {
+      @include truncate-lines(2);
     }
-  }
+  
+    .tag-count {
+      flex-shrink: 0;
+      white-space: nowrap;
+      margin-left: 4px;
+      color: $gray-300;
+    }
+  }  
 }
 
 .no-tags-message {
@@ -542,7 +540,7 @@
   line-height: 140%;
   text-transform: capitalize;
   color: $gray-300;
-  height: 24px;
+  min-height: 24px;
   @include breakpoint-medium {
     font-size: 11px;
     line-height: 110%;
@@ -560,6 +558,7 @@
   font-size: 16px;
   color: $gray-300;
   text-decoration: none;
+  @include truncate-lines(1);
 }
 
 .clear-all {

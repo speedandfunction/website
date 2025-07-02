@@ -1,11 +1,10 @@
-const headingToolbar = require('../../lib/headingToolbar');
-
 module.exports = {
   extend: '@apostrophecms/piece-type',
   options: {
     label: 'Testimonial',
     pluralLabel: 'Testimonials',
     searchable: false,
+    shortcut: false,
   },
   fields: {
     add: {
@@ -74,15 +73,8 @@ module.exports = {
       },
       feedback: {
         label: 'Feedback',
-        type: 'area',
-        options: {
-          max: 1,
-          widgets: {
-            '@apostrophecms/rich-text': {
-              ...headingToolbar,
-            },
-          },
-        },
+        type: 'string',
+        help: 'Insert the text without quotation marks. They will be added automatically.',
       },
     },
     group: {

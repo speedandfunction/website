@@ -36,6 +36,18 @@ try {
     );
   }
 
+  // Helper function to safely stringify object with single quotes
+  const stringifyWithSingleQuotes = (obj, indent = 2) => {
+    const spaces = ' '.repeat(indent);
+    const entries = Object.entries(obj)
+      .map(
+        ([key, value]) =>
+          `${spaces}${key}: '${String(value).replace(/\\/gu, '\\\\').replace(/'/gu, "\\'")}'`,
+      )
+      .join(',\n');
+    return `{\n${entries},\n${' '.repeat(indent - 2)}}`;
+  };
+
   // Generate client-side constants file content
   const clientFileContent = `/*
  * Client-side access to shared constants.
@@ -44,12 +56,12 @@ try {
  */
 
 // Direct export of constants for import { STANDARD_FORM_FIELD_NAMES } from '...'
-export const STANDARD_FORM_FIELD_NAMES = ${JSON.stringify(STANDARD_FORM_FIELD_NAMES, null, 2)};
+export const STANDARD_FORM_FIELD_NAMES = ${stringifyWithSingleQuotes(STANDARD_FORM_FIELD_NAMES)};
 
 // Default export function for backwards compatibility
 export default () => {
   return {
-    STANDARD_FORM_FIELD_NAMES
+    STANDARD_FORM_FIELD_NAMES,
   };
 };
 `;

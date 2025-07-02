@@ -72,7 +72,7 @@
         </div>
         <div class="card-swiper-back">
           <div class="card-swiper__feedback">
-            {% area card, 'feedback' %}
+            “{{ card.feedback }}”
           </div>
           <hr>
           {% if card._caseStudy and card._caseStudy[0] %}

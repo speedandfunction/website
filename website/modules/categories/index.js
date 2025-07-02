@@ -3,6 +3,7 @@ module.exports = {
   options: {
     label: 'Category',
     pluralLabel: 'Categories',
+    shortcut: false,
   },
   fields: {
     add: {
