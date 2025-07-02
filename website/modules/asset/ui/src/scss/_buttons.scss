@@ -25,6 +25,7 @@
   @include responsive-font(12px, 20px);
   transform: scale(1);
   @include transition(transform, 0.3s);
+
   @include breakpoint-medium {
     letter-spacing: -0.01em;
   }
@@ -73,8 +74,9 @@
     .sf-button {
       justify-content: center;
       align-items: center;
-      padding: 12px;
+      padding: 11px;
       margin: 0 auto 24px;
+      border: 1px solid $gray-500;
       width: 100%;
 
       &.sf-button_underline {
@@ -93,7 +95,6 @@
       &:last-child {
         background: none;
         color: $gray-500;
-        border: 1px solid $gray-500;
         box-sizing: border-box;
         text-decoration: none;
         background-color: $white;
