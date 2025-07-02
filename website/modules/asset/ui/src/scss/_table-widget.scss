@@ -37,8 +37,7 @@
   padding: 24px;
   position: relative;
   overflow: hidden;
-  cursor: pointer;
-  background-color:$white;
+  background-color: $white;
   @include transition(all, 0.5s);
   transform: scale3d(1, 1, 1);
 
@@ -48,7 +47,14 @@
 
   .background-circle {
     display: none;
-    @include decorative-background-circle($gray-500, 25%, 130%, 100%, -100% -60% auto auto, -10);
+    @include decorative-background-circle(
+      $gray-500,
+      25%,
+      130%,
+      100%,
+      -100% -60% auto auto,
+      -10
+    );
   }
 
   &:hover,
@@ -63,7 +69,7 @@
     }
 
     .sf-table-cell-description,
-    .sf-table-link a {
+    .sf-table-link {
       color: $gray-200;
     }
 
@@ -85,10 +91,18 @@
     }
 
     .background-circle {
-      @include decorative-background-circle($gray-500, 25%, 130%, 100%, -100% -60% auto auto, -10);
+      @include decorative-background-circle(
+        $gray-500,
+        25%,
+        130%,
+        100%,
+        -100% -60% auto auto,
+        -10
+      );
     }
 
-    &:hover {
+    &:hover,
+    &:focus-visible {
       transform: scale3d(1.03, 1.03, 1);
       z-index: 10;
       border-color: black;
@@ -99,7 +113,7 @@
       }
 
       .sf-table-cell-description,
-      .sf-table-link a {
+      .sf-table-link {
         color: $gray-200;
       }
 
@@ -112,24 +126,9 @@
 
     &:focus-visible {
       transform: scale3d(1.02, 1.02, 1);
-      z-index: 10;
-      border-color: black;
-
-      .sf-table-title,
-      .sf-table-cell-title {
-        color: $gray-100;
-      }
-
-      .sf-table-cell-description,
-      .sf-table-link a {
-        color: $gray-200;
-      }
 
       .background-circle {
         display: block;
-        width: 150em;
-        height: 70em;
-        transform: translate3d(-5%, -10%, 0);
       }
     }
 
@@ -161,49 +160,52 @@
 }
 
 .sf-table-title {
-  font-weight: 700;
-  font-size: 18px;
+  font-weight: $font-weight-extra-bold;
   color: $gray-500;
   margin: 0;
   @include transition(color);
-
-  @include breakpoint-medium {
-    font-size: 22px;
-  }
+  @include responsive-font(16px, 22px);
+  @include responsive-line-height(140%, 110%);
 }
 
 .sf-table-cell-description {
   border-bottom: none;
-  font-weight: 500;
-  font-size: 14px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
   color: $gray-300;
+  margin: 24px 0 0;
   @include transition(color);
+  @include font-settings(14px, 150%, $font-weight-normal);
+
+  &:has(.sf-table-link) {
+    justify-content: space-between;
+  }
+
+  &:not(:has(.sf-table-link)) {
+    justify-content: flex-start;
+  }
 
   p {
-    margin: 24px 0 0;
+    margin: 0;
   }
+
   @include breakpoint-medium {
-    p {
-      margin: 32px 0 0;
-      min-height: 80px;
-    }
+    margin: 32px 0 0;
   }
 }
 
 .sf-table-link {
   margin-top: 24px;
+  color: $gray-300;
+  text-decoration: underline;
+  @include transition(color);
+  @include font-settings(11px, 120%, $font-weight-300);
 
-  a {
-    color: $gray-300;
-    text-decoration: underline;
-    font-weight: 300;
-    font-size: 11px;
-    @include transition(color);
-
-    &:hover {
-      text-decoration: none;
-    }
+  &:hover {
+    text-decoration: none;
   }
+
   @include breakpoint-medium {
     margin-top: 32px;
   }

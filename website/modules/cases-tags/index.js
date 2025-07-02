@@ -5,6 +5,9 @@ module.exports = {
     pluralLabel: 'Case Studies Tags',
     slugPrefix: 'cases-tag-',
     withRelationships: ['_category'],
+    sort: {
+      title: 1,
+    },
     shortcut: false,
   },
   fields: {
