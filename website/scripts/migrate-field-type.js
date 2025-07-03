@@ -1,6 +1,4 @@
 const { MongoClient } = require('mongodb');
-const yargs = require('yargs/yargs');
-const { hideBin } = require('yargs/helpers');
 const {
   stripHtml,
   areaToString,
@@ -8,27 +6,13 @@ const {
   updateTableRowsDescriptions,
 } = require('./migrate-field-type.utils');
 
-const { argv } = yargs(hideBin(process.argv))
-  .option('mongoUri', {
-    describe: 'MongoDB connection URI',
-    type: 'string',
-    demandOption: true,
-  })
-  .option('dbName', {
-    describe: 'MongoDB database name',
-    type: 'string',
-    demandOption: true,
-  })
-  .help()
-  .alias('help', 'h');
-
-const MONGODB_URI = argv.mongoUri;
-const DB_NAME = argv.dbName;
-
-const getCollection = async () => {
-  const client = new MongoClient(MONGODB_URI);
+const getCollection = async (
+  mongoUri = 'mongodb://localhost:27017',
+  dbName = 'test',
+) => {
+  const client = new MongoClient(mongoUri);
   await client.connect();
-  const db = client.db(DB_NAME);
+  const db = client.db(dbName);
   const collection = db.collection('aposDocs');
   return { client, collection };
 };
@@ -49,8 +33,8 @@ const processBatches = async (
   return updatedCount;
 };
 
-const migrateTestimonialFeedbackToString = async () => {
-  const { client, collection } = await getCollection();
+const migrateTestimonialFeedbackToString = async (mongoUri, dbName) => {
+  const { client, collection } = await getCollection(mongoUri, dbName);
   try {
     const documents = await collection.find({ type: 'testimonials' }).toArray();
     const idKey = '_id';
@@ -66,8 +50,8 @@ const migrateTestimonialFeedbackToString = async () => {
   }
 };
 
-const migrateTableDescriptions = async () => {
-  const { client, collection } = await getCollection();
+const migrateTableDescriptions = async (mongoUri, dbName) => {
+  const { client, collection } = await getCollection(mongoUri, dbName);
   try {
     const docs = await collection
       .find({ 'main.items.type': 'table' })
@@ -91,11 +75,33 @@ const migrateTableDescriptions = async () => {
 };
 
 if (require.main === module) {
+  const yargs = require('yargs/yargs');
+  const { hideBin } = require('yargs/helpers');
+  const { argv } = yargs(hideBin(process.argv))
+    .option('mongoUri', {
+      describe: 'MongoDB connection URI',
+      type: 'string',
+      demandOption: true,
+    })
+    .option('dbName', {
+      describe: 'MongoDB database name',
+      type: 'string',
+      demandOption: true,
+    })
+    .help()
+    .alias('help', 'h');
+
+  const MONGODB_URI = argv.mongoUri;
+  const DB_NAME = argv.dbName;
+
   (async () => {
     try {
-      const testimonials = await migrateTestimonialFeedbackToString();
+      const testimonials = await migrateTestimonialFeedbackToString(
+        MONGODB_URI,
+        DB_NAME,
+      );
       process.stdout.write(`Updated testimonials: ${testimonials}\n`);
-      const tables = await migrateTableDescriptions();
+      const tables = await migrateTableDescriptions(MONGODB_URI, DB_NAME);
       process.stdout.write(`Updated table rows: ${tables}\n`);
     } catch (error) {
       process.stdout.write(`Migration error: ${error}\n`);
@@ -109,4 +115,8 @@ module.exports = {
   areaToString,
   updateTestimonialFeedback,
   updateTableRowsDescriptions,
+  getCollection,
+  processBatches,
+  migrateTestimonialFeedbackToString,
+  migrateTableDescriptions,
 };
