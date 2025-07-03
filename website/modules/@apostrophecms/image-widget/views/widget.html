@@ -10,7 +10,7 @@
     {% if loadingType %} loading="{{ loadingType }}"{% endif %}
     srcset="{{ apos.image.srcset(attachment) }}"
     src="{{ apos.attachment.url(attachment, { size: size }) }}"
-    alt="{{ attachment._alt or attachment.title or 'Content image' }}"
+    alt="{{ attachment._alt or attachment.title or 'Content' }}"
     {% if dimensionAttrs %}
       {% if attachment.width %} width="{{ apos.attachment.getWidth(attachment) }}" {% endif %}
       {% if attachment.height %} height="{{ apos.attachment.getHeight(attachment) }}" {% endif %}
