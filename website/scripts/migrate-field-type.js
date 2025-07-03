@@ -82,18 +82,34 @@ const updateTestimonialFeedback = async function (collection, doc, idKey) {
   return 0;
 };
 
+const processBatches = async (
+  batches,
+  idKey,
+  collection,
+  updateFn = updateTestimonialFeedback,
+) => {
+  let updatedCount = 0;
+  const allPromises = [];
+  for (const batch of batches) {
+    allPromises.push(...batch.map((doc) => updateFn(collection, doc, idKey)));
+  }
+  const results = await Promise.all(allPromises);
+  updatedCount = results.reduce((sum, value) => sum + value, 0);
+  return updatedCount;
+};
+
 const migrateTestimonialFeedbackToString = async () => {
   const { client, collection } = await getCollection();
   try {
     const documents = await collection.find({ type: 'testimonials' }).toArray();
     const idKey = '_id';
-    const updatePromises = documents.map(function (doc) {
-      return updateTestimonialFeedback(collection, doc, idKey);
-    });
-    const results = await Promise.all(updatePromises);
-    return results.reduce(function (sum, value) {
-      return sum + value;
-    }, 0);
+    const batchSize = 10;
+    const batches = [];
+    for (let i = 0; i < documents.length; i += batchSize) {
+      batches.push(documents.slice(i, i + batchSize));
+    }
+    const updatedCount = await processBatches(batches, idKey, collection);
+    return updatedCount;
   } finally {
     await client.close();
   }
@@ -101,10 +117,10 @@ const migrateTestimonialFeedbackToString = async () => {
 
 const updateTableRowsDescriptions = async (collection, doc, idKey) => {
   let changed = false;
-  if (doc.main && Array.isArray(doc.main.items)) {
-    const newItems = doc.main.items.map(function (widget) {
+  if (doc.main?.items && Array.isArray(doc.main.items)) {
+    const newItems = doc.main.items.map((widget) => {
       if (widget.type === 'table' && Array.isArray(widget.rows)) {
-        const newRows = widget.rows.map(function (row) {
+        const newRows = widget.rows.map((row) => {
           if (
             row &&
             typeof row.description === 'object' &&
@@ -138,13 +154,18 @@ const migrateTableDescriptions = async () => {
       .find({ 'main.items.type': 'table' })
       .toArray();
     const idKey = '_id';
-    const updatePromises = docs.map((doc) => {
-      return updateTableRowsDescriptions(collection, doc, idKey);
-    });
-    const results = await Promise.all(updatePromises);
-    return results.reduce(function (sum, value) {
-      return sum + value;
-    }, 0);
+    const batchSize = 10;
+    const batches = [];
+    for (let i = 0; i < docs.length; i += batchSize) {
+      batches.push(docs.slice(i, i + batchSize));
+    }
+    const updatedCount = await processBatches(
+      batches,
+      idKey,
+      collection,
+      updateTableRowsDescriptions,
+    );
+    return updatedCount;
   } finally {
     await client.close();
   }
