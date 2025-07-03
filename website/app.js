@@ -112,6 +112,7 @@ function createAposConfig() {
       'leadership-team-widget': {},
       'table-widget': {},
       'form-field-standardizer': {},
+      'custom-form': {},
     },
   };
 }
