@@ -42,7 +42,7 @@ const updateTestimonialFeedback = async function (collection, doc, idKey) {
     typeof doc.feedback === 'object'
   ) {
     const fixedFeedback = areaToString(doc.feedback);
-    if (typeof fixedFeedback === 'string' && fixedFeedback !== doc.feedback) {
+    if (typeof fixedFeedback === 'string' && fixedFeedback.length > 0) {
       await collection.updateOne(
         { [idKey]: doc[idKey] },
         { $set: { feedback: fixedFeedback } },
