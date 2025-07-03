@@ -55,7 +55,7 @@ function createAposConfig() {
       '@apostrophecms/image-widget': {
         options: {
           className: 'bp-image-widget',
-          placeholderUrl: false,
+          placeholderImage: false,
         },
       },
       '@apostrophecms/video-widget': {
