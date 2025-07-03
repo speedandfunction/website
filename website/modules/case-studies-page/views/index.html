@@ -1,12 +1,14 @@
 {# modules/case-studies-page/views/index.new.html #} {% extends "layout.html" %}
 {% import '@apostrophecms/pager:macros.html' as pager with context %} {% block
 main %}
-<div class="cs_container" data-default-visible-tags="{{ data.defaultVisibleTagsCount }}">
+<div
+  class="cs_container"
+  data-default-visible-tags="{{ data.defaultVisibleTagsCount }}"
+>
   <div class="cs_content">
-    <div class="page-main_content">
-      {% area data.page, 'main' %}
-      <div id="filter" class="filter-anchor"></div>
-    </div>
+    <div class="page-main_content">{% area data.page, 'main' %}</div>
+
+    <div id="filter" class="filter-anchor"></div>
 
     <div class="cs_filter-info">
       <div class="filters-cta">Filter Case Studies</div>
@@ -165,7 +167,10 @@ main %}
                 {% endif %}
               </li>
               {% else %}
-              <li class="tag-item{% if loop.index > data.defaultVisibleTagsCount %} tag-item--hidden{% endif %}" data-label="{{ tag.label | lower }}">
+              <li
+                class="tag-item{% if loop.index > data.defaultVisibleTagsCount %} tag-item--hidden{% endif %}"
+                data-label="{{ tag.label | lower }}"
+              >
                 {% if filterType == 'industry' %}
                 <a
                   class="tag-link"
@@ -195,7 +200,11 @@ main %}
               {% endif %} {% endfor %}
             </ul>
             {% if tags.length > data.defaultVisibleTagsCount %}
-            <button class="tags__show-more" data-filter-type="{{ filterType }}" type="button">
+            <button
+              class="tags__show-more"
+              data-filter-type="{{ filterType }}"
+              type="button"
+            >
               <span class="tags__show-more--icon">
                 <img src="/images/plus.svg" alt="Plus icon" />
               </span>
