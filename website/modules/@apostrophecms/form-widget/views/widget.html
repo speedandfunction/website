@@ -14,33 +14,11 @@ onSubmitSuccess = form.onSubmitSuccess %}
   param.key + ',' %} {% endif %} {% endfor %} {% endif %}
 
   <form
-    data-apos-form-form="{{ form._id }}"
     class="sf-form {{ prependIfPrefix('__form') }}"
     autocomplete="off"
-    {%
-    if
-    form.enableQueryParams
-    %}
-    data-apos-form-params="{{params}}"
-    {%
-    endif
-    %}
-    {%
-    if
-    recaptchaReady
-    %}
-    data-apos-recaptcha-sitekey="{{ recaptchaSite }}"
-    {%
-    endif
-    %}
-    {%
-    if
-    onSubmitSuccess
-    %}
-    onsubmit="runSubmitSuccess(event)"
-    {%
-    endif
-    %}
+    novalidate
+    method="post"
+    action="/api/v1/@apostrophecms/form/submit"
   >
     {% area form, 'contents' %} {% if recaptchaReady %}
     <noscript>
@@ -51,13 +29,10 @@ onSubmitSuccess = form.onSubmitSuccess %}
     <button
       type="submit"
       class="sf-button"
-      data-apos-form-submit
       {%
       if
       recaptchaReady
-      %}
-      disabled
-      {%
+      %}disabled{%
       endif
       %}
     >
@@ -100,11 +75,7 @@ onSubmitSuccess = form.onSubmitSuccess %}
     <h3>{{ form.thankYouHeading or __t('aposForm:defaultThankYou') }}</h3>
 
     {% if not apos.area.isEmpty(form, 'thankYouBody') %} {% area form,
-    'thankYouBody' %} {% endif %} {% if onSubmitSuccess %}
-    <script>
-      alert("Thanks!"); // {{ onSubmitSuccess | safe }}
-    </script>
-    {% endif %}
+    'thankYouBody' %} {% endif %} {% if onSubmitSuccess %} {% endif %}
   </div>
   {% endif %}
 </div>
