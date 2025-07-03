@@ -92,7 +92,6 @@
     @include truncate-lines(1);
   }
   &__content {
-    p {
       font-weight: 500;
       font-size: 14px;
       line-height: 21px;
@@ -101,8 +100,8 @@
       @include breakpoint-medium {
         @include truncate-lines(8);
       }
-    }
   }
+  
   &__url {
     text-decoration: none;
     font-weight: 700;

@@ -70,14 +70,12 @@
         height: 240px;
       }
       .sf-person__content {
-        p {
           @include truncate-lines(7);
           @include breakpoint-medium {
             @include truncate-lines(8);
             @include font-settings(14px, 150%, 400);
             color: $gray-500;
           }
-        }
       }
     }
   }
@@ -138,7 +136,7 @@
           &-wrapper {
             @include breakpoint-medium {
               height: 400px;
-              .sf-person__content p {
+              .sf-person__content {
                 @include truncate-lines(10);
                 @include font-settings(22px, 150%, 400);
               }
