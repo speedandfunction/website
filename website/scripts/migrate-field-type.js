@@ -19,7 +19,7 @@ const { argv } = yargs(hideBin(process.argv))
 const MONGODB_URI = argv.mongoUri;
 const DB_NAME = argv.dbName;
 
-const stripHtml = function (html) {
+const stripHtml = (html) => {
   if (typeof html !== 'string') return '';
   let temp = html;
   while (temp.includes('<p') || temp.includes('<span')) {
@@ -40,7 +40,7 @@ const stripHtml = function (html) {
   return temp;
 };
 
-const areaToString = function (areaData) {
+const areaToString = (areaData) => {
   if (typeof areaData === 'string') return stripHtml(areaData);
   if (areaData && areaData.items && areaData.items.length > 0) {
     return areaData.items
@@ -56,7 +56,7 @@ const areaToString = function (areaData) {
   return '';
 };
 
-const getCollection = async function () {
+const getCollection = async () => {
   const client = new MongoClient(MONGODB_URI);
   await client.connect();
   const db = client.db(DB_NAME);
@@ -82,7 +82,7 @@ const updateTestimonialFeedback = async function (collection, doc, idKey) {
   return 0;
 };
 
-const migrateTestimonialFeedbackToString = async function () {
+const migrateTestimonialFeedbackToString = async () => {
   const { client, collection } = await getCollection();
   try {
     const documents = await collection.find({ type: 'testimonials' }).toArray();
@@ -99,7 +99,7 @@ const migrateTestimonialFeedbackToString = async function () {
   }
 };
 
-const updateTableRowsDescriptions = async function (collection, doc, idKey) {
+const updateTableRowsDescriptions = async (collection, doc, idKey) => {
   let changed = false;
   if (doc.main && Array.isArray(doc.main.items)) {
     const newItems = doc.main.items.map(function (widget) {
@@ -131,14 +131,14 @@ const updateTableRowsDescriptions = async function (collection, doc, idKey) {
   return 0;
 };
 
-const migrateTableDescriptions = async function () {
+const migrateTableDescriptions = async () => {
   const { client, collection } = await getCollection();
   try {
     const docs = await collection
       .find({ 'main.items.type': 'table' })
       .toArray();
     const idKey = '_id';
-    const updatePromises = docs.map(function (doc) {
+    const updatePromises = docs.map((doc) => {
       return updateTableRowsDescriptions(collection, doc, idKey);
     });
     const results = await Promise.all(updatePromises);
@@ -151,7 +151,7 @@ const migrateTableDescriptions = async function () {
 };
 
 if (require.main === module) {
-  (async function () {
+  (async () => {
     try {
       const testimonials = await migrateTestimonialFeedbackToString();
       process.stdout.write(`Updated testimonials: ${testimonials}\n`);
