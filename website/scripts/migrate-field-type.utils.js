@@ -21,7 +21,7 @@ const stripHtml = (html) => {
 
 const areaToString = (areaData) => {
   if (typeof areaData === 'string') return stripHtml(areaData);
-  if (areaData && areaData.items && areaData.items.length > 0) {
+  if (areaData?.items?.length > 0) {
     return areaData.items
       .map(function (item) {
         if (typeof item.content === 'string') {
