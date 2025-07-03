@@ -32,12 +32,16 @@
                   />
               </div>
               <div class="sf-testimonial-header__bio">
-                <h4 class="sf-person__title">{{ card.title }}</h4>
-                <h5 class="sf-person__position">{{ card.position }}</h5>
-                {% if card.organization %}
-                <h5 class="sf-person__position sf-person__organization">
-                  {{ card.organization }}
-                </h5>
+                <div class="sf-person__container">
+                  <div class="sf-person__wrapper">
+                    <h4 class="sf-person__title">{{ card.title }}</h4>
+                  </div>
+                  <h5 class="sf-person__position">{{ card.position }}</h5>
+                  {% if card.organization %}
+                  <h5 class="sf-person__position sf-person__organization">
+                    {{ card.organization }}
+                  </h5>
+                </div>
                 {% endif %} {% if card.url %}
                 <a href="{{ card.url }}" target="_blank" class="sf-person__url"
                   >{{ card.url }}</a
@@ -46,7 +50,7 @@
               </div>
             </div>
             <div class="sf-person-wrapper">
-              <div class="sf-person__content">{% area card, 'feedback' %}</div>
+              <div class="sf-person__content">“{{ card.feedback }}”</div>
               {% if card._caseStudy %}
               <div class="card-swiper__case-study">
                 <h5 class="card-swiper__case-study-title">
