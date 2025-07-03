@@ -42,10 +42,22 @@
                     {{ card.organization }}
                   </h5>
                 </div>
-                {% endif %} {% if card.url %}
-                <a href="{{ card.url }}" target="_blank" class="sf-person__url"
-                  >{{ card.url }}</a
+                {% endif %} {% if card.url %} {# Remove protocol #} {% set
+                urlWithoutProtocol = card.url %} {% if card.url.split('://') |
+                length > 1 %} {% set urlWithoutProtocol =
+                card.url.split('://')[1] %} {% endif %} {# Remove
+                path/query/fragment #} {% set domainWithOrWithoutWww =
+                urlWithoutProtocol.split('/')[0] %} {# Remove www. if present #}
+                {% set cleanDomain = domainWithOrWithoutWww | trim |
+                replace('www.', '') %}
+                <a
+                  href="{{ card.url }}"
+                  target="_blank"
+                  class="sf-person__url"
+                  rel="noopener noreferrer"
                 >
+                  {{ cleanDomain }}
+                </a>
                 {% endif %}
               </div>
             </div>
