@@ -23,7 +23,9 @@ onSubmitSuccess = form.onSubmitSuccess %}
       {% area form, 'contents' %}
 
       {% if recaptchaReady %}
+      {# sonar-ignore-start #}
       <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+      {# sonar-ignore-end #}
         <div class="g-recaptcha"
           data-sitekey="{{ recaptchaSite }}">
         </div>

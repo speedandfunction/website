@@ -50,6 +50,7 @@
     "jest-environment-jsdom": "^30.0.0-beta.3",
     "lodash": "^4.17.21",
     "lozad": "^1.16.0",
+    "node-fetch": "^3.3.2",
     "normalize.css": "^8.0.1",
     "postmark": "^4.0.5",
     "swiper": "^11.2.6",
