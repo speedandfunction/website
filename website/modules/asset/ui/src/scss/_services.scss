@@ -29,7 +29,7 @@
       }
       
       &-expand-button {
-        top: 20px;
+        top: 25px;
       }
     }
   }
@@ -46,6 +46,11 @@
         opacity: 1;
         overflow: visible;
         transform: none;
+        padding-top: 20px;
+
+        @include breakpoint-medium {
+          padding-top: 0;
+        }
       }
     }
   }
@@ -145,7 +150,6 @@
     font-size: 14px;
     line-height: 20px;
     color: $gray-300;
-    margin: 0;
     display: block;
     max-height: 0;
     opacity: 0;
@@ -162,6 +166,10 @@
       opacity: 1;
       overflow: visible;
       transform: none;
+      
+      p {
+        padding-top: 20px;
+      }
     }
   }
   

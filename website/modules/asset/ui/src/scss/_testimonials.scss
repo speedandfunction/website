@@ -37,13 +37,12 @@
         &__bio {
           display: block;
           width: calc(100% - 102px);
-          padding: 12px 12px 0 24px;
+          padding: 4px 12px 0 24px;
           @include breakpoint-medium {
             width: calc(100% - 160px);
-            padding: 40px 40px 0;
+            padding: 32px 40px 0;
           }
           a {
-            margin-top: 8px;
             font-size: 11px;
             font-weight: 300;
             color: $gray-500;
@@ -57,12 +56,7 @@
       }
       &__title {
         @include breakpoint-medium {
-          @include font-settings(14px, 150%, 700);
-        }
-      }
-      &__organization {
-        @include breakpoint-medium {
-          margin-bottom: 14px;
+          @include font-settings(14px, 120%, 700);
         }
       }
       &__url {
@@ -112,7 +106,7 @@
               margin-bottom: 10px;
               @include font-settings(22px, 110%, 700);
             }
-            @include truncate-lines(1);
+            @include truncate-lines(2);
           }
 
           &__position {
@@ -162,7 +156,6 @@
             }
             &__bio {
               width: 100%;
-              padding: 12px 12px 12px 24px;
               @include breakpoint-medium {
                 padding: 0;
               }
