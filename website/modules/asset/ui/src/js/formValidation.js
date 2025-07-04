@@ -210,6 +210,28 @@ const sendFormData = (form, formData) => {
 
 const handleFormSubmit = (event, form, validateFieldFn) => {
   event.preventDefault();
+
+  let hasError = false;
+
+  // ReCAPTCHA validation (client-side)
+  const recaptchaWidget = form.querySelector('.g-recaptcha');
+  const recaptchaError = document.querySelector(
+    '[data-apos-form-recaptcha-error]',
+  );
+  if (
+    typeof window.grecaptcha !== 'undefined' &&
+    recaptchaWidget &&
+    !window.grecaptcha.getResponse()
+  ) {
+    if (recaptchaError) {
+      recaptchaError.classList.remove('apos-form-hidden');
+      recaptchaError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    hasError = true;
+  } else if (recaptchaError) {
+    recaptchaError.classList.add('apos-form-hidden');
+  }
+
   // Disable submit button(s) to prevent multiple submissions
   const submitButtons = form.querySelectorAll(
     'button[type="submit"], input[type="submit"]',
@@ -217,12 +239,22 @@ const handleFormSubmit = (event, form, validateFieldFn) => {
   submitButtons.forEach((btn) => (btn.disabled = true));
 
   validateForm(form, validateFieldFn)
-    .then((isValid) => onValidateForm(isValid, form, validateFieldFn))
+    .then((isValid) => {
+      if (!isValid) {
+        hasError = true;
+      }
+      if (!hasError) {
+        return onValidateForm(true, form, validateFieldFn);
+      }
+      return null;
+    })
     .finally(() => {
       // Re-enable submit button(s) after processing
       submitButtons.forEach((btn) => (btn.disabled = false));
     })
     .catch(() => false);
+
+  return true;
 };
 
 const initFormWithValidation = (form, validateFieldFn) => {

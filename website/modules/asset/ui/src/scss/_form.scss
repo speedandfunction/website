@@ -1,4 +1,5 @@
 .sf-contact-form {
+  position: relative;
   margin-top: 32px;
 
   @include breakpoint-medium {
@@ -10,13 +11,13 @@
     min-width: 295px;
     max-width: 900px;
     margin: 0 auto;
-    padding: 23px 15px 7px;
+    padding: 23px 15px;
     border: 1px solid $gray-border;
     margin-bottom: 84px;
     @include font-settings(14px, 150%, $font-weight-medium);
 
     @include breakpoint-medium {
-      padding: 24px 44px 6px;
+      padding: 24px 44px;
       margin-bottom: 248px;
     }
 
@@ -32,6 +33,28 @@
         bottom: -136px;
       }
     }
+
+    .g-recaptcha {
+      position: relative;
+      margin-top: 24px;
+    }
+    .validation-error {
+      bottom: -4px;
+      left: 5px;
+      @include breakpoint-medium {
+        left: 25px;
+      }
+    }
+
+    .apos-form-error {
+      bottom: -12px;
+      left: 5px;
+    }
+  }
+
+  .apos-form-captcha-error {
+    bottom: 0px;
+    left: 129px;
   }
 
   label {
@@ -153,22 +176,19 @@
   }
 }
 
-.validation-error {
+.validation-error,
+.apos-form-error,
+.apos-form-captcha-error {
   position: absolute;
-  top: 75px;
-  left: 5px;
-  @include breakpoint-medium {
-    top: 94px;
-    left: 25px;
-  }
+  // bottom: -4px;
+  // left: 5px;
+  // @include breakpoint-medium {
+  //   left: 25px;
+  // }
   color: $error-color;
   font-size: 12px;
   margin-top: -5px;
   margin-bottom: 10px;
   font-weight: 500;
   line-height: 110%;
-}
-
-.apos-form-error {
-  font-size: 12px;
 }

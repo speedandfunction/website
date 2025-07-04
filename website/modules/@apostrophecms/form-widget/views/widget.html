@@ -9,69 +9,68 @@ onSubmitSuccess = form.onSubmitSuccess %}
 <div class="{{ prependIfPrefix('') }}" data-apos-form-wrapper>
   {% if not apos.area.isEmpty(form, 'intro') %} {% area form, 'intro' %} {%
   endif %} {% if form %} {% set params = false %} {% if form.queryParamList %}
-      {% set params = '' %} {% for param in form.queryParamList %} {% if loop.last
+  {% set params = '' %} {% for param in form.queryParamList %} {% if loop.last
   %} {% set params = params + param.key %} {% else %} {% set params = params +
   param.key + ',' %} {% endif %} {% endfor %} {% endif %}
 
-    <form
-      class="sf-form {{ prependIfPrefix('__form') }}"
-      autocomplete="off"
-      novalidate
-      method="post"
-      action="/api/v1/@apostrophecms/form/submit"
+  <form
+    class="sf-form {{ prependIfPrefix('__form') }}"
+    autocomplete="off"
+    novalidate
+    method="post"
+    action="/api/v1/@apostrophecms/form/submit"
+  >
+    {% area form, 'contents' %} {% if recaptchaReady %} {# sonar-ignore-start #}
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    {# sonar-ignore-end #}
+    <div
+      class="g-recaptcha"
+      data-sitekey="{{ recaptchaSite }}"
+      data-size="compact"
     >
-      {% area form, 'contents' %}
-
-      {% if recaptchaReady %}
-      {# sonar-ignore-start #}
-      <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-      {# sonar-ignore-end #}
-        <div class="g-recaptcha"
-          data-sitekey="{{ recaptchaSite }}">
-        </div>
-      {% endif %}
-
-      <button type="submit" class="sf-button">
-        {{ form.submitLabel or __t('aposForm:widgetSubmit') }}
-      </button>
-    </form>
-
-    <p
-      role="alert"
-      style="display: none"
-      data-apos-form-submit-error
-      class="apos-form-hidden apos-form-error {{ prependIfPrefix('__error') }}"
-    >
-      {{ __t('aposForm:widgetSubmitError') }}
-      <span data-apos-form-global-error></span>
-    </p>
-
-    {% if recaptchaSite %}
+      {% if recaptchaSite %}
       <p
         role="alert"
         data-apos-form-recaptcha-error
-        class="apos-form-hidden apos-form-error {{ prependIfPrefix('__error') }}"
+        class="apos-form-hidden apos-form-captcha-error  {{ prependIfPrefix('__error') }}"
       >
-        {{ __t('aposForm:widgetCaptchaError') }}
+        Please confirm you are not a robot.
       </p>
+      {% endif %}
+    </div>
     {% endif %}
 
-    <p
-      class="apos-form-hidden {{ prependIfPrefix('__spinner') }}"
-      data-apos-form-spinner
-    >
-      {{ __t('aposForm:widgetSubmitting') }}
-    </p>
+    <button type="submit" class="sf-button">
+      {{ form.submitLabel or __t('aposForm:widgetSubmit') }}
+    </button>
+  </form>
 
-    <div
-      role="alert"
-      data-apos-form-thank-you
-      class="apos-form-hidden apos-form-submission-thank-you {{ prependIfPrefix('__submission-thank-you') }}"
-    >
-      <h3>{{ form.thankYouHeading or __t('aposForm:defaultThankYou') }}</h3>
+  <p
+    role="alert"
+    style="display: none"
+    data-apos-form-submit-error
+    class="apos-form-hidden apos-form-error {{ prependIfPrefix('__error') }}"
+  >
+    {{ __t('aposForm:widgetSubmitError') }}
+    <span data-apos-form-global-error></span>
+  </p>
 
-      {% if not apos.area.isEmpty(form, 'thankYouBody') %} {% area form,
+  <p
+    class="apos-form-hidden {{ prependIfPrefix('__spinner') }}"
+    data-apos-form-spinner
+  >
+    {{ __t('aposForm:widgetSubmitting') }}
+  </p>
+
+  <div
+    role="alert"
+    data-apos-form-thank-you
+    class="apos-form-hidden apos-form-submission-thank-you {{ prependIfPrefix('__submission-thank-you') }}"
+  >
+    <h3>{{ form.thankYouHeading or __t('aposForm:defaultThankYou') }}</h3>
+
+    {% if not apos.area.isEmpty(form, 'thankYouBody') %} {% area form,
     'thankYouBody' %} {% endif %} {% if onSubmitSuccess %} {% endif %}
-    </div>
+  </div>
   {% endif %}
 </div>
