@@ -43,9 +43,9 @@ module.exports = {
         required: true,
       },
       experience: {
-        label: 'Experience',
+        label: 'Joined in',
         type: 'integer',
-        help: 'Experience in years',
+        help: 'Enter the year',
         min: 0,
         def: 0,
         required: true,
