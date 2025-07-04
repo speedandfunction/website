@@ -863,11 +863,16 @@
         .truncate-wrapper {
           flex: none;
           display: block;
-          max-width: 240px;
           width: 100%;
 
           @include breakpoint-medium {
             max-width: 310px;
+            max-height: 405px;
+            height: 100%;
+          }
+
+          @include breakpoint-large {
+            max-height: 375px;
           }
         }
 
@@ -895,12 +900,16 @@
           }
         }
 
+        .portfolio-title {
+          @include truncate-lines(4);
+        }
+
         .type,
         .industry {
           @include responsive-font(11px, 11px);
           @include responsive-line-height(120%, 120%);
           color: $gray-300;
-          margin: 10px 0 40px;
+          margin: 10px 0 30px;
           @include truncate-lines(1);
         }
 
@@ -908,10 +917,14 @@
           @include responsive-font(11px, 14px);
           @include responsive-line-height(140%, 140%);
           margin: 0 0 8px;
-          @include truncate-lines(4);
+          @include truncate-lines(7);
 
           @include breakpoint-medium {
             margin: 0 0 10px;
+          }
+
+          @include breakpoint-large {
+            @include truncate-lines(5);
           }
         }
 
@@ -959,6 +972,11 @@
           text-decoration: underline;
           text-transform: lowercase;
           color: $gray-500;
+          margin-bottom: 16px;
+
+          @include breakpoint-medium {
+            margin-bottom: 0;
+          }
         }
       }
 
