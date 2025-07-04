@@ -66,6 +66,7 @@
       }
     }
     .sf-person-wrapper {
+      color: $gray-300;
       @include breakpoint-medium {
         height: 240px;
       }
