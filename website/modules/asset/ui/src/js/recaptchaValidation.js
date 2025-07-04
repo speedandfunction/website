@@ -19,7 +19,7 @@ const handleRecaptchaValueChange = function (
 const addRecaptchaValidationHandlers = (form) => {
   // Only observe the textarea#g-recaptcha-response (do NOT create any input)
   const observeRecaptcha = () => {
-    const recaptchaResponse = document.getElementById('g-recaptcha-response');
+    const recaptchaResponse = form.querySelector('#g-recaptcha-response');
     if (recaptchaResponse) {
       // Listen for input events (covers user interaction)
       recaptchaResponse.addEventListener('input', () => {
@@ -39,7 +39,7 @@ const addRecaptchaValidationHandlers = (form) => {
   // ReCAPTCHA textarea may not exist immediately, so poll for it
   let pollCount = 0;
   const pollForRecaptcha = () => {
-    if (document.getElementById('g-recaptcha-response')) {
+    if (form.querySelector('#g-recaptcha-response')) {
       observeRecaptcha();
     } else if (pollCount < 20) {
       // Try for up to 2 seconds
