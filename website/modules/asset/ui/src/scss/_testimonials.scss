@@ -67,6 +67,10 @@
     }
     .sf-person-wrapper {
       color: $gray-300;
+      line-height: 150%;
+      font-size: 14px;
+      font-weight: 500;
+      paragraph-spacing: 24px;
       @include breakpoint-medium {
         height: 240px;
       }
