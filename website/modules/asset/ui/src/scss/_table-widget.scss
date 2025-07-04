@@ -38,8 +38,7 @@
   position: relative;
   overflow: hidden;
   background-color: $white;
-  @include transition(all, 0.5s);
-  transform: scale3d(1, 1, 1);
+  @include transition(border-color, 0.3s);
 
   &:not(:last-child) {
     border-bottom: none;
@@ -59,7 +58,6 @@
 
   &:hover,
   &:focus-visible {
-    transform: scale3d(1.03, 1.03, 1);
     z-index: 10;
     border-color: black;
 
@@ -103,7 +101,6 @@
 
     &:hover,
     &:focus-visible {
-      transform: scale3d(1.03, 1.03, 1);
       z-index: 10;
       border-color: black;
 
@@ -125,8 +122,6 @@
     }
 
     &:focus-visible {
-      transform: scale3d(1.02, 1.02, 1);
-
       .background-circle {
         display: block;
       }
