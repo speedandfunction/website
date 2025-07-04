@@ -1,10 +1,10 @@
 const { clearValidationError } = require('./domHelpers');
 
-const handleRecaptchaValueChange = function (
+const handleRecaptchaValueChange = (
   recaptchaResponse,
   form,
   clearValidationErrorFn = clearValidationError,
-) {
+) => {
   if (recaptchaResponse.value) {
     clearValidationErrorFn(recaptchaResponse);
     const recaptchaError = form.querySelector(
@@ -16,7 +16,7 @@ const handleRecaptchaValueChange = function (
   }
 };
 
-const observeRecaptcha = function (form, cleanupRef, pollIntervalRef) {
+const observeRecaptcha = (form, cleanupRef, pollIntervalRef) => {
   const recaptchaResponse = form.querySelector('#g-recaptcha-response');
   if (recaptchaResponse) {
     const handleInput = () => {
@@ -42,12 +42,12 @@ const observeRecaptcha = function (form, cleanupRef, pollIntervalRef) {
   }
 };
 
-const pollForRecaptcha = function (
+const pollForRecaptcha = (
   form,
   observeFn,
   pollForRecaptchaTimeoutRef,
   cleanupRef,
-) {
+) => {
   let pollCount = 0;
   const poll = function () {
     if (form.querySelector('#g-recaptcha-response')) {
@@ -60,7 +60,7 @@ const pollForRecaptcha = function (
   poll();
 };
 
-const addRecaptchaValidationHandlers = function (form) {
+const addRecaptchaValidationHandlers = (form) => {
   const pollIntervalRef = { current: null };
   const pollForRecaptchaTimeoutRef = { current: null };
   const cleanupRef = { current: null };
