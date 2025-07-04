@@ -249,7 +249,7 @@ function initFilterModal() {
   window.caseStudiesFilterModal = new FilterModal({
     modalSelector: '#filter-modal',
     openBtnSelector: '.filters-cta',
-    closeBtnSelector: '.filter-modal__close',
+    closeBtnSelector: '.filter-modal__button',
     backdropSelector: '.filter-modal__backdrop',
     clearAllSelector: '.clear-all',
     selectedTagsSelector: '.selected-tags',
