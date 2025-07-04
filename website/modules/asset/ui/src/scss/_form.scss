@@ -183,11 +183,6 @@
 .apos-form-error,
 .apos-form-captcha-error {
   position: absolute;
-  // bottom: -4px;
-  // left: 5px;
-  // @include breakpoint-medium {
-  //   left: 25px;
-  // }
   color: $error-color;
   font-size: 12px;
   margin-top: -5px;
