@@ -69,7 +69,7 @@ const fieldSpecificSchemas = {
   'g-recaptcha-response': yup
     .string()
     .required('Please complete the reCAPTCHA')
-    .min(10, 'Invalid reCAPTCHA token'),
+    .min(70, 'Invalid reCAPTCHA token'),
 };
 
 const fallbackSchemas = {

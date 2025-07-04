@@ -41,6 +41,7 @@
     "@apostrophecms/form": "^1.4.2",
     "@apostrophecms/import-export": "^3.2.0",
     "@barba/core": "^2.10.3",
+    "abort-controller": "^3.0.0",
     "apostrophe": "^4.17.0",
     "connect-redis": "^7.1.1",
     "dotenv": "^16.5.0",

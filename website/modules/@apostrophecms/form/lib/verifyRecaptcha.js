@@ -1,4 +1,5 @@
 const fetch = require('node-fetch');
+const AbortController = require('abort-controller');
 
 const verifyRecaptcha = async function ({ secret, token, remoteip }) {
   if (!token || token.trim() === '') {
@@ -9,28 +10,43 @@ const verifyRecaptcha = async function ({ secret, token, remoteip }) {
   params.append('response', token);
   params.append('remoteip', remoteip);
 
-  const response = await fetch(
-    'https://www.google.com/recaptcha/api/siteverify',
-    {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: params,
-      timeout: 5000,
-    },
-  );
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 5000);
 
-  if (!response.ok) {
-    return { success: false, error: `HTTP error! status: ${response.status}` };
+  try {
+    const response = await fetch(
+      'https://www.google.com/recaptcha/api/siteverify',
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: params,
+        signal: controller.signal,
+      },
+    );
+    clearTimeout(timeoutId);
+
+    if (!response.ok) {
+      return {
+        success: false,
+        error: `HTTP error! status: ${response.status}`,
+      };
+    }
+    const data = await response.json();
+    if (!data.success) {
+      return {
+        success: false,
+        error: 'reCAPTCHA verification failed.',
+        details: data,
+      };
+    }
+    return { success: true, details: data };
+  } catch (error) {
+    clearTimeout(timeoutId);
+    if (error.name === 'AbortError') {
+      return { success: false, error: 'reCAPTCHA verification timed out.' };
+    }
+    return { success: false, error: `Network error: ${error.message}` };
   }
-  const data = await response.json();
-  if (!data.success) {
-    return {
-      success: false,
-      error: 'reCAPTCHA verification failed.',
-      details: data,
-    };
-  }
-  return { success: true, details: data };
 };
 
 module.exports = { verifyRecaptcha };
