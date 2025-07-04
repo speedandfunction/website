@@ -1,5 +1,6 @@
 const { validateField } = require('./formValidator');
 const { showValidationError, clearValidationError } = require('./domHelpers');
+const { addRecaptchaValidationHandlers } = require('./recaptchaValidation');
 
 // Test-specific DOM helpers
 const testShowValidationError = (field, message) => {
@@ -272,6 +273,9 @@ const initFormWithValidation = (form, validateFieldFn) => {
     },
     true,
   );
+
+  // Add reCAPTCHA validation handlers
+  addRecaptchaValidationHandlers(form);
 };
 
 module.exports = { initFormValidation };
