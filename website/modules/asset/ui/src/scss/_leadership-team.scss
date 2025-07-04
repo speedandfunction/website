@@ -18,12 +18,20 @@
   // prevent extra top border when leader-card is hovered in second row
   & + .leadership-list {
     .leader-card {
-      &:hover {
+      @include breakpoint-large {
+        border-top: none;
+
         .leader-header {
-          .leader-title-block {
-            @include breakpoint-large {
-              border-top: 1px solid transparent;
-            }
+          margin-bottom: 1px;
+        }
+      }
+
+      &:hover {
+        @include breakpoint-large {
+          border-top: none;
+
+          .leader-header {
+            margin-bottom: 1px;
           }
         }
       }
@@ -40,45 +48,13 @@
   height: 100%;
   margin-bottom: 24px;
   position: relative;
+  border-top: 1px solid transparent;
+  border-left: 1px solid $whisper;
+  border-bottom: 1px solid $whisper;
 
   @include breakpoint-large {
-    max-height: 383px;
     max-width: 400px;
     margin-bottom: 0;
-  }
-
-  // avoid double border
-  &:not(:first-child) {
-    .leader-header {
-      .leader-title-block {
-        @include breakpoint-large {
-          border-left: none;
-        }
-      }
-    }
-
-    .leader-footer {
-      @include breakpoint-large {
-        border-left: none;
-      }
-    }
-  }
-
-  // avoid double border on hover for leader-card
-  &:has(+ .leader-card:hover) {
-    .leader-header {
-      .leader-title-block {
-        @include breakpoint-large {
-          border-right: none;
-        }
-      }
-    }
-
-    .leader-footer {
-      @include breakpoint-large {
-        border-right: none;
-      }
-    }
   }
 
   .leader-header {
@@ -91,13 +67,14 @@
     }
 
     .leader-title-block {
-      padding: 29px 24px;
+      padding: 27px 24px;
       width: 100%;
+      box-sizing: border-box;
 
       @include breakpoint-large {
         padding: 40px 40px 0;
-        border: 1px solid $whisper;
-        border-bottom: none;
+        border: none;
+        border-top: 1px solid $whisper;
         width: auto;
       }
     }
@@ -105,11 +82,30 @@
 
   .leader-footer {
     padding: 24px;
-    border: 1px solid $whisper;
+    border-top: 1px solid $whisper;
+    border-right: 1px solid $whisper;
 
     @include breakpoint-large {
-      padding: 0 40px 40px;
       border-top: none;
+      border-right: none;
+      padding: 0 40px 40px;
+    }
+  }
+
+  &:last-child {
+    @include breakpoint-large {
+      .leader-header {
+        .leader-title-block {
+          border-right: 1px solid $whisper;
+        }
+      }
+      .leader-footer {
+        border-right: 1px solid $whisper;
+      }
+
+      &:hover {
+        border-right: 1px solid $whisper;
+      }
     }
   }
 
@@ -182,6 +178,12 @@
   }
 
   &:hover {
+    border-top: 1px solid transparent;
+
+    @include breakpoint-large {
+      border-top: 1px solid $whisper;
+    }
+
     .leader-photo {
       @include breakpoint-large {
         opacity: 0;
@@ -219,14 +221,15 @@
     .leader-header {
       .leader-title-block {
         @include breakpoint-large {
-          border-left: 1px solid $whisper;
+          border: none;
+          margin-bottom: 1px;
         }
       }
     }
 
     .leader-footer {
       @include breakpoint-large {
-        border-left: 1px solid $whisper;
+        border: none;
       }
     }
   }
