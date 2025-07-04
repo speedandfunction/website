@@ -16,38 +16,64 @@ const handleRecaptchaValueChange = function (
   }
 };
 
-const addRecaptchaValidationHandlers = (form) => {
-  // Only observe the textarea#g-recaptcha-response (do NOT create any input)
-  const observeRecaptcha = () => {
-    const recaptchaResponse = form.querySelector('#g-recaptcha-response');
-    if (recaptchaResponse) {
-      // Listen for input events (covers user interaction)
-      recaptchaResponse.addEventListener('input', () => {
+const observeRecaptcha = function (form, cleanupRef, pollIntervalRef) {
+  const recaptchaResponse = form.querySelector('#g-recaptcha-response');
+  if (recaptchaResponse) {
+    const handleInput = () => {
+      handleRecaptchaValueChange(recaptchaResponse, form);
+    };
+    recaptchaResponse.addEventListener('input', handleInput);
+    let lastValue = recaptchaResponse.value;
+    pollIntervalRef.current = setInterval(() => {
+      if (!document.body.contains(recaptchaResponse)) {
+        clearInterval(pollIntervalRef.current);
+        recaptchaResponse.removeEventListener('input', handleInput);
+        return;
+      }
+      if (recaptchaResponse.value && recaptchaResponse.value !== lastValue) {
+        lastValue = recaptchaResponse.value;
         handleRecaptchaValueChange(recaptchaResponse, form);
-      });
-      // Poll for value changes (covers programmatic updates by reCAPTCHA)
-      let lastValue = recaptchaResponse.value;
-      setInterval(() => {
-        if (recaptchaResponse.value && recaptchaResponse.value !== lastValue) {
-          lastValue = recaptchaResponse.value;
-          handleRecaptchaValueChange(recaptchaResponse, form);
-        }
-      }, 200);
-    }
-  };
+      }
+    }, 500);
+    cleanupRef.current = () => {
+      if (pollIntervalRef.current) clearInterval(pollIntervalRef.current);
+      recaptchaResponse.removeEventListener('input', handleInput);
+    };
+  }
+};
 
-  // ReCAPTCHA textarea may not exist immediately, so poll for it
+const pollForRecaptcha = function (
+  form,
+  observeFn,
+  pollForRecaptchaTimeoutRef,
+  cleanupRef,
+) {
   let pollCount = 0;
-  const pollForRecaptcha = () => {
+  const poll = function () {
     if (form.querySelector('#g-recaptcha-response')) {
-      observeRecaptcha();
+      observeFn();
     } else if (pollCount < 20) {
-      // Try for up to 2 seconds
       pollCount += 1;
-      setTimeout(pollForRecaptcha, 100);
+      pollForRecaptchaTimeoutRef.current = setTimeout(poll, 100);
     }
   };
-  pollForRecaptcha();
+  poll();
+};
+
+const addRecaptchaValidationHandlers = function (form) {
+  const pollIntervalRef = { current: null };
+  const pollForRecaptchaTimeoutRef = { current: null };
+  const cleanupRef = { current: null };
+
+  const observeFn = () => observeRecaptcha(form, cleanupRef, pollIntervalRef);
+  pollForRecaptcha(form, observeFn, pollForRecaptchaTimeoutRef, cleanupRef);
+
+  return () => {
+    if (pollIntervalRef.current) clearInterval(pollIntervalRef.current);
+    if (pollForRecaptchaTimeoutRef.current)
+      clearTimeout(pollForRecaptchaTimeoutRef.current);
+    if (cleanupRef.current) cleanupRef.current();
+  };
 };
 
 module.exports = { addRecaptchaValidationHandlers, handleRecaptchaValueChange };
