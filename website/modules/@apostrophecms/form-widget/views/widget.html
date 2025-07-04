@@ -27,18 +27,16 @@ onSubmitSuccess = form.onSubmitSuccess %}
       class="g-recaptcha"
       data-sitekey="{{ recaptchaSite }}"
       data-size="compact"
+    ></div>
+    {% if recaptchaSite %}
+    <p
+      role="alert"
+      data-apos-form-recaptcha-error
+      class="apos-form-hidden apos-form-captcha-error  {{ prependIfPrefix('__error') }}"
     >
-      {% if recaptchaSite %}
-      <p
-        role="alert"
-        data-apos-form-recaptcha-error
-        class="apos-form-hidden apos-form-captcha-error  {{ prependIfPrefix('__error') }}"
-      >
-        Please confirm you are not a robot.
-      </p>
-      {% endif %}
-    </div>
-    {% endif %}
+      Please confirm you are not a robot.
+    </p>
+    {% endif %} {% endif %}
 
     <button type="submit" class="sf-button">
       {{ form.submitLabel or __t('aposForm:widgetSubmit') }}

@@ -54,7 +54,10 @@
 
   .apos-form-captcha-error {
     bottom: 0px;
-    left: 129px;
+    left: 18px;
+    @include breakpoint-medium {
+      left: 48px;
+    }
   }
 
   label {
