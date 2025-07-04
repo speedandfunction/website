@@ -71,11 +71,8 @@
       }
       .sf-person__content {
         color: $gray-300;
-          @include truncate-lines(8);
-          @include breakpoint-medium {
-            @include truncate-lines(7);
-            @include font-settings(14px, 150%, 400);
-        }
+        @include truncate-lines(7);
+        @include font-settings(14px, 150%, 400);
       }
     }
   }
