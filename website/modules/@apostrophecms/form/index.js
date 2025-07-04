@@ -28,7 +28,8 @@ const submitRouteHandler = function (self) {
         const result = await verifyRecaptcha({
           secret: globalDoc.recaptchaSecret,
           token: recaptchaToken,
-          remoteip: req.ip,
+          remoteip:
+            req.headers['x-forwarded-for']?.split(',').shift().trim() || req.ip,
         });
         if (!result.success) {
           return res.status(400).json({ error: result.error });
