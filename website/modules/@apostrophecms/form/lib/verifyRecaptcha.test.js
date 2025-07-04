@@ -59,4 +59,24 @@ describe('verifyRecaptcha', () => {
     expect(result.success).toBe(false);
     expect(result.error).toMatch(/HTTP error/u);
   });
+
+  it('should fail if secret is missing', async () => {
+    const result = await verifyRecaptcha({
+      secret: '',
+      token: 'sometoken',
+      remoteip: '127.0.0.1',
+    });
+    expect(result.success).toBe(false);
+    expect(result.error).toBe('Missing reCAPTCHA secret.');
+  });
+
+  it('should fail if remoteip is missing', async () => {
+    const result = await verifyRecaptcha({
+      secret: 'test',
+      token: 'sometoken',
+      remoteip: '',
+    });
+    expect(result.success).toBe(false);
+    expect(result.error).toBe('Missing remote IP address.');
+  });
 });
