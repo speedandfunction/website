@@ -13,14 +13,19 @@
       <span></span>
       <span></span>
     </button>
+    <nav
+      id="main-navigation"
+      class="sf-nav"
+      data-menu
+      aria-label="Main navigation"
+    >
+      <ol class="sf-nav__list">
+        {% for item in data.global.primaryNav %}
+        <li>{% render utilities.navLink(item.menuItem) %}</li>
+        {% endfor %}
+      </ol>
+    </nav>
   </div>
-  <nav class="sf-nav" data-menu>
-    <ol class="sf-nav__list">
-      {% for item in data.global.primaryNav %}
-      <li>{% render utilities.navLink(item.menuItem) %}</li>
-      {% endfor %}
-    </ol>
-  </nav>
 </header>
 {% endfragment %} {% fragment footer() %}
 <footer class="sf-container">
