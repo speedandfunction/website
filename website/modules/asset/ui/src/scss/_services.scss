@@ -94,10 +94,6 @@
       .sf-simple-cards__card-wrap {
         padding: 40px;
 
-        &:hover {
-          padding-left: 50px;
-          padding-right: 50px;
-        }
       }
     }
   }
@@ -220,10 +216,8 @@
   
   .sf-simple-cards--no-expandable & {
     @include transition(all, 0.5s);
-    transform: scale3d(1, 1, 1);
     
     &:hover {
-      transform: scale3d(1.03, 1.03, 1);
       z-index: 10;
       
       .sf-simple-cards__card-title {
@@ -250,10 +244,8 @@
   @include breakpoint-medium {
     padding: 40px;
     @include transition(all, 0.5s);
-    transform: scale3d(1, 1, 1);
     
     &:hover {
-      transform: scale3d(1.02, 1.02, 1);
       z-index: 10;
       
       .sf-simple-cards__card-title {
