@@ -20,9 +20,8 @@ onSubmitSuccess = form.onSubmitSuccess %}
     method="post"
     action="/api/v1/@apostrophecms/form/submit"
   >
-    {% area form, 'contents' %} {% if recaptchaReady %}
-    <!-- prettier-ignore -->
-    <script src="https://www.google.com/recaptcha/api.js" async defer><!-- NOSONAR --></script>
+    {% area form, 'contents' %} {% if recaptchaReady %} {% include
+    "website/modules/@apostrophecms/form-widget/views/recaptcha-script.html" %}
     <div
       class="g-recaptcha"
       data-sitekey="{{ recaptchaSite }}"
