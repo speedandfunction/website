@@ -21,7 +21,7 @@ onSubmitSuccess = form.onSubmitSuccess %}
     action="/api/v1/@apostrophecms/form/submit"
   >
     {% area form, 'contents' %} {% if recaptchaReady %} {% include
-    "website/modules/@apostrophecms/form-widget/views/recaptcha-script.html" %}
+    "recaptcha-script.html" %}
     <div
       class="g-recaptcha"
       data-sitekey="{{ recaptchaSite }}"
