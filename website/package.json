@@ -52,9 +52,11 @@
     "lodash": "^4.17.21",
     "lozad": "^1.16.0",
     "node-fetch": "^2.6.7",
+    "mongodb": "^6.17.0",
     "normalize.css": "^8.0.1",
     "postmark": "^4.0.5",
     "swiper": "^11.2.6",
+    "yargs": "^17.7.2",
     "yup": "^1.6.1"
   },
   "devDependencies": {
