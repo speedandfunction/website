@@ -65,6 +65,11 @@ const fieldSpecificSchemas = {
         return internationalPattern.test(value) || localPattern.test(value);
       },
     ),
+
+  'g-recaptcha-response': yup
+    .string()
+    .required('Please complete the reCAPTCHA')
+    .min(70, 'Invalid reCAPTCHA token'),
 };
 
 const fallbackSchemas = {

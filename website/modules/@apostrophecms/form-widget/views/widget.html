@@ -20,22 +20,24 @@ onSubmitSuccess = form.onSubmitSuccess %}
     method="post"
     action="/api/v1/@apostrophecms/form/submit"
   >
-    {% area form, 'contents' %} {% if recaptchaReady %}
-    <noscript>
-      <p>{{ __t('aposForm:widgetNoScript') }}</p>
-    </noscript>
-    {% endif %}
-
-    <button
-      type="submit"
-      class="sf-button"
-      {%
-      if
-      recaptchaReady
-      %}disabled{%
-      endif
-      %}
+    {% area form, 'contents' %} {% if recaptchaReady %} {% include
+    "recaptcha-script.html" %}
+    <div
+      class="g-recaptcha"
+      data-sitekey="{{ recaptchaSite }}"
+      data-size="compact"
+    ></div>
+    {% if recaptchaSite %}
+    <p
+      role="alert"
+      data-apos-form-recaptcha-error
+      class="apos-form-hidden apos-form-captcha-error  {{ prependIfPrefix('__error') }}"
     >
+      Please confirm you are not a robot.
+    </p>
+    {% endif %} {% endif %}
+
+    <button type="submit" class="sf-button">
       {{ form.submitLabel or __t('aposForm:widgetSubmit') }}
     </button>
   </form>
@@ -49,16 +51,6 @@ onSubmitSuccess = form.onSubmitSuccess %}
     {{ __t('aposForm:widgetSubmitError') }}
     <span data-apos-form-global-error></span>
   </p>
-
-  {% if recaptchaSite %}
-  <p
-    role="alert"
-    data-apos-form-recaptcha-error
-    class="apos-form-hidden apos-form-error {{ prependIfPrefix('__error') }}"
-  >
-    {{ __t('aposForm:widgetCaptchaError') }}
-  </p>
-  {% endif %}
 
   <p
     class="apos-form-hidden {{ prependIfPrefix('__spinner') }}"
