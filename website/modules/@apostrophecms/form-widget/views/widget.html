@@ -20,8 +20,10 @@ onSubmitSuccess = form.onSubmitSuccess %}
     method="post"
     action="/api/v1/@apostrophecms/form/submit"
   >
-    {% area form, 'contents' %} {% if recaptchaReady %} {% include
-    "recaptcha-script.html" %}
+    {% area form, 'contents' %} {% if recaptchaReady %}
+    <!-- sonar:ignore:start -->
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <!-- sonar:ignore:end -->
     <div
       class="g-recaptcha"
       data-sitekey="{{ recaptchaSite }}"
