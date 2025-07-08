@@ -5,7 +5,9 @@ const generateHeaders = (formData) => {
   const { _id, ...formFields } = formData;
 
   for (const key of Object.keys(formFields)) {
-    headers.push(formatHeaderName(key));
+    if (key !== 'g-recaptcha-response') {
+      headers.push(formatHeaderName(key));
+    }
   }
 
   return headers;
@@ -18,11 +20,13 @@ const generateRowData = (formData) => {
 
   const { _id, ...formFields } = formData;
 
-  for (const value of Object.values(formFields)) {
-    if (Array.isArray(value)) {
-      rowData.push(value.join(', '));
-    } else {
-      rowData.push(value);
+  for (const [key, value] of Object.entries(formFields)) {
+    if (key !== 'g-recaptcha-response') {
+      if (Array.isArray(value)) {
+        rowData.push(value.join(', '));
+      } else {
+        rowData.push(value);
+      }
     }
   }
 
