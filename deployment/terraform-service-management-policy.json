@@ -1,0 +1,104 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "TerraformECRPermissions",
+      "Effect": "Allow",
+      "Action": [
+        "ecr:CreateRepository",
+        "ecr:DeleteRepository",
+        "ecr:DescribeRepositories",
+        "ecr:PutLifecyclePolicy",
+        "ecr:GetLifecyclePolicy",
+        "ecr:DeleteLifecyclePolicy",
+        "ecr:PutImageScanningConfiguration",
+        "ecr:PutImageTagMutability",
+        "ecr:TagResource",
+        "ecr:UntagResource",
+        "ecr:ListTagsForResource",
+        "ecr:GetAuthorizationToken",
+        "ecr:BatchCheckLayerAvailability",
+        "ecr:GetDownloadUrlForLayer",
+        "ecr:BatchGetImage",
+        "ecr:InitiateLayerUpload",
+        "ecr:UploadLayerPart",
+        "ecr:CompleteLayerUpload",
+        "ecr:PutImage"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "TerraformECSPermissions",
+      "Effect": "Allow",
+      "Action": [
+        "ecs:CreateCluster",
+        "ecs:DeleteCluster",
+        "ecs:DescribeClusters",
+        "ecs:ListClusters",
+        "ecs:CreateService",
+        "ecs:DeleteService",
+        "ecs:DescribeServices",
+        "ecs:UpdateService",
+        "ecs:RegisterTaskDefinition",
+        "ecs:DeregisterTaskDefinition",
+        "ecs:DescribeTaskDefinition",
+        "ecs:ListServices",
+        "ecs:DescribeTasks",
+        "ecs:ListTasks",
+        "ecs:TagResource",
+        "ecs:UntagResource",
+        "ecs:ListTagsForResource"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "TerraformApplicationAutoScalingPermissions",
+      "Effect": "Allow",
+      "Action": [
+        "application-autoscaling:RegisterScalableTarget",
+        "application-autoscaling:DeregisterScalableTarget",
+        "application-autoscaling:DescribeScalableTargets",
+        "application-autoscaling:PutScalingPolicy",
+        "application-autoscaling:DeleteScalingPolicy",
+        "application-autoscaling:DescribeScalingPolicies",
+        "application-autoscaling:DescribeScalingActivities",
+        "application-autoscaling:TagResource",
+        "application-autoscaling:UntagResource",
+        "application-autoscaling:ListTagsForResource"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "TerraformSSMParameterStorePermissions",
+      "Effect": "Allow",
+      "Action": [
+        "ssm:PutParameter",
+        "ssm:GetParameter",
+        "ssm:GetParameters",
+        "ssm:DeleteParameter",
+        "ssm:DescribeParameters",
+        "ssm:AddTagsToResource",
+        "ssm:RemoveTagsFromResource",
+        "ssm:ListTagsForResource"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "TerraformCloudWatchLogsPermissions",
+      "Effect": "Allow",
+      "Action": [
+        "logs:CreateLogGroup",
+        "logs:DeleteLogGroup",
+        "logs:DescribeLogGroups",
+        "logs:DescribeLogStreams",
+        "logs:GetLogEvents",
+        "logs:FilterLogEvents",
+        "logs:PutRetentionPolicy",
+        "logs:TagResource",
+        "logs:UntagResource",
+        "logs:ListTagsForResource"
+      ],
+      "Resource": "*"
+    }
+  ]
+} 

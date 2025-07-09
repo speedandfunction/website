@@ -2,6 +2,10 @@
 .git
 .gitignore
 
+# Submodules (not needed in container)
+.cursor/
+website-pages/
+
 # Node.js dependencies
 node_modules
 coverage
