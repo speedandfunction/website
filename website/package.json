@@ -11,11 +11,7 @@
     "test": "jest",
     "test:coverage": "jest --coverage",
     "lint": "eslint .",
-    "lint:pr-script": "eslint ../scripts/merged-prs-last-24h.js --no-eslintrc --env node --parser-options=ecmaVersion:2022",
-    "format": "prettier --write '**/**/*.{js,jsx,ts,tsx,json,css,md}'",
-    "format:pr-script": "prettier --write ../scripts/merged-prs-last-24h.js",
-    "migrate:db": "node scripts/mongo-migrate.js",
-    "migrate:db:help": "node scripts/mongo-migrate.js --help"
+    "format": "prettier --write '**/**/*.{js,jsx,ts,tsx,json,css,md}'"
   },
   "nodemonConfig": {
     "delay": 1000,
