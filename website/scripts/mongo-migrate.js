@@ -9,13 +9,13 @@ const parseArguments = () => {
   const args = process.argv.slice(2);
   const options = {};
   
-  args.forEach(arg => {
+  for (const arg of args) {
     if (arg.startsWith('--env=')) options.envPath = arg.split('=')[1];
     else if (arg === '--help' || arg === '-h') options.help = true;
     else if (arg === '--dry-run') options.dryRun = true;
     else if (arg === '--verbose' || arg === '-v') options.verbose = true;
     else if (arg.startsWith('--')) throw new Error(`Unknown argument: ${arg}`);
-  });
+  }
   
   return options;
 };
