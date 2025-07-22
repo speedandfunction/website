@@ -179,5 +179,11 @@ module.exports = {
         'node/no-unpublished-import': 'off',
       },
     },
+    {
+      files: ['scripts/s3-copy.js'],
+      rules: {
+        'max-lines': 'off',
+      },
+    },
   ],
 };

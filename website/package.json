@@ -13,7 +13,9 @@
     "lint": "eslint .",
     "lint:pr-script": "eslint ../scripts/merged-prs-last-24h.js --no-eslintrc --env node --parser-options=ecmaVersion:2022",
     "format": "prettier --write '**/**/*.{js,jsx,ts,tsx,json,css,md}'",
-    "format:pr-script": "prettier --write ../scripts/merged-prs-last-24h.js"
+    "format:pr-script": "prettier --write ../scripts/merged-prs-last-24h.js",
+    "migrate:db": "node scripts/mongo-migrate.js",
+    "migrate:db:help": "node scripts/mongo-migrate.js --help"
   },
   "nodemonConfig": {
     "delay": 1000,
@@ -40,6 +42,7 @@
   "dependencies": {
     "@apostrophecms/form": "^1.4.2",
     "@apostrophecms/import-export": "^3.2.0",
+    "@aws-sdk/client-s3": "^3.850.0",
     "@barba/core": "^2.10.3",
     "abort-controller": "^3.0.0",
     "apostrophe": "^4.17.0",
@@ -51,8 +54,8 @@
     "jest-environment-jsdom": "^30.0.0-beta.3",
     "lodash": "^4.17.21",
     "lozad": "^1.16.0",
-    "node-fetch": "^2.6.7",
     "mongodb": "^6.17.0",
+    "node-fetch": "^2.6.7",
     "normalize.css": "^8.0.1",
     "postmark": "^4.0.5",
     "swiper": "^11.2.6",
