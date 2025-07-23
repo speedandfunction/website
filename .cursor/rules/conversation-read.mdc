@@ -1,0 +1,76 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Handle Pull Request Comments
+
+## Purpose
+This workflow analyzes pull request comments against the current codebase to identify which comments are still relevant and need to be addressed.
+
+## Process
+
+1. Get PR Number: `npx tsx scripts/get-pr-number.ts`
+2. Fetch PR Comments: `npx tsx scripts/list-pr-conversations.ts <PR_NUMBER>`
+3. Analyze Comments
+For each comment retrieved:
+- Review the comment content
+- Check if the mentioned code/issue still relevant in the current codebase
+- Categorize as:
+  - **RELEVANT**: The issue or suggestion mentioned still applies (even if code moved to different location)
+  - **OUTDATED**: The issue has been addressed or code has changed
+
+**Relevance is determined by the intent of the comment, not exact code location:**
+- If problematic pattern still exists anywhere → RELEVANT
+- If suggestion hasn't been implemented → RELEVANT  
+- If issue was fixed/refactored → OUTDATED
+- If code was removed entirely → OUTDATED
+
+### 4. Generate Report
+Create a detailed report that includes:
+- Summary of all comments analyzed
+- List of comments that are still relevant
+- if issue is still relevant, provide recommendation for addressing the comment
+- Any comments that need further investigation
+
+#### Edge Cases:
+- **Bot comments**: Treat bot comments (e.g., from copilot-pull-request-reviewer) the same as human comments
+- **Deleted files**: If a comment references a file that no longer exists, mark as OUTDATED
+- **Vague comments**: Comments without specific details (e.g., "this looks wrong") should be marked as RELEVANT
+- **Decision field**: Always leave the Decision field empty for the user to fill in later
+
+### 5. Save the analysis report to `./tmp/PR_CONVERSATIONS.md`, Use the following structure:
+
+```markdown
+# All Conversations for PR #4:
+
+## ❌ OUTDATED (Fixed by previous changes):
+
+### **<relative path to file>:<line>** 
+Id: <conversation id>
+Author: <the author of a comment>
+Description: <once sentence up to 40 words what actually this comment about>
+----
+<Full text of original comment>
+----
+Status: <RELEVANT>:<Explanation why this is relevant>
+
+## ✅ STILL RELEVANT (Need to be fixed):
+
+### **<relative path to file>:<line>** 
+Id: <conversation id>
+Author: <the author of a comment>
+Description: <once sentence up to 40 words what actually this comment about>
+----
+<Full text of original comment>
+----
+Status: <RELEVANT>:<Explanation why this is relevant>
+Recommendation: <Recommendation whether this issue needs to be processed or ignored>
+Decision: 
+
+```
+
+## Important Notes
+- The `list-pr-comments.ts` script outputs JSON to console for programmatic processing
+- Each comment includes: file, line, author, body, createdAt, outdated, resolved, diffHunk, and url
+- Comments are automatically sorted by creation date

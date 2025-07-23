@@ -1,0 +1,166 @@
+# Process Pull Request Comments
+
+## Purpose
+This workflow processes analyzed pull request comments from `./tmp/PR_CONVERSATIONS.md` and executes actions based on the Decision field for each relevant comment.
+
+## Prerequisites
+- Analysis file exists at: `./tmp/PR_CONVERSATIONS.md`
+- Scripts available: `scripts/resolve-pr-conversation.js`
+- GitHub CLI configured for issue creation
+
+## Process Flow
+
+### 1. Read Analysis File
+- Load `./tmp/PR_CONVERSATIONS.md` 
+- Parse all comments into structured data
+- Extract fields: Id, Status, Decision, Comment Body, PR Number, etc.
+
+### 2. Process Each Conversation
+
+#### Step 2.1: Check Id Field
+- **If Id = "Local"**: Skip to next conversation (no resolution needed - created by local tool)
+- **Otherwise**: Continue to Step 2.2
+
+#### Step 2.2: Check Status Field
+- **If Status = "OUTDATED"**: 
+  - Execute: `node scripts/resolve-pr-conversation.js CONVERSATION_ID "Marked as outdated"`
+  - Skip to next conversation
+- **Otherwise**: Continue to Step 2.3
+
+#### Step 2.3: Process Based on Decision Field
+
+| Decision Value | Action | Resolution Comment |
+|----------------|--------|-------------------|
+| IGNORE or Empty | Skip to next conversation | N/A |
+| RESOLVE | Mark as resolved only | "Acknowledged and resolved" |
+| PROCESS or FIX | 1. Apply fix using common rules<br>2. Mark as resolved | "Fixed: [7-15 word description of what was done]" |
+| Create Issue or Fix later | 1. Create GitHub issue<br>2. Add links (PR ↔ Issue)<br>3. Mark as resolved | "Created issue #[number] for future fix" |
+
+### 3. Resolution Command Format
+```bash
+node scripts/resolve-pr-conversation.js CONVERSATION_ID "Your comment here"
+```
+
+## Visual Process Diagrams
+
+### Main Process Flow Diagram
+```mermaid
+flowchart TD
+    Start([Start: Process PR Comments]) --> ReadFile[Read ./tmp/PR_CONVERSATIONS.md]
+    ReadFile --> ParseComments[Parse Comments into Structured Data]
+    ParseComments --> StartLoop{For Each Conversation}
+    
+    StartLoop --> CheckId{Is Id = Local?}
+    CheckId -->|Yes| NextConv[Skip to Next Conversation]
+    CheckId -->|No| CheckStatus{Is Status = OUTDATED?}
+    
+    CheckStatus -->|Yes| ResolveOutdated[Execute: resolve-pr-conversation.js<br/>with 'Marked as outdated']
+    ResolveOutdated --> NextConv
+    
+    CheckStatus -->|No| CheckDecision{Check Decision Field}
+    
+    CheckDecision -->|IGNORE or Empty| NextConv
+    CheckDecision -->|RESOLVE| ResolveOnly[Mark as Resolved<br/>Comment: 'Acknowledged and resolved']
+    CheckDecision -->|PROCESS or FIX| ProcessFix[1. Apply Fix Using Common Rules<br/>2. Mark as Resolved<br/>Comment: 'Fixed: 7-15 word description']
+    CheckDecision -->|Create Issue or<br/>Fix later| CreateIssue[1. Create GitHub Issue<br/>2. Add PR-Issue Links<br/>3. Mark as Resolved<br/>Comment: 'Created issue #number for future fix']
+    
+    ResolveOnly --> NextConv
+    ProcessFix --> NextConv
+    CreateIssue --> NextConv
+    
+    NextConv --> MoreConv{More Conversations?}
+    MoreConv -->|Yes| StartLoop
+    MoreConv -->|No| End([End])
+    
+    %% Styling
+    classDef decision fill:#f9f,stroke:#333,stroke-width:2px
+    classDef action fill:#bbf,stroke:#333,stroke-width:2px
+    classDef terminal fill:#9f9,stroke:#333,stroke-width:2px
+    
+    class CheckId,CheckStatus,CheckDecision,StartLoop,MoreConv decision
+    class ReadFile,ParseComments,ResolveOutdated,ResolveOnly,ProcessFix,CreateIssue,NextConv action
+    class Start,End terminal
+```
+
+### Common Rules Application Diagram (For PROCESS/FIX Decision)
+```mermaid
+flowchart LR
+    subgraph ProcessFix[Process/Fix Workflow]
+        direction TB
+        Start2([Decision = PROCESS/FIX]) --> ApplyRules[Apply Common Rules]
+        
+        ApplyRules --> Rule1[no-apologies-rule:<br/>Remove any apologies]
+        ApplyRules --> Rule2[no-summaries-rule:<br/>Don't summarize changes]
+        ApplyRules --> Rule3[no-unnecessary-confirmations-rule:<br/>Don't ask for confirmation]
+        ApplyRules --> Rule4[no-unnecessary-updates-rule:<br/>Only make needed changes]
+        ApplyRules --> Rule5[preserve-existing-code-rule:<br/>Keep unrelated code intact]
+        
+        Rule1 --> ImplementFix[Implement the Fix]
+        Rule2 --> ImplementFix
+        Rule3 --> ImplementFix
+        Rule4 --> ImplementFix
+        Rule5 --> ImplementFix
+        
+        ImplementFix --> CreateComment[Create 7-15 Word Summary<br/>of What Was Fixed]
+        CreateComment --> ResolveConv[Execute: resolve-pr-conversation.js<br/>CONVERSATION_ID 'Fixed: summary']
+    end
+    
+    %% Styling
+    classDef rules fill:#ffd,stroke:#333,stroke-width:2px
+    classDef process fill:#ddf,stroke:#333,stroke-width:2px
+    
+    class Rule1,Rule2,Rule3,Rule4,Rule5 rules
+    class ApplyRules,ImplementFix,CreateComment,ResolveConv process
+```
+
+## Comment Guidelines
+- Rephrase comments to fix English grammar
+- Keep original wording/intent
+- For processed/fixed items: Create concise 7-15 word summary of action taken
+- Be specific about what was changed or fixed
+
+## Error Handling
+- If conversation ID not found: Log and continue
+- If GitHub issue creation fails: Log error, mark conversation with error note
+- If resolution script fails: Retry once, then log failure
+
+## Common Rules Reference
+When Decision = PROCESS or FIX, apply these rules:
+- no-apologies-rule
+- no-summaries-rule
+- no-unnecessary-confirmations-rule
+- no-unnecessary-updates-rule
+- preserve-existing-code-rule
+
+## Quick Reference Flowchart
+
+### Main Process Flow
+1. Read `./tmp/PR_CONVERSATIONS.md`
+2. For each conversation:
+   - Local? → Skip
+   - OUTDATED? → Resolve with "Marked as outdated"
+   - Decision:
+     - IGNORE/Empty → Skip
+     - RESOLVE → Resolve with "Acknowledged and resolved"
+     - PROCESS/FIX → Apply fix, resolve with action summary
+     - Create Issue/Fix later → Create issue, add links, resolve
+
+### Resolution Command
+```bash
+node scripts/resolve-pr-conversation.js CONVERSATION_ID "Your comment"
+```
+
+### Decision Matrix
+| Decision | Action Required | Resolution Comment Template |
+|----------|----------------|---------------------------|
+| Local ID | None (Skip) | N/A |
+| OUTDATED | Resolve only | "Marked as outdated" |
+| IGNORE | None (Skip) | N/A |
+| Empty | None (Skip) | N/A |
+| RESOLVE | Resolve only | "Acknowledged and resolved" |
+| PROCESS | Fix + Resolve | "Fixed: [specific action taken]" |
+| FIX | Fix + Resolve | "Fixed: [specific action taken]" |
+| Create Issue | Issue + Resolve | "Created issue #[num] for future fix" |
+| Fix later | Issue + Resolve | "Created issue #[num] for future fix" |
+
+
