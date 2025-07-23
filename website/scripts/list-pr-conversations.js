@@ -14,7 +14,7 @@ function getPRNumber() {
 function buildGraphQLQuery() {
   return `
     query($prNumber: Int!) {
-      repository(owner: "ondatra-ai", name: "flow-test") {
+      repository(owner: "speedandfunction", name: "website") {
         pullRequest(number: $prNumber) {
           reviewThreads(first: 100) {
             nodes {

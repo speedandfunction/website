@@ -144,3 +144,4 @@ website/public/apos-frontend
 dump.archive
 .prettierrc
 aposUsersSafe.json
+tmp

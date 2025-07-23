@@ -15,8 +15,11 @@ const getEnvPath = () => {
   return path.resolve(envArg || path.join(__dirname, '..', '.env'));
 };
 
+const envPath = getEnvPath();
+require('dotenv').config({ path: envPath });
+
 const config = {
-  envPath: getEnvPath(),
+  envPath,
   get buckets() {
     return {
       source: process.env.S3_SOURCE_BUCKET,
@@ -24,22 +27,30 @@ const config = {
     };
   },
   get credentials() {
+    const validateCredentials = (creds, type) => {
+      if (!creds.accessKeyId || !creds.secretAccessKey) {
+        throw new Error(`Missing AWS ${type} credentials`);
+      }
+      if (creds.accessKeyId.length < 16 || creds.secretAccessKey.length < 20) {
+        throw new Error(`Invalid AWS ${type} credential format`);
+      }
+      return creds;
+    };
+
     return {
-      source: {
+      source: validateCredentials({
         region: process.env.AWS_SOURCE_REGION || 'us-east-1',
         accessKeyId: process.env.AWS_SOURCE_ACCESS_KEY_ID,
         secretAccessKey: process.env.AWS_SOURCE_SECRET_ACCESS_KEY,
-      },
-      dest: {
+      }, 'source'),
+      dest: validateCredentials({
         region: process.env.AWS_DEST_REGION || 'us-east-1',
         accessKeyId: process.env.AWS_DEST_ACCESS_KEY_ID,
         secretAccessKey: process.env.AWS_DEST_SECRET_ACCESS_KEY,
-      },
+      }, 'destination'),
     };
   },
 };
-
-require('dotenv').config({ path: config.envPath });
 
 /*
  * Configuration constants
