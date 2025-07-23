@@ -83,11 +83,11 @@ function getPRComments(prNumber) {
     const conversations = parseConversations(data);
 
     // Sort by creation date of first comment in each conversation
-    conversations.sort((a, b) => {
-      const aFirstComment = a.comments[0]?.createdAt || '';
-      const bFirstComment = b.comments[0]?.createdAt || '';
+    conversations.sort((conversationA, conversationB) => {
+      const firstCommentA = conversationA.comments[0]?.createdAt || '';
+      const firstCommentB = conversationB.comments[0]?.createdAt || '';
       return (
-        new Date(aFirstComment).getTime() - new Date(bFirstComment).getTime()
+        new Date(firstCommentA).getTime() - new Date(firstCommentB).getTime()
       );
     });
 

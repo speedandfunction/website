@@ -13,7 +13,7 @@ function addCommentToThread(threadId, comment) {
     const query = `mutation {
       addPullRequestReviewThreadReply(input: {
         pullRequestReviewThreadId: "${threadId}",
-        body: "${comment.replace(/\\/g, '\\\\').replace(/"/g, '\\"').replace(/\n/g, '\\n')}"
+        body: "${comment.replace(/\\/gu, '\\\\').replace(/"/gu, '\\"').replace(/\n/gu, '\\n')}"
       }) {
         comment {
           id
@@ -96,8 +96,12 @@ function resolveConversation(conversationId, comment) {
       const { thread } = response.data.resolveReviewThread;
       // eslint-disable-next-line no-console
       console.log(`✅ Successfully resolved conversation ${thread.id}`);
-      // eslint-disable-next-line no-console
-      console.log(`Status: ${thread.isResolved ? 'Resolved' : 'Not resolved'}`);
+
+      let status = 'Not resolved';
+      if (thread.isResolved) {
+        status = 'Resolved';
+      }
+      console.log(`Status: ${status}`);
     } else if (response.errors) {
       // eslint-disable-next-line no-console
       console.error('❌ GitHub API errors:');
@@ -119,8 +123,7 @@ function resolveConversation(conversationId, comment) {
 }
 
 // Get conversationId and optional comment from command line arguments
-const conversationId = process.argv[2];
-const comment = process.argv[3];
+const [, , conversationId, comment] = process.argv;
 
 // Call the function and handle it properly
 try {

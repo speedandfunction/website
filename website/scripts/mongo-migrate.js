@@ -9,8 +9,10 @@ const parseArguments = () => {
   const options = {};
 
   for (const arg of args) {
-    if (arg.startsWith('--env=')) options.envPath = arg.split('=')[1];
-    else if (arg === '--help' || arg === '-h') options.help = true;
+    if (arg.startsWith('--env=')) {
+      const [, envPath] = arg.split('=');
+      options.envPath = envPath;
+    } else if (arg === '--help' || arg === '-h') options.help = true;
     else if (arg === '--dry-run') options.dryRun = true;
     else if (arg === '--verbose' || arg === '-v') options.verbose = true;
     else if (arg.startsWith('--')) throw new Error(`Unknown argument: ${arg}`);
@@ -140,7 +142,7 @@ const copyIndexes = async (sourceCol, targetCol, name, verbose) => {
 
   for (const index of customIndexes) {
     try {
-      const { v, ns, ...indexSpec } = index;
+      const { v: _version, ns: _namespace, ...indexSpec } = index;
       await targetCol.createIndex(indexSpec.key, indexSpec);
 
       if (verbose) console.log(`   📇 ${name}: Created index "${index.name}"`);
@@ -160,9 +162,11 @@ const verifyMigration = async (sourceDb, targetDb, collections, verbose) => {
       const match = sourceCount === targetCount;
 
       if (verbose || !match) {
-        console.log(
-          `   ${match ? '✅' : '❌'} ${name}: ${sourceCount} → ${targetCount}`,
-        );
+        let status = '❌';
+        if (match) {
+          status = '✅';
+        }
+        console.log(`   ${status} ${name}: ${sourceCount} → ${targetCount}`);
       }
 
       return { name, match };
@@ -256,7 +260,6 @@ const migrate = async (options) => {
       console.log('\n❌ Verification failed');
       process.exit(1);
     }
-
   } finally {
     await sourceClient.close();
     await targetClient.close();

@@ -38,16 +38,22 @@ const config = {
     };
 
     return {
-      source: validateCredentials({
-        region: process.env.AWS_SOURCE_REGION || 'us-east-1',
-        accessKeyId: process.env.AWS_SOURCE_ACCESS_KEY_ID,
-        secretAccessKey: process.env.AWS_SOURCE_SECRET_ACCESS_KEY,
-      }, 'source'),
-      dest: validateCredentials({
-        region: process.env.AWS_DEST_REGION || 'us-east-1',
-        accessKeyId: process.env.AWS_DEST_ACCESS_KEY_ID,
-        secretAccessKey: process.env.AWS_DEST_SECRET_ACCESS_KEY,
-      }, 'destination'),
+      source: validateCredentials(
+        {
+          region: process.env.AWS_SOURCE_REGION || 'us-east-1',
+          accessKeyId: process.env.AWS_SOURCE_ACCESS_KEY_ID,
+          secretAccessKey: process.env.AWS_SOURCE_SECRET_ACCESS_KEY,
+        },
+        'source',
+      ),
+      dest: validateCredentials(
+        {
+          region: process.env.AWS_DEST_REGION || 'us-east-1',
+          accessKeyId: process.env.AWS_DEST_ACCESS_KEY_ID,
+          secretAccessKey: process.env.AWS_DEST_SECRET_ACCESS_KEY,
+        },
+        'destination',
+      ),
     };
   },
 };
