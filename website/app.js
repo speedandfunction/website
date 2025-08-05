@@ -3,15 +3,21 @@ require('dotenv').config({ path: '../.env' });
 const { getEnv } = require('./utils/env');
 
 function createAposConfig() {
+  const isProduction = process.env.NODE_ENV === 'production';
+  const baseUrl = getEnv('BASE_URL') || (isProduction ? 'https://speedandfunction.com' : 'http://localhost:3000');
+  
   return {
     shortName: 'apostrophe-site',
-    baseUrl: getEnv('BASE_URL'),
-
+    baseUrl: baseUrl,
+    
     // Session configuration
     modules: {
       // Core modules configuration
       '@apostrophecms/express': {
         options: {
+          // Trust proxy for Railway deployment
+          trustProxy: true,
+          
           session: {
             // If using Redis (recommended for production)
             secret: getEnv('SESSION_SECRET'),
@@ -21,20 +27,70 @@ function createAposConfig() {
                 url: getEnv('REDIS_URI'),
               },
             },
+            cookie: {
+              // Set domain for production to work with custom domain
+              domain: isProduction ? '.speedandfunction.com' : undefined,
+              secure: isProduction,
+              sameSite: 'lax',
+              httpOnly: true,
+              maxAge: 24 * 60 * 60 * 1000, // 24 hours
+            },
           },
+          
           csrf: {
             cookie: {
               key: '_csrf',
               path: '/',
               httpOnly: true,
-              secure: process.env.NODE_ENV === 'production',
+              secure: isProduction,
               sameSite: 'lax',
               maxAge: 3600,
+              // CRITICAL: Set domain for CSRF cookie to work with custom domain
+              domain: isProduction ? '.speedandfunction.com' : undefined,
             },
+            // Additional CSRF options for better security
+            ignoreMethods: ['GET', 'HEAD', 'OPTIONS'],
+            value: (req) => {
+              return req.body && req.body._csrf ||
+                     req.query && req.query._csrf ||
+                     req.headers['x-csrf-token'] ||
+                     req.headers['x-xsrf-token'] ||
+                     req.headers['csrf-token'];
+            }
           },
+          
+          // Add middleware to handle domain-specific headers
+          middleware: [
+            {
+              before: '@apostrophecms/csrf',
+              middleware: (req, res, next) => {
+                // Ensure proper headers for custom domain
+                if (req.hostname === 'speedandfunction.com' || req.get('host') === 'speedandfunction.com') {
+                  req.headers['x-forwarded-host'] = 'speedandfunction.com';
+                  req.headers['x-forwarded-proto'] = 'https';
+                }
+                
+                // Set CORS headers for API requests
+                const allowedOrigins = [
+                  'https://speedandfunction.com',
+                  'https://apostrophe-cms-production.up.railway.app'
+                ];
+                
+                const origin = req.headers.origin;
+                if (allowedOrigins.includes(origin)) {
+                  res.setHeader('Access-Control-Allow-Origin', origin);
+                  res.setHeader('Access-Control-Allow-Credentials', 'true');
+                  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+                  res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization, X-CSRF-Token, X-XSRF-TOKEN');
+                }
+                
+                next();
+              }
+            }
+          ]
         },
       },
-
+      
       // Make getEnv function available to templates
       '@apostrophecms/template': {
         options: {
@@ -43,13 +99,13 @@ function createAposConfig() {
           },
         },
       },
-
+      
       // Add global data module
       'global-data': {},
-
+      
       // Shared constants module
       '@apostrophecms/shared-constants': {},
-
+      
       // Configure page types
       '@apostrophecms/rich-text-widget': {},
       '@apostrophecms/image-widget': {
@@ -63,7 +119,7 @@ function createAposConfig() {
           className: 'bp-video-widget',
         },
       },
-
+      
       // Custom Widgets
       'home-hero-widget': {},
       'default-hero-widget': {},
@@ -79,11 +135,7 @@ function createAposConfig() {
       'contact-widget': {},
       'page-intro-widget': {},
       'whitespace-widget': {},
-      /*
-       * 'links-buttons-widget': {},
-       * 'team-carousel-widget': {},
-       */
-
+      
       // The main form module
       '@apostrophecms/form': {},
       // The form widget module, allowing editors to add forms to content areas
@@ -92,13 +144,14 @@ function createAposConfig() {
       '@apostrophecms/form-text-field-widget': {},
       '@apostrophecms/form-textarea-field-widget': {},
       '@apostrophecms/form-checkboxes-field-widget': {},
-
+      
       // Custom Pieces
       'team-members': {},
       'testimonials': {},
-
+      
       // `asset` supports the project"s webpack build for client-side assets.
       'asset': {},
+      
       // The project"s first custom page type.
       'default-page': {},
       '@apostrophecms/import-export': {},
@@ -121,4 +174,5 @@ function createAposConfig() {
 if (require.main === module) {
   apostrophe(createAposConfig());
 }
+
 module.exports = { createAposConfig };
