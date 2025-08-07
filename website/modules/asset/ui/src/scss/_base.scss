@@ -177,3 +177,12 @@
 .breadcrumb-link:hover {
   text-decoration: underline;
 }
+
+#page-main_content.loading {
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+#page-main_content.loaded {
+  opacity: 1;
+}

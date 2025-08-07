@@ -6,7 +6,9 @@ main %}
   data-default-visible-tags="{{ data.defaultVisibleTagsCount }}"
 >
   <div class="cs_content">
-    <div class="page-main_content">{% area data.page, 'main' %}</div>
+    <div class="page-main_content loading" id="page-main_content">
+      {% area data.page, 'main' %}
+    </div>
 
     <div id="filter" class="filter-anchor"></div>
 
@@ -294,6 +296,17 @@ main %}
 
 <script>
   window.totalPages = {{ data.totalPages | json }};
+</script>
+<script>
+  const container = document.getElementById('page-main_content');
+
+  if (container) {
+    window.addEventListener('load', () => {
+      console.log('Page loaded, updating class…');
+      container.classList.remove('loading');
+      container.classList.add('loaded');
+    });
+  }
 </script>
 <script src="/js/modules/case-studies-page/infinite-scroll.js"></script>
 
