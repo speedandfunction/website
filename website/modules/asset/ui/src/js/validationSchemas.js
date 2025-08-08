@@ -1,3 +1,4 @@
+const { formatPhoneNumber } = require('./phoneFormat');
 const {
   STANDARD_FORM_FIELD_NAMES,
 } = require('../../../../@apostrophecms/shared-constants/ui/src/index');
@@ -34,37 +35,15 @@ const fieldSpecificSchemas = {
   [STANDARD_FORM_FIELD_NAMES.PHONE_NUMBER]: yup
     .string()
     .required('Phone number is required')
-    .max(20, 'Phone number is too long')
-    .test(
-      'phone-format',
-      'Enter a valid phone number (e.g., +1 (234) 567-8900)',
-      (value) => {
-        if (!value) return false;
+    .min(10, 'Phone number is too short')
+    .max(19, 'Phone number is too long')
+    .test('phone-format', 'Enter a valid phone number', (value) => {
+      if (!value) return false;
+      if (/[A-Za-z]/u.test(value)) return false;
 
-        // First check for letters - reject immediately if found
-        if (/[A-Za-z]/u.test(value)) return false;
-
-        // Remove all non-digit characters except leading +
-        const digits = value.replace(/\D/gu, '');
-
-        // Check for minimum length (10 digits typical for phone numbers)
-        if (digits.length < 10) return false;
-
-        // International format: +1 (234) 567-8900 or +1 234 567 8900 or +1.234.567.8900
-        const internationalPattern =
-          /^\+?\d{1,3}[\s.-]?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/u;
-        // Local format: (234) 567-8900 or 234 567 8900
-        const localPattern = /^\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/u;
-
-        // If it starts with +, it must match international pattern
-        if (value.startsWith('+')) {
-          return internationalPattern.test(value);
-        }
-
-        // Otherwise check both patterns
-        return internationalPattern.test(value) || localPattern.test(value);
-      },
-    ),
+      const formatted = formatPhoneNumber(value);
+      return Boolean(formatted);
+    }),
 
   'g-recaptcha-response': yup
     .string()
