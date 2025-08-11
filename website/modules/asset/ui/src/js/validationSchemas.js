@@ -37,7 +37,6 @@ const fieldSpecificSchemas = {
     .trim()
     .required('Phone number is required')
     .test('phone-format', 'Enter a valid phone number', (value, context) => {
-      if (!value) return false;
       if (/[A-Za-z]/u.test(value)) return false;
 
       // Check digit length after removing non-digit characters
