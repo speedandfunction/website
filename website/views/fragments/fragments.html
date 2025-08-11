@@ -28,8 +28,35 @@
   </div>
 </header>
 {% endfragment %} {% fragment footer() %}
-<footer class="sf-container">
-  <p class="sf-copy">&#169; {{ data.currentYear or '2025' }} S&F</p>
+<footer class="sf-footer">
+  <div class="sf-footer__content">
+    <div class="sf-footer__top">
+      <p class="sf-footer__tagline">A Deliberately Developmental Organization.</p>
+      <p class="sf-footer__tagline">Built by real people, for real impact. Let's grow something meaningful together.</p>
+    </div>
+    
+    <div class="sf-footer__links">
+      <div class="sf-footer__links-group">
+        <a href="https://www.linkedin.com/company/speed-and-function/" 
+           class="sf-footer__links-item" 
+           target="_blank" 
+           rel="noopener noreferrer">
+          linkedin
+        </a>
+        <a href="mailto:connect@speedandfunction.com" 
+           class="sf-footer__links-item">
+          connect@speedandfunction.com
+        </a>
+      </div>
+      <a href="/privacy-policy" class="sf-footer__links-item">
+        privacy policy
+      </a>
+    </div>
+    
+    <div class="sf-footer__bottom">
+      <p class="sf-copy">&#169; {{ data.currentYear or '2025' }} S&F</p>
+    </div>
+  </div>
 </footer>
 {% endfragment %} {% fragment breadcrumbs() %} {% if data.page._url !=
 data.home._url %}

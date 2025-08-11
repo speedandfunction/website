@@ -1,12 +1,91 @@
+.sf-footer {
+  background-color: $white;
+  margin-top: auto;
+  
+  .sf-footer__content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 40px 16px;
+    
+    @include breakpoint-medium {
+      padding: 0 40px 24px;
+    }
+  }
+  
+  .sf-footer__top {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+  
+  .sf-footer__tagline {
+    font-size: $font-size-body-small-mobile;
+    font-weight: $font-weight-300;
+    color: $gray-300;
+    margin: 0;
+    line-height: 120%;
+  }
+  
+  .sf-footer__links {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    font-size: $font-size-body-small-mobile;
+    font-weight: $font-weight-300;
+    line-height: 120%;
+    
+    @include breakpoint-medium {
+      flex-direction: row;
+      justify-content: space-between;
+      gap: 32px;
+      text-align: left;
+    }
+  }
+  
+  .sf-footer__links-group {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    
+    @include breakpoint-medium {
+      flex-direction: row;
+      align-items: center;
+      gap: 32px;
+    }
+  }
+  
+  .sf-footer__links-item {
+    font-size: $font-size-body-small;
+    font-weight: $font-weight-normal;
+    color: $gray-500;
+    text-decoration: none;
+    transition: color 0.2s ease;
+    
+    &:hover,
+    &:focus {
+      color: $gray-400;
+      text-decoration: underline;
+    }
+  }
+  
+  .sf-footer__links > .sf-footer__links-item:last-child {
+    margin-top: 44px;
+    @include breakpoint-medium {
+      margin-top: 0;
+    }
+  }
+  
+  .sf-footer__bottom {
+    text-align: center;
+    padding-top: 32px;
+  }
+}
+
 .sf-copy {
   text-align: center;
   font-weight: $font-weight-medium;
   font-size: $font-size-body-small;
   line-height: 140%;
-  margin-top: 0;
-  margin-bottom: 10px;
+  margin: 0;
   color: $gray-300;
-  @include breakpoint-medium {
-    margin-bottom: 34px;
-  }
 }
