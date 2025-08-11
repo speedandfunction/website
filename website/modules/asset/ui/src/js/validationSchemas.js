@@ -34,12 +34,26 @@ const fieldSpecificSchemas = {
 
   [STANDARD_FORM_FIELD_NAMES.PHONE_NUMBER]: yup
     .string()
+    .trim()
     .required('Phone number is required')
-    .min(10, 'Phone number is too short')
-    .max(19, 'Phone number is too long')
-    .test('phone-format', 'Enter a valid phone number', (value) => {
+    .test('phone-format', 'Enter a valid phone number', (value, context) => {
       if (!value) return false;
       if (/[A-Za-z]/u.test(value)) return false;
+
+      // Check digit length after removing non-digit characters
+      const digits = value.replace(/\D/gu, '');
+      if (digits.length < 10) {
+        return context.createError({
+          path: context.path,
+          message: 'Phone number is too short',
+        });
+      }
+      if (digits.length > 15) {
+        return context.createError({
+          path: context.path,
+          message: 'Phone number is too long',
+        });
+      }
 
       const formatted = formatPhoneNumber(value);
       return Boolean(formatted);

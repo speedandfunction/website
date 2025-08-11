@@ -120,9 +120,9 @@ describe('Phone Number Schema', () => {
     );
   });
 
-  test('rejects invalid format', async () => {
+  test('rejects phone number with only letters', async () => {
     await expect(schema.validate('abc')).rejects.toThrow(
-      'Phone number is too short',
+      'Enter a valid phone number',
     );
   });
 
