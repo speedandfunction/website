@@ -120,6 +120,12 @@ module.exports = {
           },
         },
       },
+      // SEO fields
+      seoGoogleTagManager: {
+        label: 'Google Tag Manager ID',
+        type: 'string',
+        help: 'Enter your GTM container ID (e.g., GTM-XXXXXXX)'
+      },
     },
     group: {
       navs: {
@@ -129,6 +135,10 @@ module.exports = {
       footer: {
         label: 'Footer',
         fields: ['comAddress', 'footerLinks', 'socialMediaLinks', 'footerForm'],
+      },
+      seo: {
+        label: 'SEO & Analytics',
+        fields: ['seoGoogleTagManager'],
       },
     },
   },

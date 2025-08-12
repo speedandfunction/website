@@ -34,7 +34,19 @@ function createAposConfig() {
           },
         },
       },
-
+      // GTM setup and dependencies
+      '@apostrophecms/seo': {
+        options: {
+          googleTagManager: {
+            id: process.env.GOOGLE_TAG_MANAGER_ID
+          }
+        }
+      },
+      '@apostrophecms/global': {
+        options: {
+          seoGoogleTagManager: true
+        }
+      },
       // Make getEnv function available to templates
       '@apostrophecms/template': {
         options: {
