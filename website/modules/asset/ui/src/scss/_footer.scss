@@ -68,7 +68,7 @@
     }
   }
   
-  .sf-footer__links > .sf-footer__links-item:last-child {
+  .sf-footer__links-item--policy {
     margin-top: 44px;
     @include breakpoint-medium {
       margin-top: 0;
@@ -86,6 +86,12 @@
   font-weight: $font-weight-medium;
   font-size: $font-size-body-small;
   line-height: 140%;
-  margin: 0;
   color: $gray-300;
+}
+
+// Обмежити margin reset тільки в контексті футера для уникнення глобальних регресій
+.sf-footer {
+  .sf-copy {
+    margin: 0;
+  }
 }
