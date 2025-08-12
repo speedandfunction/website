@@ -42,11 +42,7 @@ function createAposConfig() {
           }
         }
       },
-      '@apostrophecms/global': {
-        options: {
-          seoGoogleTagManager: true
-        }
-      },
+      '@apostrophecms/global': {},
       // Make getEnv function available to templates
       '@apostrophecms/template': {
         options: {

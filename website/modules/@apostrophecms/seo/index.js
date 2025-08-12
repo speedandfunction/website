@@ -7,30 +7,34 @@ module.exports = {
     self.apos.template.prepend('head', '@apostrophecms/seo:metaHead');
   },
   components(self) {
+    // Resolve GTM ID from global override or module options
+    const resolveGtmId = req => {
+      const fromGlobal = req?.data?.global?.seoGoogleTagManager;
+      const fromOptions = self.options?.googleTagManager?.id;
+      return (String(fromGlobal || '').trim() || String(fromOptions || '').trim());
+    };
+
     return {
       async metaHead(req, data) {
-        // Meta tags and other SEO head elements
+        // Only on front-end page requests
+        if (!req?.data?.page) {
+          return {};
+        }
         return {};
       },
       async tagManagerBody(req, data) {
-        // GTM noscript tag for body
-        const global = req.data.global;
-        if (global && global.seoGoogleTagManager) {
-          return {
-            gtmId: global.seoGoogleTagManager
-          };
+        if (!req?.data?.page) {
+          return {};
         }
-        return {};
+        const gtmId = resolveGtmId(req);
+        return gtmId ? { gtmId } : {};
       },
       async tagManagerHead(req, data) {
-        // GTM script tag for head
-        const global = req.data.global;
-        if (global && global.seoGoogleTagManager) {
-          return {
-            gtmId: global.seoGoogleTagManager
-          };
+        if (!req?.data?.page) {
+          return {};
         }
-        return {};
+        const gtmId = resolveGtmId(req);
+        return gtmId ? { gtmId } : {};
       }
     };
   }
