@@ -124,7 +124,7 @@ module.exports = {
       seoGoogleTagManager: {
         label: 'Google Tag Manager ID',
         type: 'string',
-        help: 'Enter your GTM container ID (e.g., GTM-XXXXXXX)'
+        help: 'Enter your GTM container ID (e.g., GTM-XXXXXXX)',
       },
     },
     group: {

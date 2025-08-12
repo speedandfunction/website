@@ -38,9 +38,9 @@ function createAposConfig() {
       '@apostrophecms/seo': {
         options: {
           googleTagManager: {
-            id: process.env.GOOGLE_TAG_MANAGER_ID
-          }
-        }
+            id: process.env.GOOGLE_TAG_MANAGER_ID,
+          },
+        },
       },
       '@apostrophecms/global': {},
       // Make getEnv function available to templates

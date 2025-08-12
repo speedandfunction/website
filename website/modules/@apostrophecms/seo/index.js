@@ -8,34 +8,42 @@ module.exports = {
   },
   components(self) {
     // Resolve GTM ID from global override or module options
-    const resolveGtmId = req => {
+    const resolveGtmId = (req) => {
       const fromGlobal = req?.data?.global?.seoGoogleTagManager;
       const fromOptions = self.options?.googleTagManager?.id;
-      return (String(fromGlobal || '').trim() || String(fromOptions || '').trim());
+      return (
+        String(fromGlobal || '').trim() || String(fromOptions || '').trim()
+      );
     };
 
     return {
-      async metaHead(req, data) {
+      metaHead(req, data) {
         // Only on front-end page requests
         if (!req?.data?.page) {
           return {};
         }
         return {};
       },
-      async tagManagerBody(req, data) {
+      tagManagerBody(req, data) {
         if (!req?.data?.page) {
           return {};
         }
         const gtmId = resolveGtmId(req);
-        return gtmId ? { gtmId } : {};
+        if (gtmId) {
+          return { gtmId };
+        }
+        return {};
       },
-      async tagManagerHead(req, data) {
+      tagManagerHead(req, data) {
         if (!req?.data?.page) {
           return {};
         }
         const gtmId = resolveGtmId(req);
-        return gtmId ? { gtmId } : {};
-      }
+        if (gtmId) {
+          return { gtmId };
+        }
+        return {};
+      },
     };
-  }
+  },
 };
