@@ -73,7 +73,6 @@
         color: $gray-300;
         overflow: auto;
         height: 150px;
-
         @include font-settings(14px, 150%, 400);
       }
     }
