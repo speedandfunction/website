@@ -7,13 +7,24 @@ module.exports = {
     self.apos.template.prepend('head', '@apostrophecms/seo:metaHead');
   },
   components(self) {
-    // Resolve GTM ID from global override or module options
+    /*
+     * Resolve GTM ID from global override or module options
+     * Only allow valid GTM container IDs (e.g. “GTM-XXXX”)
+     */
+    const sanitizeGtmId = (id) => {
+      const value = String(id || '').trim();
+      if (/^gtm-[\da-z]+$/iu.test(value)) {
+        return value.toUpperCase();
+      }
+      return '';
+    };
     const resolveGtmId = (req) => {
       const fromGlobal = req?.data?.global?.seoGoogleTagManager;
       const fromOptions = self.options?.googleTagManager?.id;
-      return (
-        String(fromGlobal || '').trim() || String(fromOptions || '').trim()
-      );
+      const candidate =
+        (fromGlobal && String(fromGlobal).trim()) ||
+        (fromOptions && String(fromOptions).trim());
+      return sanitizeGtmId(candidate);
     };
 
     return {
