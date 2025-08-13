@@ -18,7 +18,7 @@
   }
   
   .sf-footer__tagline {
-    font-size: $font-size-body-small-mobile;
+    font-size: $font-size-footer-mobile;
     font-weight: $font-weight-300;
     color: $gray-300;
     margin: 0;
@@ -30,7 +30,7 @@
     flex-direction: column;
     align-items: flex-start;
     gap: 16px;
-    font-size: $font-size-body-small-mobile;
+    font-size: $font-size-footer-mobile;
     font-weight: $font-weight-300;
     line-height: 120%;
     
@@ -55,7 +55,7 @@
   }
   
   .sf-footer__links-item {
-    font-size: $font-size-body-small;
+    font-size: $font-size-footer-mobile;
     font-weight: $font-weight-normal;
     color: $gray-500;
     text-decoration: none;
@@ -84,7 +84,7 @@
 .sf-copy {
   text-align: center;
   font-weight: $font-weight-medium;
-  font-size: $font-size-body-small;
+  font-size: $font-size-body-medium-mobile;
   line-height: 140%;
   color: $gray-300;
 }
