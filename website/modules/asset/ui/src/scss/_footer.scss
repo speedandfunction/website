@@ -79,6 +79,10 @@
     text-align: center;
     padding-top: 32px;
   }
+  
+  .sf-copy {
+    margin: 0;
+  }
 }
 
 .sf-copy {
@@ -87,11 +91,4 @@
   font-size: $font-size-body-medium-mobile;
   line-height: 140%;
   color: $gray-300;
-}
-
-// Обмежити margin reset тільки в контексті футера для уникнення глобальних регресій
-.sf-footer {
-  .sf-copy {
-    margin: 0;
-  }
 }
