@@ -156,12 +156,6 @@ module.exports = {
       },
     },
     {
-      files: ['modules/@apostrophecms/seo/index.js'],
-      rules: {
-        'max-lines-per-function': 'off',
-      },
-    },
-    {
       files: ['modules/asset/ui/src/index.js'],
       rules: {
         'max-lines-per-function': 'off',

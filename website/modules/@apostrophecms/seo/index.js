@@ -8,8 +8,7 @@ module.exports = {
   },
   components(self) {
     /*
-     * Resolve GTM ID from global override or module options
-     * Only allow valid GTM container IDs (e.g. “GTM-XXXX”)
+     * Resolve GTM ID from global override or module options and validate it
      */
     const sanitizeGtmId = (id) => {
       const value = String(id || '').trim();
