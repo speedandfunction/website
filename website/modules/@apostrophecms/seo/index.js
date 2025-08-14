@@ -6,26 +6,15 @@ module.exports = {
       id: process.env.GOOGLE_TAG_MANAGER_ID,
     },
   },
-  init(self) {
-    /*
-     * SEO components are called directly from layout.html template
-     * No automatic injection needed to avoid duplication
-     */
-  },
+  // No init hook required (layout renders components explicitly).
   components(self) {
+    const getGtmId = (req) => gtmUtils.resolveGtmId(req, self.options);
     return {
-      metaHead(req, data) {
-        // Only on front-end page requests
-        if (!req?.data?.page) {
-          return {};
-        }
-        return {};
-      },
       tagManagerBody(req, data) {
         if (!req?.data?.page) {
           return {};
         }
-        const gtmId = gtmUtils.resolveGtmId(req, self.options);
+        const gtmId = getGtmId(req);
         if (gtmId) {
           return { gtmId };
         }
@@ -35,7 +24,7 @@ module.exports = {
         if (!req?.data?.page) {
           return {};
         }
-        const gtmId = gtmUtils.resolveGtmId(req, self.options);
+        const gtmId = getGtmId(req);
         if (gtmId) {
           return { gtmId };
         }
