@@ -1,12 +1,112 @@
+.sf-footer {
+  background-color: $white;
+  margin-top: auto;
+  
+  .sf-footer__content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-bottom: 16px;
+    
+    @include breakpoint-medium {
+      padding-bottom: 24px;
+    }
+  }
+  
+  .sf-footer__top {
+    text-align: center;
+    margin-bottom: 32px;
+    display: block;
+    @include breakpoint-medium {
+      display: block;
+      width: fit-content;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+  
+  .sf-footer__tagline {
+    font-size: $font-size-footer-mobile;
+    font-weight: $font-weight-300;
+    color: $gray-300;
+    margin: 0;
+    line-height: 120%;
+    display: block;
+    
+    &:first-child {
+      display: block;
+    }
+    
+    &:not(:first-child) {
+      display: block;
+      @include breakpoint-medium {
+        display: inline-block;
+      }
+    }
+  }
+  
+  .sf-footer__links {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    font-size: $font-size-footer-mobile;
+    font-weight: $font-weight-300;
+    line-height: 120%;
+    
+    @include breakpoint-medium {
+      flex-direction: row;
+      justify-content: space-between;
+      gap: 32px;
+      text-align: left;
+    }
+  }
+  
+  .sf-footer__links-group {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    
+    @include breakpoint-medium {
+      flex-direction: row;
+      align-items: center;
+      gap: 32px;
+    }
+  }
+  
+  .sf-footer__links-item {
+    font-size: $font-size-footer-mobile;
+    font-weight: $font-weight-normal;
+    color: $gray-500;
+    text-decoration: none;
+    transition: color 0.2s ease;
+    
+    &:hover,
+    &:focus {
+      color: $gray-400;
+      text-decoration: underline;
+    }
+  }
+  
+  .sf-footer__links-item--policy {
+    margin-top: 44px;
+    @include breakpoint-medium {
+      margin-top: 0;
+    }
+  }
+  
+  .sf-footer__bottom {
+    text-align: center;
+    padding-top: 32px;
+  }
+  
+  .sf-copy {
+    margin: 0;
+  }
+}
+
 .sf-copy {
   text-align: center;
   font-weight: $font-weight-medium;
-  font-size: $font-size-body-small;
+  font-size: $font-size-body-medium-mobile;
   line-height: 140%;
-  margin-top: 0;
-  margin-bottom: 10px;
   color: $gray-300;
-  @include breakpoint-medium {
-    margin-bottom: 34px;
-  }
 }
