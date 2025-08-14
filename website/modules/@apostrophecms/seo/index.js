@@ -1,3 +1,5 @@
+const gtmUtils = require('./lib/gtm-utils');
+
 module.exports = {
   improve: '@apostrophecms/seo',
   init(self) {
@@ -7,25 +9,6 @@ module.exports = {
     self.apos.template.prepend('head', '@apostrophecms/seo:metaHead');
   },
   components(self) {
-    /*
-     * Resolve GTM ID from global override or module options and validate it
-     */
-    const sanitizeGtmId = (id) => {
-      const value = String(id || '').trim();
-      if (/^gtm-[\da-z]+$/iu.test(value)) {
-        return value.toUpperCase();
-      }
-      return '';
-    };
-    const resolveGtmId = (req) => {
-      const fromGlobal = req?.data?.global?.seoGoogleTagManager;
-      const fromOptions = self.options?.googleTagManager?.id;
-      const candidate =
-        (fromGlobal && String(fromGlobal).trim()) ||
-        (fromOptions && String(fromOptions).trim());
-      return sanitizeGtmId(candidate);
-    };
-
     return {
       metaHead(req, data) {
         // Only on front-end page requests
@@ -38,7 +21,7 @@ module.exports = {
         if (!req?.data?.page) {
           return {};
         }
-        const gtmId = resolveGtmId(req);
+        const gtmId = gtmUtils.resolveGtmId(req, self.options);
         if (gtmId) {
           return { gtmId };
         }
@@ -48,7 +31,7 @@ module.exports = {
         if (!req?.data?.page) {
           return {};
         }
-        const gtmId = resolveGtmId(req);
+        const gtmId = gtmUtils.resolveGtmId(req, self.options);
         if (gtmId) {
           return { gtmId };
         }

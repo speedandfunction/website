@@ -14,9 +14,11 @@
 {# ✅ Add favicon in the <head> section #}
 {% block extraHead %}
   <link rel="icon" href="{{ apos.asset.url('/modules/asset/favicon/favicon.ico') }}" type="image/x-icon">
+  {{ customSeoGtmHead(data) }}
 {% endblock %}
 
 {% block beforeMain %}
+  {{ customSeoGtmBody(data) }}
   <a class="sr-only" href="#main">Skip to content</a>
   <div
     class="bp-wrapper relative"
