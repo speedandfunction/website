@@ -1,6 +1,11 @@
 const gtmUtils = require('./lib/gtm-utils');
 
 module.exports = {
+  options: {
+    googleTagManager: {
+      id: process.env.GOOGLE_TAG_MANAGER_ID,
+    },
+  },
   init(self) {
     // Ensure SEO components are injected into the template
     self.apos.template.prepend('body', '@apostrophecms/seo:tagManagerBody');
