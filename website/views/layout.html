@@ -1,24 +1,20 @@
-{# Automatically extends the right outer layout and also handles AJAX situations #}
-{% extends data.outerLayout %}
-{% import 'fragments/fragments.html' as fragments %}
-
-{% set title = data.piece.title or data.page.title %}
-
-{% block title %}
-  {{ title }}
-  {% if not title %}
-    {{ apos.log('Looks like you forgot to override the title block in a template that does not have access to an Apostrophe page or piece.') }}
-  {% endif %}
-{% endblock %}
-
-{# ✅ Add favicon in the <head> section #}
-{% block extraHead %}
-  <link rel="icon" href="{{ apos.asset.url('/modules/asset/favicon/favicon.ico') }}" type="image/x-icon">
-  {% component '@apostrophecms/seo:tagManagerHead' with data %}
-{% endblock %}
-
-{% block beforeMain %}
-  {% component '@apostrophecms/seo:tagManagerBody' with data %}
+{# Automatically extends the right outer layout and also handles AJAX situations
+#} {% extends data.outerLayout %} {% import 'fragments/fragments.html' as
+fragments %} {% set title = data.piece.title or data.page.title %} {% block
+title %} {{ title }} {% if not title %} {{ apos.log('Looks like you forgot to
+override the title block in a template that does not have access to an
+Apostrophe page or piece.') }} {% endif %} {% endblock %} {# ✅ Add favicon in
+the
+<head>
+  section #} {% block extraHead %}
+  <link
+    rel="icon"
+    href="{{ apos.asset.url('/modules/asset/favicon/favicon.ico') }}"
+    type="image/x-icon"
+  />
+  {% component '@apostrophecms/seo:tagManagerHead' with data %} {% endblock %}
+  {% block beforeMain %} {% component '@apostrophecms/seo:tagManagerBody' with
+  data %}
   <a class="sr-only" href="#main">Skip to content</a>
   <div
     class="bp-wrapper relative"
@@ -30,38 +26,43 @@
       class="bp-main"
       role="main"
       id="main"
-      {% if not data.user %}
-        data-barba="container"
-      {% endif %}
+      {%
+      if
+      not
+      data.user
+      %}
+      data-barba="container"
+      {%
+      endif
+      %}
     >
       {% render fragments.breadcrumbs() %}
-      <div class="sf-container hidden">
-{% endblock %}
-
-{% block main %}
-  {# Usually, your page templates in the @apostrophecms/pages module will override this block. It is safe to assume this is where your page-specific content should go. #}
-{% endblock %}
-
-{% block afterMain %}
+      <div class="sf-container loading" aria-busy="true">
+        {% endblock %} {% block main %} {# Usually, your page templates in the
+        @apostrophecms/pages module will override this block. It is safe to
+        assume this is where your page-specific content should go. #} {%
+        endblock %} {% block afterMain %}
       </div>
     </main>
     {% render fragments.footer() %}
     <script type="text/javascript"></script>
-    
+
     <script>
-            document.addEventListener('DOMContentLoaded', function() {
+      document.addEventListener('DOMContentLoaded', function () {
         const breadcrumbs = document.querySelector('.breadcrumb');
         const container = document.querySelector('.sf-container');
         if (breadcrumbs) {
-          breadcrumbs.classList.remove('hidden');
-          breadcrumbs.classList.add('visible');
+          breadcrumbs.classList.remove('loading');
+          breadcrumbs.classList.add('loaded');
+          breadcrumbs.setAttribute('aria-busy', 'false');
         }
         if (container) {
-          container.classList.remove('hidden');
-          container.classList.add('visible');
+          container.classList.remove('loading');
+          container.classList.add('loaded');
+          container.setAttribute('aria-busy', 'false');
         }
       });
     </script>
   </div>
-{# Close .bp-wrapper #}
-{% endblock %}
+  {# Close .bp-wrapper #} {% endblock %}
+</head>

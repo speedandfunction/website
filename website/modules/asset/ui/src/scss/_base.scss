@@ -178,12 +178,12 @@
   text-decoration: underline;
 }
 
-.hidden {
+.loading {
   opacity: 0;
   overflow: hidden;
   visibility: hidden;
 }
-.visible {
+.loaded {
   opacity: 1;
 
   overflow: visible;

@@ -6,7 +6,11 @@ main %}
   data-default-visible-tags="{{ data.defaultVisibleTagsCount }}"
 >
   <div class="cs_content">
-    <div class="page-main_content hidden" id="page-main_content">
+    <div
+      class="page-main_content loading"
+      id="page-main_content"
+      aria-busy="true"
+    >
       {% area data.page, 'main' %}
     </div>
 
@@ -302,13 +306,11 @@ main %}
 
   if (container) {
     window.addEventListener('DOMContentLoaded', () => {
-      container.classList.remove('hidden');
-      container.classList.add('visible');
-          });
-
-    
+      container.classList.remove('loading');
+      container.classList.add('loaded');
+      container.setAttribute('aria-busy', 'false');
+    });
   }
- 
 </script>
 <script src="/js/modules/case-studies-page/infinite-scroll.js"></script>
 

@@ -31,60 +31,74 @@
 <footer class="sf-footer sf-container">
   <div class="sf-footer__content">
     <div class="sf-footer__top">
-      <p class="sf-footer__tagline">A Deliberately Developmental Organization.</p>
+      <p class="sf-footer__tagline">
+        A Deliberately Developmental Organization.
+      </p>
       <p class="sf-footer__tagline">Built by real people, for real impact.</p>
-      <p class="sf-footer__tagline">Let's grow something meaningful together.</p>
+      <p class="sf-footer__tagline">
+        Let's grow something meaningful together.
+      </p>
     </div>
-    
+
     <div class="sf-footer__links">
       <div class="sf-footer__links-group">
-        <a href="https://www.linkedin.com/company/speed-and-function/" 
-           class="sf-footer__links-item" 
-           target="_blank" 
-           rel="noopener noreferrer">
+        <a
+          href="https://www.linkedin.com/company/speed-and-function/"
+          class="sf-footer__links-item"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           linkedin
         </a>
-        <a href="mailto:connect@speedandfunction.com" 
-           class="sf-footer__links-item">
+        <a
+          href="mailto:connect@speedandfunction.com"
+          class="sf-footer__links-item"
+        >
           connect@speedandfunction.com
         </a>
       </div>
-      <a href="/privacy-policy" class="sf-footer__links-item sf-footer__links-item--policy">
+      <a
+        href="/privacy-policy"
+        class="sf-footer__links-item sf-footer__links-item--policy"
+      >
         privacy policy
       </a>
     </div>
-    
+
     <div class="sf-footer__bottom">
       <p class="sf-copy">&#169; {{ data.currentYear or '2025' }} S&amp;F</p>
     </div>
   </div>
 </footer>
 {% endfragment %} {% fragment breadcrumbs() %} {% if data.page._url !=
-   data.home._url %}
-    <nav class="breadcrumb hidden" aria-label="Breadcrumb navigation">
-      <ol class="breadcrumb-list">
-        {% for page in data.page._ancestors %}
-          <li class="breadcrumb-item">
-            <a href="{{ page._url }}" class="breadcrumb-link">
-              {% if page._url == data.home._url %} Home {% else %} {{ page.title }} {%
-                 endif %}
-            </a>
-          </li>
-        {% endfor %} {% if data.piece %}
-          <li class="breadcrumb-item">
-            <a href="{{ data.page._url }}" class="breadcrumb-link">
-              {{ data.page.title }}
-            </a>
-          </li>
-          <li class="breadcrumb-item breadcrumb-item-current" aria-current="page">
-            <span>{{ data.piece.title }}</span>
-          </li>
-        {% else %}
-          <li class="breadcrumb-item breadcrumb-item-current" aria-current="page">
-            <span>{{ data.page.title }}</span>
-          </li>
-        {% endif %}
-      </ol>
-    </nav>
-  {% endif %} {% endfragment %}
-  
+data.home._url %}
+<nav
+  class="breadcrumb loading"
+  aria-label="Breadcrumb navigation"
+  aria-busy="true"
+>
+  <ol class="breadcrumb-list">
+    {% for page in data.page._ancestors %}
+    <li class="breadcrumb-item">
+      <a href="{{ page._url }}" class="breadcrumb-link">
+        {% if page._url == data.home._url %} Home {% else %} {{ page.title }} {%
+        endif %}
+      </a>
+    </li>
+    {% endfor %} {% if data.piece %}
+    <li class="breadcrumb-item">
+      <a href="{{ data.page._url }}" class="breadcrumb-link">
+        {{ data.page.title }}
+      </a>
+    </li>
+    <li class="breadcrumb-item breadcrumb-item-current" aria-current="page">
+      <span>{{ data.piece.title }}</span>
+    </li>
+    {% else %}
+    <li class="breadcrumb-item breadcrumb-item-current" aria-current="page">
+      <span>{{ data.page.title }}</span>
+    </li>
+    {% endif %}
+  </ol>
+</nav>
+{% endif %} {% endfragment %}
