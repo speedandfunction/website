@@ -34,7 +34,9 @@ function createAposConfig() {
           },
         },
       },
-
+      // Enable local SEO module with GTM integration
+      '@apostrophecms/seo': {},
+      '@apostrophecms/global': {},
       // Make getEnv function available to templates
       '@apostrophecms/template': {
         options: {
