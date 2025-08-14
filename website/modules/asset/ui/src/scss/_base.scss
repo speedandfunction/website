@@ -178,11 +178,14 @@
   text-decoration: underline;
 }
 
-#page-main_content.loading {
+.hidden {
   opacity: 0;
-  transition: opacity 0.3s ease-in-out;
+  overflow: hidden;
+  visibility: hidden;
 }
-
-#page-main_content.loaded {
+.visible {
   opacity: 1;
+
+  overflow: visible;
+  visibility: visible;
 }

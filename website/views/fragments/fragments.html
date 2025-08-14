@@ -32,30 +32,31 @@
   <p class="sf-copy">&#169; {{ data.currentYear or '2025' }} S&F</p>
 </footer>
 {% endfragment %} {% fragment breadcrumbs() %} {% if data.page._url !=
-data.home._url %}
-<nav class="breadcrumb" aria-label="Breadcrumb navigation">
-  <ol class="breadcrumb-list">
-    {% for page in data.page._ancestors %}
-    <li class="breadcrumb-item">
-      <a href="{{ page._url }}" class="breadcrumb-link">
-        {% if page._url == data.home._url %} Home {% else %} {{ page.title }} {%
-        endif %}
-      </a>
-    </li>
-    {% endfor %} {% if data.piece %}
-    <li class="breadcrumb-item">
-      <a href="{{ data.page._url }}" class="breadcrumb-link">
-        {{ data.page.title }}
-      </a>
-    </li>
-    <li class="breadcrumb-item breadcrumb-item-current" aria-current="page">
-      <span>{{ data.piece.title }}</span>
-    </li>
-    {% else %}
-    <li class="breadcrumb-item breadcrumb-item-current" aria-current="page">
-      <span>{{ data.page.title }}</span>
-    </li>
-    {% endif %}
-  </ol>
-</nav>
-{% endif %} {% endfragment %}
+   data.home._url %}
+    <nav class="breadcrumb hidden" aria-label="Breadcrumb navigation">
+      <ol class="breadcrumb-list">
+        {% for page in data.page._ancestors %}
+          <li class="breadcrumb-item">
+            <a href="{{ page._url }}" class="breadcrumb-link">
+              {% if page._url == data.home._url %} Home {% else %} {{ page.title }} {%
+                 endif %}
+            </a>
+          </li>
+        {% endfor %} {% if data.piece %}
+          <li class="breadcrumb-item">
+            <a href="{{ data.page._url }}" class="breadcrumb-link">
+              {{ data.page.title }}
+            </a>
+          </li>
+          <li class="breadcrumb-item breadcrumb-item-current" aria-current="page">
+            <span>{{ data.piece.title }}</span>
+          </li>
+        {% else %}
+          <li class="breadcrumb-item breadcrumb-item-current" aria-current="page">
+            <span>{{ data.page.title }}</span>
+          </li>
+        {% endif %}
+      </ol>
+    </nav>
+  {% endif %} {% endfragment %}
+  

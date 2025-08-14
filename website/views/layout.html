@@ -33,7 +33,7 @@
       {% endif %}
     >
       {% render fragments.breadcrumbs() %}
-      <div class="sf-container">
+      <div class="sf-container hidden">
 {% endblock %}
 
 {% block main %}
@@ -45,6 +45,22 @@
     </main>
     {% render fragments.footer() %}
     <script type="text/javascript"></script>
+    
+    <script>
+            document.addEventListener('DOMContentLoaded', function() {
+        const breadcrumbs = document.querySelector('.breadcrumb');
+        const container = document.querySelector('.sf-container');
+        if (breadcrumbs) {
+          console.log('Script in breadcrumbs');
+          breadcrumbs.classList.remove('hidden');
+          breadcrumbs.classList.add('visible');
+        }
+        if (container) {
+          container.classList.remove('hidden');
+          container.classList.add('visible');
+        }
+      });
+    </script>
   </div>
 {# Close .bp-wrapper #}
 {% endblock %}
