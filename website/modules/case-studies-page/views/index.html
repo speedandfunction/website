@@ -301,7 +301,7 @@ main %}
   const container = document.getElementById('page-main_content');
 
   if (container) {
-    window.addEventListener('load', () => {
+    window.addEventListener('DOMContentLoaded', () => {
       container.classList.remove('hidden');
       container.classList.add('visible');
           });
