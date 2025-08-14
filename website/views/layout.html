@@ -48,10 +48,10 @@ the
     <script type="text/javascript">
       document.addEventListener('DOMContentLoaded', function () {
         document
-          .querySelectorAll('.breadcrumb.hidden, .sf-container.hidden')
+          .querySelectorAll('.breadcrumb.loading, .sf-container.loading')
           .forEach(function (el) {
-            el.classList.remove('hidden');
-            el.classList.add('visible');
+            el.classList.remove('loading');
+            el.classList.add('loaded');
             if (el.hasAttribute('aria-busy')) {
               el.setAttribute('aria-busy', 'false');
             }
@@ -60,8 +60,8 @@ the
     </script>
     <noscript>
       <style>
-        .breadcrumb.hidden,
-        .sf-container.hidden {
+        .breadcrumb.loading,
+        .sf-container.loading {
           opacity: 1 !important;
           overflow: visible !important;
           visibility: visible !important;
