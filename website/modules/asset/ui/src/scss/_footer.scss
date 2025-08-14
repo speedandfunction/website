@@ -5,16 +5,23 @@
   .sf-footer__content {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 40px 16px;
+    padding-bottom: 16px;
     
     @include breakpoint-medium {
-      padding: 0 40px 24px;
+      padding-bottom: 24px;
     }
   }
   
   .sf-footer__top {
     text-align: center;
     margin-bottom: 32px;
+    display: block;
+    @include breakpoint-medium {
+      display: block;
+      width: fit-content;
+      margin-left: auto;
+      margin-right: auto;
+    }
   }
   
   .sf-footer__tagline {
@@ -23,13 +30,24 @@
     color: $gray-300;
     margin: 0;
     line-height: 120%;
+    display: block;
+    
+    &:first-child {
+      display: block;
+    }
+    
+    &:not(:first-child) {
+      display: block;
+      @include breakpoint-medium {
+        display: inline-block;
+      }
+    }
   }
   
   .sf-footer__links {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 16px;
     font-size: $font-size-footer-mobile;
     font-weight: $font-weight-300;
     line-height: 120%;
@@ -45,7 +63,7 @@
   .sf-footer__links-group {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 12px;
     
     @include breakpoint-medium {
       flex-direction: row;
