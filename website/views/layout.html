@@ -45,24 +45,29 @@ the
       </div>
     </main>
     {% render fragments.footer() %}
-    <script type="text/javascript"></script>
-
-    <script>
+    <script type="text/javascript">
       document.addEventListener('DOMContentLoaded', function () {
-        const breadcrumbs = document.querySelector('.breadcrumb');
-        const container = document.querySelector('.sf-container');
-        if (breadcrumbs) {
-          breadcrumbs.classList.remove('loading');
-          breadcrumbs.classList.add('loaded');
-          breadcrumbs.setAttribute('aria-busy', 'false');
-        }
-        if (container) {
-          container.classList.remove('loading');
-          container.classList.add('loaded');
-          container.setAttribute('aria-busy', 'false');
-        }
+        document
+          .querySelectorAll('.breadcrumb.hidden, .sf-container.hidden')
+          .forEach(function (el) {
+            el.classList.remove('hidden');
+            el.classList.add('visible');
+            if (el.hasAttribute('aria-busy')) {
+              el.setAttribute('aria-busy', 'false');
+            }
+          });
       });
     </script>
+    <noscript>
+      <style>
+        .breadcrumb.hidden,
+        .sf-container.hidden {
+          opacity: 1 !important;
+          overflow: visible !important;
+          visibility: visible !important;
+        }
+      </style>
+    </noscript>
   </div>
   {# Close .bp-wrapper #} {% endblock %}
 </head>
