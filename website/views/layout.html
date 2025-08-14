@@ -14,11 +14,11 @@
 {# ✅ Add favicon in the <head> section #}
 {% block extraHead %}
   <link rel="icon" href="{{ apos.asset.url('/modules/asset/favicon/favicon.ico') }}" type="image/x-icon">
-  {% render '@apostrophecms/seo:tagManagerHead', data %}
+  {% component '@apostrophecms/seo:tagManagerHead' with data %}
 {% endblock %}
 
 {% block beforeMain %}
-  {% render '@apostrophecms/seo:tagManagerBody', data %}
+  {% component '@apostrophecms/seo:tagManagerBody' with data %}
   <a class="sr-only" href="#main">Skip to content</a>
   <div
     class="bp-wrapper relative"

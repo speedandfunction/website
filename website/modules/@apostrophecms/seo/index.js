@@ -7,10 +7,10 @@ module.exports = {
     },
   },
   init(self) {
-    // Ensure SEO components are injected into the template
-    self.apos.template.prepend('body', '@apostrophecms/seo:tagManagerBody');
-    self.apos.template.append('head', '@apostrophecms/seo:tagManagerHead');
-    self.apos.template.prepend('head', '@apostrophecms/seo:metaHead');
+    /*
+     * SEO components are called directly from layout.html template
+     * No automatic injection needed to avoid duplication
+     */
   },
   components(self) {
     return {
