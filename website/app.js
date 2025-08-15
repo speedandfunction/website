@@ -32,6 +32,23 @@ function createAposConfig() {
               maxAge: 3600,
             },
           },
+          // Add CORS configuration for production
+          cors: {
+            origin: (() => {
+              if (process.env.NODE_ENV === 'production') {
+                return 'https://speedandfunction.com';
+              }
+              return true;
+            })(),
+            credentials: true,
+            methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+            allowedHeaders: [
+              'Content-Type',
+              'Authorization',
+              'X-Requested-With',
+              'X-CSRF-Token',
+            ],
+          },
         },
       },
       // Enable local SEO module with GTM integration
