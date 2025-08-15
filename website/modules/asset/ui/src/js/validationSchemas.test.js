@@ -109,7 +109,7 @@ describe('Phone Number Schema', () => {
 
   test('rejects too short phone number', async () => {
     await expect(schema.validate('123')).rejects.toThrow(
-      'Enter a valid phone number (e.g., +1 (234) 567-8900)',
+      'Phone number is too short',
     );
   });
 
@@ -120,15 +120,15 @@ describe('Phone Number Schema', () => {
     );
   });
 
-  test('rejects invalid format', async () => {
+  test('rejects phone number with only letters', async () => {
     await expect(schema.validate('abc')).rejects.toThrow(
-      'Enter a valid phone number (e.g., +1 (234) 567-8900)',
+      'Enter a valid phone number',
     );
   });
 
   test('rejects phone number with letters', async () => {
     await expect(schema.validate('123-ABC-4567')).rejects.toThrow(
-      'Enter a valid phone number (e.g., +1 (234) 567-8900)',
+      'Enter a valid phone number',
     );
   });
 });

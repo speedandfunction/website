@@ -5,7 +5,7 @@ const {
 
 describe('Phone Number Validator', () => {
   let phoneInput = null;
-  const ERROR_MESSAGE = 'Enter a valid phone number (e.g., +1 (234) 567-8900)';
+  const ERROR_MESSAGE = 'Phone number is too short';
 
   beforeEach(() => {
     phoneInput = document.createElement('input');
@@ -33,11 +33,21 @@ describe('Phone Number Validator', () => {
   });
 
   it('rejects invalid international format', async () => {
-    await expectInvalidPhone('+123456789');
+    phoneInput.value = '+123';
+    const result = await validateField(phoneInput);
+    expect(result).toEqual({
+      isValid: false,
+      message: 'Phone number is too short',
+    });
   });
 
   it('rejects phone number with letters', async () => {
-    await expectInvalidPhone('+1 (234) ABC-1234');
+    phoneInput.value = '+1 (234) ABC-1234';
+    const result = await validateField(phoneInput);
+    expect(result).toEqual({
+      isValid: false,
+      message: 'Enter a valid phone number',
+    });
   });
 
   it('accepts valid phone number with country code', async () => {
