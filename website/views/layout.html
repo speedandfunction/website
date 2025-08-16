@@ -21,17 +21,17 @@
   {% component '@apostrophecms/seo:tagManagerBody' with data %}
   <a class="sr-only" href="#main">Skip to content</a>
   <div
-    class="bp-wrapper relative"
-    data-barba="wrapper"
-    data-barba-namespace="home"
-  >
+  class="bp-wrapper relative"
+  data-barba="wrapper"
+>
     {% render fragments.header() %}
     <main
       class="bp-main"
       role="main"
       id="main"
       {% if not data.user %}
-        data-barba="container"
+      data-barba="container"
+      data-barba-namespace="{{ (data.page and data.page.type) or 'default' }}"
       {% endif %}
     >
       {% render fragments.breadcrumbs() %}
