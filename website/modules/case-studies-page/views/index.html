@@ -301,17 +301,7 @@ main %}
 <script>
   window.totalPages = {{ data.totalPages | json }};
 </script>
-<script>
-  const container = document.getElementById('page-main_content');
 
-  if (container) {
-    window.addEventListener('DOMContentLoaded', () => {
-      container.classList.remove('loading');
-      container.classList.add('loaded');
-      container.setAttribute('aria-busy', 'false');
-    });
-  }
-</script>
 <noscript>
   <style>
     #page-main_content {

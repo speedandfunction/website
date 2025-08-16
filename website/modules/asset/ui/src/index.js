@@ -12,7 +12,19 @@ import { setupTagSearchForInput } from './searchInputHandler';
 import { FilterModal } from './filterModal';
 import { initClientSideFiltering } from './clientSideFiltering';
 
-/* eslint-enable sort-imports */
+function revealLoaded() {
+  document
+    .querySelectorAll(
+      '.breadcrumb.loading, .sf-container.loading, .page-main_content.loading',
+    )
+    .forEach((el) => {
+      el.classList.remove('loading');
+      el.classList.add('loaded');
+      if (el.hasAttribute('aria-busy')) {
+        el.setAttribute('aria-busy', 'false');
+      }
+    });
+}
 
 function initConfiguration() {
   window.DEFAULT_VISIBLE_TAGS_COUNT = 5;
@@ -57,13 +69,11 @@ function initFontChanger() {
 
   setInterval(() => {
     currentFontIndex = (currentFontIndex + 1) % fonts.length;
-    // Use Array.prototype.at() for safer array access
     const currentFont = fonts.at(currentFontIndex);
     heroContent.style.fontFamily = currentFont;
   }, 500);
 }
 
-// Tag search filter for case studies page
 function initCaseStudiesTagFilter({
   inputSelector = '.tag-search',
   containerSelector = '.filter-section',
@@ -92,12 +102,10 @@ function initializeAllComponents() {
   initClientSideFiltering();
 }
 
-// Barba pages
 function initBarbaPageTransitions() {
   if (!document.querySelector('[data-barba="container"]')) return;
 
   apos.util.onReady(() => {
-    // Initialize case studies filter handler
     initCaseStudiesFilterHandler();
 
     // Original Barba enter callback
@@ -175,16 +183,11 @@ function initBarbaPageTransitions() {
       ],
     });
 
-    // Add after hook for updating menu state
     barba.hooks.after(() => {
       // Update menu active state
       const currentPath = window.location.pathname;
       const menuLinks = document.querySelectorAll('.sf-nav__list a');
-
-      // First, remove active class from all menu items
       menuLinks.forEach((link) => link.classList.remove('active'));
-
-      // Then, add active class to the current menu item
       menuLinks.forEach((link) => {
         const href = link.getAttribute('href');
         const hrefPath = new URL(href, window.location.origin).pathname;
@@ -192,6 +195,10 @@ function initBarbaPageTransitions() {
           link.classList.add('active');
         }
       });
+
+      revealLoaded();
+
+      initFilterModal();
     });
   });
 }
@@ -259,16 +266,12 @@ function initFilterModal() {
 
 document.addEventListener('DOMContentLoaded', initFilterModal);
 
-if (typeof barba !== 'undefined') {
-  barba.hooks.after(() => {
-    initFilterModal();
-  });
-}
-
 export default () => {
   initConfiguration();
 
   initializeAllComponents();
+
+  document.addEventListener('DOMContentLoaded', revealLoaded);
 
   apos.util.onReady(() => {
     initCaseStudiesFilterHandler();
@@ -281,14 +284,13 @@ export default () => {
   // Case studies anchor fix
   setTimeout(() => {
     const { pathname, search, hash } = window.location;
-    const isCasesPage = pathname.includes('/cases');
-    const hasFilterParams =
-      search.includes('industry') ||
-      search.includes('stack') ||
-      search.includes('caseStudyType') ||
-      hash.includes('filter');
-
-    if (isCasesPage && hasFilterParams) {
+    if (
+      pathname.includes('/cases') &&
+      (search.includes('industry') ||
+        search.includes('stack') ||
+        search.includes('caseStudyType') ||
+        hash.includes('filter'))
+    ) {
       const filterAnchor = document.getElementById('filter');
       if (filterAnchor) filterAnchor.scrollIntoView({ behavior: 'smooth' });
     }

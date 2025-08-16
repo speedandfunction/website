@@ -21,9 +21,9 @@
   {% component '@apostrophecms/seo:tagManagerBody' with data %}
   <a class="sr-only" href="#main">Skip to content</a>
   <div
-  class="bp-wrapper relative"
-  data-barba="wrapper"
->
+    class="bp-wrapper relative"
+    data-barba="wrapper"
+  >
     {% render fragments.header() %}
     <main
       class="bp-main"
@@ -46,19 +46,6 @@
       </div>
     </main>
     {% render fragments.footer() %}
-    <script type="text/javascript">
-      document.addEventListener('DOMContentLoaded', function () {
-        document
-          .querySelectorAll('.breadcrumb.loading, [data-reveal="dom"].loading')
-          .forEach(function (el) {
-            el.classList.remove('loading');
-            el.classList.add('loaded');
-            if (el.hasAttribute('aria-busy')) {
-              el.setAttribute('aria-busy', 'false');
-            }
-          });
-      });
-    </script>
     <noscript>
       <style>
         .breadcrumb.loading,
@@ -70,5 +57,5 @@
       </style>
     </noscript>
   </div>
-{# Close .bp-wrapper #}
+  {# Close .bp-wrapper #}
 {% endblock %}

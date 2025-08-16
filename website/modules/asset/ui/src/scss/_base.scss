@@ -177,14 +177,3 @@
 .breadcrumb-link:hover {
   text-decoration: underline;
 }
-
-.loading {
-  opacity: 0;
-  overflow: hidden;
-  visibility: hidden;
-}
-.loaded {
-  opacity: 1;
-  overflow: visible;
-  visibility: visible;
-}
