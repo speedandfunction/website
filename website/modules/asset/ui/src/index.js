@@ -271,7 +271,11 @@ export default () => {
 
   initializeAllComponents();
 
-  document.addEventListener('DOMContentLoaded', revealLoaded);
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', revealLoaded);
+  } else {
+    revealLoaded();
+  }
 
   apos.util.onReady(() => {
     initCaseStudiesFilterHandler();
