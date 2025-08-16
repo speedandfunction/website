@@ -23,7 +23,6 @@
   <div
     class="bp-wrapper relative"
     data-barba="wrapper"
-    data-barba-namespace="home"
   >
     {% render fragments.header() %}
     <main
@@ -31,11 +30,12 @@
       role="main"
       id="main"
       {% if not data.user %}
-        data-barba="container"
+      data-barba="container"
+      data-barba-namespace="{{ (data.page and data.page.type) or 'default' }}"
       {% endif %}
     >
       {% render fragments.breadcrumbs() %}
-      <div class="sf-container">
+      <div class="sf-container loading" aria-busy="true" data-reveal="dom">
 {% endblock %}
 
 {% block main %}
@@ -46,7 +46,16 @@
       </div>
     </main>
     {% render fragments.footer() %}
-    <script type="text/javascript"></script>
+    <noscript>
+      <style>
+        .breadcrumb.loading,
+        .sf-container.loading {
+          opacity: 1 !important;
+          overflow: visible !important;
+          visibility: visible !important;
+        }
+      </style>
+    </noscript>
   </div>
-{# Close .bp-wrapper #}
+  {# Close .bp-wrapper #}
 {% endblock %}
