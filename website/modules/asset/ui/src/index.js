@@ -108,14 +108,11 @@ function initBarbaPageTransitions() {
   apos.util.onReady(() => {
     initCaseStudiesFilterHandler();
 
-    // Original Barba enter callback
     const originalEnterCallback = function (data, hasFilterAnchor) {
-      // Scroll to the top after page transition (unless we have a filter anchor)
       if (!hasFilterAnchor) {
         window.scrollTo(0, 0);
       }
 
-      // Close menu if it's open
       const menuButton = document.getElementById('nav-icon');
       const menu = document.querySelector('[data-menu]');
       if (menuButton && menu) {
@@ -123,7 +120,6 @@ function initBarbaPageTransitions() {
         menuButton.classList.remove('open');
       }
 
-      // Trigger video play after transition
       const video = data.next.container.querySelector('video');
       if (video) {
         video.play();
@@ -285,7 +281,6 @@ export default () => {
   initAnchorNavigation();
   initMenuToggle();
 
-  // Case studies anchor fix
   setTimeout(() => {
     const { pathname, search, hash } = window.location;
     if (
