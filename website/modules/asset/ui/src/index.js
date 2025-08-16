@@ -164,7 +164,6 @@ function initBarbaPageTransitions() {
       cacheIgnore: false,
       preventRunning: true,
       timeout: 10000,
-
       transitions: [
         {
           sync: false,
@@ -193,13 +192,13 @@ function initBarbaPageTransitions() {
       });
 
       revealLoaded();
-
-      initFilterModal();
+      if (!window.caseStudiesFilterModal) {
+        initFilterModal();
+      }
     });
   });
 }
 
-// Anchor Navigation
 function initAnchorNavigation() {
   const anchors = document.querySelectorAll('a[href^="#"]');
   if (!anchors.length) return;
@@ -219,7 +218,6 @@ function initAnchorNavigation() {
 
 function initMenuToggle() {
   apos.util.onReady(() => {
-    // Menu Open
     const menuButton = document.getElementById('nav-icon');
     const menu = document.querySelector('[data-menu]');
 
@@ -230,7 +228,6 @@ function initMenuToggle() {
       menuButton.classList.toggle('open');
     });
 
-    // Close menu when clicking on menu items for non-logged users
     const menuLinks = menu.querySelectorAll('a');
     menuLinks.forEach((link) => {
       link.addEventListener('click', () => {
@@ -243,7 +240,6 @@ function initMenuToggle() {
   });
 }
 
-// Filter Case Studies modal for Case Studies mobile page
 function initFilterModal() {
   if (!document.querySelector('.cs_list')) {
     return;
@@ -260,7 +256,11 @@ function initFilterModal() {
   });
 }
 
-document.addEventListener('DOMContentLoaded', initFilterModal);
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initFilterModal);
+} else {
+  initFilterModal();
+}
 
 export default () => {
   initConfiguration();
