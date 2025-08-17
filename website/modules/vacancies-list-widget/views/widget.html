@@ -4,7 +4,13 @@
     vacancy in data.widget._vacancies %}
     <div class="vacancy-card">
       <div class="primary-info">
-        <h3 class="vacancy-title">{{ vacancy.title }}</h3>
+        <h3 class="vacancy-title">
+          <a
+            href="{{ vacancy.link }}"
+            target="_blank"
+            rel="noopener noreferrer"
+          >{{ vacancy.title }}</a>
+        </h3>
         <p class="vacancy-description">{{ vacancy.description }}</p>
       </div>
 
