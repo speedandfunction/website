@@ -168,18 +168,23 @@
           <div class="links-area">
             {% if data.piece.fullStoryUrl %}
             <a
-              href="{{ data.piece.fullStoryUrl }}"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="full-story_btn"
-              >Read The Full Story</a
+            href="{{ data.piece.fullStoryUrl }}"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="full-story_btn"
+            >Read The Full Story</a
             >
             {% endif %} {% if data.piece.prodLink %}
+            {# Remove path/query/fragment #}
+            {% set urlWithoutProtocol = data.piece.prodLink | replace('https://', '') | replace('http://', '') %}
+            {% set domainWithOrWithoutWww = urlWithoutProtocol.split('/')[0] %}
+            {% set cleanDomain = domainWithOrWithoutWww | trim | replace('www.', '') %}
             <a
               href="{{ data.piece.prodLink }}"
               target="_blank"
               class="prod-link"
-              >{{ data.piece.prodLink }}</a
+              rel="noopener noreferrer"
+              >{{ cleanDomain }}</a
             >
             {% endif %}
           </div>
