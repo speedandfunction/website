@@ -44,7 +44,7 @@
     text-decoration: none;
     @include truncate-lines(2);
   }
-  &__wrapper{
+  &__wrapper {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -52,9 +52,8 @@
     @include breakpoint-medium {
       margin-bottom: 8px;
     }
-    
   }
-  &__container{
+  &__container {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -92,16 +91,13 @@
     @include truncate-lines(1);
   }
   &__content {
-      font-weight: 500;
-      font-size: 14px;
-      line-height: 21px;
-      color: $gray-300;
-      margin: 0;
-      @include breakpoint-medium {
-        @include truncate-lines(8);
-      }
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 21px;
+    color: $gray-300;
+    margin: 0;
   }
-  
+
   &__url {
     text-decoration: none;
     font-weight: 700;

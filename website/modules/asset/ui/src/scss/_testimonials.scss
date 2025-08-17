@@ -71,7 +71,19 @@
       }
       .sf-person__content {
         color: $gray-300;
-        @include truncate-lines(7);
+
+        overflow-x: hidden;
+        overflow-y: auto;
+        max-height: 150px;
+
+        overflow-wrap: anywhere;
+        word-break: break-word;
+
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior: contain;
+        scrollbar-gutter: stable both-edges;
+        padding-right: 12px;
+
         @include font-settings(14px, 150%, 400);
       }
     }
@@ -134,7 +146,6 @@
             @include breakpoint-medium {
               height: 400px;
               .sf-person__content {
-                @include truncate-lines(10);
                 @include font-settings(22px, 150%, 400);
               }
             }
