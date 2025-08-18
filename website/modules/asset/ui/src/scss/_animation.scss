@@ -55,3 +55,40 @@
     filter: blur(0);
   }
 }
+
+// Loading/Loaded states for reveal animations
+.loading {
+  opacity: 0;
+  overflow: hidden;
+  visibility: hidden;
+  transform: translateY(20px);
+  transition:
+    opacity 0.6s ease-out,
+    transform 0.6s ease-out;
+}
+
+.loaded {
+  opacity: 1;
+  overflow: visible;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+// Specific loading states for breadcrumbs and containers
+.breadcrumb.loading,
+.sf-container.loading {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  transform: translateY(15px);
+  transition:
+    opacity 0.5s ease-out,
+    visibility 0.5s ease-out,
+    transform 0.5s ease-out;
+}
+
+.breadcrumb.loaded,
+.sf-container.loaded {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: translateY(0);
+}

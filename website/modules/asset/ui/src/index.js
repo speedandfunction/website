@@ -12,7 +12,19 @@ import { setupTagSearchForInput } from './searchInputHandler';
 import { FilterModal } from './filterModal';
 import { initClientSideFiltering } from './clientSideFiltering';
 
-/* eslint-enable sort-imports */
+function revealLoaded() {
+  document
+    .querySelectorAll(
+      '.breadcrumb.loading, .sf-container.loading, .page-main_content.loading',
+    )
+    .forEach((el) => {
+      el.classList.remove('loading');
+      el.classList.add('loaded');
+      if (el.hasAttribute('aria-busy')) {
+        el.setAttribute('aria-busy', 'false');
+      }
+    });
+}
 
 function initConfiguration() {
   window.DEFAULT_VISIBLE_TAGS_COUNT = 5;
@@ -57,13 +69,11 @@ function initFontChanger() {
 
   setInterval(() => {
     currentFontIndex = (currentFontIndex + 1) % fonts.length;
-    // Use Array.prototype.at() for safer array access
     const currentFont = fonts.at(currentFontIndex);
     heroContent.style.fontFamily = currentFont;
   }, 500);
 }
 
-// Tag search filter for case studies page
 function initCaseStudiesTagFilter({
   inputSelector = '.tag-search',
   containerSelector = '.filter-section',
@@ -92,22 +102,17 @@ function initializeAllComponents() {
   initClientSideFiltering();
 }
 
-// Barba pages
 function initBarbaPageTransitions() {
   if (!document.querySelector('[data-barba="container"]')) return;
 
   apos.util.onReady(() => {
-    // Initialize case studies filter handler
     initCaseStudiesFilterHandler();
 
-    // Original Barba enter callback
     const originalEnterCallback = function (data, hasFilterAnchor) {
-      // Scroll to the top after page transition (unless we have a filter anchor)
       if (!hasFilterAnchor) {
         window.scrollTo(0, 0);
       }
 
-      // Close menu if it's open
       const menuButton = document.getElementById('nav-icon');
       const menu = document.querySelector('[data-menu]');
       if (menuButton && menu) {
@@ -115,7 +120,6 @@ function initBarbaPageTransitions() {
         menuButton.classList.remove('open');
       }
 
-      // Trigger video play after transition
       const video = data.next.container.querySelector('video');
       if (video) {
         video.play();
@@ -160,7 +164,6 @@ function initBarbaPageTransitions() {
       cacheIgnore: false,
       preventRunning: true,
       timeout: 10000,
-
       transitions: [
         {
           sync: false,
@@ -175,16 +178,11 @@ function initBarbaPageTransitions() {
       ],
     });
 
-    // Add after hook for updating menu state
     barba.hooks.after(() => {
       // Update menu active state
       const currentPath = window.location.pathname;
       const menuLinks = document.querySelectorAll('.sf-nav__list a');
-
-      // First, remove active class from all menu items
       menuLinks.forEach((link) => link.classList.remove('active'));
-
-      // Then, add active class to the current menu item
       menuLinks.forEach((link) => {
         const href = link.getAttribute('href');
         const hrefPath = new URL(href, window.location.origin).pathname;
@@ -192,11 +190,15 @@ function initBarbaPageTransitions() {
           link.classList.add('active');
         }
       });
+
+      revealLoaded();
+      if (!window.caseStudiesFilterModal) {
+        initFilterModal();
+      }
     });
   });
 }
 
-// Anchor Navigation
 function initAnchorNavigation() {
   const anchors = document.querySelectorAll('a[href^="#"]');
   if (!anchors.length) return;
@@ -216,7 +218,6 @@ function initAnchorNavigation() {
 
 function initMenuToggle() {
   apos.util.onReady(() => {
-    // Menu Open
     const menuButton = document.getElementById('nav-icon');
     const menu = document.querySelector('[data-menu]');
 
@@ -227,7 +228,6 @@ function initMenuToggle() {
       menuButton.classList.toggle('open');
     });
 
-    // Close menu when clicking on menu items for non-logged users
     const menuLinks = menu.querySelectorAll('a');
     menuLinks.forEach((link) => {
       link.addEventListener('click', () => {
@@ -240,7 +240,6 @@ function initMenuToggle() {
   });
 }
 
-// Filter Case Studies modal for Case Studies mobile page
 function initFilterModal() {
   if (!document.querySelector('.cs_list')) {
     return;
@@ -257,18 +256,22 @@ function initFilterModal() {
   });
 }
 
-document.addEventListener('DOMContentLoaded', initFilterModal);
-
-if (typeof barba !== 'undefined') {
-  barba.hooks.after(() => {
-    initFilterModal();
-  });
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initFilterModal);
+} else {
+  initFilterModal();
 }
 
 export default () => {
   initConfiguration();
 
   initializeAllComponents();
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', revealLoaded);
+  } else {
+    revealLoaded();
+  }
 
   apos.util.onReady(() => {
     initCaseStudiesFilterHandler();
@@ -278,17 +281,15 @@ export default () => {
   initAnchorNavigation();
   initMenuToggle();
 
-  // Case studies anchor fix
   setTimeout(() => {
     const { pathname, search, hash } = window.location;
-    const isCasesPage = pathname.includes('/cases');
-    const hasFilterParams =
-      search.includes('industry') ||
-      search.includes('stack') ||
-      search.includes('caseStudyType') ||
-      hash.includes('filter');
-
-    if (isCasesPage && hasFilterParams) {
+    if (
+      pathname.includes('/cases') &&
+      (search.includes('industry') ||
+        search.includes('stack') ||
+        search.includes('caseStudyType') ||
+        hash.includes('filter'))
+    ) {
       const filterAnchor = document.getElementById('filter');
       if (filterAnchor) filterAnchor.scrollIntoView({ behavior: 'smooth' });
     }
