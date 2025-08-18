@@ -44,6 +44,17 @@
         @include breakpoint-medium {
           margin: 0 0 12px;
         }
+
+        a {
+          text-decoration: none;
+          color: $gray-500;
+
+          &:hover,
+          &:focus {
+            text-decoration: none;
+            color: $gray-500;
+          }
+        }
       }
 
       .vacancy-description {
