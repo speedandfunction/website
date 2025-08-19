@@ -7,7 +7,7 @@ test('Snapshot for Home Page', async ({ page }) => {
     height: 720,
   });
 
-  await page.goto(getEnv('BASE_URL'), {
+  await page.goto(process.env.BASE_URL || 'http://localhost:3000', {
     timeout: 60000,
     waitUntil: 'networkidle',
   });
