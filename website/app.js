@@ -5,7 +5,7 @@ const { getEnv } = require('./utils/env');
 function createAposConfig() {
   return {
     shortName: 'apostrophe-site',
-    baseUrl: getEnv('BASE_URL'),
+    baseUrl: process.env.BASE_URL || 'https://speedandfunction.com',
 
     // Session configuration
     modules: {
