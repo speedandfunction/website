@@ -69,12 +69,6 @@
     {% endif %}
   </div>
 
-    {% if data.global.footerForm and data.global.footerForm.items and data.global.footerForm.items.length > 0 %}
-    <div class="sf-footer__form">
-      {% area data.global, 'footerForm' %}
-    </div>
-    {% endif %}
-
     <div class="sf-footer__bottom">
       <p class="sf-copy">&#169; {{ data.currentYear or '2025' }} S&amp;F</p>
     </div>
