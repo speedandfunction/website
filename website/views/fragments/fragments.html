@@ -30,40 +30,50 @@
 {% endfragment %} {% fragment footer() %}
 <footer class="sf-footer sf-container">
   <div class="sf-footer__content">
-    <div class="sf-footer__top">
-      <p class="sf-footer__tagline">
-        A Deliberately Developmental Organization.
-      </p>
-      <p class="sf-footer__tagline">Built by real people, for real impact.</p>
-      <p class="sf-footer__tagline">
-        Let's grow something meaningful together.
-      </p>
+    
+    {% if data.global.companyMission and data.global.companyMission.items and data.global.companyMission.items.length > 0 %}
+    <div class="sf-footer__mission">
+      <div class="sf-footer__mission-content">
+        {% area data.global, 'companyMission' %}
+      </div>
     </div>
+    {% endif %}
 
     <div class="sf-footer__links">
-      <div class="sf-footer__links-group">
-        <a
-          href="https://www.linkedin.com/company/speed-and-function/"
-          class="sf-footer__links-item"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          linkedin
+      {% if data.global.socialMediaLinks and data.global.socialMediaLinks.length > 0 %}
+        <div class="sf-footer__links-group">
+          {% for item in data.global.socialMediaLinks %}
+          <a
+            href="{% if item.SMLink.linkType == 'page' and item.SMLink._page %}{{ item.SMLink._page._url }}{% else %}{{ item.SMLink.customUrl }}{% endif %}"
+            class="sf-footer__links-item"
+            {% if item.SMLink.target and item.SMLink.target.includes('_blank') %}target="_blank" rel="noopener noreferrer"{% endif %}
+          >
+          {{ item.SMLink.linkTitle }}
         </a>
-        <a
-          href="mailto:connect@speedandfunction.com"
-          class="sf-footer__links-item"
-        >
-          connect@speedandfunction.com
-        </a>
-      </div>
-      <a
-        href="/privacy-policy"
-        class="sf-footer__links-item sf-footer__links-item--policy"
-      >
-        privacy policy
-      </a>
+        {% endfor %}
     </div>
+    {% endif %}
+
+    {% if data.global.footerLinks and data.global.footerLinks.length > 0 %}
+      <div class="sf-footer__links-group">
+        {% for item in data.global.footerLinks %}
+        <a
+          href="{% if item.footerLink.linkType == 'page' and item.footerLink._page %}{{ item.footerLink._page._url }}{% else %}{{ item.footerLink.customUrl }}{% endif %}"
+          class="sf-footer__links-item"
+          {% if item.footerLink.target and item.footerLink.target.includes('_blank') %}target="_blank" rel="noopener noreferrer"{% endif %}
+        >
+          {{ item.footerLink.linkTitle }}
+        </a>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+
+    {% if data.global.footerForm and data.global.footerForm.items and data.global.footerForm.items.length > 0 %}
+    <div class="sf-footer__form">
+      {% area data.global, 'footerForm' %}
+    </div>
+    {% endif %}
 
     <div class="sf-footer__bottom">
       <p class="sf-copy">&#169; {{ data.currentYear or '2025' }} S&amp;F</p>
