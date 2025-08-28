@@ -97,7 +97,7 @@ export const initClientSideFiltering = function () {
   window.addEventListener('popstate', handlePopState);
   window.addEventListener('resize', handleResize);
   document.addEventListener('click', handleFilterClick);
-  
+
   // Keep aria-expanded in sync with checkbox state
   document.addEventListener('change', function (event) {
     const checkbox = event.target.closest('.filter-category__toggle');
@@ -106,7 +106,11 @@ export const initClientSideFiltering = function () {
     }
     const button = document.querySelector(`label[for="${checkbox.id}"]`);
     if (button) {
-      button.setAttribute('aria-expanded', checkbox.checked ? 'true' : 'false');
+      if (checkbox.checked) {
+        button.setAttribute('aria-expanded', 'true');
+      } else {
+        button.setAttribute('aria-expanded', 'false');
+      }
     }
   });
 };
