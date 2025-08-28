@@ -1,22 +1,6 @@
 // Client-side filtering for case studies with page reload
 
-const EXPANDED_CATEGORIES_KEY = 'caseStudiesExpandedCategories';
-
-const saveExpandedCategories = function () {
-  const expandedCategories = [];
-  const checkboxes = document.querySelectorAll('.filter-category__toggle');
-  checkboxes.forEach(function (checkbox) {
-    if (checkbox.checked) {
-      const filterType = checkbox.id.replace('filter-toggle-', '');
-      expandedCategories.push(filterType);
-    }
-  });
-
-  sessionStorage.setItem(
-    EXPANDED_CATEGORIES_KEY,
-    JSON.stringify(expandedCategories),
-  );
-};
+// No persistence needed for current requirement ("open if tag is selected").
 
 const hasSelectedTagsInCategory = function (filterType) {
   const selectedTags = document.querySelectorAll(
@@ -53,36 +37,8 @@ const updateCategoriesVisibility = function () {
   });
 };
 
-const restoreExpandedCategories = function () {
-  try {
-    const saved = sessionStorage.getItem(EXPANDED_CATEGORIES_KEY);
-    if (!saved) {
-      updateCategoriesVisibility();
-      return;
-    }
-    
-    const expandedCategories = JSON.parse(saved);
-    expandedCategories.forEach(function (filterType) {
-      const checkbox = document.getElementById(`filter-toggle-${filterType}`);
-      if (checkbox && !checkbox.checked) {
-        if (hasSelectedTagsInCategory(filterType)) {
-          checkbox.checked = true;
-          const button = document.querySelector(
-            `label[for="filter-toggle-${filterType}"]`,
-          );
-          if (button) {
-            button.setAttribute('aria-expanded', 'true');
-          }
-        }
-      }
-    });
-    
-    updateCategoriesVisibility();
-  } catch (error) {
-    // Fallback to default visibility logic if parsing fails
-    console.warn('Failed to restore expanded categories:', error);
-    updateCategoriesVisibility();
-  }
+const initializeCategoriesVisibility = function () {
+  updateCategoriesVisibility();
 };
 
 const shouldInterceptClick = function (link) {
@@ -108,12 +64,6 @@ const handleFilterClick = function (event) {
   }
 
   event.preventDefault();
-
-  if (filterLink.classList.contains('clear-all-link')) {
-    sessionStorage.removeItem(EXPANDED_CATEGORIES_KEY);
-  } else {
-    saveExpandedCategories();
-  }
 
   const href = filterLink.getAttribute('href');
   try {
@@ -142,9 +92,21 @@ export const initClientSideFiltering = function () {
     return;
   }
 
-  restoreExpandedCategories();
+  initializeCategoriesVisibility();
 
   window.addEventListener('popstate', handlePopState);
   window.addEventListener('resize', handleResize);
   document.addEventListener('click', handleFilterClick);
+  
+  // Keep aria-expanded in sync with checkbox state
+  document.addEventListener('change', function (event) {
+    const checkbox = event.target.closest('.filter-category__toggle');
+    if (!checkbox) {
+      return;
+    }
+    const button = document.querySelector(`label[for="${checkbox.id}"]`);
+    if (button) {
+      button.setAttribute('aria-expanded', checkbox.checked ? 'true' : 'false');
+    }
+  });
 };
