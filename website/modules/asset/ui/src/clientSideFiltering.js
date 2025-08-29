@@ -1,5 +1,46 @@
 // Client-side filtering for case studies with page reload
 
+// No persistence needed for current requirement ("open if tag is selected").
+
+const hasSelectedTagsInCategory = function (filterType) {
+  const selectedTags = document.querySelectorAll(
+    `#filter-content-${filterType} .tag-item.active`,
+  );
+  return selectedTags.length > 0;
+};
+
+const isDesktop = function () {
+  return window.innerWidth > 1024;
+};
+
+const updateCategoriesVisibility = function () {
+  const checkboxes = document.querySelectorAll('.filter-category__toggle');
+  checkboxes.forEach(function (checkbox) {
+    const filterType = checkbox.id.replace('filter-toggle-', '');
+    const hasSelectedTags = hasSelectedTagsInCategory(filterType);
+    const isIndustryCategory = filterType === 'industry';
+
+    const shouldBeOpen = hasSelectedTags || (isIndustryCategory && isDesktop());
+    if (shouldBeOpen && !checkbox.checked) {
+      checkbox.checked = true;
+      const button = document.querySelector(`label[for="${checkbox.id}"]`);
+      if (button) {
+        button.setAttribute('aria-expanded', 'true');
+      }
+    } else if (!shouldBeOpen && checkbox.checked) {
+      checkbox.checked = false;
+      const button = document.querySelector(`label[for="${checkbox.id}"]`);
+      if (button) {
+        button.setAttribute('aria-expanded', 'false');
+      }
+    }
+  });
+};
+
+const initializeCategoriesVisibility = function () {
+  updateCategoriesVisibility();
+};
+
 const shouldInterceptClick = function (link) {
   const href = link.getAttribute('href');
   return (
@@ -32,7 +73,6 @@ const handleFilterClick = function (event) {
     history.pushState({ clientSideFilter: true, url: newUrl }, '', newUrl);
     window.location.reload();
   } catch {
-    // Fallback to default navigation if URL construction fails
     window.location.href = href;
   }
 };
@@ -43,11 +83,34 @@ const handlePopState = function (event) {
   }
 };
 
+const handleResize = function () {
+  updateCategoriesVisibility();
+};
+
 export const initClientSideFiltering = function () {
   if (!document.querySelector('.cs_list')) {
     return;
   }
 
+  initializeCategoriesVisibility();
+
   window.addEventListener('popstate', handlePopState);
+  window.addEventListener('resize', handleResize);
   document.addEventListener('click', handleFilterClick);
+
+  // Keep aria-expanded in sync with checkbox state
+  document.addEventListener('change', function (event) {
+    const checkbox = event.target.closest('.filter-category__toggle');
+    if (!checkbox) {
+      return;
+    }
+    const button = document.querySelector(`label[for="${checkbox.id}"]`);
+    if (button) {
+      if (checkbox.checked) {
+        button.setAttribute('aria-expanded', 'true');
+      } else {
+        button.setAttribute('aria-expanded', 'false');
+      }
+    }
+  });
 };
