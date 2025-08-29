@@ -72,27 +72,14 @@ module.exports = {
           },
         },
       },
-      comAddress: {
-        label: 'Company Address',
+      companyMission: {
+        label: 'Company Mission',
         type: 'area',
         options: {
           max: 1,
           widgets: {
             '@apostrophecms/rich-text': {
               ...headingToolbar,
-            },
-          },
-        },
-      },
-      footerLinks: {
-        label: 'Footer Links',
-        type: 'array',
-        titleField: 'footerLink.linkTitle',
-        fields: {
-          add: {
-            footerLink: {
-              label: 'Link',
-              ...linkSchema,
             },
           },
         },
@@ -110,16 +97,20 @@ module.exports = {
           },
         },
       },
-      footerForm: {
-        label: 'Footer Form',
-        type: 'area',
-        options: {
-          max: 1,
-          widgets: {
-            '@apostrophecms/form': {},
+      footerLinks: {
+        label: 'Footer Links',
+        type: 'array',
+        titleField: 'footerLink.linkTitle',
+        fields: {
+          add: {
+            footerLink: {
+              label: 'Link',
+              ...linkSchema,
+            },
           },
         },
       },
+
       // SEO fields
       seoGoogleTagManager: {
         label: 'Google Tag Manager ID',
@@ -134,7 +125,7 @@ module.exports = {
       },
       footer: {
         label: 'Footer',
-        fields: ['comAddress', 'footerLinks', 'socialMediaLinks', 'footerForm'],
+        fields: ['companyMission', 'footerLinks', 'socialMediaLinks'],
       },
       seo: {
         label: 'SEO & Analytics',
