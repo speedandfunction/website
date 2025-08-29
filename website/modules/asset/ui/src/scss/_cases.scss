@@ -1286,14 +1286,14 @@
   }
 
   &__content {
-    position: absolute;
-    left: 50%;
-    top: 50%;
+    position: sticky;
+    left: 20px;
+    right: 20px;
+    top: 90px;
     width: 90vw;
     max-width: 400px;
-    min-width: 320px;
+    min-width: 300px;
     background: #fff;
-    transform: translate(-50%, -50%);
     z-index: 2;
     padding: 0 16px 24px;
     max-height: 90vh;

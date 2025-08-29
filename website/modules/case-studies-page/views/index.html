@@ -95,11 +95,13 @@ main %}
         tags and tags.length %}
         <div class="filter-section">
           <!-- prettier-ignore -->
+          {% set hasActiveFilter = data.query[filterType] %}
+          {% set shouldBeOpen = loop.first or hasActiveFilter %}
           <input
             type="checkbox"
             id="filter-toggle-{{ filterType }}"
             class="filter-category__toggle"
-            {% if loop.first %}checked{% endif %}
+            {% if shouldBeOpen %}checked{% endif %}
             aria-labelledby="filter-category-{{ filterType }}"
           />
           <div class="filter-category" id="filter-category-{{ filterType }}">
@@ -109,7 +111,7 @@ main %}
               class="filter-category__expand-button"
               role="button"
               tabindex="0"
-              aria-expanded="{% if loop.first %}true{% else %}false{% endif %}"
+              aria-expanded="{% if shouldBeOpen %}true{% else %}false{% endif %}"
               aria-controls="filter-content-{{ filterType }}"
               aria-label="Toggle {{ filterLabel }} filter section"
               onkeydown="return true;"
