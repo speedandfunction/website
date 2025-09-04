@@ -32,5 +32,5 @@ jobs:
           GITHUB_OWNER: speedandfunction
           GITHUB_REPO: website
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-          SLACK_CHANNEL: "#spdfn-website"
+          SLACK_CHANNEL: "#spdfn-website-updates"
           BOT_NAME: "PRs Report Bot" 
