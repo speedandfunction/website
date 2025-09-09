@@ -40,6 +40,7 @@
   "dependencies": {
     "@apostrophecms/form": "^1.4.2",
     "@apostrophecms/import-export": "^3.2.0",
+    "@apostrophecms/security-headers": "^1.0.2",
     "@barba/core": "^2.10.3",
     "abort-controller": "^3.0.0",
     "apostrophe": "^4.17.0",
