@@ -10,6 +10,7 @@ function createAposConfig() {
     // Session configuration
     modules: {
       // Core modules configuration
+      '@apostrophecms/security-headers': {},
       '@apostrophecms/express': {
         options: {
           session: {
