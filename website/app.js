@@ -116,6 +116,7 @@ function createAposConfig() {
       // Custom Pieces
       'team-members': {},
       'testimonials': {},
+      'landing-pages': {},
 
       // `asset` supports the project"s webpack build for client-side assets.
       'asset': {},
