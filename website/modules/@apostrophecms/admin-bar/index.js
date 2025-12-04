@@ -12,7 +12,7 @@ module.exports = {
       },
       {
         label: 'Cases',
-        items: ['case-studies', 'cases-tags'],
+        items: ['case-studies', 'cases-tags', 'business-partner'],
       },
       {
         label: 'Categories',
