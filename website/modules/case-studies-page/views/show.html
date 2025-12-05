@@ -140,6 +140,7 @@
         href="{{ partner.partnerWebsite }}"
         target="_blank"
         rel="noopener noreferrer"
+        aria-label="Visit {{ partner.title or 'partner' }} website"
         class="cs_partnership"
       >
       {% else %}
@@ -158,6 +159,7 @@
             class="cs_partnership-logo"
             src="{{ apos.attachment.url(partnerLogo, { size: 'full' }) }}"
             alt="{{ partnerLogo._alt or partner.title or '' }}"
+            loading="lazy"
             width="{{ apos.attachment.getWidth(partnerLogo) }}"
             height="{{ apos.attachment.getHeight(partnerLogo) }}"
           />

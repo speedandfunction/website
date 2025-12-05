@@ -30,7 +30,7 @@ module.exports = {
       },
       partnerWebsite: {
         label: 'Partner Website',
-        type: 'string',
+        type: 'url',
         required: true,
         help: "Link to partner's official website (must include http(s) protocol).",
         placeholder: 'https://example.com',
@@ -44,4 +44,3 @@ module.exports = {
     },
   },
 };
-
