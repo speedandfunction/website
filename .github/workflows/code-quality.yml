@@ -177,7 +177,7 @@ jobs:
 
   sonarqube:
     runs-on: ubuntu-latest
-    if: ${{ github.actor != 'dependabot[bot]' }}
+    if: ${{ github.actor != 'dependabot[bot]' && vars.SONAR_DISABLE_CI != 'true' }}
     needs: unit-tests
     steps:
       - name: Checkout repository
@@ -192,6 +192,15 @@ jobs:
 
       - name: SonarQube Scan
         uses: sonarsource/sonarqube-scan-action@v5.0.0
+        with:
+          args: >
+            -Dsonar.verbose=true
+            -Dsonar.host.url=https://sonarcloud.io
+            -Dsonar.organization=speedandfunction
+            -Dsonar.projectKey=speedandfunction_website 
+            -Dsonar.pullrequest.key=${{ github.event.pull_request.number }}
+            -Dsonar.pullrequest.branch=${{ github.head_ref }}
+            -Dsonar.pullrequest.base=${{ github.base_ref }}
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 

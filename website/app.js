@@ -125,6 +125,7 @@ function createAposConfig() {
       'cases-tags': {},
       'case-studies': {},
       'case-studies-page': {},
+      'business-partner': {},
       'categories': {},
       'vacancies': {},
       'vacancies-list-widget': {},

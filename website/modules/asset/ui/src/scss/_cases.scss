@@ -1394,3 +1394,88 @@
     }
   }
 }
+
+// Partnership section
+.cs_partnership {
+  z-index: 2;
+  text-decoration: none;
+  display: block;
+  width: 100%;
+  max-width: 687px;
+  padding: 0 20px;
+
+  @include breakpoint-medium {
+    position: absolute;
+    top: 40px;
+    left: 0;
+    padding: 0;
+  }
+
+  &:hover,
+  &:focus {
+    text-decoration: none;
+
+    .cs_partnership-box {
+      box-shadow: 0 4px 12px rgba($black, 0.15);
+      transform: translateY(-2px);
+    }
+  }
+}
+
+.cs_partnership-box {
+  background-color: $white;
+  padding: 8px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  text-align: center;
+  transition: all 0.3s ease;
+
+  @include breakpoint-medium {
+    flex-direction: column;
+    width: 114px;
+    padding: 12px;
+    gap: 8px;
+  }
+}
+
+.cs_partnership-label {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 2px;
+
+  .cs_partnership-text:nth-child(3) {
+    display: none;
+  }
+
+  @include breakpoint-medium {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+.cs_partnership-text {
+  @include font-settings(11px, 110%, $font-weight-extra-bold);
+  color: $gray-500;
+  display: block;
+
+  @include breakpoint-medium {
+    text-transform: uppercase;
+  }
+}
+
+.cs_partnership-logo {
+  max-width: 100%;
+  height: auto;
+  max-height: 36px;
+  width: auto;
+  object-fit: contain;
+  display: block;
+
+  @include breakpoint-medium {
+    max-height: 46px;
+  }
+}

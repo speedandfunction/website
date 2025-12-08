@@ -50,6 +50,21 @@ module.exports = {
         },
         help: 'Select technologies utilized in the project.',
       },
+      _partner: {
+        label: 'Partner',
+        type: 'relationship',
+        withType: 'business-partner',
+        max: 1,
+        builders: {
+          project: {
+            title: 1,
+            slug: 1,
+            partnerLogo: 1,
+            partnerWebsite: 1,
+          },
+        },
+        help: 'Select a partner for this case study.',
+      },
       _caseStudyType: {
         label: 'Case Study Type',
         type: 'relationship',
@@ -144,6 +159,7 @@ module.exports = {
           '_stack',
           '_caseStudyType',
           '_industry',
+          '_partner',
           'portfolioTitle',
           'descriptor',
           'prodLink',

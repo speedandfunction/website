@@ -132,6 +132,46 @@
 
       {% endif %}
 
+      {% if data.piece._partner and data.piece._partner.length %}
+      {% set partner = data.piece._partner[0] %}
+      {% set partnerLogo = apos.image.first(partner.partnerLogo) %}
+      {% if partner.partnerWebsite %}
+      <a
+        href="{{ partner.partnerWebsite }}"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Visit {{ partner.title or 'partner' }} website"
+        class="cs_partnership"
+      >
+      {% else %}
+      <div class="cs_partnership">
+      {% endif %}
+        <div class="cs_partnership-box">
+          <div class="cs_partnership-label">
+            <span class="cs_partnership-text">In partnership</span>
+            <span class="cs_partnership-text">with</span>
+            {% if partner.title %}
+            <span class="cs_partnership-text">{{ partner.title }}</span>
+            {% endif %}
+          </div>
+          {% if partnerLogo %}
+          <img
+            class="cs_partnership-logo"
+            src="{{ apos.attachment.url(partnerLogo, { size: 'full' }) }}"
+            alt="{{ partnerLogo._alt or partner.title or '' }}"
+            loading="lazy"
+            width="{{ apos.attachment.getWidth(partnerLogo) }}"
+            height="{{ apos.attachment.getHeight(partnerLogo) }}"
+          />
+          {% endif %}
+        </div>
+      {% if partner.partnerWebsite %}
+      </a>
+      {% else %}
+      </div>
+      {% endif %}
+      {% endif %}
+
       <div class="cs_info">
         <div class="cs_info-primary">
           <div class="truncate-wrapper">
