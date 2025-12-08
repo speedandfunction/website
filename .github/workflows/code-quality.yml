@@ -10,7 +10,6 @@ on:
 # Set minimum permissions by default
 permissions:
   contents: read
-  pull-requests: read
 
 jobs:
   docker-lint:
@@ -180,9 +179,6 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ github.actor != 'dependabot[bot]' && vars.SONAR_DISABLE_CI != 'true' }}
     needs: unit-tests
-    permissions:
-      contents: read
-      pull-requests: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
