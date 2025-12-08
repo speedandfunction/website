@@ -10,7 +10,7 @@ on:
 # Set minimum permissions by default
 permissions:
   contents: read
-   pull-requests: read
+  pull-requests: read
 
 jobs:
   docker-lint:
