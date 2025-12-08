@@ -178,7 +178,7 @@ jobs:
 
   sonarqube:
     runs-on: ubuntu-latest
-    if: ${{ github.actor != 'dependabot[bot]' }}
+    if: ${{ github.actor != 'dependabot[bot]' && vars.SONAR_DISABLE_CI != 'true' }}
     needs: unit-tests
     permissions:
       contents: read
