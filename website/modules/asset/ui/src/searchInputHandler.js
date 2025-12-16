@@ -35,7 +35,12 @@ const toggleNoTagsMessage = function (container, hasVisible) {
  * Implements filtering decisions — determines which tags should be shown.
  */
 
-const filterTags = function (tagItems, filterValue, getLabel, defaultVisibleCount) {
+const filterTags = function (
+  tagItems,
+  filterValue,
+  getLabel,
+  defaultVisibleCount,
+) {
   let hasVisible = false;
   const isSearchActive = filterValue.length > 0;
 
@@ -48,14 +53,12 @@ const filterTags = function (tagItems, filterValue, getLabel, defaultVisibleCoun
       } else {
         hideTagItem(tag);
       }
+    } else if (index < defaultVisibleCount) {
+      showTagItem(tag);
+      hasVisible = true;
     } else {
-      if (index < defaultVisibleCount) {
-        showTagItem(tag);
-        hasVisible = true;
-      } else {
-        tag.style.display = '';
-        tag.classList.add('tag-item--hidden');
-      }
+      tag.style.display = '';
+      tag.classList.add('tag-item--hidden');
     }
   });
 
@@ -88,9 +91,11 @@ const setupTagSearchForInput = function (input, options) {
     if (!container) return;
 
     const csContainer = document.querySelector('.cs_container');
-    const defaultVisibleCount = csContainer
-      ? parseInt(csContainer.dataset.defaultVisibleTags, 10) || 5
-      : 5;
+    let defaultVisibleCount = 5;
+    if (csContainer) {
+      defaultVisibleCount =
+        parseInt(csContainer.dataset.defaultVisibleTags, 10) || 5;
+    }
 
     const tagItems = container.querySelectorAll(tagSelector);
     const hasVisible = filterTags(
