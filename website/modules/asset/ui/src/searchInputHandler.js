@@ -85,17 +85,17 @@ const setupTagSearchForInput = function (input, options) {
 
   removePreviousHandler(input);
 
+  const csContainer = document.querySelector('.cs_container');
+  let defaultVisibleCount = 5;
+  if (csContainer) {
+    defaultVisibleCount =
+      parseInt(csContainer.dataset.defaultVisibleTags, 10) || 5;
+  }
+
   const handler = function () {
     const filterValue = input.value.trim().toLowerCase();
     const container = input.closest(containerSelector);
     if (!container) return;
-
-    const csContainer = document.querySelector('.cs_container');
-    let defaultVisibleCount = 5;
-    if (csContainer) {
-      defaultVisibleCount =
-        parseInt(csContainer.dataset.defaultVisibleTags, 10) || 5;
-    }
 
     const tagItems = container.querySelectorAll(tagSelector);
     const hasVisible = filterTags(
