@@ -12,6 +12,7 @@ const getTagLabel = function (tagItem) {
 
 const showTagItem = function (tagItem) {
   tagItem.style.display = '';
+  tagItem.classList.remove('tag-item--hidden');
 };
 
 const hideTagItem = function (tagItem) {
@@ -34,16 +35,27 @@ const toggleNoTagsMessage = function (container, hasVisible) {
  * Implements filtering decisions — determines which tags should be shown.
  */
 
-const filterTags = function (tagItems, filterValue, getLabel) {
+const filterTags = function (tagItems, filterValue, getLabel, defaultVisibleCount) {
   let hasVisible = false;
+  const isSearchActive = filterValue.length > 0;
 
-  tagItems.forEach(function (tag) {
-    const match = getLabel(tag).includes(filterValue);
-    if (match) {
-      showTagItem(tag);
-      hasVisible = true;
+  tagItems.forEach(function (tag, index) {
+    if (isSearchActive) {
+      const match = getLabel(tag).includes(filterValue);
+      if (match) {
+        showTagItem(tag);
+        hasVisible = true;
+      } else {
+        hideTagItem(tag);
+      }
     } else {
-      hideTagItem(tag);
+      if (index < defaultVisibleCount) {
+        showTagItem(tag);
+        hasVisible = true;
+      } else {
+        tag.style.display = '';
+        tag.classList.add('tag-item--hidden');
+      }
     }
   });
 
@@ -75,8 +87,18 @@ const setupTagSearchForInput = function (input, options) {
     const container = input.closest(containerSelector);
     if (!container) return;
 
+    const csContainer = document.querySelector('.cs_container');
+    const defaultVisibleCount = csContainer
+      ? parseInt(csContainer.dataset.defaultVisibleTags, 10) || 5
+      : 5;
+
     const tagItems = container.querySelectorAll(tagSelector);
-    const hasVisible = filterTags(tagItems, filterValue, getTagLabelFn);
+    const hasVisible = filterTags(
+      tagItems,
+      filterValue,
+      getTagLabelFn,
+      defaultVisibleCount,
+    );
     toggleNoTagsMessage(container, hasVisible);
   };
 
