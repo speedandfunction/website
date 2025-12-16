@@ -12,6 +12,7 @@ const getTagLabel = function (tagItem) {
 
 const showTagItem = function (tagItem) {
   tagItem.style.display = '';
+  tagItem.classList.remove('tag-item--hidden');
 };
 
 const hideTagItem = function (tagItem) {
@@ -34,16 +35,30 @@ const toggleNoTagsMessage = function (container, hasVisible) {
  * Implements filtering decisions — determines which tags should be shown.
  */
 
-const filterTags = function (tagItems, filterValue, getLabel) {
+const filterTags = function (
+  tagItems,
+  filterValue,
+  getLabel,
+  defaultVisibleCount,
+) {
   let hasVisible = false;
+  const isSearchActive = filterValue.length > 0;
 
-  tagItems.forEach(function (tag) {
-    const match = getLabel(tag).includes(filterValue);
-    if (match) {
+  tagItems.forEach(function (tag, index) {
+    if (isSearchActive) {
+      const match = getLabel(tag).includes(filterValue);
+      if (match) {
+        showTagItem(tag);
+        hasVisible = true;
+      } else {
+        hideTagItem(tag);
+      }
+    } else if (index < defaultVisibleCount) {
       showTagItem(tag);
       hasVisible = true;
     } else {
-      hideTagItem(tag);
+      tag.style.display = '';
+      tag.classList.add('tag-item--hidden');
     }
   });
 
@@ -70,13 +85,27 @@ const setupTagSearchForInput = function (input, options) {
 
   removePreviousHandler(input);
 
+  const csContainer = document.querySelector('.cs_container');
+  let defaultVisibleCount = 5;
+  if (csContainer) {
+    const parsed = parseInt(csContainer.dataset.defaultVisibleTags, 10);
+    if (parsed > 0) {
+      defaultVisibleCount = parsed;
+    }
+  }
+
   const handler = function () {
     const filterValue = input.value.trim().toLowerCase();
     const container = input.closest(containerSelector);
     if (!container) return;
 
     const tagItems = container.querySelectorAll(tagSelector);
-    const hasVisible = filterTags(tagItems, filterValue, getTagLabelFn);
+    const hasVisible = filterTags(
+      tagItems,
+      filterValue,
+      getTagLabelFn,
+      defaultVisibleCount,
+    );
     toggleNoTagsMessage(container, hasVisible);
   };
 
