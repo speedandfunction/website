@@ -88,8 +88,10 @@ const setupTagSearchForInput = function (input, options) {
   const csContainer = document.querySelector('.cs_container');
   let defaultVisibleCount = 5;
   if (csContainer) {
-    defaultVisibleCount =
-      parseInt(csContainer.dataset.defaultVisibleTags, 10) || 5;
+    const parsed = parseInt(csContainer.dataset.defaultVisibleTags, 10);
+    if (parsed > 0) {
+      defaultVisibleCount = parsed;
+    }
   }
 
   const handler = function () {
