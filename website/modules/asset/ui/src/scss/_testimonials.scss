@@ -218,6 +218,29 @@
     @include breakpoint-medium {
       margin-top: 52px;
     }
+
+    &[data-testimonial-count='1'] {
+      .sf-testimonials {
+        .sf-person-wrapper {
+          .sf-person__content {
+            max-height: 150px;
+            @media (min-width: 768px) {
+              max-height: 300px;
+            }
+          }
+        }
+      }
+    }
+
+    &:not([data-testimonial-count='1']) {
+      .sf-testimonials {
+        .sf-person-wrapper {
+          .sf-person__content {
+            max-height: 150px;
+          }
+        }
+      }
+    }
   }
 }
 
