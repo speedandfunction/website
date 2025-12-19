@@ -97,12 +97,10 @@ const toggleShowMoreButtonVisibility = function (
   if (showMoreButton) {
     if (isSearchActive) {
       showMoreButton.style.display = 'none';
+    } else if (totalTags > defaultVisibleCount) {
+      showMoreButton.style.display = 'flex';
     } else {
-      if (totalTags > defaultVisibleCount) {
-        showMoreButton.style.display = 'flex';
-      } else {
-        showMoreButton.style.display = 'none';
-      }
+      showMoreButton.style.display = 'none';
     }
   }
 };
