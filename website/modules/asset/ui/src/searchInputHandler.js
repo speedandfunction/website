@@ -76,6 +76,35 @@ const removePreviousHandler = function (input) {
   }
 };
 
+const getDefaultVisibleCount = function () {
+  const csContainer = document.querySelector('.cs_container');
+  let defaultVisibleCount = 5;
+  if (csContainer) {
+    const parsed = parseInt(csContainer.dataset.defaultVisibleTags, 10);
+    if (parsed > 0) {
+      defaultVisibleCount = parsed;
+    }
+  }
+  return defaultVisibleCount;
+};
+
+const toggleShowMoreButtonVisibility = function (
+  container,
+  isSearchActive,
+  totalTags,
+  defaultVisibleCount,
+) {
+  const showMoreButton = container.querySelector('.tags__show-more');
+  if (showMoreButton) {
+    if (isSearchActive) {
+      showMoreButton.style.display = 'none';
+    } else {
+      showMoreButton.style.display =
+        totalTags > defaultVisibleCount ? 'flex' : 'none';
+    }
+  }
+};
+
 const setupTagSearchForInput = function (input, options) {
   const {
     containerSelector,
@@ -85,14 +114,7 @@ const setupTagSearchForInput = function (input, options) {
 
   removePreviousHandler(input);
 
-  const csContainer = document.querySelector('.cs_container');
-  let defaultVisibleCount = 5;
-  if (csContainer) {
-    const parsed = parseInt(csContainer.dataset.defaultVisibleTags, 10);
-    if (parsed > 0) {
-      defaultVisibleCount = parsed;
-    }
-  }
+  const defaultVisibleCount = getDefaultVisibleCount();
 
   const handler = function () {
     const filterValue = input.value.trim().toLowerCase();
@@ -109,19 +131,12 @@ const setupTagSearchForInput = function (input, options) {
     );
     toggleNoTagsMessage(container, hasVisible);
 
-    const showMoreButton = container.querySelector('.tags__show-more');
-    if (showMoreButton) {
-      if (isSearchActive) {
-        showMoreButton.style.display = 'none';
-      } else {
-        const totalTags = tagItems.length;
-        if (totalTags > defaultVisibleCount) {
-          showMoreButton.style.display = 'flex';
-        } else {
-          showMoreButton.style.display = 'none';
-        }
-      }
-    }
+    toggleShowMoreButtonVisibility(
+      container,
+      isSearchActive,
+      tagItems.length,
+      defaultVisibleCount,
+    );
   };
 
   input.tagSearchHandler = handler;
