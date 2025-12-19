@@ -100,6 +100,7 @@ const setupTagSearchForInput = function (input, options) {
     if (!container) return;
 
     const tagItems = container.querySelectorAll(tagSelector);
+    const isSearchActive = filterValue.length > 0;
     const hasVisible = filterTags(
       tagItems,
       filterValue,
@@ -107,6 +108,20 @@ const setupTagSearchForInput = function (input, options) {
       defaultVisibleCount,
     );
     toggleNoTagsMessage(container, hasVisible);
+
+    const showMoreButton = container.querySelector('.tags__show-more');
+    if (showMoreButton) {
+      if (isSearchActive) {
+        showMoreButton.style.display = 'none';
+      } else {
+        const totalTags = tagItems.length;
+        if (totalTags > defaultVisibleCount) {
+          showMoreButton.style.display = 'flex';
+        } else {
+          showMoreButton.style.display = 'none';
+        }
+      }
+    }
   };
 
   input.tagSearchHandler = handler;
