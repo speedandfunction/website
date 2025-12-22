@@ -7,6 +7,7 @@ on:
   push:
     branches:
       - main
+      - staging
       - 'release/pr-v*'
 
   workflow_dispatch:
@@ -35,7 +36,7 @@ jobs:
   deploy-to-railway:
     name: Deploy to Railway
     runs-on: ubuntu-latest
-    environment: ${{ inputs.deploy-env || (github.ref_name == 'main' && 'Development') || (startsWith(github.ref_name, 'release/pr-v') && 'Production') || (startsWith(github.ref_name, 'staging/') && 'Staging') || 'None' }}
+    environment: ${{ inputs.deploy-env || (github.ref_name == 'main' && 'Development') || (startsWith(github.ref_name, 'release/pr-v') && 'Production') || (github.ref_name == 'staging' && 'Staging') || 'None' }}
     env:
       RAILWAY_TOKEN: ${{ secrets.RAILWAY_GITHUB_ACTIONS }}
     steps:
@@ -54,7 +55,7 @@ jobs:
   restore-db:
     name: Restore DB
     needs: deploy-to-railway
-    environment: ${{ inputs.deploy-env || (github.ref_name == 'main' && 'Development') || (startsWith(github.ref_name, 'release/pr-v') && 'Production') || (startsWith(github.ref_name, 'staging/') && 'Staging') || 'None' }}
+    environment: ${{ inputs.deploy-env || (github.ref_name == 'main' && 'Development') || (startsWith(github.ref_name, 'release/pr-v') && 'Production') || (github.ref_name == 'staging' && 'Staging') || 'None' }}
     runs-on: ubuntu-latest
     if: ${{ inputs.restore-db == true }}
     env:
@@ -74,7 +75,7 @@ jobs:
     needs: restore-db
     if: ${{ inputs.create-admin == true }}
     runs-on: ubuntu-latest
-    environment: ${{ inputs.deploy-env || (github.ref_name == 'main' && 'Development') || (startsWith(github.ref_name, 'release/pr-v') && 'Production') || (startsWith(github.ref_name, 'staging/') && 'Staging') || 'None' }}
+    environment: ${{ inputs.deploy-env || (github.ref_name == 'main' && 'Development') || (startsWith(github.ref_name, 'release/pr-v') && 'Production') || (github.ref_name == 'staging' && 'Staging') || 'None' }}
     env:
       APOS_MONGODB_URI: ${{ secrets.MONGO_URI }}
       ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
