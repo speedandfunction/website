@@ -5,19 +5,14 @@ module.exports = {
     pluralLabel: 'Business Partners',
     slugPrefix: 'business-partner-',
     sort: {
-      title: 1,
+      createdAt: -1,
     },
     shortcut: false,
   },
   fields: {
     add: {
-      title: {
-        label: 'Partner Name',
-        type: 'string',
-        required: true,
-      },
-      partnerLogo: {
-        label: 'Partner Logo',
+      partnerLogoMobile: {
+        label: 'Partner Logo (Mobile)',
         type: 'area',
         required: true,
         options: {
@@ -27,6 +22,20 @@ module.exports = {
             '@apostrophecms/image': {},
           },
         },
+        help: 'Upload 66px × 66px logo for mobile/default view',
+      },
+      partnerLogoDesktop: {
+        label: 'Partner Logo (Desktop)',
+        type: 'area',
+        required: true,
+        options: {
+          max: 1,
+          min: 1,
+          widgets: {
+            '@apostrophecms/image': {},
+          },
+        },
+        help: 'Upload 146px × 146px logo for desktop (≥ medium breakpoint)',
       },
       partnerWebsite: {
         label: 'Partner Website',
@@ -39,7 +48,7 @@ module.exports = {
     group: {
       basics: {
         label: 'Basics',
-        fields: ['title', 'partnerLogo', 'partnerWebsite'],
+        fields: ['partnerLogoMobile', 'partnerLogoDesktop', 'partnerWebsite'],
       },
     },
   },
