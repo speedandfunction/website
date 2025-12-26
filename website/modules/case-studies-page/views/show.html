@@ -134,36 +134,38 @@
 
       {% if data.piece._partner and data.piece._partner.length %}
       {% set partner = data.piece._partner[0] %}
-      {% set partnerLogo = apos.image.first(partner.partnerLogo) %}
+      {% set partnerLogoMobile = apos.image.first(partner.partnerLogoMobile) %}
+      {% set partnerLogoDesktop = apos.image.first(partner.partnerLogoDesktop) %}
       {% if partner.partnerWebsite %}
       <a
         href="{{ partner.partnerWebsite }}"
         target="_blank"
         rel="noopener noreferrer"
-        aria-label="Visit {{ partner.title or 'partner' }} website"
+        aria-label="Visit partner website"
         class="cs_partnership"
       >
       {% else %}
       <div class="cs_partnership">
       {% endif %}
-        <div class="cs_partnership-box">
-          <div class="cs_partnership-label">
-            <span class="cs_partnership-text">In partnership</span>
-            <span class="cs_partnership-text">with</span>
-            {% if partner.title %}
-            <span class="cs_partnership-text">{{ partner.title }}</span>
-            {% endif %}
-          </div>
-          {% if partnerLogo %}
-          <img
-            class="cs_partnership-logo"
-            src="{{ apos.attachment.url(partnerLogo, { size: 'full' }) }}"
-            alt="{{ partnerLogo._alt or partner.title or '' }}"
-            width="{{ apos.attachment.getWidth(partnerLogo) }}"
-            height="{{ apos.attachment.getHeight(partnerLogo) }}"
+        {% if partnerLogoMobile or partnerLogoDesktop %}
+        <picture class="cs_partnership-picture">
+          {% if partnerLogoDesktop %}
+          <source
+            media="(min-width: 768px)"
+            srcset="{{ apos.attachment.url(partnerLogoDesktop, { size: 'full' }) }}"
           />
           {% endif %}
-        </div>
+          {% if partnerLogoMobile %}
+          <img
+            class="cs_partnership-logo"
+            src="{{ apos.attachment.url(partnerLogoMobile, { size: 'full' }) }}"
+            alt="{{ partnerLogoMobile._alt or 'Partner logo' }}"
+            width="{{ apos.attachment.getWidth(partnerLogoMobile) }}"
+            height="{{ apos.attachment.getHeight(partnerLogoMobile) }}"
+          />
+          {% endif %}
+        </picture>
+        {% endif %}
       {% if partner.partnerWebsite %}
       </a>
       {% else %}

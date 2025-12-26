@@ -57,9 +57,9 @@ module.exports = {
         max: 1,
         builders: {
           project: {
-            title: 1,
             slug: 1,
-            partnerLogo: 1,
+            partnerLogoMobile: 1,
+            partnerLogoDesktop: 1,
             partnerWebsite: 1,
           },
         },
