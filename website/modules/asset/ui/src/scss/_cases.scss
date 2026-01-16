@@ -1274,6 +1274,9 @@
 
   .tags-filter {
     max-width: none;
+    max-height: none;
+    overflow-y: visible;
+    overflow-x: visible;
   }
 
   &__backdrop {
@@ -1295,7 +1298,7 @@
     min-width: 300px;
     background: #fff;
     z-index: 2;
-    padding: 0 16px 24px;
+    padding: 0 16px 60px;
     max-height: 90vh;
     overflow-y: auto;
     box-shadow: 0 8px 32px rgba($black, 0.18);
