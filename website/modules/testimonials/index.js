@@ -106,6 +106,10 @@ module.exports = {
         label: 'Organization',
         name: 'organization',
       },
+      _caseStudy: {
+        label: 'Related Case Study',
+        name: '_caseStudy.0.title',
+      },
     },
   },
   filters: {
