@@ -122,7 +122,11 @@ const setupFilterAccessibility = function () {
 };
 
 // Helper function to collapse tags with animation
-const collapseTagsWithAnimation = function (itemsToProcess, button, textElement) {
+const collapseTagsWithAnimation = function (
+  itemsToProcess,
+  button,
+  textElement,
+) {
   if (!itemsToProcess || !button || !textElement) return;
 
   // Prevent double-clicking during animation
@@ -201,6 +205,8 @@ const setupShowMoreHandlers = function () {
     if (!button) return;
 
     const filterContent = button.closest('.filter-content');
+    if (!filterContent) return;
+
     const searchInput = filterContent.querySelector('.tag-search');
     const isSearchActive = searchInput && searchInput.value.trim().length > 0;
 
