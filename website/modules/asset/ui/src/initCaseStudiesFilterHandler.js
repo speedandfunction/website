@@ -122,8 +122,8 @@ const setupFilterAccessibility = function () {
 };
 
 // Helper function to collapse tags with animation
-const collapseTagsWithAnimation = function (allItems, button, textElement) {
-  if (!allItems || !button || !textElement) return;
+const collapseTagsWithAnimation = function (itemsToProcess, button, textElement) {
+  if (!itemsToProcess || !button || !textElement) return;
 
   // Prevent double-clicking during animation
   if (button.dataset.animating === 'true') {
@@ -137,9 +137,11 @@ const collapseTagsWithAnimation = function (allItems, button, textElement) {
   textElement.textContent = 'Show more';
 
   // Immediately hide items that should be hidden (no animation delay)
-  allItems.forEach(function (item, index) {
+  itemsToProcess.forEach(function (item, index) {
     if (index >= getDefaultVisibleTagsCount()) {
       item.classList.add('tag-item--hidden');
+    } else {
+      item.classList.remove('tag-item--hidden');
     }
   });
 
@@ -150,8 +152,8 @@ const collapseTagsWithAnimation = function (allItems, button, textElement) {
 };
 
 // Helper function to expand tags with animation
-const expandTagsWithAnimation = function (allItems, button, textElement) {
-  if (!allItems || !button || !textElement) return;
+const expandTagsWithAnimation = function (itemsToProcess, button, textElement) {
+  if (!itemsToProcess || !button || !textElement) return;
 
   // Prevent double-clicking during animation
   if (button.dataset.animating === 'true') {
@@ -167,7 +169,7 @@ const expandTagsWithAnimation = function (allItems, button, textElement) {
   // Show all items with staggered animation for smooth effect
   let expandCounter = 0;
   let maxDelay = 0;
-  allItems.forEach(function (item, index) {
+  itemsToProcess.forEach(function (item, index) {
     if (index >= getDefaultVisibleTagsCount()) {
       const delay = expandCounter * 50;
       maxDelay = Math.max(maxDelay, delay);
@@ -199,13 +201,29 @@ const setupShowMoreHandlers = function () {
     if (!button) return;
 
     const filterContent = button.closest('.filter-content');
-    const allItems = filterContent.querySelectorAll('.tag-item');
-    const textElement = button.querySelector('.tags__show-more--text');
+    const searchInput = filterContent.querySelector('.tag-search');
+    const isSearchActive = searchInput && searchInput.value.trim().length > 0;
 
-    if (button.classList.contains('tags__show-more--expanded')) {
-      collapseTagsWithAnimation(allItems, button, textElement);
+    const textElement = button.querySelector('.tags__show-more--text');
+    const allItems = filterContent.querySelectorAll('.tag-item');
+
+    if (isSearchActive) {
+      const matchingItems = Array.from(allItems).filter(function (item) {
+        return item.style.display !== 'none';
+      });
+
+      if (button.classList.contains('tags__show-more--expanded')) {
+        collapseTagsWithAnimation(matchingItems, button, textElement);
+      } else {
+        expandTagsWithAnimation(matchingItems, button, textElement);
+      }
     } else {
-      expandTagsWithAnimation(allItems, button, textElement);
+      const allItemsArray = Array.from(allItems);
+      if (button.classList.contains('tags__show-more--expanded')) {
+        collapseTagsWithAnimation(allItemsArray, button, textElement);
+      } else {
+        expandTagsWithAnimation(allItemsArray, button, textElement);
+      }
     }
   };
 

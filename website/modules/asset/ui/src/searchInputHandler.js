@@ -96,11 +96,34 @@ const toggleShowMoreButtonVisibility = function (
   const showMoreButton = container.querySelector('.tags__show-more');
   if (showMoreButton) {
     if (isSearchActive) {
-      showMoreButton.style.display = 'none';
-    } else if (totalTags > defaultVisibleCount) {
-      showMoreButton.style.display = 'flex';
+      const tagItems = container.querySelectorAll('.tag-item');
+      let visibleCount = 0;
+      tagItems.forEach(function (item) {
+        if (item.style.display !== 'none' && !item.classList.contains('tag-item--hidden')) {
+          visibleCount += 1;
+        }
+      });
+      if (visibleCount <= defaultVisibleCount) {
+        showMoreButton.style.display = 'none';
+      } else {
+        showMoreButton.style.display = 'flex';
+        const textElement = showMoreButton.querySelector('.tags__show-more--text');
+        if (textElement && visibleCount > defaultVisibleCount) {
+          showMoreButton.classList.add('tags__show-more--expanded');
+          textElement.textContent = 'Show less';
+        }
+      }
     } else {
-      showMoreButton.style.display = 'none';
+      const textElement = showMoreButton.querySelector('.tags__show-more--text');
+      if (textElement) {
+        showMoreButton.classList.remove('tags__show-more--expanded');
+        textElement.textContent = 'Show more';
+      }
+      if (totalTags > defaultVisibleCount) {
+        showMoreButton.style.display = 'flex';
+      } else {
+        showMoreButton.style.display = 'none';
+      }
     }
   }
 };
