@@ -8,79 +8,140 @@
     padding-bottom: 16px;
 
     @include breakpoint-medium {
-      padding-bottom: 24px;
+      padding-bottom: 150px;
     }
   }
 
   .sf-footer__mission {
     text-align: center;
-    margin-bottom: 32px;
+    margin-bottom: 20px;
     display: block;
+
     @include breakpoint-medium {
       display: block;
       width: fit-content;
       margin-left: auto;
       margin-right: auto;
+      margin-bottom: 91.5px;
     }
 
     p {
-      font-size: $font-size-footer-mobile;
-      font-weight: $font-weight-300;
-      color: $gray-300;
+      font-size: 10px;
+      font-weight: $font-weight-bold;
+      color: #7c7c7b;
       margin: 0;
-      line-height: 120%;
+      line-height: 140%;
       display: block;
-      margin-right: 4px;
+      text-align: center;
       text-wrap: balance;
+
+      @include breakpoint-medium {
+        font-size: 12px;
+      }
 
       &:first-child {
         display: block;
       }
 
-      &:not(:first-child) {
+      &:nth-child(2) {
         display: block;
-        @include breakpoint-medium {
-          display: inline-block;
-        }
       }
     }
   }
 
-  .sf-footer__links {
+  .sf-footer__badge-row {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    font-size: $font-size-footer-mobile;
-    font-weight: $font-weight-300;
-    line-height: 120%;
-    gap: 44px;
-
-    @include breakpoint-medium {
-      flex-direction: row;
-      justify-content: space-between;
-      gap: 32px;
-      text-align: left;
-    }
-  }
-
-  .sf-footer__links-group {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
+    align-items: center;
+    margin-bottom: 104px;
 
     @include breakpoint-medium {
       flex-direction: row;
       align-items: center;
-      gap: 32px;
+      justify-content: space-between;
+      margin-bottom: 0;
+      position: relative;
+    }
+  }
+
+  .sf-footer__badge {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 60px;
+    order: 1;
+
+    @include breakpoint-medium {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      margin-bottom: 0;
+      order: 1;
+    }
+
+    .sf-footer__badge-image {
+      width: 100px;
+      height: 60px;
+      object-fit: contain;
+
+      @include breakpoint-medium {
+        width: 140px;
+        height: 80px;
+      }
+    }
+  }
+
+  .sf-footer__links-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    order: 2;
+    margin-bottom: 0;
+
+    @include breakpoint-medium {
+      flex-direction: row;
+      align-items: center;
+      gap: 50px;
+      flex: 1;
+      justify-content: flex-start;
+      order: 0;
+      margin-bottom: 0;
+    }
+  }
+
+  .sf-footer__links-right {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    order: 3;
+    margin-bottom: 0;
+
+    @include breakpoint-medium {
+      flex-direction: row;
+      align-items: center;
+      gap: 50px;
+      flex: 1;
+      justify-content: flex-end;
+      order: 2;
+      margin-bottom: 0;
     }
   }
 
   .sf-footer__links-item {
-    font-size: $font-size-footer-mobile;
-    font-weight: $font-weight-normal;
+    font-size: 10px;
+    font-weight: $font-weight-bold;
     color: $gray-500;
+    line-height: 140%;
     text-decoration: none;
+    text-align: center;
     transition: color 0.2s ease;
+    margin-bottom: 20px;
+
+    @include breakpoint-medium {
+      font-size: 12px;
+      text-align: left;
+      margin-bottom: 0;
+    }
 
     &:hover,
     &:focus {
@@ -89,16 +150,12 @@
     }
   }
 
-  .sf-footer__links-item--policy {
-    margin-top: 44px;
-    @include breakpoint-medium {
-      margin-top: 0;
-    }
-  }
-
   .sf-footer__bottom {
     text-align: center;
-    padding-top: 32px;
+
+    @include breakpoint-medium {
+      text-align: right;
+    }
   }
 
   .sf-copy {
@@ -108,8 +165,13 @@
 
 .sf-copy {
   text-align: center;
-  font-weight: $font-weight-medium;
-  font-size: $font-size-body-medium-mobile;
+  font-weight: $font-weight-bold;
+  font-size: 10px;
   line-height: 140%;
-  color: $gray-300;
+  color: $gray-500;
+
+  @include breakpoint-medium {
+    font-size: 12px;
+    text-align: right;
+  }
 }
