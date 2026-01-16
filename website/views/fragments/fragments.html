@@ -30,7 +30,6 @@
 {% endfragment %} {% fragment footer() %}
 <footer class="sf-footer sf-container">
   <div class="sf-footer__content">
-    
     {% if data.global.companyMission and data.global.companyMission.items and data.global.companyMission.items.length > 0 %}
     <div class="sf-footer__mission">
       <div class="sf-footer__mission-content">
@@ -39,38 +38,45 @@
     </div>
     {% endif %}
 
-    <div class="sf-footer__links">
-      {% if data.global.socialMediaLinks and data.global.socialMediaLinks.length > 0 %}
-        <div class="sf-footer__links-group">
+    <div class="sf-footer__badge-row">
+      <div class="sf-footer__links-left">
+        {% if data.global.socialMediaLinks and data.global.socialMediaLinks.length > 0 %}
           {% for item in data.global.socialMediaLinks %}
           <a
             href="{% if item.SMLink.linkType == 'page' and item.SMLink._page %}{{ item.SMLink._page._url }}{% else %}{{ item.SMLink.customUrl }}{% endif %}"
             class="sf-footer__links-item"
             {% if item.SMLink.target and item.SMLink.target.includes('_blank') %}target="_blank" rel="noopener noreferrer"{% endif %}
           >
-          {{ item.SMLink.linkTitle }}
-        </a>
-        {% endfor %}
-    </div>
-    {% endif %}
-
-    {% if data.global.footerLinks and data.global.footerLinks.length > 0 %}
-      <div class="sf-footer__links-group">
-        {% for item in data.global.footerLinks %}
-        <a
-          href="{% if item.footerLink.linkType == 'page' and item.footerLink._page %}{{ item.footerLink._page._url }}{% else %}{{ item.footerLink.customUrl }}{% endif %}"
-          class="sf-footer__links-item"
-          {% if item.footerLink.target and item.footerLink.target.includes('_blank') %}target="_blank" rel="noopener noreferrer"{% endif %}
-        >
-          {{ item.footerLink.linkTitle }}
-        </a>
-        {% endfor %}
+            {{ item.SMLink.linkTitle }}
+          </a>
+          {% endfor %}
+        {% endif %}
       </div>
-    {% endif %}
-  </div>
 
-    <div class="sf-footer__bottom">
-      <p class="sf-copy">&#169; {{ data.currentYear or '2025' }} S&amp;F</p>
+      <div class="sf-footer__badge">
+        <img
+          src="/images/proud-icon.png"
+          alt="Proud member of The Bureau"
+          class="sf-footer__badge-image"
+        />
+      </div>
+
+      <div class="sf-footer__links-right">
+        {% if data.global.footerLinks and data.global.footerLinks.length > 0 %}
+          {% for item in data.global.footerLinks %}
+          <a
+            href="{% if item.footerLink.linkType == 'page' and item.footerLink._page %}{{ item.footerLink._page._url }}{% else %}{{ item.footerLink.customUrl }}{% endif %}"
+            class="sf-footer__links-item"
+            {% if item.footerLink.target and item.footerLink.target.includes('_blank') %}target="_blank" rel="noopener noreferrer"{% endif %}
+          >
+            {{ item.footerLink.linkTitle }}
+          </a>
+          {% endfor %}
+        {% endif %}
+        <div class="sf-footer__bottom">
+          <p class="sf-copy">&#169; {{ data.currentYear or '2026' }} S&amp;F</p>
+        </div>
+      </div>
     </div>
   </div>
 </footer>
