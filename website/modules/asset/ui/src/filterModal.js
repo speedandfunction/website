@@ -85,9 +85,21 @@ export class FilterModal {
     if (this.tagsFilter) this.modalBody.appendChild(this.tagsFilter);
     this.modal.classList.add('active');
     document.body.style.overflow = 'hidden';
+
+    if (this.tagsFilter) {
+      this.tagsFilter.style.maxHeight = 'none';
+      this.tagsFilter.style.overflowY = 'visible';
+      this.tagsFilter.style.overflowX = 'visible';
+    }
   }
 
   close() {
+    if (this.tagsFilter) {
+      this.tagsFilter.style.maxHeight = '';
+      this.tagsFilter.style.overflowY = '';
+      this.tagsFilter.style.overflowX = '';
+    }
+
     const elementsToRestore = [
       { element: this.clearAll, parent: this.originalParents.clearAll },
       { element: this.selectedTags, parent: this.originalParents.selectedTags },
