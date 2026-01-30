@@ -4,7 +4,7 @@
   "description": "Apostrophe CMS website",
   "main": "app.js",
   "scripts": {
-    "start": "node scripts/generate_constants.js && node app @apostrophecms/asset:build && pm2-runtime app.js -i max",
+    "start": "node scripts/generate_constants.js && node app @apostrophecms/asset:build && pm2-runtime app.js -i 2",
     "dev": "node scripts/generate_constants.js && nodemon",
     "build": "node scripts/generate_constants.js && NODE_ENV=production node app.js apostrophe:generation",
     "serve": "NODE_ENV=production node app.js",
