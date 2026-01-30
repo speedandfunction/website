@@ -1,4 +1,4 @@
-FROM node:23-alpine AS build
+FROM node:24-alpine AS build
 # Set build arguments with defaults
 ARG NODE_ENV=production
 ARG NPM_INSTALL_FLAGS=
@@ -15,7 +15,7 @@ RUN npm ci $NPM_INSTALL_FLAGS
 # Copy website files
 COPY website/ ./
 
-FROM node:23-alpine
+FROM node:24-alpine
 
 # Set working directory
 WORKDIR /app
@@ -23,8 +23,8 @@ WORKDIR /app
 # Create a non-root user and group 
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 
-# Install dependencies needed for health checks with pinned version
-RUN apk add --no-cache wget=1.25.0-r1
+# Install dependencies needed for health checks
+RUN apk add --no-cache wget
 
 # Copy layer wfrom build image
 COPY --chown=appuser:appgroup --from=build /app /app
