@@ -24,7 +24,7 @@ WORKDIR /app
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 
 # Install dependencies needed for health checks
-RUN apk add --no-cache wget
+RUN apk add --no-cache wget=1.25.0-r2
 
 # Copy layer wfrom build image
 COPY --chown=appuser:appgroup --from=build /app /app
