@@ -4,7 +4,7 @@
   "description": "Apostrophe CMS website",
   "main": "app.js",
   "scripts": {
-    "start": "node scripts/generate_constants.js && node app @apostrophecms/asset:build && node app.js",
+    "start": "node scripts/generate_constants.js && node app @apostrophecms/asset:build && pm2-runtime app.js -i max",
     "dev": "node scripts/generate_constants.js && nodemon",
     "build": "node scripts/generate_constants.js && NODE_ENV=production node app.js apostrophe:generation",
     "serve": "NODE_ENV=production node app.js",
@@ -55,6 +55,7 @@
     "mongodb": "^6.17.0",
     "node-fetch": "^2.6.7",
     "normalize.css": "^8.0.1",
+    "pm2-runtime": "^5.4.1",
     "postmark": "^4.0.5",
     "swiper": "^11.2.6",
     "yargs": "^17.7.2",
