@@ -23,16 +23,20 @@ module.exports = {
         'font-src': 'data:',
       },
       inlineScripts: {
+        /* eslint-disable no-secrets/no-secrets -- CSP script hashes, not secrets */
         'script-src':
           "'sha256-oTA8qLsJHk9g+M1YNjqx2sHGYh6catTGwk9lmCk8hhs=' " +
           "'sha256-ZC4Ihfl+1sv3E25DQh090ITQKwffxiocyA9C1vaePKU=' " +
           "'sha256-Q/LPXhHka5/egcP/jMtr5hz7Sxemm+1q7K+bOgaJiMo=' " +
           "'sha256-3ZRDhT/4WJSTcMHjSSKp1/doi40daSfiQU6ZD395+DA=' " +
-          "'sha256-huW3ylgdSqVTZdqsJoCPMlhbzwwaT0HRomNhtq49Beo='",
+          "'sha256-huW3ylgdSqVTZdqsJoCPMlhbzwwaT0HRomNhtq49Beo=' " +
+          "'sha256-zoD9yhjUIP539kmB7swNElD1S9L+cey6RvNjUnEcTU4='",
+        /* eslint-enable no-secrets/no-secrets */
       },
       linkedin: {
         'script-src': 'snap.licdn.com',
-        'connect-src': 'HOSTS px.ads.linkedin.com',
+        'connect-src':
+          "'self' localhost d3qlcaacmmrges.cloudfront.net px.ads.linkedin.com",
         'img-src': 'px.ads.linkedin.com',
       },
       googleAnalytics: {
