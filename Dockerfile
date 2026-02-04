@@ -17,9 +17,6 @@ COPY website/ ./
 
 FROM node:24-alpine
 
-# Set working directory
-WORKDIR /app
-
 # Create a non-root user and group 
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 
@@ -31,6 +28,9 @@ COPY --chown=appuser:appgroup --from=build /app /app
 
 # Switch to non-root user
 USER appuser
+
+# Set working directory
+WORKDIR /app
 
 # Expose the port the app runs on
 EXPOSE 3000
