@@ -1,15 +1,14 @@
+const isProduction = process.env.NODE_ENV === 'production';
+
+let localhostPart = '';
+if (!isProduction) {
+  localhostPart = 'localhost ';
+}
+const connectSrcHosts = `'self' ${localhostPart}d3qlcaacmmrges.cloudfront.net px.ads.linkedin.com`;
+
 /**
- * Extends @apostrophecms/security-headers to allow reCAPTCHA.
- * reCAPTCHA requires script-src and frame-src to include Google domains.
- * Without these, the reCAPTCHA script is blocked by CSP and no token is
- * generated, causing "Missing reCAPTCHA token" on form submission.
- *
- * Also allows data: URIs for font-src so that inline base64 fonts (e.g. from
- * Swiper or other libraries) are not blocked by CSP.
- *
- * Adds script-src hash for inline scripts injected by third-party tools (e.g.
- * GTM) that cannot use the request nonce. Also allows Hotjar, Facebook Pixel,
- * and LinkedIn Insight (script-src, connect-src, img-src).
+ * Extends @apostrophecms/security-headers for reCAPTCHA, GTM, GA, Hotjar,
+ * Facebook Pixel, and LinkedIn Insight.
  */
 module.exports = {
   improve: '@apostrophecms/security-headers',
@@ -35,18 +34,26 @@ module.exports = {
       },
       linkedin: {
         'script-src': 'snap.licdn.com',
-        'connect-src':
-          "'self' localhost d3qlcaacmmrges.cloudfront.net px.ads.linkedin.com",
+        'connect-src': connectSrcHosts,
         'img-src': 'px.ads.linkedin.com',
       },
       googleAnalytics: {
         'connect-src': '*.google-analytics.com *.analytics.google.com',
       },
       hotjar: {
-        'script-src': 'static.hotjar.com',
+        'script-src': '*.hotjar.com *.hotjar.io',
+        'connect-src':
+          'https://*.hotjar.com https://*.hotjar.io wss://*.hotjar.com',
+        'img-src':
+          'https://static.hotjar.com https://script.hotjar.com ' +
+          'https://survey-images.hotjar.com',
+        'font-src': 'https://script.hotjar.com',
+        'style-src': 'https://static.hotjar.com https://script.hotjar.com',
       },
       facebook: {
         'script-src': 'connect.facebook.net',
+        'connect-src': 'https://www.facebook.com',
+        'img-src': 'https://www.facebook.com',
       },
     },
   },
