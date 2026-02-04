@@ -2,7 +2,7 @@ const isProduction = process.env.NODE_ENV === 'production';
 
 let localhostPart = '';
 if (!isProduction) {
-  localhostPart = 'localhost ';
+  localhostPart = 'localhost:* ';
 }
 const connectSrcHosts = `'self' ${localhostPart}d3qlcaacmmrges.cloudfront.net px.ads.linkedin.com`;
 
