@@ -20,9 +20,6 @@ FROM node:23-alpine
 # Create a non-root user and group 
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 
-# Install dependencies needed for health checks with pinned version
-RUN apk add --no-cache wget=1.25.0-r1
-
 # Copy layer wfrom build image
 COPY --chown=appuser:appgroup --from=build /app /app
 
