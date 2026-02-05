@@ -1,4 +1,4 @@
-FROM node:23-alpine AS build
+FROM node:24-alpine AS build
 # Set build arguments with defaults
 ARG NODE_ENV=production
 ARG NPM_INSTALL_FLAGS=
@@ -15,7 +15,7 @@ RUN npm ci $NPM_INSTALL_FLAGS
 # Copy website files
 COPY website/ ./
 
-FROM node:23-alpine
+FROM node:24-alpine
 
 # Create a non-root user and group 
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
