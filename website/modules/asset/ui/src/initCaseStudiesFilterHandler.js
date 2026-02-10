@@ -49,6 +49,35 @@ const emptyCleanup = function () {
   // No cleanup needed
 };
 
+// Move selected (checked) tag items to the top and re-apply visibility (first 5 visible)
+const reorderSelectedTagsFirst = function () {
+  const tagsLists = document.querySelectorAll('.tags-list');
+  const visibleCount = getDefaultVisibleTagsCount();
+
+  tagsLists.forEach(function (list) {
+    const items = Array.from(list.querySelectorAll('.tag-item'));
+    const active = items.filter(function (item) {
+      return item.classList.contains('active');
+    });
+    const inactive = items.filter(function (item) {
+      return !item.classList.contains('active');
+    });
+    const reordered = active.concat(inactive);
+
+    reordered.forEach(function (item) {
+      list.appendChild(item);
+    });
+
+    reordered.forEach(function (item, index) {
+      if (index >= visibleCount) {
+        item.classList.add('tag-item--hidden');
+      } else {
+        item.classList.remove('tag-item--hidden');
+      }
+    });
+  });
+};
+
 // Setup keyboard event handlers for filter buttons
 const setupKeydownHandlers = function (filterButtons) {
   const handleKeyDown = function (event) {
@@ -246,6 +275,7 @@ const setupShowMoreHandlers = function () {
 
 // Initialization - Single responsibility: Set up all filter-related functionality
 const initCaseStudiesFilterHandler = function () {
+  reorderSelectedTagsFirst();
   const filterCleanup = setupFilterLinkDetection();
   const accessibilityCleanup = setupFilterAccessibility();
   const showMoreCleanup = setupShowMoreHandlers();
