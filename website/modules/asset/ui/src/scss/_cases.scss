@@ -1413,18 +1413,49 @@
   }
 }
 
-.cs_partnership-picture {
-  display: block;
+.cs_partnership-box {
+  background-color: $white;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  text-align: center;
+  width: 66px;
+  height: 66px;
+
+  @include breakpoint-medium {
+    width: 146px;
+    height: 146px;
+    padding: 20px 10px;
+  }
+}
+
+.cs_partnership-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.cs_partnership-text {
+  @include font-settings(6px, 100%, $font-weight-extra-bold);
+  color: $gray-500;
+  text-transform: uppercase;
+
+  @include breakpoint-medium {
+    @include font-settings(14px, 100%, $font-weight-extra-bold);
+  }
 }
 
 .cs_partnership-logo {
-  width: 66px;
-  height: 66px;
+  max-width: 100%;
+  height: auto;
+  max-height: 20px;
+  width: auto;
   object-fit: contain;
   display: block;
 
   @include breakpoint-medium {
-    width: 140px;
-    height: 140px;
+    max-height: 40px;
   }
 }
