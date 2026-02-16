@@ -178,6 +178,10 @@ module.exports = {
   },
   columns: {
     add: {
+      portfolioTitle: {
+        label: 'Portfolio Title',
+        name: 'portfolioTitle',
+      },
       _stack: {
         label: 'Tech Stack',
         component: 'AposCellTags',
