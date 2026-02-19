@@ -22,6 +22,19 @@ class TagCountService {
   }
 
   /**
+   * Creates a mapping from partner IDs to partner slugs
+   * @param {Array} businessPartners - Array of partner objects
+   * @returns {Object} Map of partner ID to slug
+   */
+  static createPartnerMap(businessPartners) {
+    const partnerMap = {};
+    businessPartners.forEach((partner) => {
+      partnerMap[partner.aposDocId] = partner.slug;
+    });
+    return partnerMap;
+  }
+
+  /**
    * Counts tags of a specific type and updates the counts object
    * @param {Array} tagIds - Array of tag IDs to count
    * @param {Object} tagMap - Map of tag ID to slug
@@ -47,21 +60,25 @@ class TagCountService {
    * @param {Object} req - ApostropheCMS request object
    * @param {Object} aposModules - ApostropheCMS modules
    * @param {Object} options - Module options
-   * @returns {Promise<Array>} Promise resolving to [caseStudies, casesTags] arrays
+   * @returns {Promise<Array>} Promise resolving to [caseStudies, casesTags, businessPartners] arrays
    */
   static async fetchCaseStudiesAndTags(req, aposModules, options) {
     const caseStudies = await aposModules[options.pieces].find(req).toArray();
     const casesTags = await aposModules['cases-tags'].find(req).toArray();
-    return [caseStudies, casesTags];
+    const businessPartners = await aposModules['business-partner']
+      .find(req)
+      .toArray();
+    return [caseStudies, casesTags, businessPartners];
   }
 
   /**
    * Processes case studies to count tags by type
    * @param {Array} caseStudies - Array of case study objects
    * @param {Object} tagMap - Map of tag ID to slug
+   * @param {Object} partnerMap - Map of partner ID to slug
    * @param {Object} tagCounts - Object to store all tag counts
    */
-  static processCaseStudies(caseStudies, tagMap, tagCounts) {
+  static processCaseStudies(caseStudies, tagMap, partnerMap, tagCounts) {
     caseStudies.forEach((study) => {
       TagCountService.countTagsOfType(
         study.industryIds,
@@ -75,6 +92,12 @@ class TagCountService {
         study.caseStudyTypeIds,
         tagMap,
         tagCounts.caseStudyType,
+      );
+
+      TagCountService.countTagsOfType(
+        study.partnerIds,
+        partnerMap,
+        tagCounts.partner,
       );
     });
   }
@@ -91,14 +114,21 @@ class TagCountService {
       industry: {},
       stack: {},
       caseStudyType: {},
+      partner: {},
     };
 
-    const [caseStudies, casesTags] =
+    const [caseStudies, casesTags, businessPartners] =
       await TagCountService.fetchCaseStudiesAndTags(req, aposModules, options);
 
     const tagMap = TagCountService.createTagMap(casesTags);
+    const partnerMap = TagCountService.createPartnerMap(businessPartners);
 
-    TagCountService.processCaseStudies(caseStudies, tagMap, tagCounts);
+    TagCountService.processCaseStudies(
+      caseStudies,
+      tagMap,
+      partnerMap,
+      tagCounts,
+    );
 
     return tagCounts;
   }

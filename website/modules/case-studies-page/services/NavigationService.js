@@ -30,6 +30,27 @@ class NavigationService {
   }
 
   /**
+   * Converts business partner slugs to IDs
+   * @param {Object} apos - ApostropheCMS instance
+   * @param {Object} req - Request object
+   * @param {Array} slugs - Array of partner slugs
+   * @returns {Promise<Array>} Promise resolving to array of partner IDs
+   */
+  static async convertPartnerSlugsToIds(apos, req, slugs) {
+    const partnerPromises = slugs.map(async (slug) => {
+      const results = await apos.modules['business-partner']
+        .find(req, { slug })
+        .toArray();
+      if (results.length > 0) {
+        return results[0];
+      }
+      return null;
+    });
+    const partners = await Promise.all(partnerPromises);
+    return partners.filter((partner) => partner).map((partner) => partner.aposDocId);
+  }
+
+  /**
    * Applies filters to a query based on request parameters
    * @param {Object} query - ApostropheCMS query object
    * @param {Object} req - Request object
@@ -72,6 +93,19 @@ class NavigationService {
       if (caseStudyTypeIds.length > 0) {
         filteredQuery = filteredQuery.and({
           caseStudyTypeIds: { $in: caseStudyTypeIds },
+        });
+      }
+    }
+
+    if (req.query.partner && req.query.partner.length > 0) {
+      const partnerIds = await NavigationService.convertPartnerSlugsToIds(
+        apos,
+        req,
+        req.query.partner,
+      );
+      if (partnerIds.length > 0) {
+        filteredQuery = filteredQuery.and({
+          partnerIds: { $in: partnerIds },
         });
       }
     }
