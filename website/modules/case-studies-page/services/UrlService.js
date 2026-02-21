@@ -41,6 +41,14 @@ class UrlService {
       });
     }
 
+    // Add partner parameters
+    if (query.partner) {
+      const partners = UrlService.ensureArray(query.partner);
+      partners.forEach((partner, index) => {
+        params.append(`partner[${index}]`, partner);
+      });
+    }
+
     // Add search parameter
     if (query.search) {
       params.append('search', query.search);

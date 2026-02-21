@@ -19,7 +19,7 @@ main %}
     <div class="cs_filter-info">
       <div class="filters-cta">Filter Case Studies</div>
       {% set hasActiveFilters = data.query.industry or data.query.stack or
-      data.query.caseStudyType %} {% if hasActiveFilters %}
+      data.query.caseStudyType or data.query.partner %} {% if hasActiveFilters %}
       <p class="items-count">
         {{ data.totalPieces }} Ite{% if data.totalPieces == 1 %}m{% else %}ms{%
         endif %} Found
@@ -32,7 +32,7 @@ main %}
       <div class="clear-all">
         <a
           class="clear-all-link"
-          href="{{ data.url | build({ industry: null, stack: null, caseStudyType: null }) }}#filter"
+          href="{{ data.url | build({ industry: null, stack: null, caseStudyType: null, partner: null }) }}#filter"
           aria-label="Clear all filters"
         >
           <span class="clear-all-content">
@@ -46,7 +46,7 @@ main %}
 
       <div class="selected-tags">
         <ul class="selected-tags-list">
-          {% for filterType in ['industry', 'stack', 'caseStudyType'] %} {% if
+          {% for filterType in ['industry', 'stack', 'caseStudyType', 'partner'] %} {% if
           data.query[filterType] %} {% for tag in data.piecesFilters[filterType]
           %} {# Check if tag is selected (handle both array and string) #} {%
           set isTagSelected = false %} {% if data.query[filterType].length is
@@ -79,6 +79,14 @@ main %}
             >
               <img src="/images/close.svg" alt="Close Icon" />
             </a>
+            {% elif filterType == 'partner' %}
+            <a
+              class="remove-tag"
+              href="{{ data.url | build({}, { partner: { $pull: tag.value } }) }}#filter"
+              aria-label="Remove partner tag {{ tag.label }}"
+            >
+              <img src="/images/close.svg" alt="Close Icon" />
+            </a>
             {% endif %}
           </li>
           {% endif %} {% endfor %} {% endif %} {% endfor %}
@@ -91,7 +99,7 @@ main %}
       <div class="tags-filter">
         {# Display all filter types #} {% for filterType, filterLabel in [
         ['industry', 'Industry'], ['caseStudyType', 'Case Type'], ['stack',
-        'Technology'] ] %} {% set tags = data.piecesFilters[filterType] %} {% if
+        'Technology'], ['partner', 'Partner'] ] %} {% set tags = data.piecesFilters[filterType] %} {% if
         tags and tags.length %}
         <div class="filter-section">
           <!-- prettier-ignore -->
@@ -175,6 +183,14 @@ main %}
                   <span class="tag-label">{{ tag.label }}</span>
                   <span class="tag-count">[ {{ count }} ]</span>
                 </a>
+                {% elif filterType == 'partner' %}
+                <a
+                  class="tag-link"
+                  href="{{ data.url | build({}, { partner: { $pull: tag.value } }) }}#filter"
+                >
+                  <span class="tag-label">{{ tag.label }}</span>
+                  <span class="tag-count">[ {{ count }} ]</span>
+                </a>
                 {% endif %}
               </li>
               {% else %}
@@ -202,6 +218,14 @@ main %}
                 <a
                   class="tag-link"
                   href="{{ data.url | build({}, { stack: { $addToSet: tag.value } }) }}#filter"
+                >
+                  <span class="tag-label">{{ tag.label }}</span>
+                  <span class="tag-count">[ {{ count }} ]</span>
+                </a>
+                {% elif filterType == 'partner' %}
+                <a
+                  class="tag-link"
+                  href="{{ data.url | build({}, { partner: { $addToSet: tag.value } }) }}#filter"
                 >
                   <span class="tag-label">{{ tag.label }}</span>
                   <span class="tag-count">[ {{ count }} ]</span>

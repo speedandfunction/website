@@ -13,6 +13,7 @@ module.exports = {
       { name: 'industry' },
       { name: 'stack' },
       { name: 'caseStudyType' },
+      { name: 'partner' },
     ],
     pieces: 'case-studies',
     piecesFiltersUrl: '/case-studies',
@@ -59,6 +60,7 @@ module.exports = {
             industry: {},
             stack: {},
             caseStudyType: {},
+            partner: {},
           });
         }
       },
