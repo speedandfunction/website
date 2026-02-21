@@ -12,12 +12,18 @@ class NavigationService {
    * Converts slugs to document IDs for a given piece module
    * @param {Object} apos - ApostropheCMS instance
    * @param {Object} req - Request object
-   * @param {Array} slugs - Array of slugs
+   * @param {Array|string} slugs - Array of slugs or single slug (Express may pass string for one query param)
    * @param {string} moduleKey - Key of the piece module in apos.modules (e.g. 'cases-tags', 'business-partner')
    * @returns {Promise<Array>} Promise resolving to array of document IDs
    */
   static async convertSlugsToIdsForModule(apos, req, slugs, moduleKey) {
-    const docPromises = slugs.map(async (slug) => {
+    let slugList = [];
+    if (Array.isArray(slugs)) {
+      slugList = slugs;
+    } else if (slugs) {
+      slugList = [slugs];
+    }
+    const docPromises = slugList.map(async (slug) => {
       const results = await apos.modules[moduleKey]
         .find(req, { slug })
         .toArray();
@@ -60,30 +66,6 @@ class NavigationService {
       slugs,
       'business-partner',
     );
-  }
-
-  /**
-   * Applies a single slug-based filter to the query
-   * @param {Object} filteredQuery - Current query object
-   * @param {Object} req - Request object
-   * @param {Object} apos - ApostropheCMS instance
-   * @param {Object} options - Options object
-   * @param {string} options.paramName - Query parameter name
-   * @param {Function} options.convertFn - Async function to convert slugs to IDs
-   * @param {string} options.fieldName - Document field name for the filter
-   * @returns {Promise<Object>} Promise resolving to modified query object
-   */
-  static async applySlugFilter(filteredQuery, req, apos, options) {
-    const { paramName, convertFn, fieldName } = options;
-    const values = req.query[paramName];
-    if (!values || values.length === 0) {
-      return filteredQuery;
-    }
-    const ids = await convertFn(apos, req, values);
-    if (ids.length === 0) {
-      return filteredQuery;
-    }
-    return filteredQuery.and({ [fieldName]: { $in: ids } });
   }
 
   /**
