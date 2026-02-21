@@ -9,15 +9,16 @@
  */
 class NavigationService {
   /**
-   * Converts tag slugs to IDs
+   * Converts slugs to document IDs for a given piece module
    * @param {Object} apos - ApostropheCMS instance
    * @param {Object} req - Request object
-   * @param {Array} slugs - Array of tag slugs
-   * @returns {Promise<Array>} Promise resolving to array of tag IDs
+   * @param {Array} slugs - Array of slugs
+   * @param {string} moduleKey - Key of the piece module in apos.modules (e.g. 'cases-tags', 'business-partner')
+   * @returns {Promise<Array>} Promise resolving to array of document IDs
    */
-  static async convertSlugsToIds(apos, req, slugs) {
-    const tagPromises = slugs.map(async (slug) => {
-      const results = await apos.modules['cases-tags']
+  static async convertSlugsToIdsForModule(apos, req, slugs, moduleKey) {
+    const docPromises = slugs.map(async (slug) => {
+      const results = await apos.modules[moduleKey]
         .find(req, { slug })
         .toArray();
       if (results.length > 0) {
@@ -25,8 +26,24 @@ class NavigationService {
       }
       return null;
     });
-    const tags = await Promise.all(tagPromises);
-    return tags.filter((tag) => tag).map((tag) => tag.aposDocId);
+    const docs = await Promise.all(docPromises);
+    return docs.filter((doc) => doc).map((doc) => doc.aposDocId);
+  }
+
+  /**
+   * Converts tag slugs to IDs (cases-tags module)
+   * @param {Object} apos - ApostropheCMS instance
+   * @param {Object} req - Request object
+   * @param {Array} slugs - Array of tag slugs
+   * @returns {Promise<Array>} Promise resolving to array of tag IDs
+   */
+  static convertSlugsToIds(apos, req, slugs) {
+    return NavigationService.convertSlugsToIdsForModule(
+      apos,
+      req,
+      slugs,
+      'cases-tags',
+    );
   }
 
   /**
@@ -36,18 +53,37 @@ class NavigationService {
    * @param {Array} slugs - Array of partner slugs
    * @returns {Promise<Array>} Promise resolving to array of partner IDs
    */
-  static async convertPartnerSlugsToIds(apos, req, slugs) {
-    const partnerPromises = slugs.map(async (slug) => {
-      const results = await apos.modules['business-partner']
-        .find(req, { slug })
-        .toArray();
-      if (results.length > 0) {
-        return results[0];
-      }
-      return null;
-    });
-    const partners = await Promise.all(partnerPromises);
-    return partners.filter((partner) => partner).map((partner) => partner.aposDocId);
+  static convertPartnerSlugsToIds(apos, req, slugs) {
+    return NavigationService.convertSlugsToIdsForModule(
+      apos,
+      req,
+      slugs,
+      'business-partner',
+    );
+  }
+
+  /**
+   * Applies a single slug-based filter to the query
+   * @param {Object} filteredQuery - Current query object
+   * @param {Object} req - Request object
+   * @param {Object} apos - ApostropheCMS instance
+   * @param {Object} options - Options object
+   * @param {string} options.paramName - Query parameter name
+   * @param {Function} options.convertFn - Async function to convert slugs to IDs
+   * @param {string} options.fieldName - Document field name for the filter
+   * @returns {Promise<Object>} Promise resolving to modified query object
+   */
+  static async applySlugFilter(filteredQuery, req, apos, options) {
+    const { paramName, convertFn, fieldName } = options;
+    const values = req.query[paramName];
+    if (!values || values.length === 0) {
+      return filteredQuery;
+    }
+    const ids = await convertFn(apos, req, values);
+    if (ids.length === 0) {
+      return filteredQuery;
+    }
+    return filteredQuery.and({ [fieldName]: { $in: ids } });
   }
 
   /**
@@ -58,58 +94,45 @@ class NavigationService {
    * @returns {Promise<Object>} Promise resolving to modified query object
    */
   static async applyFiltersToQuery(query, req, apos) {
+    const filterConfigs = [
+      {
+        param: 'industry',
+        convert: NavigationService.convertSlugsToIds,
+        field: 'industryIds',
+      },
+      {
+        param: 'stack',
+        convert: NavigationService.convertSlugsToIds,
+        field: 'stackIds',
+      },
+      {
+        param: 'caseStudyType',
+        convert: NavigationService.convertSlugsToIds,
+        field: 'caseStudyTypeIds',
+      },
+      {
+        param: 'partner',
+        convert: NavigationService.convertPartnerSlugsToIds,
+        field: 'partnerIds',
+      },
+    ];
+    const idArrays = await Promise.all(
+      filterConfigs.map((config) => {
+        if (req.query[config.param]?.length) {
+          return config.convert(apos, req, req.query[config.param]);
+        }
+        return Promise.resolve([]);
+      }),
+    );
     let filteredQuery = query;
-
-    if (req.query.industry && req.query.industry.length > 0) {
-      const industryIds = await NavigationService.convertSlugsToIds(
-        apos,
-        req,
-        req.query.industry,
-      );
-      if (industryIds.length > 0) {
+    for (let index = 0; index < filterConfigs.length; index += 1) {
+      const ids = idArrays[index];
+      if (ids.length > 0) {
         filteredQuery = filteredQuery.and({
-          industryIds: { $in: industryIds },
+          [filterConfigs[index].field]: { $in: ids },
         });
       }
     }
-
-    if (req.query.stack && req.query.stack.length > 0) {
-      const stackIds = await NavigationService.convertSlugsToIds(
-        apos,
-        req,
-        req.query.stack,
-      );
-      if (stackIds.length > 0) {
-        filteredQuery = filteredQuery.and({ stackIds: { $in: stackIds } });
-      }
-    }
-
-    if (req.query.caseStudyType && req.query.caseStudyType.length > 0) {
-      const caseStudyTypeIds = await NavigationService.convertSlugsToIds(
-        apos,
-        req,
-        req.query.caseStudyType,
-      );
-      if (caseStudyTypeIds.length > 0) {
-        filteredQuery = filteredQuery.and({
-          caseStudyTypeIds: { $in: caseStudyTypeIds },
-        });
-      }
-    }
-
-    if (req.query.partner && req.query.partner.length > 0) {
-      const partnerIds = await NavigationService.convertPartnerSlugsToIds(
-        apos,
-        req,
-        req.query.partner,
-      );
-      if (partnerIds.length > 0) {
-        filteredQuery = filteredQuery.and({
-          partnerIds: { $in: partnerIds },
-        });
-      }
-    }
-
     return filteredQuery;
   }
 

@@ -9,29 +9,16 @@
  */
 class TagCountService {
   /**
-   * Creates a mapping from tag IDs to tag slugs
-   * @param {Array} casesTags - Array of tag objects
-   * @returns {Object} Map of tag ID to slug
+   * Creates a mapping from document ID to slug for any array of docs with aposDocId and slug
+   * @param {Array} docs - Array of document objects with aposDocId and slug
+   * @returns {Object} Map of document ID to slug
    */
-  static createTagMap(casesTags) {
-    const tagMap = {};
-    casesTags.forEach((tag) => {
-      tagMap[tag.aposDocId] = tag.slug;
+  static createIdToSlugMap(docs) {
+    const map = {};
+    docs.forEach((doc) => {
+      map[doc.aposDocId] = doc.slug;
     });
-    return tagMap;
-  }
-
-  /**
-   * Creates a mapping from partner IDs to partner slugs
-   * @param {Array} businessPartners - Array of partner objects
-   * @returns {Object} Map of partner ID to slug
-   */
-  static createPartnerMap(businessPartners) {
-    const partnerMap = {};
-    businessPartners.forEach((partner) => {
-      partnerMap[partner.aposDocId] = partner.slug;
-    });
-    return partnerMap;
+    return map;
   }
 
   /**
@@ -63,11 +50,11 @@ class TagCountService {
    * @returns {Promise<Array>} Promise resolving to [caseStudies, casesTags, businessPartners] arrays
    */
   static async fetchCaseStudiesAndTags(req, aposModules, options) {
-    const caseStudies = await aposModules[options.pieces].find(req).toArray();
-    const casesTags = await aposModules['cases-tags'].find(req).toArray();
-    const businessPartners = await aposModules['business-partner']
-      .find(req)
-      .toArray();
+    const [caseStudies, casesTags, businessPartners] = await Promise.all([
+      aposModules[options.pieces].find(req).toArray(),
+      aposModules['cases-tags'].find(req).toArray(),
+      aposModules['business-partner'].find(req).toArray(),
+    ]);
     return [caseStudies, casesTags, businessPartners];
   }
 
@@ -120,8 +107,8 @@ class TagCountService {
     const [caseStudies, casesTags, businessPartners] =
       await TagCountService.fetchCaseStudiesAndTags(req, aposModules, options);
 
-    const tagMap = TagCountService.createTagMap(casesTags);
-    const partnerMap = TagCountService.createPartnerMap(businessPartners);
+    const tagMap = TagCountService.createIdToSlugMap(casesTags);
+    const partnerMap = TagCountService.createIdToSlugMap(businessPartners);
 
     TagCountService.processCaseStudies(
       caseStudies,
