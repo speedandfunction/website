@@ -199,6 +199,9 @@ module.exports = {
       _stack: {
         label: 'Stack',
       },
+      _partner: {
+        label: 'Partner',
+      },
     },
   },
   helpers() {

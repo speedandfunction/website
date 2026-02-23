@@ -9,15 +9,22 @@
  */
 class NavigationService {
   /**
-   * Converts tag slugs to IDs
+   * Converts slugs to document IDs for a given piece module
    * @param {Object} apos - ApostropheCMS instance
    * @param {Object} req - Request object
-   * @param {Array} slugs - Array of tag slugs
-   * @returns {Promise<Array>} Promise resolving to array of tag IDs
+   * @param {Array|string} slugs - Array of slugs or single slug (Express may pass string for one query param)
+   * @param {string} moduleKey - Key of the piece module in apos.modules (e.g. 'cases-tags', 'business-partner')
+   * @returns {Promise<Array>} Promise resolving to array of document IDs
    */
-  static async convertSlugsToIds(apos, req, slugs) {
-    const tagPromises = slugs.map(async (slug) => {
-      const results = await apos.modules['cases-tags']
+  static async convertSlugsToIdsForModule(apos, req, slugs, moduleKey) {
+    let slugList = [];
+    if (Array.isArray(slugs)) {
+      slugList = slugs;
+    } else if (slugs) {
+      slugList = [slugs];
+    }
+    const docPromises = slugList.map(async (slug) => {
+      const results = await apos.modules[moduleKey]
         .find(req, { slug })
         .toArray();
       if (results.length > 0) {
@@ -25,8 +32,40 @@ class NavigationService {
       }
       return null;
     });
-    const tags = await Promise.all(tagPromises);
-    return tags.filter((tag) => tag).map((tag) => tag.aposDocId);
+    const docs = await Promise.all(docPromises);
+    return docs.filter((doc) => doc).map((doc) => doc.aposDocId);
+  }
+
+  /**
+   * Converts tag slugs to IDs (cases-tags module)
+   * @param {Object} apos - ApostropheCMS instance
+   * @param {Object} req - Request object
+   * @param {Array} slugs - Array of tag slugs
+   * @returns {Promise<Array>} Promise resolving to array of tag IDs
+   */
+  static convertSlugsToIds(apos, req, slugs) {
+    return NavigationService.convertSlugsToIdsForModule(
+      apos,
+      req,
+      slugs,
+      'cases-tags',
+    );
+  }
+
+  /**
+   * Converts business partner slugs to IDs
+   * @param {Object} apos - ApostropheCMS instance
+   * @param {Object} req - Request object
+   * @param {Array} slugs - Array of partner slugs
+   * @returns {Promise<Array>} Promise resolving to array of partner IDs
+   */
+  static convertPartnerSlugsToIds(apos, req, slugs) {
+    return NavigationService.convertSlugsToIdsForModule(
+      apos,
+      req,
+      slugs,
+      'business-partner',
+    );
   }
 
   /**
@@ -37,45 +76,45 @@ class NavigationService {
    * @returns {Promise<Object>} Promise resolving to modified query object
    */
   static async applyFiltersToQuery(query, req, apos) {
+    const filterConfigs = [
+      {
+        param: 'industry',
+        convert: NavigationService.convertSlugsToIds,
+        field: 'industryIds',
+      },
+      {
+        param: 'stack',
+        convert: NavigationService.convertSlugsToIds,
+        field: 'stackIds',
+      },
+      {
+        param: 'caseStudyType',
+        convert: NavigationService.convertSlugsToIds,
+        field: 'caseStudyTypeIds',
+      },
+      {
+        param: 'partner',
+        convert: NavigationService.convertPartnerSlugsToIds,
+        field: 'partnerIds',
+      },
+    ];
+    const idArrays = await Promise.all(
+      filterConfigs.map((config) => {
+        if (req.query[config.param]?.length) {
+          return config.convert(apos, req, req.query[config.param]);
+        }
+        return Promise.resolve([]);
+      }),
+    );
     let filteredQuery = query;
-
-    if (req.query.industry && req.query.industry.length > 0) {
-      const industryIds = await NavigationService.convertSlugsToIds(
-        apos,
-        req,
-        req.query.industry,
-      );
-      if (industryIds.length > 0) {
+    for (let index = 0; index < filterConfigs.length; index += 1) {
+      const ids = idArrays[index];
+      if (ids.length > 0) {
         filteredQuery = filteredQuery.and({
-          industryIds: { $in: industryIds },
+          [filterConfigs[index].field]: { $in: ids },
         });
       }
     }
-
-    if (req.query.stack && req.query.stack.length > 0) {
-      const stackIds = await NavigationService.convertSlugsToIds(
-        apos,
-        req,
-        req.query.stack,
-      );
-      if (stackIds.length > 0) {
-        filteredQuery = filteredQuery.and({ stackIds: { $in: stackIds } });
-      }
-    }
-
-    if (req.query.caseStudyType && req.query.caseStudyType.length > 0) {
-      const caseStudyTypeIds = await NavigationService.convertSlugsToIds(
-        apos,
-        req,
-        req.query.caseStudyType,
-      );
-      if (caseStudyTypeIds.length > 0) {
-        filteredQuery = filteredQuery.and({
-          caseStudyTypeIds: { $in: caseStudyTypeIds },
-        });
-      }
-    }
-
     return filteredQuery;
   }
 
