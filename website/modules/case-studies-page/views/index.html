@@ -385,7 +385,8 @@
 <script>
   (function () {
     var el = document.getElementById('case-studies-page-data');
-    window.totalPages = el ? parseInt(el.getAttribute('data-total-pages'), 10) : 1;
+    var parsed = el ? parseInt(el.getAttribute('data-total-pages'), 10) : NaN;
+    window.totalPages = Number.isFinite(parsed) ? parsed : 1;
   })();
 </script>
 

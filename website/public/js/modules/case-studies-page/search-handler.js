@@ -57,9 +57,13 @@
 
     const searchInput = document.getElementById('case-studies-search');
     const clearButton = event.target.closest('.cs_search-bar-clear');
-    if (searchInput) {
-      searchInput.value = '';
-      updateClearButtonVisibility(searchInput, clearButton);
+    if (!searchInput) {
+      return;
+    }
+    const hadValue = searchInput.value && searchInput.value.trim();
+    searchInput.value = '';
+    updateClearButtonVisibility(searchInput, clearButton);
+    if (hadValue) {
       performSearch('');
     }
   }
