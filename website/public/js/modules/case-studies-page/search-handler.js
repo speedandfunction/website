@@ -29,28 +29,25 @@
     return newUrl;
   }
 
-  // Update URL and reload page
+  // Navigate to URL with updated search (single history entry; Back works as expected)
   function performSearch(searchValue) {
     const newUrl = buildSearchUrl(searchValue);
-    history.pushState({ clientSideFilter: true, url: newUrl }, '', newUrl);
-    window.location.reload();
+    window.location.assign(newUrl);
   }
 
-  // Update clear button visibility
+  const VISIBLE_CLASS = 'cs_search-bar-clear--visible';
+
+  // Sync clear button visibility via CSS class (no inline styles; CSS rules control display)
   function updateClearButtonVisibility(searchInput, clearButton) {
-    if (searchInput && clearButton) {
-      if (searchInput.value && searchInput.value.trim()) {
-        clearButton.style.display = 'flex';
-      } else {
-        clearButton.style.display = 'none';
-      }
+    if (!searchInput || !clearButton) {
+      return;
     }
-  }
-
-  // Handle search input (only update clear button; search runs on Enter)
-  function handleSearchInput(event) {
-    const clearButton = document.querySelector('.cs_search-bar-clear');
-    updateClearButtonVisibility(event.target, clearButton);
+    const hasValue = searchInput.value && searchInput.value.trim();
+    if (hasValue) {
+      clearButton.classList.add(VISIBLE_CLASS);
+    } else {
+      clearButton.classList.remove(VISIBLE_CLASS);
+    }
   }
 
   // Handle clear button click
@@ -63,7 +60,6 @@
     if (searchInput) {
       searchInput.value = '';
       updateClearButtonVisibility(searchInput, clearButton);
-      searchInput.focus();
       performSearch('');
     }
   }
@@ -97,7 +93,11 @@
       return;
     }
 
-    // Add input event listener
+    function handleSearchInput(event) {
+      updateClearButtonVisibility(event.target, clearButton);
+    }
+
+    // Add input event listener (handler closes over clearButton; no live query per keystroke)
     searchInput.addEventListener('input', handleSearchInput);
 
     // Add form submit handler

@@ -79,16 +79,11 @@ class NavigationService {
    */
   static applySearchFilter(filteredQuery, req) {
     const searchTerm = SearchService.getSearchTerm(req.query || {});
-    const regexPattern = SearchService.buildSearchRegexPattern(searchTerm);
-    if (!regexPattern) {
+    const searchCondition = SearchService.buildSearchCondition(searchTerm);
+    if (!searchCondition) {
       return filteredQuery;
     }
-    return filteredQuery.and({
-      $or: [
-        { title: { $regex: regexPattern, $options: 'i' } },
-        { portfolioTitle: { $regex: regexPattern, $options: 'i' } },
-      ],
-    });
+    return filteredQuery.and(searchCondition);
   }
 
   /**

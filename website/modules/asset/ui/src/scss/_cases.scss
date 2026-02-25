@@ -178,10 +178,6 @@
   display: flex;
 }
 
-.cs_search-bar-input-wrapper:focus-within .cs_search-bar-input::placeholder {
-  color: $gray-300;
-}
-
 // Tags styling
 .tags-filter {
   border: 1px solid $gray-border;

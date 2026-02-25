@@ -15,14 +15,9 @@ const buildIndexQuery = function (self, req) {
     .perPage(self.perPage);
   self.filterByIndexPage(query, req.data.page);
 
-  const regexPattern = SearchService.buildSearchRegexPattern(searchTerm);
-  if (regexPattern) {
-    query.and({
-      $or: [
-        { title: { $regex: regexPattern, $options: 'i' } },
-        { portfolioTitle: { $regex: regexPattern, $options: 'i' } },
-      ],
-    });
+  const searchCondition = SearchService.buildSearchCondition(searchTerm);
+  if (searchCondition) {
+    query.and(searchCondition);
   }
   return query;
 };
@@ -92,11 +87,19 @@ module.exports = {
   },
 
   init(self) {
+    const superBeforeIndex = self.beforeIndex;
     self.beforeIndex = async (req) => {
+      if (superBeforeIndex) {
+        await superBeforeIndex(req);
+      }
       await self.setupIndexData(req);
     };
 
+    const superBeforeShow = self.beforeShow;
     self.beforeShow = async (req) => {
+      if (superBeforeShow) {
+        await superBeforeShow(req);
+      }
       await self.setupShowData(req);
     };
   },
