@@ -75,6 +75,31 @@ class UrlService {
   }
 
   /**
+   * Filter param keys that must be arrays when present (for safe iteration in
+   * templates).
+   */
+  static get filterParamKeys() {
+    return ['industry', 'stack', 'caseStudyType', 'partner'];
+  }
+
+  /**
+   * Returns a copy of query with filter params normalized to arrays so
+   * templates can safely iterate (avoids single-string params iterating as
+   * characters).
+   * @param {Object} query - Raw request query object
+   * @returns {Object} New object with filter params as arrays when present
+   */
+  static normalizeFilterParams(query) {
+    const result = { ...query };
+    UrlService.filterParamKeys.forEach((key) => {
+      if (result[key] !== null && result[key] !== undefined) {
+        result[key] = UrlService.ensureArray(result[key]);
+      }
+    });
+    return result;
+  }
+
+  /**
    * Attaches index page data to request
    * @param {Object} req - Request object
    * @param {Object} tagCounts - Tag counts data
@@ -85,6 +110,7 @@ class UrlService {
       reqCopy.data = {};
     }
     reqCopy.data.tagCounts = tagCounts;
+    reqCopy.data.query = UrlService.normalizeFilterParams(req.query || {});
     // Set default visible tags count
     reqCopy.data.defaultVisibleTagsCount = 5;
     reqCopy.data.buildCaseStudyUrl = (caseStudyUrl) =>
@@ -102,7 +128,7 @@ class UrlService {
       reqCopy.data = {};
     }
 
-    const queryParams = req.query || {};
+    const queryParams = UrlService.normalizeFilterParams(req.query || {});
 
     // Build complete URLs server-side to avoid template encoding issues
     reqCopy.data.prev = navigation.prev;

@@ -1,9 +1,12 @@
-{# modules/case-studies-page/views/index.new.html #} {% extends "layout.html" %}
-{% import '@apostrophecms/pager:macros.html' as pager with context %} {% block
-main %}
+{# modules/case-studies-page/views/index.html #}
+{% extends "layout.html" %}
+{% import '@apostrophecms/pager:macros.html' as pager with context %}
+{% block main %}
 <div
   class="cs_container"
+  id="case-studies-page-data"
   data-default-visible-tags="{{ data.defaultVisibleTagsCount }}"
+  data-total-pages="{{ data.totalPages }}"
 >
   <div class="cs_content">
     <div
@@ -16,10 +19,62 @@ main %}
 
     <div id="filter" class="filter-anchor"></div>
 
+    <div class="cs_search-bar-wrapper">
+      <form class="cs_search-bar-form" action="{{ data.url }}" method="get" role="search">
+        <div class="cs_search-bar-input-wrapper">
+          <img
+            class="cs_search-bar-icon"
+            src="/images/search.svg"
+            alt="Search icon"
+            aria-hidden="true"
+          />
+          <input
+            type="text"
+            class="cs_search-bar-input"
+            id="case-studies-search"
+            name="search"
+            placeholder="Search case studies"
+            value="{{ data.query.search or '' }}"
+            autocomplete="off"
+            aria-label="Search case studies by title"
+          />
+          <button
+            type="button"
+            class="cs_search-bar-clear{% if data.query.search %} cs_search-bar-clear--visible{% endif %}"
+            aria-label="Clear search"
+            title="Clear search"
+          >
+            <img src="/images/close.svg" alt="" aria-hidden="true" />
+          </button>
+        </div>
+        {# Preserve existing filter parameters #}
+        {% if data.query.industry %}
+          {% for industry in data.query.industry %}
+            <input type="hidden" name="industry[]" value="{{ industry }}" />
+          {% endfor %}
+        {% endif %}
+        {% if data.query.stack %}
+          {% for stack in data.query.stack %}
+            <input type="hidden" name="stack[]" value="{{ stack }}" />
+          {% endfor %}
+        {% endif %}
+        {% if data.query.caseStudyType %}
+          {% for caseStudyType in data.query.caseStudyType %}
+            <input type="hidden" name="caseStudyType[]" value="{{ caseStudyType }}" />
+          {% endfor %}
+        {% endif %}
+        {% if data.query.partner %}
+          {% for partner in data.query.partner %}
+            <input type="hidden" name="partner[]" value="{{ partner }}" />
+          {% endfor %}
+        {% endif %}
+      </form>
+    </div>
+
     <div class="cs_filter-info">
       <div class="filters-cta">Filter Case Studies</div>
       {% set hasActiveFilters = data.query.industry or data.query.stack or
-      data.query.caseStudyType or data.query.partner %} {% if hasActiveFilters %}
+      data.query.caseStudyType or data.query.partner or data.query.search %} {% if hasActiveFilters %}
       <p class="items-count">
         {{ data.totalPieces }} Ite{% if data.totalPieces == 1 %}m{% else %}ms{%
         endif %} Found
@@ -32,7 +87,7 @@ main %}
       <div class="clear-all">
         <a
           class="clear-all-link"
-          href="{{ data.url | build({ industry: null, stack: null, caseStudyType: null, partner: null }) }}#filter"
+          href="{{ data.url | build({ industry: null, stack: null, caseStudyType: null, partner: null, search: null }) }}#filter"
           aria-label="Clear all filters"
         >
           <span class="clear-all-content">
@@ -328,7 +383,11 @@ main %}
 </div>
 
 <script>
-  window.totalPages = {{ data.totalPages | json }};
+  (function () {
+    var el = document.getElementById('case-studies-page-data');
+    var parsed = el ? parseInt(el.getAttribute('data-total-pages'), 10) : NaN;
+    window.totalPages = Number.isFinite(parsed) ? parsed : 1;
+  })();
 </script>
 
 <noscript>
@@ -341,5 +400,6 @@ main %}
   </style>
 </noscript>
 <script src="/js/modules/case-studies-page/infinite-scroll.js"></script>
+<script src="/js/modules/case-studies-page/search-handler.js"></script>
 
 {% endblock main %}

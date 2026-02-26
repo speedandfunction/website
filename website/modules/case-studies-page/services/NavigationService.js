@@ -1,3 +1,5 @@
+const SearchService = require('./SearchService');
+
 /**
  * NavigationService - Single Responsibility: Case study navigation
  *
@@ -69,6 +71,22 @@ class NavigationService {
   }
 
   /**
+   * Applies search filter to query when search param is present
+   * Uses SearchService for safe regex (ReDoS prevention) and array handling
+   * @param {Object} filteredQuery - Query object
+   * @param {Object} req - Request object
+   * @returns {Object} Modified query
+   */
+  static applySearchFilter(filteredQuery, req) {
+    const searchTerm = SearchService.getSearchTerm(req.query || {});
+    const searchCondition = SearchService.buildSearchCondition(searchTerm);
+    if (!searchCondition) {
+      return filteredQuery;
+    }
+    return filteredQuery.and(searchCondition);
+  }
+
+  /**
    * Applies filters to a query based on request parameters
    * @param {Object} query - ApostropheCMS query object
    * @param {Object} req - Request object
@@ -115,7 +133,7 @@ class NavigationService {
         });
       }
     }
-    return filteredQuery;
+    return NavigationService.applySearchFilter(filteredQuery, req);
   }
 
   /**

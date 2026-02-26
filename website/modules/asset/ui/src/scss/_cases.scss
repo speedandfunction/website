@@ -78,9 +78,110 @@
   }
 }
 
+// New search bar (separate from .cs_search-form to avoid conflicts)
+.cs_search-bar-wrapper {
+  width: 100%;
+  margin-bottom: 20px;
+  @include breakpoint-medium {
+    margin-bottom: 0;
+  }
+}
+
+.cs_search-bar-form {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.cs_search-bar-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 56px;
+  background: $white;
+  border: 1px solid rgba($gray-200, 0.4);
+  box-sizing: border-box;
+  transition: border-color 0.2s ease;
+
+  &:focus-within {
+    outline: 0;
+    border: none;
+    border-bottom: 1px solid rgba($gray-200, 0.4);
+
+    .cs_search-bar-icon {
+      display: none;
+    }
+  }
+}
+
+.cs_search-bar-icon {
+  position: absolute;
+  left: 1rem;
+  width: 24px;
+  height: 24px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.cs_search-bar-input {
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  padding: 0 1rem 0 3rem;
+  border: none;
+  background: transparent;
+  font-size: 14px;
+  font-weight: $font-weight-medium;
+  color: $gray-500;
+  outline: none;
+  box-shadow: none;
+
+  &::placeholder {
+    color: $gray-300;
+  }
+
+  &:focus {
+    border: none;
+    outline: none;
+    box-shadow: none;
+  }
+}
+
+.cs_search-bar-clear {
+  display: none;
+  position: absolute;
+  right: 1rem;
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  z-index: 2;
+  align-items: center;
+  justify-content: center;
+
+  img {
+    width: 16px;
+    height: 16px;
+  }
+
+  &:hover {
+    opacity: 0.7;
+  }
+}
+
+.cs_search-bar-input:not(:placeholder-shown) ~ .cs_search-bar-clear,
+.cs_search-bar-input:focus ~ .cs_search-bar-clear,
+.cs_search-bar-clear--visible {
+  display: flex;
+}
+
 // Tags styling
 .tags-filter {
   border: 1px solid $gray-border;
+  flex-shrink: 0;
   font-style: $font-style-normal;
   max-width: 262px;
   width: 100%;
@@ -468,6 +569,7 @@
     align-items: flex-start;
     justify-content: flex-start;
     top: $desktop-header-height;
+    margin-top: 20px;
   }
 }
 
@@ -630,6 +732,7 @@
   grid-template-columns: 1fr;
   gap: 32px;
   margin: 0 auto;
+  min-width: 0;
   opacity: 0;
   transform: translateY(30px);
   filter: blur(2px);
@@ -1188,6 +1291,11 @@
     opacity: 1;
     transform: none;
     filter: none;
+  }
+
+  .cs_search-bar-input-wrapper,
+  .cs_search-bar-clear {
+    transition: none;
   }
 
   .tag-item {
