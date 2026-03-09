@@ -13,7 +13,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    environment: ${{ inputs.deploy-env || (github.ref_name == 'main' && 'Development') || (startsWith(github.ref_name, 'release/pr-v') && 'Production') || 'None' }}
+    environment: ${{ (github.ref_name == 'main' && 'Development') || (startsWith(github.ref_name, 'release/pr-v') && 'Production') || 'None' }}
 
     steps:
       - uses: actions/checkout@v4
