@@ -1,0 +1,57 @@
+name: Deploy
+
+permissions:
+  id-token: write
+  contents: read
+
+on:
+  push:
+    branches:
+      - main
+      - 'release/pr-v*'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: ${{ (github.ref_name == 'main' && 'Development') || (startsWith(github.ref_name, 'release/pr-v') && 'Production') || 'None' }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.PIPELINE_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION }}
+
+      - uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build and push image
+        id: build
+        run: |
+          IMAGE_TAG=${{ github.sha }}
+          docker build -t ${{ vars.ECR_URL }}:$IMAGE_TAG .
+          docker push ${{ vars.ECR_URL }}:$IMAGE_TAG
+          echo "image=${{ vars.ECR_URL }}:$IMAGE_TAG" >> $GITHUB_OUTPUT
+
+      - name: Get current task definition
+        run: |
+          aws ecs describe-task-definition \
+            --task-definition ${{ vars.TASK_FAMILY }} \
+            --query taskDefinition \
+            > task-definition.json
+
+      - name: Update image in task definition
+        id: render
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: task-definition.json
+          container-name: ${{ vars.CONTAINER_NAME }}
+          image: ${{ steps.build.outputs.image }}
+
+      - name: Deploy to ECS
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v2
+        with:
+          task-definition: ${{ steps.render.outputs.task-definition }}
+          service: ${{ vars.ECS_SERVICE }}
+          cluster: ${{ vars.ECS_CLUSTER }}
+          wait-for-service-stability: true

@@ -4,11 +4,11 @@ permissions:
   contents: read
 
 on:
-  push:
-    branches:
-      - main
-      - staging
-      - 'release/pr-v*'
+#   push:
+#     branches:
+#       # - main
+#       # - staging
+#       # - 'release/pr-v*'
 
   workflow_dispatch:
     inputs:
