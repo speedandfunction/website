@@ -1,3 +1,6 @@
+/**
+ * Tests for website/app.js: createAposConfig and module exports.
+ */
 const { createAposConfig } = require('./app');
 const mockConnectRedis = jest.fn();
 jest.mock('connect-redis', () => mockConnectRedis);
@@ -56,6 +59,16 @@ describe('createAposConfig', () => {
       connect: mockConnectRedis,
       options: { url: envVars.redisUri },
     });
+  });
+
+  test('uses in-memory session store when REDIS_URI is not set', () => {
+    delete process.env.REDIS_URI;
+
+    const config = createAposConfig();
+
+    expect(
+      config.modules['@apostrophecms/express'].options.session.store,
+    ).toBeUndefined();
   });
 
   // Define module categories for verification - moved outside the test
