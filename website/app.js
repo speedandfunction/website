@@ -2,6 +2,13 @@ const apostrophe = require('apostrophe');
 require('dotenv').config({ path: '../.env' });
 const { getEnv } = require('./utils/env');
 
+/**
+ * Creates the Apostrophe CMS configuration object.
+ * Configures session (with optional Redis store), base URL, CORS, and all
+ * modules (express, template, widgets, pieces, etc.).
+ *
+ * @returns {object} Apostrophe configuration with shortName, baseUrl, and modules.
+ */
 function createAposConfig() {
   const redisUri = process.env.REDIS_URI;
 

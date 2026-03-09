@@ -1,3 +1,6 @@
+/**
+ * Tests for website/app.js: createAposConfig and module exports.
+ */
 const { createAposConfig } = require('./app');
 const mockConnectRedis = jest.fn();
 jest.mock('connect-redis', () => mockConnectRedis);
