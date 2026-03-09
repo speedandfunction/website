@@ -58,6 +58,16 @@ describe('createAposConfig', () => {
     });
   });
 
+  test('uses in-memory session store when REDIS_URI is not set', () => {
+    delete process.env.REDIS_URI;
+
+    const config = createAposConfig();
+
+    expect(
+      config.modules['@apostrophecms/express'].options.session.store,
+    ).toBeUndefined();
+  });
+
   // Define module categories for verification - moved outside the test
   const moduleCategories = [
     {

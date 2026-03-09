@@ -1,8 +1,23 @@
 const apostrophe = require('apostrophe');
 require('dotenv').config({ path: '../.env' });
-const { getEnv } = require('./utils/env');
+const { getEnv, getOptionalEnv } = require('./utils/env');
 
 function createAposConfig() {
+  const redisUri = getOptionalEnv('REDIS_URI');
+
+  const sessionConfig = {
+    secret: getEnv('SESSION_SECRET'),
+  };
+
+  if (redisUri) {
+    sessionConfig.store = {
+      connect: require('connect-redis'),
+      options: {
+        url: redisUri,
+      },
+    };
+  }
+
   return {
     shortName: 'apostrophe-site',
     baseUrl: process.env.BASE_URL || 'https://speedandfunction.com',
@@ -13,16 +28,7 @@ function createAposConfig() {
       '@apostrophecms/security-headers': {},
       '@apostrophecms/express': {
         options: {
-          session: {
-            // If using Redis (recommended for production)
-            secret: getEnv('SESSION_SECRET'),
-            store: {
-              connect: require('connect-redis'),
-              options: {
-                url: getEnv('REDIS_URI'),
-              },
-            },
-          },
+          session: sessionConfig,
           csrf: {
             cookie: {
               key: '_csrf',
