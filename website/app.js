@@ -1,9 +1,9 @@
 const apostrophe = require('apostrophe');
 require('dotenv').config({ path: '../.env' });
-const { getEnv, getOptionalEnv } = require('./utils/env');
+const { getEnv } = require('./utils/env');
 
 function createAposConfig() {
-  const redisUri = getOptionalEnv('REDIS_URI');
+  const redisUri = process.env.REDIS_URI;
 
   const sessionConfig = {
     secret: getEnv('SESSION_SECRET'),
