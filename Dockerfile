@@ -1,4 +1,4 @@
-FROM node:24-slim
+FROM node:24-slim as build
 # Set build arguments with defaults
 ARG NODE_ENV=production
 ARG NPM_INSTALL_FLAGS=
