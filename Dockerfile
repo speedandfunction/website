@@ -17,6 +17,8 @@ COPY website/ ./
 
 FROM node:24-alpine
 
+RUN apk add --no-cache ca-certificates && update-ca-certificates
+
 # Create a non-root user and group 
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 
