@@ -18,7 +18,7 @@ COPY website/ ./
 FROM node:24-slim
 
 # Create a non-root user and group 
-RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+RUN addgroup --system appgroup && adduser --system --ingroup appgroup appuser
 
 # Copy layer wfrom build image
 COPY --chown=appuser:appgroup --from=build /app /app
