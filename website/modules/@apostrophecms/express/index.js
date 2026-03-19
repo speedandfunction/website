@@ -11,7 +11,9 @@ module.exports = {
   middleware(_self) {
     return {
       logRequests: {
-        middleware: morgan(':date[iso] :method :url :status :response-time ms - :remote-addr - :user-agent'),
+        middleware: morgan(
+          ':date[iso] :method :url :status :response-time ms - :remote-addr - :user-agent',
+        ),
       },
     };
   },
