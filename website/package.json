@@ -53,6 +53,7 @@
     "lodash": "^4.17.21",
     "lozad": "^1.16.0",
     "mongodb": "^6.17.0",
+    "morgan": "^1.10.0",
     "node-fetch": "^2.6.7",
     "normalize.css": "^8.0.1",
     "pm2-runtime": "^5.4.1",
