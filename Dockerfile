@@ -1,8 +1,5 @@
-<<<<<<< HEAD
 FROM node:24-alpine as build
-=======
-FROM node:24-slim as build
->>>>>>> 4389063392e10317ff55fb313a214346a4c9b131
+
 # Set build arguments with defaults
 ARG NODE_ENV=production
 ARG NPM_INSTALL_FLAGS=
@@ -14,22 +11,15 @@ WORKDIR /app
 COPY website/package*.json ./
 
 # Install dependencies based on environment and flags
-RUN npm install $NPM_INSTALL_FLAGS
+RUN npm ci $NPM_INSTALL_FLAGS
 
 # Copy website files
 COPY website/ ./
 
-<<<<<<< HEAD
 FROM node:24-alpine
 
 # Create a non-root user and group
 RUN addgroup -S appgroup && adduser -S -G appgroup appuser
-=======
-FROM node:24-slim
-
-# Create a non-root user and group 
-RUN addgroup --system appgroup && adduser --system --ingroup appgroup appuser
->>>>>>> 4389063392e10317ff55fb313a214346a4c9b131
 
 # Copy layer wfrom build image
 COPY --chown=appuser:appgroup --from=build /app /app
