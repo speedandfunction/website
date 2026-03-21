@@ -28,10 +28,11 @@ jobs:
       - name: Build and push image
         id: build
         run: |
-          IMAGE_TAG=${{ github.sha }}
-          docker build -t ${{ vars.ECR_URL }}:$IMAGE_TAG .
-          docker push ${{ vars.ECR_URL }}:$IMAGE_TAG
-          echo "image=${{ vars.ECR_URL }}:$IMAGE_TAG" >> $GITHUB_OUTPUT
+            IMAGE_TAG=${{ github.sha }}
+            docker build -t ${{ vars.ECR_URL }}:$IMAGE_TAG -t ${{ vars.ECR_URL }}:latest .
+            docker push ${{ vars.ECR_URL }}:$IMAGE_TAG
+            docker push ${{ vars.ECR_URL }}:latest
+            echo "image=${{ vars.ECR_URL }}:$IMAGE_TAG" >> $GITHUB_OUTPUT
 
       - name: Get current task definition
         run: |
