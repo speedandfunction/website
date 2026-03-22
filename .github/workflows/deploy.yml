@@ -20,7 +20,7 @@ jobs:
 
       - uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: ${{ vars.PIPELINE_ROLE_ARN }}
+          role-to-assume: ${{ secrets.PIPELINE_ROLE_ARN }}
           aws-region: ${{ vars.AWS_REGION }}
 
       - uses: aws-actions/amazon-ecr-login@v2
