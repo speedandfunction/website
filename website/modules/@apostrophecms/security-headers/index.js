@@ -32,6 +32,11 @@ module.exports = {
           "'sha256-zoD9yhjUIP539kmB7swNElD1S9L+cey6RvNjUnEcTU4='",
         /* eslint-enable no-secrets/no-secrets */
       },
+      calendly: {
+        'script-src': 'https://assets.calendly.com',
+        'frame-src': 'https://calendly.com',
+        'connect-src': 'https://calendly.com https://assets.calendly.com',
+      },
       linkedin: {
         'script-src': 'snap.licdn.com',
         'connect-src': connectSrcHosts,
