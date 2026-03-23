@@ -35,7 +35,7 @@ module.exports = {
       calendly: {
         'script-src': 'https://assets.calendly.com',
         'frame-src': 'https://calendly.com',
-        'connect-src': 'https://calendly.com https://assets.calendly.com'
+        'connect-src': 'https://calendly.com https://assets.calendly.com',
       },
       linkedin: {
         'script-src': 'snap.licdn.com',
