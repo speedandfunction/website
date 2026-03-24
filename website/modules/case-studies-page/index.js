@@ -15,11 +15,72 @@ const buildIndexQuery = function (self, req) {
     .perPage(self.perPage);
   self.filterByIndexPage(query, req.data.page);
 
-  const searchCondition = SearchService.buildSearchCondition(searchTerm);
+  const resolved = req.data.searchRelationships || {};
+  const searchCondition = SearchService.buildSearchCondition(
+    searchTerm,
+    resolved,
+  );
   if (searchCondition) {
     query.and(searchCondition);
   }
   return query;
+};
+
+const runResolveSearchRelationships = async function (self, req) {
+  req.data ||= {};
+  const reqData = req.data;
+  const searchTerm = SearchService.getSearchTerm(req.query || {});
+  if (!searchTerm) {
+    reqData.searchRelationships = {};
+    return;
+  }
+  let resolvedRelationships = {};
+  try {
+    resolvedRelationships = await SearchService.resolveSearchRelationships(
+      searchTerm,
+      self.apos,
+      req,
+    );
+  } catch (error) {
+    self.apos.util.error('Error resolving search relationships:', error);
+  }
+  reqData.searchRelationships = resolvedRelationships;
+};
+
+const runApplyEnhancedSearchResults = async function (self, req) {
+  const reqData = req.data;
+  const searchTerm = SearchService.getSearchTerm(req.query || {});
+  if (!searchTerm) {
+    return;
+  }
+  const queryParams = { ...req.query };
+  delete queryParams.search;
+  const resolved = reqData.searchRelationships || {};
+  const hasRelationshipMatches = Object.keys(resolved).length > 0;
+  if (!hasRelationshipMatches) {
+    return;
+  }
+  const searchCondition = SearchService.buildSearchCondition(
+    searchTerm,
+    resolved,
+  );
+  if (!searchCondition) {
+    return;
+  }
+
+  const piecesQuery = self.pieces
+    .find(req, {})
+    .applyBuildersSafely(queryParams);
+  piecesQuery.and(searchCondition);
+
+  const totalQuery = self.pieces.find(req, {}).applyBuildersSafely(queryParams);
+  totalQuery.and(searchCondition);
+
+  const pieces = await piecesQuery.toArray();
+  const totalPieces = await totalQuery.toCount();
+  reqData.pieces = pieces;
+  reqData.totalPieces = totalPieces;
+  reqData.totalPages = 1;
 };
 
 const runSetupIndexData = async function (self, req) {
@@ -92,6 +153,8 @@ module.exports = {
       if (superBeforeIndex) {
         await superBeforeIndex(req);
       }
+      await self.resolveSearchRelationships(req);
+      await self.applyEnhancedSearchResults(req);
       await self.setupIndexData(req);
     };
 
@@ -108,6 +171,12 @@ module.exports = {
     return {
       indexQuery(req) {
         return buildIndexQuery(self, req);
+      },
+      async resolveSearchRelationships(req) {
+        return await runResolveSearchRelationships(self, req);
+      },
+      async applyEnhancedSearchResults(req) {
+        return await runApplyEnhancedSearchResults(self, req);
       },
       async setupIndexData(req) {
         return await runSetupIndexData(self, req);

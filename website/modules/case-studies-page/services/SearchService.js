@@ -1,17 +1,39 @@
 /**
- * SearchService - Shared search term normalization and safe regex building
+ * SearchService - Search term normalization, safe regex building,
+ * and relationship resolution for case-study search.
  *
- * Used by case-studies-page index query and NavigationService so search
- * behavior and escaping stay consistent and safe (ReDoS prevention).
+ * Used by case-studies-page index query and NavigationService so
+ * search behavior stays consistent (ReDoS prevention, escaping).
  */
 
 const REGEX_ESCAPE = /[$()*+.?[\\\]^{|}]/gu;
 
 const MAX_SEARCH_TERM_LENGTH = 200;
 
+const TEXT_FIELDS = [
+  'title',
+  'portfolioTitle',
+  'descriptor',
+  'objective',
+  'challenge',
+  'solution',
+  'results',
+];
+
+const RELATIONSHIP_CONFIGS = [
+  {
+    module: 'cases-tags',
+    caseStudyFields: ['stackIds', 'industryIds', 'caseStudyTypeIds'],
+  },
+  {
+    module: 'business-partner',
+    caseStudyFields: ['partnerIds'],
+  },
+];
+
 /**
- * Normalizes search param from query (handles missing, array, non-string)
- * @param {Object} queryParams - Request query object (e.g. req.query)
+ * Normalizes search param from query
+ * @param {Object} queryParams - Request query object
  * @returns {string} Trimmed search string, or empty string
  */
 const getSearchTerm = function (queryParams) {
@@ -30,10 +52,10 @@ const getSearchTerm = function (queryParams) {
 };
 
 /**
- * Builds a safe MongoDB regex pattern from search term (escape + word match)
- * Search term is capped at MAX_SEARCH_TERM_LENGTH to avoid pathologically long patterns
+ * Builds a safe MongoDB regex pattern from search term.
+ * Capped at MAX_SEARCH_TERM_LENGTH to avoid long patterns.
  * @param {string} searchTerm - User search string
- * @returns {string|null} Pattern for $regex, or null if no search
+ * @returns {string|null} Pattern for $regex, or null
  */
 const buildSearchRegexPattern = function (searchTerm) {
   if (!searchTerm || !searchTerm.trim()) {
@@ -52,23 +74,77 @@ const buildSearchRegexPattern = function (searchTerm) {
 };
 
 /**
- * Builds MongoDB $or condition for case study search (single source of truth for searchable fields)
+ * Resolves relationship document IDs whose title or slug
+ * matches the search term. Returns a map of case-study
+ * ID-array field names to arrays of matching aposDocId values.
  * @param {string} searchTerm - User search string
- * @returns {Object|null} Condition to pass to query.and(), or null if no search
+ * @param {Object} apos - ApostropheCMS instance
+ * @param {Object} req - Request object
+ * @returns {Promise<Object>} Field-name-to-IDs map
  */
-const buildSearchCondition = function (searchTerm) {
+const resolveSearchRelationships = async function (searchTerm, apos, req) {
+  const regexPattern = buildSearchRegexPattern(searchTerm);
+  if (!regexPattern) {
+    return {};
+  }
+
+  const regexOpts = { $regex: regexPattern, $options: 'i' };
+  const result = {};
+
+  const lookups = RELATIONSHIP_CONFIGS.map(async (config) => {
+    const docs = await apos.modules[config.module]
+      .find(req, {})
+      .and({
+        $or: [{ title: regexOpts }, { slug: regexOpts }],
+      })
+      .toArray();
+
+    const ids = docs.map((doc) => doc.aposDocId);
+    if (ids.length > 0) {
+      config.caseStudyFields.forEach((field) => {
+        result[field] = ids;
+      });
+    }
+  });
+
+  await Promise.all(lookups);
+  return result;
+};
+
+/**
+ * Builds MongoDB $or condition for case study search across
+ * text fields and pre-resolved relationship ID fields.
+ * @param {string} searchTerm - User search string
+ * @param {Object} [resolvedRelationships] - Pre-resolved IDs
+ * @returns {Object|null} Condition for query.and(), or null
+ */
+const buildSearchCondition = function (searchTerm, resolvedRelationships) {
   const regexPattern = buildSearchRegexPattern(searchTerm);
   if (!regexPattern) {
     return null;
   }
+
   const regexOpts = { $regex: regexPattern, $options: 'i' };
-  return {
-    $or: [{ title: regexOpts }, { portfolioTitle: regexOpts }],
-  };
+  const orBranches = TEXT_FIELDS.map((field) => ({ [field]: regexOpts }));
+
+  const relationships = resolvedRelationships || {};
+  Object.keys(relationships).forEach((field) => {
+    const ids = relationships[field];
+    if (ids && ids.length > 0) {
+      orBranches.push({ [field]: { $in: ids } });
+    }
+  });
+
+  if (orBranches.length === 0) {
+    return null;
+  }
+
+  return { $or: orBranches };
 };
 
 module.exports = {
   buildSearchCondition,
   buildSearchRegexPattern,
   getSearchTerm,
+  resolveSearchRelationships,
 };

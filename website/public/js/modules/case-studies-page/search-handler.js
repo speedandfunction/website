@@ -78,7 +78,10 @@
   }
 
   function handleSearchFocus(event) {
-    event.target.setAttribute('placeholder', 'Try a title or description');
+    event.target.setAttribute(
+      'placeholder',
+      'Try a title, technology, or partner',
+    );
   }
 
   function handleSearchBlur(event) {
