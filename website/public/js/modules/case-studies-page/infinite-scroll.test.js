@@ -93,7 +93,7 @@ describe('Infinite Scroll', () => {
 
     // Simulate intersection twice
     const observer = mockIntersectionObserver.mock.results[0].value;
-    await observer.callback([{ isIntersecting: true }]);
+    observer.callback([{ isIntersecting: true }]);
     await observer.callback([{ isIntersecting: true }]);
 
     expect(global.fetch).toHaveBeenCalledTimes(1);

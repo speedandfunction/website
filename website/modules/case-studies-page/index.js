@@ -53,6 +53,10 @@ const runApplyEnhancedSearchResults = async function (self, req) {
   if (!searchTerm) {
     return;
   }
+  let { perPage } = self;
+  if (!perPage) {
+    perPage = 6;
+  }
   const queryParams = { ...req.query };
   delete queryParams.search;
   const resolved = reqData.searchRelationships || {};
@@ -70,7 +74,8 @@ const runApplyEnhancedSearchResults = async function (self, req) {
 
   const piecesQuery = self.pieces
     .find(req, {})
-    .applyBuildersSafely(queryParams);
+    .applyBuildersSafely(queryParams)
+    .perPage(perPage);
   piecesQuery.and(searchCondition);
 
   const totalQuery = self.pieces.find(req, {}).applyBuildersSafely(queryParams);
@@ -80,7 +85,7 @@ const runApplyEnhancedSearchResults = async function (self, req) {
   const totalPieces = await totalQuery.toCount();
   reqData.pieces = pieces;
   reqData.totalPieces = totalPieces;
-  reqData.totalPages = 1;
+  reqData.totalPages = Math.max(1, Math.ceil(totalPieces / perPage));
 };
 
 const runSetupIndexData = async function (self, req) {

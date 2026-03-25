@@ -8,11 +8,25 @@ document.addEventListener('DOMContentLoaded', function () {
   const MAX_RETRIES = 3;
   const existingCardUrls = new Set();
 
+  function getCardUrl(card) {
+    if (!card) {
+      return null;
+    }
+    if (card.href) {
+      return card.href;
+    }
+    if (card.dataset && card.dataset.href) {
+      return card.dataset.href;
+    }
+    return null;
+  }
+
   function trackExistingCards() {
     const cards = grid.querySelectorAll('.cs_card');
     cards.forEach((card) => {
-      if (card.href) {
-        existingCardUrls.add(card.href);
+      const cardUrl = getCardUrl(card);
+      if (cardUrl) {
+        existingCardUrls.add(cardUrl);
       }
     });
   }
@@ -72,10 +86,13 @@ document.addEventListener('DOMContentLoaded', function () {
         return;
       }
       newCards.forEach((card) => {
-        if (!card.href || existingCardUrls.has(card.href)) {
+        const cardUrl = getCardUrl(card);
+        if (cardUrl && existingCardUrls.has(cardUrl)) {
           return;
         }
-        existingCardUrls.add(card.href);
+        if (cardUrl) {
+          existingCardUrls.add(cardUrl);
+        }
         grid.appendChild(card.cloneNode(true));
       });
       currentPage = nextPage;
@@ -119,13 +136,13 @@ document.addEventListener('DOMContentLoaded', function () {
   if (trigger && grid) {
     trackExistingCards();
     const observer = new IntersectionObserver(
-      (entries) => {
+      async (entries) => {
         const entry = entries[0];
         if (!entry.isIntersecting || isLoading || currentPage >= totalPages) {
           return;
         }
         isLoading = true;
-        loadNextPage(observer, trigger);
+        await loadNextPage(observer, trigger);
       },
       {
         rootMargin: '0px 0px 200px 0px',
