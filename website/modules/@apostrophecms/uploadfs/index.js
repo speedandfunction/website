@@ -9,7 +9,7 @@ const uploadfsOptions = {
   storage: 's3',
   bucket: getEnv('APOS_S3_BUCKET'),
   region: getEnv('APOS_S3_REGION'),
-  acl: process.env.APOS_S3_ACL || null,
+  acl: 'private',
   cdn: {
     enabled: true,
     url: getEnv('APOS_CDN_URL'),
