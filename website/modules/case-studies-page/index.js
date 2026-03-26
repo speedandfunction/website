@@ -4,6 +4,47 @@ const SearchService = require('./services/SearchService');
 const TagCountService = require('./services/TagCountService');
 const UrlService = require('./services/UrlService');
 
+const createDocMapById = function (docs) {
+  const map = {};
+  docs.forEach((doc) => {
+    map[doc.aposDocId] = {
+      label: doc.title,
+      value: doc.slug,
+    };
+  });
+  return map;
+};
+
+const collectFilterOptions = function (pieces, fieldName, docMap) {
+  const values = {};
+  pieces.forEach((piece) => {
+    const ids = piece[fieldName] || [];
+    ids.forEach((id) => {
+      if (docMap[id]) {
+        values[id] = docMap[id];
+      }
+    });
+  });
+  const options = Object.values(values);
+  options.sort((first, second) => first.label.localeCompare(second.label));
+  return options;
+};
+
+const buildPiecesFiltersFromResults = async function (self, req, pieces) {
+  const [tags, partners] = await Promise.all([
+    self.apos.modules['cases-tags'].find(req).toArray(),
+    self.apos.modules['business-partner'].find(req).toArray(),
+  ]);
+  const tagMap = createDocMapById(tags);
+  const partnerMap = createDocMapById(partners);
+  return {
+    industry: collectFilterOptions(pieces, 'industryIds', tagMap),
+    stack: collectFilterOptions(pieces, 'stackIds', tagMap),
+    caseStudyType: collectFilterOptions(pieces, 'caseStudyTypeIds', tagMap),
+    partner: collectFilterOptions(pieces, 'partnerIds', partnerMap),
+  };
+};
+
 const buildIndexQuery = function (self, req) {
   const queryParams = { ...req.query };
   const searchTerm = SearchService.getSearchTerm(queryParams);
@@ -53,10 +94,6 @@ const runApplyEnhancedSearchResults = async function (self, req) {
   if (!searchTerm) {
     return;
   }
-  let { perPage } = self;
-  if (!perPage) {
-    perPage = 6;
-  }
   const queryParams = { ...req.query };
   delete queryParams.search;
   const resolved = reqData.searchRelationships || {};
@@ -74,18 +111,16 @@ const runApplyEnhancedSearchResults = async function (self, req) {
 
   const piecesQuery = self.pieces
     .find(req, {})
-    .applyBuildersSafely(queryParams)
-    .perPage(perPage);
+    .applyBuildersSafely(queryParams);
   piecesQuery.and(searchCondition);
 
-  const totalQuery = self.pieces.find(req, {}).applyBuildersSafely(queryParams);
-  totalQuery.and(searchCondition);
-
   const pieces = await piecesQuery.toArray();
-  const totalPieces = await totalQuery.toCount();
+  const totalPieces = pieces.length;
+  const piecesFilters = await buildPiecesFiltersFromResults(self, req, pieces);
   reqData.pieces = pieces;
   reqData.totalPieces = totalPieces;
-  reqData.totalPages = Math.max(1, Math.ceil(totalPieces / perPage));
+  reqData.totalPages = 1;
+  reqData.piecesFilters = piecesFilters;
 };
 
 const runSetupIndexData = async function (self, req) {

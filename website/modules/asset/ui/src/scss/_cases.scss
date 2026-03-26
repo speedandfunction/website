@@ -756,6 +756,59 @@
   }
 }
 
+.cs_empty-state {
+  width: 100%;
+  min-height: 220px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  padding: 24px 16px;
+  text-align: center;
+  background-color: $white;
+
+  @include breakpoint-medium {
+    min-height: 280px;
+    padding: 40px 24px;
+  }
+}
+
+.cs_list--empty {
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 240px);
+
+  @include breakpoint-medium {
+    min-height: calc(100vh - 290px);
+  }
+
+  .tags-filter {
+    display: none;
+  }
+}
+
+.cs_empty-state--standalone {
+  width: min(960px, 100%);
+  margin: 0 auto;
+}
+
+.cs_empty-state-title {
+  margin: 0;
+  color: $gray-500;
+  @include responsive-font(20px, 28px);
+  @include responsive-line-height(120%, 120%);
+  font-weight: $font-weight-extra-bold;
+}
+
+.cs_empty-state-text {
+  margin: 0;
+  max-width: 520px;
+  color: $gray-300;
+  @include responsive-font(12px, 14px);
+  @include responsive-line-height(150%, 150%);
+}
+
 .cs_card {
   background-color: $white;
   border: 1px solid $whisper;
