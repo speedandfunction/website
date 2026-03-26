@@ -212,17 +212,17 @@ module.exports = {
       indexQuery(req) {
         return buildIndexQuery(self, req);
       },
-      async resolveSearchRelationships(req) {
-        return await runResolveSearchRelationships(self, req);
+      resolveSearchRelationships(req) {
+        return runResolveSearchRelationships(self, req);
       },
-      async applyEnhancedSearchResults(req) {
-        return await runApplyEnhancedSearchResults(self, req);
+      applyEnhancedSearchResults(req) {
+        return runApplyEnhancedSearchResults(self, req);
       },
-      async setupIndexData(req) {
-        return await runSetupIndexData(self, req);
+      setupIndexData(req) {
+        return runSetupIndexData(self, req);
       },
-      async setupShowData(req) {
-        return await runSetupShowData(self, req);
+      setupShowData(req) {
+        return runSetupShowData(self, req);
       },
     };
   },

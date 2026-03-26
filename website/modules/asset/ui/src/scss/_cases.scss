@@ -798,6 +798,7 @@
   color: $gray-500;
   @include responsive-font(20px, 28px);
   @include responsive-line-height(120%, 120%);
+
   font-weight: $font-weight-extra-bold;
 }
 
