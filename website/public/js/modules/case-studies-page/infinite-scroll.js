@@ -6,14 +6,75 @@ document.addEventListener('DOMContentLoaded', function () {
   let isLoading = false;
   let errorCount = 0;
   const MAX_RETRIES = 3;
+  const existingCardUrls = new Set();
+
+  function getCardUrl(card) {
+    if (!card) {
+      return null;
+    }
+    if (card.href) {
+      return card.href;
+    }
+    if (card.dataset && card.dataset.href) {
+      return card.dataset.href;
+    }
+    return null;
+  }
+
+  function trackExistingCards() {
+    const cards = grid.querySelectorAll('.cs_card');
+    cards.forEach((card) => {
+      const cardUrl = getCardUrl(card);
+      if (cardUrl) {
+        existingCardUrls.add(cardUrl);
+      }
+    });
+  }
+
+  function hasActiveSidebarFilters(url) {
+    const filterParams = [
+      'industry[]',
+      'industry[0]',
+      'stack[]',
+      'stack[0]',
+      'caseStudyType[]',
+      'caseStudyType[0]',
+      'partner[]',
+      'partner[0]',
+    ];
+    return filterParams.some((param) => url.searchParams.has(param));
+  }
+
+  async function fetchWithFallback(url) {
+    let response = await fetch(url.toString());
+    if (
+      response.status === 404 &&
+      url.searchParams.has('search') &&
+      hasActiveSidebarFilters(url)
+    ) {
+      const fallbackUrl = new URL(url.toString());
+      fallbackUrl.searchParams.delete('search');
+      response = await fetch(fallbackUrl.toString());
+    }
+    return response;
+  }
+
+  function stopInfiniteScroll(observer, trigger) {
+    observer.unobserve(trigger);
+    isLoading = false;
+  }
 
   async function loadNextPage(observer, trigger) {
     const nextPage = currentPage + 1;
     const url = new URL(window.location.href);
     url.searchParams.set('page', nextPage);
     try {
-      const response = await fetch(url.toString());
+      const response = await fetchWithFallback(url);
       if (!response.ok) {
+        if (response.status === 404) {
+          stopInfiniteScroll(observer, trigger);
+          return;
+        }
         throw new Error('Network response was not ok');
       }
       const html = await response.text();
@@ -21,9 +82,17 @@ document.addEventListener('DOMContentLoaded', function () {
       const doc = parser.parseFromString(html, 'text/html');
       const newCards = doc.querySelectorAll('.cs_card');
       if (newCards.length === 0) {
-        throw new Error('No new case studies found');
+        stopInfiniteScroll(observer, trigger);
+        return;
       }
       newCards.forEach((card) => {
+        const cardUrl = getCardUrl(card);
+        if (cardUrl && existingCardUrls.has(cardUrl)) {
+          return;
+        }
+        if (cardUrl) {
+          existingCardUrls.add(cardUrl);
+        }
         grid.appendChild(card.cloneNode(true));
       });
       currentPage = nextPage;
@@ -55,26 +124,25 @@ document.addEventListener('DOMContentLoaded', function () {
   function handleLoadError(error, observer, trigger) {
     errorCount++;
     if (errorCount >= MAX_RETRIES) {
-      observer.unobserve(trigger);
+      stopInfiniteScroll(observer, trigger);
       displayErrorMessage(error);
-      isLoading = false;
       return;
     }
     setTimeout(() => {
       isLoading = false;
-      currentPage--;
     }, 1000);
   }
 
   if (trigger && grid) {
+    trackExistingCards();
     const observer = new IntersectionObserver(
-      (entries) => {
+      async (entries) => {
         const entry = entries[0];
         if (!entry.isIntersecting || isLoading || currentPage >= totalPages) {
           return;
         }
         isLoading = true;
-        loadNextPage(observer, trigger);
+        await loadNextPage(observer, trigger);
       },
       {
         rootMargin: '0px 0px 200px 0px',

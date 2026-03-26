@@ -71,15 +71,22 @@ class NavigationService {
   }
 
   /**
-   * Applies search filter to query when search param is present
-   * Uses SearchService for safe regex (ReDoS prevention) and array handling
+   * Applies search filter to query when search param is present.
+   * Resolves relationship matches so search covers taxonomy and
+   * partner fields in addition to text fields.
    * @param {Object} filteredQuery - Query object
    * @param {Object} req - Request object
-   * @returns {Object} Modified query
+   * @param {Object} apos - ApostropheCMS instance
+   * @returns {Promise<Object>} Modified query
    */
-  static applySearchFilter(filteredQuery, req) {
+  static async applySearchFilter(filteredQuery, req, apos) {
     const searchTerm = SearchService.getSearchTerm(req.query || {});
-    const searchCondition = SearchService.buildSearchCondition(searchTerm);
+    const resolvedRelationships =
+      await SearchService.resolveSearchRelationships(searchTerm, apos, req);
+    const searchCondition = SearchService.buildSearchCondition(
+      searchTerm,
+      resolvedRelationships,
+    );
     if (!searchCondition) {
       return filteredQuery;
     }
@@ -133,7 +140,7 @@ class NavigationService {
         });
       }
     }
-    return NavigationService.applySearchFilter(filteredQuery, req);
+    return await NavigationService.applySearchFilter(filteredQuery, req, apos);
   }
 
   /**
