@@ -133,4 +133,18 @@ module.exports = {
       },
     },
   },
+  apiRoutes(self) {
+    return {
+      get: {
+        nav(req) {
+          const { global } = req.data;
+          return {
+            primaryNav: global.primaryNav || [],
+            footerLinks: global.footerLinks || [],
+            socialMediaLinks: global.socialMediaLinks || [],
+          };
+        },
+      },
+    };
+  },
 };
