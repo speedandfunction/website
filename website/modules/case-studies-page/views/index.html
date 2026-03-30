@@ -36,7 +36,7 @@
             placeholder="Search case studies"
             value="{{ data.query.search or '' }}"
             autocomplete="off"
-            aria-label="Search case studies by title"
+            aria-label="Search case studies"
           />
           <button
             type="button"
@@ -150,7 +150,7 @@
       {% endif %}
     </div>
 
-    <div class="cs_list">
+    <div class="cs_list{% if not data.pieces or not data.pieces.length %} cs_list--empty{% endif %}">
       <div class="tags-filter">
         {# Display all filter types #} {% for filterType, filterLabel in [
         ['industry', 'Industry'], ['caseStudyType', 'Case Type'], ['stack',
@@ -307,6 +307,7 @@
         {% endif %} {% endfor %}
       </div>
 
+      {% if data.pieces and data.pieces.length %}
       <div class="cs_grid" id="case-studies-grid">
         {% for article in data.pieces %} {# CARD START: {{ article.title }} #}
         <a href="{{ data.buildCaseStudyUrl(article._url) }}" class="cs_card">
@@ -358,6 +359,14 @@
         </a>
         {# CARD END: {{ article.title }} #} {% endfor %}
       </div>
+      {% else %}
+      <div class="cs_empty-state cs_empty-state--standalone" role="status" aria-live="polite">
+        <h3 class="cs_empty-state-title">No Results Found</h3>
+        <p class="cs_empty-state-text">
+          Try a different keyword or clear filters to see more case studies.
+        </p>
+      </div>
+      {% endif %}
     </div>
 
     <div id="filter-modal" class="filter-modal">

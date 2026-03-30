@@ -4,6 +4,47 @@ const SearchService = require('./services/SearchService');
 const TagCountService = require('./services/TagCountService');
 const UrlService = require('./services/UrlService');
 
+const createDocMapById = function (docs) {
+  const map = {};
+  docs.forEach((doc) => {
+    map[doc.aposDocId] = {
+      label: doc.title,
+      value: doc.slug,
+    };
+  });
+  return map;
+};
+
+const collectFilterOptions = function (pieces, fieldName, docMap) {
+  const values = {};
+  pieces.forEach((piece) => {
+    const ids = piece[fieldName] || [];
+    ids.forEach((id) => {
+      if (docMap[id]) {
+        values[id] = docMap[id];
+      }
+    });
+  });
+  const options = Object.values(values);
+  options.sort((first, second) => first.label.localeCompare(second.label));
+  return options;
+};
+
+const buildPiecesFiltersFromResults = async function (self, req, pieces) {
+  const [tags, partners] = await Promise.all([
+    self.apos.modules['cases-tags'].find(req).toArray(),
+    self.apos.modules['business-partner'].find(req).toArray(),
+  ]);
+  const tagMap = createDocMapById(tags);
+  const partnerMap = createDocMapById(partners);
+  return {
+    industry: collectFilterOptions(pieces, 'industryIds', tagMap),
+    stack: collectFilterOptions(pieces, 'stackIds', tagMap),
+    caseStudyType: collectFilterOptions(pieces, 'caseStudyTypeIds', tagMap),
+    partner: collectFilterOptions(pieces, 'partnerIds', partnerMap),
+  };
+};
+
 const buildIndexQuery = function (self, req) {
   const queryParams = { ...req.query };
   const searchTerm = SearchService.getSearchTerm(queryParams);
@@ -15,11 +56,71 @@ const buildIndexQuery = function (self, req) {
     .perPage(self.perPage);
   self.filterByIndexPage(query, req.data.page);
 
-  const searchCondition = SearchService.buildSearchCondition(searchTerm);
+  const resolved = req.data.searchRelationships || {};
+  const searchCondition = SearchService.buildSearchCondition(
+    searchTerm,
+    resolved,
+  );
   if (searchCondition) {
     query.and(searchCondition);
   }
   return query;
+};
+
+const runResolveSearchRelationships = async function (self, req) {
+  req.data ||= {};
+  const reqData = req.data;
+  const searchTerm = SearchService.getSearchTerm(req.query || {});
+  if (!searchTerm) {
+    reqData.searchRelationships = {};
+    return;
+  }
+  let resolvedRelationships = {};
+  try {
+    resolvedRelationships = await SearchService.resolveSearchRelationships(
+      searchTerm,
+      self.apos,
+      req,
+    );
+  } catch (error) {
+    self.apos.util.error('Error resolving search relationships:', error);
+  }
+  reqData.searchRelationships = resolvedRelationships;
+};
+
+const runApplyEnhancedSearchResults = async function (self, req) {
+  const reqData = req.data;
+  const searchTerm = SearchService.getSearchTerm(req.query || {});
+  if (!searchTerm) {
+    return;
+  }
+  const queryParams = { ...req.query };
+  delete queryParams.search;
+  const resolved = reqData.searchRelationships || {};
+  const hasRelationshipMatches = Object.keys(resolved).length > 0;
+  if (!hasRelationshipMatches) {
+    return;
+  }
+  const searchCondition = SearchService.buildSearchCondition(
+    searchTerm,
+    resolved,
+  );
+  if (!searchCondition) {
+    return;
+  }
+
+  const piecesQuery = self.pieces
+    .find(req, {})
+    .applyBuildersSafely(queryParams);
+  piecesQuery.and(searchCondition);
+
+  const pieces = await piecesQuery.toArray();
+  const totalPieces = pieces.length;
+  const piecesFilters = await buildPiecesFiltersFromResults(self, req, pieces);
+  reqData.pieces = pieces;
+  reqData.totalPieces = totalPieces;
+  reqData.totalPages = 1;
+  reqData.piecesFilters = piecesFilters;
 };
 
 const runSetupIndexData = async function (self, req) {
@@ -92,6 +193,8 @@ module.exports = {
       if (superBeforeIndex) {
         await superBeforeIndex(req);
       }
+      await self.resolveSearchRelationships(req);
+      await self.applyEnhancedSearchResults(req);
       await self.setupIndexData(req);
     };
 
@@ -109,11 +212,17 @@ module.exports = {
       indexQuery(req) {
         return buildIndexQuery(self, req);
       },
-      async setupIndexData(req) {
-        return await runSetupIndexData(self, req);
+      resolveSearchRelationships(req) {
+        return runResolveSearchRelationships(self, req);
       },
-      async setupShowData(req) {
-        return await runSetupShowData(self, req);
+      applyEnhancedSearchResults(req) {
+        return runApplyEnhancedSearchResults(self, req);
+      },
+      setupIndexData(req) {
+        return runSetupIndexData(self, req);
+      },
+      setupShowData(req) {
+        return runSetupShowData(self, req);
       },
     };
   },
