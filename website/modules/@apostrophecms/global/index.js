@@ -137,7 +137,7 @@ module.exports = {
     return {
       get: {
         nav(req) {
-          const { global } = req.data;
+          const global = req?.data?.global || {};
           return {
             primaryNav: global.primaryNav || [],
             footerLinks: global.footerLinks || [],
