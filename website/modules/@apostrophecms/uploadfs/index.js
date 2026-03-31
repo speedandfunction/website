@@ -9,7 +9,6 @@ const uploadfsOptions = {
   storage: 's3',
   bucket: getEnv('APOS_S3_BUCKET'),
   region: getEnv('APOS_S3_REGION'),
-  acl: process.env.APOS_S3_ACL || null,
   cdn: {
     enabled: true,
     url: getEnv('APOS_CDN_URL'),
@@ -31,6 +30,12 @@ if (aposS3Https) {
 if (aposS3Secret) {
   uploadfsOptions.secret = aposS3Secret;
   uploadfsOptions.key = getEnv('APOS_S3_KEY');
+}
+
+const aposS3BucketObjectsAcl = process.env.APOS_S3_ACL;
+if (aposS3BucketObjectsAcl) {
+  uploadfsOptions.bucketObjectsACL = aposS3BucketObjectsAcl;
+  uploadfsOptions.disabledBucketObjectsACL = aposS3BucketObjectsAcl;
 }
 
 const res = {
