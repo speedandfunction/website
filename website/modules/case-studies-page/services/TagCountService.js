@@ -49,13 +49,16 @@ class TagCountService {
    * @param {Object} options - Module options
    * @returns {Promise<Array>} Promise resolving to [caseStudies, casesTags, businessPartners] arrays
    */
-  static async fetchCaseStudiesAndTags(req, aposModules, options) {
-    const [caseStudies, casesTags, businessPartners] = await Promise.all([
-      aposModules[options.pieces].find(req).toArray(),
+  static async fetchCaseStudiesAndTags(req, aposModules, options, caseStudies) {
+    const [casesTags, businessPartners] = await Promise.all([
       aposModules['cases-tags'].find(req).toArray(),
       aposModules['business-partner'].find(req).toArray(),
     ]);
-    return [caseStudies, casesTags, businessPartners];
+    let pieces = caseStudies;
+    if (!pieces) {
+      pieces = await aposModules[options.pieces].find(req).toArray();
+    }
+    return [pieces, casesTags, businessPartners];
   }
 
   /**
@@ -96,7 +99,7 @@ class TagCountService {
    * @param {Object} options - Module options
    * @returns {Promise<Object>} Tag counts by type
    */
-  static async calculateTagCounts(req, aposModules, options) {
+  static async calculateTagCounts(req, aposModules, options, caseStudiesInput) {
     const tagCounts = {
       industry: {},
       stack: {},
@@ -105,7 +108,12 @@ class TagCountService {
     };
 
     const [caseStudies, casesTags, businessPartners] =
-      await TagCountService.fetchCaseStudiesAndTags(req, aposModules, options);
+      await TagCountService.fetchCaseStudiesAndTags(
+        req,
+        aposModules,
+        options,
+        caseStudiesInput,
+      );
 
     const tagMap = TagCountService.createIdToSlugMap(casesTags);
     const partnerMap = TagCountService.createIdToSlugMap(businessPartners);

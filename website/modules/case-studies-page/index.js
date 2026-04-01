@@ -67,6 +67,26 @@ const buildIndexQuery = function (self, req) {
   return query;
 };
 
+const buildTagCountQuery = function (self, req) {
+  const queryParams = { ...req.query };
+  const searchTerm = SearchService.getSearchTerm(queryParams);
+  delete queryParams.search;
+  delete queryParams.page;
+
+  const query = self.pieces.find(req, {}).applyBuildersSafely(queryParams);
+  self.filterByIndexPage(query, req.data.page);
+
+  const resolved = req.data.searchRelationships || {};
+  const searchCondition = SearchService.buildSearchCondition(
+    searchTerm,
+    resolved,
+  );
+  if (searchCondition) {
+    query.and(searchCondition);
+  }
+  return query;
+};
+
 const runResolveSearchRelationships = async function (self, req) {
   req.data ||= {};
   const reqData = req.data;
@@ -125,10 +145,13 @@ const runApplyEnhancedSearchResults = async function (self, req) {
 
 const runSetupIndexData = async function (self, req) {
   try {
+    const countQuery = buildTagCountQuery(self, req);
+    const caseStudiesForCounts = await countQuery.toArray();
     const tagCounts = await TagCountService.calculateTagCounts(
       req,
       self.apos.modules,
       self.options,
+      caseStudiesForCounts,
     );
     UrlService.attachIndexData(req, tagCounts);
   } catch (error) {
