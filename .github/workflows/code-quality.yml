@@ -60,6 +60,7 @@ jobs:
           image: apostrophe-cms:test
           sarif-file: docker-scan-results.sarif
           only-severities: critical,high
+          write-comment: false
 
       - name: Upload scan results
         uses: github/codeql-action/upload-sarif@v3
