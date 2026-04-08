@@ -1,4 +1,21 @@
-{% extends "layout.html" %} {% block main %}
+{% extends "layout.html" %}
+{% block extraHead %}
+  {{ super() }}
+  {% set hasQueryParams =
+    data.query.search or
+    data.query.industry or
+    data.query.stack or
+    data.query.caseStudyType or
+    data.query.partner or
+    data.query.page
+  %}
+  <link rel="canonical" href="{{ data.piece._url | e }}" />
+  <meta
+    name="robots"
+    content="{% if hasQueryParams %}noindex,follow{% else %}index,follow{% endif %}"
+  />
+{% endblock %}
+{% block main %}
 
 <div>
   <div class="cs_nav-container">
