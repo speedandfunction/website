@@ -17,6 +17,8 @@ module.exports = {
             'www.speedandfunction.com',
           ];
           const isProductionHost = productionHosts.includes(baseHost);
+          const parsedBaseUrl = new URL(baseUrl);
+          const normalizedBaseUrl = parsedBaseUrl.origin;
           if (!isProduction || !isProductionHost) {
             return res.type('text/plain').send('User-agent: *\nDisallow: /\n');
           }
@@ -24,7 +26,7 @@ module.exports = {
           const robotsContent =
             'User-agent: *\n' +
             'Allow: /\n\n' +
-            `Sitemap: ${baseUrl}/sitemap.xml\n`;
+            `Sitemap: ${normalizedBaseUrl}/sitemap.xml\n`;
           return res.type('text/plain').send(robotsContent);
         },
       },
