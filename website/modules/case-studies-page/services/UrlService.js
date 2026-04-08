@@ -153,6 +153,7 @@ class UrlService {
 
     reqCopy.data.backUrl = UrlService.buildCaseStudyUrl('/cases', queryParams);
     reqCopy.data.query = queryParams;
+    reqCopy.data.hasQueryParams = Object.keys(req.query || {}).length > 0;
   }
 }
 

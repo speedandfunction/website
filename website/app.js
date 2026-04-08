@@ -67,6 +67,7 @@ function createAposConfig() {
       },
       // Enable local SEO module with GTM integration
       '@apostrophecms/seo': {},
+      '@apostrophecms/sitemap': {},
       '@apostrophecms/global': {},
       // Make getEnv function available to templates
       '@apostrophecms/template': {
@@ -79,6 +80,7 @@ function createAposConfig() {
 
       // Add global data module
       'global-data': {},
+      'robots': {},
 
       // Shared constants module
       '@apostrophecms/shared-constants': {},

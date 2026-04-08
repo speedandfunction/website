@@ -1,4 +1,13 @@
-{% extends "layout.html" %} {% block main %}
+{% extends "layout.html" %}
+{% block extraHead %}
+  {{ super() }}
+  <link rel="canonical" href="{{ data.piece._url | e }}" />
+  <meta
+    name="robots"
+    content="{% if data.hasQueryParams %}noindex,follow{% else %}index,follow{% endif %}"
+  />
+{% endblock %}
+{% block main %}
 
 <div>
   <div class="cs_nav-container">
