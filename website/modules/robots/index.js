@@ -12,7 +12,11 @@ module.exports = {
             baseHost = '';
           }
           const isProduction = process.env.NODE_ENV === 'production';
-          const isProductionHost = baseHost === 'www.speedandfunction.com';
+          const productionHosts = [
+            'speedandfunction.com',
+            'www.speedandfunction.com',
+          ];
+          const isProductionHost = productionHosts.includes(baseHost);
           if (!isProduction || !isProductionHost) {
             return res.type('text/plain').send('User-agent: *\nDisallow: /\n');
           }
