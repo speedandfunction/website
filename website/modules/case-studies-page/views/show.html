@@ -4,7 +4,7 @@
   <link rel="canonical" href="{{ data.piece._url | e }}" />
   <meta
     name="robots"
-    content="{% if data.hasQueryParams %}noindex,follow{% else %}index,follow{% endif %}"
+    content="{% if data.hasQueryParams %}noindex,nofollow{% else %}index,follow{% endif %}"
   />
 {% endblock %}
 {% block main %}

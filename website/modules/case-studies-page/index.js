@@ -182,7 +182,7 @@ const buildIndexSeoData = function (req) {
   }
   let robots = 'index,follow';
   if (shouldNoindex) {
-    robots = 'noindex,follow';
+    robots = 'noindex,nofollow';
   }
   return {
     canonicalUrl: pageUrl,
