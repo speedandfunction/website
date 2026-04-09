@@ -165,6 +165,36 @@ const runSetupIndexData = async function (self, req) {
   }
 };
 
+const buildIndexSeoData = function (req) {
+  const query = req.query || {};
+  const hasFilterParams =
+    Boolean(query.search) ||
+    Boolean(query.industry) ||
+    Boolean(query.stack) ||
+    Boolean(query.caseStudyType) ||
+    Boolean(query.partner);
+  const pageNumber = Number(query.page || 1);
+  const hasPaginationParam = Number.isFinite(pageNumber) && pageNumber > 1;
+  const shouldNoindex = hasFilterParams || hasPaginationParam;
+  let pageUrl = '/cases';
+  if (req.data && req.data.page && req.data.page.slug) {
+    pageUrl = req.data.page.slug;
+  }
+  let robots = 'index,follow';
+  if (shouldNoindex) {
+    robots = 'noindex,follow';
+  }
+  return {
+    canonicalUrl: pageUrl,
+    robots,
+  };
+};
+
+const runSetupIndexSeoData = function (req) {
+  req.data ||= {};
+  req.data.caseListingSeo = buildIndexSeoData(req);
+};
+
 const runSetupShowData = async function (self, req) {
   try {
     const navigation = await NavigationService.getNavigationDataForPage(
@@ -219,6 +249,7 @@ module.exports = {
       await self.resolveSearchRelationships(req);
       await self.applyEnhancedSearchResults(req);
       await self.setupIndexData(req);
+      self.setupIndexSeoData(req);
     };
 
     const superBeforeShow = self.beforeShow;
@@ -243,6 +274,9 @@ module.exports = {
       },
       setupIndexData(req) {
         return runSetupIndexData(self, req);
+      },
+      setupIndexSeoData(req) {
+        return runSetupIndexSeoData(req);
       },
       setupShowData(req) {
         return runSetupShowData(self, req);

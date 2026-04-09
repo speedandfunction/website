@@ -1,6 +1,11 @@
 {# modules/case-studies-page/views/index.html #}
 {% extends "layout.html" %}
 {% import '@apostrophecms/pager:macros.html' as pager with context %}
+{% block extraHead %}
+  {{ super() }}
+  <link rel="canonical" href="{{ data.caseListingSeo.canonicalUrl | e }}" />
+  <meta name="robots" content="{{ data.caseListingSeo.robots | e }}" />
+{% endblock %}
 {% block main %}
 <div
   class="cs_container"
