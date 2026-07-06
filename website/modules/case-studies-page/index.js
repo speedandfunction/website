@@ -28,36 +28,6 @@ const collectFilterOptions = function (pieces, fieldName, docMap) {
   return options;
 };
 
-const buildIndexSeoData = function (req) {
-  const query = req.query || {};
-  const hasFilterParams =
-    Boolean(query.search) ||
-    Boolean(query.industry) ||
-    Boolean(query.stack) ||
-    Boolean(query.caseStudyType) ||
-    Boolean(query.partner);
-  const pageNumber = Number(query.page || 1);
-  const hasPaginationParam = Number.isFinite(pageNumber) && pageNumber > 1;
-  const shouldNoindex = hasFilterParams || hasPaginationParam;
-  let pageUrl = '/cases';
-  if (req.data && req.data.page && req.data.page.slug) {
-    pageUrl = req.data.page.slug;
-  }
-  let robots = 'index,follow';
-  if (shouldNoindex) {
-    robots = 'noindex,nofollow';
-  }
-  return {
-    canonicalUrl: pageUrl,
-    robots,
-  };
-};
-
-const runSetupIndexSeoData = function (req) {
-  req.data ||= {};
-  req.data.caseListingSeo = buildIndexSeoData(req);
-};
-
 const runSetupShowData = async function (self, req) {
   try {
     const navigation = await NavigationService.getNavigationDataForPage(
@@ -105,11 +75,14 @@ module.exports = {
           self.apos.modules['cases-tags'].find(req).toArray(),
           self.apos.modules['business-partner'].find(req).toArray(),
         ]);
-        req.data.pieces = pieces;
-        req.data.totalPieces = pieces.length;
-        req.data.totalPages = 1;
-        req.data.casesTags = casesTags;
-        req.data.businessPartners = businessPartners;
+        req.data = {
+          ...req.data,
+          pieces,
+          totalPieces: pieces.length,
+          totalPages: 1,
+          casesTags,
+          businessPartners,
+        };
 
         // Build filter options from all tags
         const tagMap = createDocMapById(casesTags);
@@ -117,7 +90,11 @@ module.exports = {
         req.data.piecesFilters = {
           industry: collectFilterOptions(pieces, 'industryIds', tagMap),
           stack: collectFilterOptions(pieces, 'stackIds', tagMap),
-          caseStudyType: collectFilterOptions(pieces, 'caseStudyTypeIds', tagMap),
+          caseStudyType: collectFilterOptions(
+            pieces,
+            'caseStudyTypeIds',
+            tagMap,
+          ),
           partner: collectFilterOptions(pieces, 'partnerIds', partnerMap),
         };
 
