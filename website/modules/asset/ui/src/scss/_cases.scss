@@ -573,6 +573,10 @@
   }
 }
 
+.is-hidden {
+  display: none !important;
+}
+
 .items-count {
   font-weight: $font-weight-extra-bold;
   color: $gray-500;
