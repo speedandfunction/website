@@ -7,9 +7,10 @@ import { initCaseStudiesFilterHandler } from './initCaseStudiesFilterHandler';
 import { initFormValidation } from './js/formValidation';
 import { initPhoneFormatting } from './js/phoneFormat';
 import { initSmoothCounters } from './smoothCounters';
-import lozad from 'lozad';
+import { initFontChanger } from './initFontChanger';
+import { initImageLozad } from './initImageLozad';
 import { setupTagSearchForInput } from './searchInputHandler';
-import { FilterModal } from './filterModal';
+import { initFilterModal } from './initFilterModal';
 import { initClientSideFiltering } from './clientSideFiltering';
 import {
   saveScrollPosition,
@@ -47,37 +48,6 @@ function initConfiguration() {
   }
 }
 
-function initImageLozad() {
-  const observer = lozad();
-  observer.observe();
-}
-
-function initFontChanger() {
-  const heroContent = document.querySelector('.sf-hero-content strong');
-  if (!heroContent) return;
-
-  const fonts = [
-    'Poppins',
-    'Philosopher',
-    'Pinyon Script',
-    'Racing Sans One',
-    'Poiret One',
-    'Redacted Script',
-    'Redressed',
-    'Rock 3D',
-    'Rubik Glitch Pop',
-    'Yesteryear',
-    'Roboto Mono',
-    'Pixelify Sans',
-  ];
-  let currentFontIndex = 0;
-
-  setInterval(() => {
-    currentFontIndex = (currentFontIndex + 1) % fonts.length;
-    const currentFont = fonts.at(currentFontIndex);
-    heroContent.style.fontFamily = currentFont;
-  }, 500);
-}
 
 function initCaseStudiesTagFilter({
   inputSelector = '.tag-search',
@@ -117,11 +87,11 @@ function initBarbaPageTransitions() {
       if (!hasFilterAnchor) {
         const nextUrl = data.next.url.href;
         const savedScroll = getSavedScrollPosition(nextUrl);
-        if (savedScroll !== null) {
+        if (savedScroll === null) {
+          window.scrollTo(0, 0);
+        } else {
           // Restore the scroll position when returning to the cases listing.
           window.scrollTo(0, savedScroll);
-        } else {
-          window.scrollTo(0, 0);
         }
       }
 
@@ -162,12 +132,16 @@ function initBarbaPageTransitions() {
       const willReload = !initializeApostropheForm(data.next.container);
 
       if (willReload) {
-        // A full reload is about to happen. Do NOT clear the saved scroll
-        // position here; the load-time restore relies on it surviving the reload.
+        /*
+         A full reload is about to happen. Do NOT clear the saved scroll
+         position here; the load-time restore relies on it surviving the reload.
+        */
         window.location.reload();
       } else {
-        // SPA transition: the saved scroll position (if any) has been applied
-        // above, so it is safe to clear now.
+        /*
+         SPA transition: the saved scroll position (if any) has been applied
+         above, so it is safe to clear now.
+        */
         clearSavedScrollPosition();
       }
 
@@ -217,9 +191,6 @@ function initBarbaPageTransitions() {
       });
 
       revealLoaded();
-      if (!window.caseStudiesFilterModal) {
-        initFilterModal();
-      }
     });
   });
 }
@@ -265,27 +236,6 @@ function initMenuToggle() {
   });
 }
 
-function initFilterModal() {
-  if (!document.querySelector('.cs_list')) {
-    return;
-  }
-
-  window.caseStudiesFilterModal = new FilterModal({
-    modalSelector: '#filter-modal',
-    openBtnSelector: '.filters-cta',
-    closeBtnSelector: '.filter-modal__button',
-    backdropSelector: '.filter-modal__backdrop',
-    clearAllSelector: '.clear-all',
-    selectedTagsSelector: '.selected-tags',
-    tagsFilterSelector: '.tags-filter',
-  });
-}
-
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initFilterModal);
-} else {
-  initFilterModal();
-}
 
 export default () => {
   initConfiguration();
@@ -306,13 +256,17 @@ export default () => {
   initAnchorNavigation();
   initMenuToggle();
 
-  // Restore scroll position when returning to the /cases listing after a full
-  // page reload (Barba reloads pages without an Apostrophe form).
+  /*
+   Restore scroll position when returning to the /cases listing after a full
+   page reload (Barba reloads pages without an Apostrophe form).
+  */
   const restoredScroll = getSavedScrollPosition(window.location.href);
   if (restoredScroll !== null) {
     clearSavedScrollPosition();
-    // Reassert the position over a short window to counter layout shifts from
-    // lazily loaded images/content.
+    /*
+     Reassert the position over a short window to counter layout shifts from
+     lazily loaded images/content.
+    */
     const reapply = (attempts) => {
       window.scrollTo(0, restoredScroll);
       if (attempts > 0) {
