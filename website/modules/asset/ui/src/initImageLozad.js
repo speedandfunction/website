@@ -1,8 +1,8 @@
 import lozad from 'lozad';
 
-function initImageLozad() {
+const initImageLozad = function () {
   const observer = lozad();
   observer.observe();
-}
+};
 
 export { initImageLozad };

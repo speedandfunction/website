@@ -1,16 +1,16 @@
 /*
-Scroll memory for the case studies index page.
-Preserves the user's scroll position when navigating from a case study
-show page back to the /cases listing.
-*/
+ * Scroll memory for the case studies index page.
+ * Preserves the user's scroll position when navigating from a case study
+ * show page back to the /cases listing.
+ */
 
 const CASES_PATH = '/cases';
 /*
-Use sessionStorage so the position survives full page reloads. The Barba
-enter callback triggers window.location.reload() for pages without an
-Apostrophe form (which includes the /cases listing), so an in-memory store
-would be wiped before we could restore.
-*/
+ * Use sessionStorage so the position survives full page reloads. The Barba
+ * enter callback triggers window.location.reload() for pages without an
+ * Apostrophe form (which includes the /cases listing), so an in-memory store
+ * would be wiped before we could restore.
+ */
 const STORAGE_KEY = 'casesScrollPosition';
 
 const isCasesListing = function (pathname) {

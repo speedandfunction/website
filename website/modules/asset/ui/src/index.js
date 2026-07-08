@@ -10,7 +10,6 @@ import { initSmoothCounters } from './smoothCounters';
 import { initFontChanger } from './initFontChanger';
 import { initImageLozad } from './initImageLozad';
 import { setupTagSearchForInput } from './searchInputHandler';
-import { initFilterModal } from './initFilterModal';
 import { initClientSideFiltering } from './clientSideFiltering';
 import {
   saveScrollPosition,
@@ -47,7 +46,6 @@ function initConfiguration() {
     }
   }
 }
-
 
 function initCaseStudiesTagFilter({
   inputSelector = '.tag-search',
@@ -133,15 +131,15 @@ function initBarbaPageTransitions() {
 
       if (willReload) {
         /*
-         A full reload is about to happen. Do NOT clear the saved scroll
-         position here; the load-time restore relies on it surviving the reload.
-        */
+         * A full reload is about to happen. Do NOT clear the saved scroll
+         * position here; the load-time restore relies on it surviving the reload.
+         */
         window.location.reload();
       } else {
         /*
-         SPA transition: the saved scroll position (if any) has been applied
-         above, so it is safe to clear now.
-        */
+         * SPA transition: the saved scroll position (if any) has been applied
+         * above, so it is safe to clear now.
+         */
         clearSavedScrollPosition();
       }
 
@@ -236,7 +234,6 @@ function initMenuToggle() {
   });
 }
 
-
 export default () => {
   initConfiguration();
 
@@ -257,16 +254,16 @@ export default () => {
   initMenuToggle();
 
   /*
-   Restore scroll position when returning to the /cases listing after a full
-   page reload (Barba reloads pages without an Apostrophe form).
-  */
+   * Restore scroll position when returning to the /cases listing after a full
+   * page reload (Barba reloads pages without an Apostrophe form).
+   */
   const restoredScroll = getSavedScrollPosition(window.location.href);
   if (restoredScroll !== null) {
     clearSavedScrollPosition();
     /*
-     Reassert the position over a short window to counter layout shifts from
-     lazily loaded images/content.
-    */
+     * Reassert the position over a short window to counter layout shifts from
+     * lazily loaded images/content.
+     */
     const reapply = (attempts) => {
       window.scrollTo(0, restoredScroll);
       if (attempts > 0) {

@@ -1,6 +1,6 @@
 import { FilterModal } from './filterModal';
 
-function initFilterModal() {
+const initFilterModal = function () {
   if (!document.querySelector('.cs_list')) {
     return;
   }
@@ -14,7 +14,7 @@ function initFilterModal() {
     selectedTagsSelector: '.selected-tags',
     tagsFilterSelector: '.tags-filter',
   });
-}
+};
 
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', initFilterModal);

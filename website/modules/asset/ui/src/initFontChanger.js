@@ -1,4 +1,4 @@
-function initFontChanger() {
+const initFontChanger = function () {
   const heroContent = document.querySelector('.sf-hero-content strong');
   if (!heroContent) return;
 
@@ -23,6 +23,6 @@ function initFontChanger() {
     const currentFont = fonts.at(currentFontIndex);
     heroContent.style.fontFamily = currentFont;
   }, 500);
-}
+};
 
 export { initFontChanger };
