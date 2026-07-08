@@ -11,6 +11,11 @@ import lozad from 'lozad';
 import { setupTagSearchForInput } from './searchInputHandler';
 import { FilterModal } from './filterModal';
 import { initClientSideFiltering } from './clientSideFiltering';
+import {
+  saveScrollPosition,
+  getSavedScrollPosition,
+  clearSavedScrollPosition,
+} from './scrollMemory';
 
 function revealLoaded() {
   document
@@ -110,7 +115,14 @@ function initBarbaPageTransitions() {
 
     const originalEnterCallback = function (data, hasFilterAnchor) {
       if (!hasFilterAnchor) {
-        window.scrollTo(0, 0);
+        const nextUrl = data.next.url.href;
+        const savedScroll = getSavedScrollPosition(nextUrl);
+        if (savedScroll !== null) {
+          // Restore the scroll position when returning to the cases listing.
+          window.scrollTo(0, savedScroll);
+        } else {
+          window.scrollTo(0, 0);
+        }
       }
 
       const menuButton = document.getElementById('nav-icon');
@@ -147,8 +159,16 @@ function initBarbaPageTransitions() {
       };
 
       // Initialize Apostrophe forms (already inside apos.util.onReady)
-      if (!initializeApostropheForm(data.next.container)) {
+      const willReload = !initializeApostropheForm(data.next.container);
+
+      if (willReload) {
+        // A full reload is about to happen. Do NOT clear the saved scroll
+        // position here; the load-time restore relies on it surviving the reload.
         window.location.reload();
+      } else {
+        // SPA transition: the saved scroll position (if any) has been applied
+        // above, so it is safe to clear now.
+        clearSavedScrollPosition();
       }
 
       // Remove the previous page container to avoid blinking
@@ -176,6 +196,11 @@ function initBarbaPageTransitions() {
           enter: enhanceBarbaWithFilterHandling(originalEnterCallback),
         },
       ],
+    });
+
+    barba.hooks.beforeLeave((data) => {
+      // Remember scroll position of the cases listing before navigating away.
+      saveScrollPosition(data.current.url.href);
     });
 
     barba.hooks.after(() => {
@@ -281,7 +306,26 @@ export default () => {
   initAnchorNavigation();
   initMenuToggle();
 
+  // Restore scroll position when returning to the /cases listing after a full
+  // page reload (Barba reloads pages without an Apostrophe form).
+  const restoredScroll = getSavedScrollPosition(window.location.href);
+  if (restoredScroll !== null) {
+    clearSavedScrollPosition();
+    // Reassert the position over a short window to counter layout shifts from
+    // lazily loaded images/content.
+    const reapply = (attempts) => {
+      window.scrollTo(0, restoredScroll);
+      if (attempts > 0) {
+        setTimeout(() => reapply(attempts - 1), 100);
+      }
+    };
+    reapply(5);
+  }
+
   setTimeout(() => {
+    // Do not hijack scroll if we are restoring a saved listing position.
+    if (restoredScroll !== null) return;
+
     const { pathname, search, hash } = window.location;
     if (
       pathname.includes('/cases') &&
