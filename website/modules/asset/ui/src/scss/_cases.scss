@@ -953,7 +953,7 @@
 
   @include breakpoint-medium {
     margin: 40px 0 120px;
-    height: 600px;
+    height: auto;
   }
 
   &-card {
@@ -973,6 +973,7 @@
       max-height: 396px;
       max-width: none;
       position: absolute;
+      top: 0;
       width: 100%;
       z-index: 0;
 
@@ -997,9 +998,9 @@
       @include breakpoint-medium {
         background: $white;
         flex-direction: row;
-        margin-top: 0;
+        margin-top: 40px;
         margin-left: 20.76%;
-        height: 520px;
+        height: auto;
         width: 79.24%;
       }
 
@@ -1166,7 +1167,6 @@
           border-top: none;
           padding: 16px 20px;
           margin: 0;
-          overflow-y: auto;
         }
 
         @include breakpoint-large {
