@@ -19,6 +19,115 @@
     partner: new Set()
   };
 
+  // sessionStorage keys for preserving the filter state when navigating to a
+  // case study show page and back to the /cases listing.
+  const FILTER_STORAGE_KEY = 'casesFilterState';
+  const FILTER_RETURN_KEY = 'casesFilterReturn';
+
+  // Serialize the current filter state and search term.
+  function getFilterStateSnapshot() {
+    return {
+      industry: Array.from(filterState.industry),
+      stack: Array.from(filterState.stack),
+      caseStudyType: Array.from(filterState.caseStudyType),
+      partner: Array.from(filterState.partner),
+      search: searchTerm || ''
+    };
+  }
+
+  // Persist the current filter state to sessionStorage.
+  function persistFilterState() {
+    try {
+      window.sessionStorage.setItem(
+        FILTER_STORAGE_KEY,
+        JSON.stringify(getFilterStateSnapshot())
+      );
+    } catch (error) {
+      // Ignore unavailable storage
+    }
+  }
+
+  // Remove any persisted filter state.
+  function clearPersistedFilterState() {
+    try {
+      window.sessionStorage.removeItem(FILTER_STORAGE_KEY);
+    } catch (error) {
+      // Ignore unavailable storage
+    }
+  }
+
+  // Open the filter categories that have active selections after a restore.
+  function openCategoriesForActiveFilters() {
+    Object.keys(filterState).forEach(function (filterType) {
+      if (filterState[filterType].size === 0) {
+        return;
+      }
+      const checkbox = document.getElementById('filter-toggle-' + filterType);
+      if (checkbox && !checkbox.checked) {
+        checkbox.checked = true;
+        const button = document.querySelector(
+          'label[for="filter-toggle-' + filterType + '"]'
+        );
+        if (button) {
+          button.setAttribute('aria-expanded', 'true');
+        }
+      }
+    });
+  }
+
+  // Restore the persisted filter state (tags + search) into the DOM.
+  function restoreFilterState() {
+    let saved = null;
+    try {
+      saved = JSON.parse(window.sessionStorage.getItem(FILTER_STORAGE_KEY));
+    } catch (error) {
+      saved = null;
+    }
+    if (!saved) {
+      return false;
+    }
+
+    Object.keys(filterState).forEach(function (filterType) {
+      filterState[filterType].clear();
+      const values = Array.isArray(saved[filterType]) ? saved[filterType] : [];
+      values.forEach(function (value) {
+        filterState[filterType].add(value);
+        updateTagActiveState(filterType, value, true);
+      });
+    });
+
+    searchTerm = saved.search || '';
+    const searchInput = document.getElementById('case-studies-search');
+    if (searchInput) {
+      searchInput.value = searchTerm;
+    }
+
+    openCategoriesForActiveFilters();
+    return true;
+  }
+
+  // Mark intent to restore filters and persist them when the user opens a case
+  // study from the listing. This is the precise "leaving /cases -> case study"
+  // moment; the flag is consumed when the /cases page next loads.
+  function setupReturnIntentOnCardClick() {
+    const grid = document.getElementById('case-studies-grid');
+    if (!grid) {
+      return;
+    }
+    grid.addEventListener('click', function (event) {
+      const card = event.target.closest('.cs_card');
+      if (!card) {
+        return;
+      }
+      persistFilterState();
+      try {
+        window.sessionStorage.setItem(FILTER_RETURN_KEY, '1');
+      } catch (error) {
+        // Ignore unavailable storage
+      }
+    });
+  }
+
   // Populate filterState from server-rendered active tag items on page load
   function initFilterState() {
     Object.keys(filterState).forEach(function (filterType) {
@@ -396,9 +505,35 @@
       clearAll.addEventListener('click', handleClearAllClick);
     }
 
+    // Persist filters and mark restore intent when opening a case study card
+    setupReturnIntentOnCardClick();
+
     // Initialize in-memory filter state and search term from server-rendered values
     initFilterState();
     searchTerm = searchInput.value;
+
+    // If the user is returning from a case study show page, restore the
+    // previously selected filters; otherwise start fresh and drop stored state.
+    let shouldRestore = false;
+    try {
+      shouldRestore =
+        window.sessionStorage.getItem(FILTER_RETURN_KEY) === '1';
+      window.sessionStorage.removeItem(FILTER_RETURN_KEY);
+    } catch (error) {
+      shouldRestore = false;
+    }
+
+    if (shouldRestore) {
+      restoreFilterState();
+      clearPersistedFilterState();
+    } else {
+      clearPersistedFilterState();
+    }
+
+    // Sync clear-button visibility with the (possibly restored) search value
+    if (clearButton) {
+      updateClearButtonVisibility(searchInput, clearButton);
+    }
 
     // Initialize selected tags list, card filtering, and tag counts on page load
     updateSelectedTagsList();
