@@ -44,6 +44,18 @@
   box-sizing: border-box;
 }
 
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
 :root {
   --gradient-field-calm:
     radial-gradient(60% 50% at 30% 30%, rgba(50,155,255,0.18) 0%, transparent 70%),
@@ -313,7 +325,7 @@ svg.sicon {
 .ca-row .rn {
   font-size: 12px;
   font-weight: 700;
-  color: #00897B;
+  color: #006B65;
   letter-spacing: 0.1em;
 }
 
@@ -327,7 +339,7 @@ svg.sicon {
 
 .ca-row .ra {
   font-size: 22px;
-  color: #9A9A9A;
+  color: #6B6B6B;
   display: inline-block;
   transition: transform .3s cubic-bezier(.16,1,.3,1), color .3s ease;
 }
@@ -500,7 +512,7 @@ svg.sicon {
 
   .ca-row:hover .ra {
     transform: none;
-    color: #9A9A9A;
+    color: #6B6B6B;
   }
 
   .ca-row:active .ra {
