@@ -1,0 +1,131 @@
+/* =====================================================
+   S&F Design System — Poppins Local Font Faces
+   Extracted from standalone HTML to match exact font rendering
+   ===================================================== */
+
+@font-face {
+  font-family: Poppins;
+  src: url("095218db-2043-405c-98b7-36ac7349705d.ttf") format('truetype');
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: Poppins;
+  src: url("2a3428e4-1580-46a5-baff-6dc39ea3e2fc.ttf") format('truetype');
+  font-weight: 100;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: Poppins;
+  src: url("b51b596e-4621-4ad1-b55f-44f69e2ea9fb.ttf") format('truetype');
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: Poppins;
+  src: url("f359dfdb-1cfb-414d-a28b-18accc9ee3c9.ttf") format('truetype');
+  font-weight: 200;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: Poppins;
+  src: url("89679e58-ae73-4ffa-82a9-28453e57c929.ttf") format('truetype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: Poppins;
+  src: url("fc6fec59-033f-4482-b82c-7626fb0067ee.ttf") format('truetype');
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: Poppins;
+  src: url("eb6b591f-529a-40dc-a3db-4877cfa5f49f.ttf") format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: Poppins;
+  src: url("f05b968c-c6f2-4492-8813-2970183ba46f.ttf") format('truetype');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: Poppins;
+  src: url("56d7d5e0-b648-41cb-a52f-6fef943b83a7.ttf") format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: Poppins;
+  src: url("3430fd77-b6b9-4bfa-9df5-34fb676f64d7.ttf") format('truetype');
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: Poppins;
+  src: url("355db9eb-98d1-400e-8a31-d25584157553.ttf") format('truetype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: Poppins;
+  src: url("52f4f47c-e7db-4269-b0cc-3056b4c6843c.ttf") format('truetype');
+  font-weight: 600;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: Poppins;
+  src: url("b41d3b25-b9f7-40b2-9018-e900fb230ed9.ttf") format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: Poppins;
+  src: url("f05b968c-c6f2-4492-8813-2970183ba46f.ttf") format('truetype');
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: Poppins;
+  src: url("8603a01e-8dcc-4ac2-adb5-0f41a72b9eb8.ttf") format('truetype');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: Poppins;
+  src: url("c482d2e1-a40a-4dab-8e25-0ee3d9b8afc7.ttf") format('truetype');
+  font-weight: 800;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: Poppins;
+  src: url("300b45dd-b3fb-4b26-95dc-03f1ebcc0b6e.ttf") format('truetype');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: Poppins;
+  src: url("63d68c68-ea15-46cf-8c7b-ac11f26e18df.ttf") format('truetype');
+  font-weight: 900;
+  font-style: italic;
+  font-display: swap;
+}
