@@ -15,6 +15,10 @@ module.exports = {
         label: 'Home',
       },
       {
+        name: 'home-simplified',
+        label: 'Home - Simplified',
+      },
+      {
         name: 'case-studies-page',
         label: 'Case Studies Page',
       },

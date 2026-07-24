@@ -136,6 +136,7 @@ function createAposConfig() {
       'asset': {},
       // The project"s first custom page type.
       'default-page': {},
+      'home-simplified': {},
       '@apostrophecms/import-export': {},
       'cases-tags': {},
       'case-studies': {},
