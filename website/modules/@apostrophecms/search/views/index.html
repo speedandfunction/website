@@ -13,9 +13,9 @@
   <div class="sf-search-page">
     <h1 class="sf-search-page__heading">{{ __('Search Results') }}</h1>
 
-    {% if data.query.search %}
+    {% if data.query.q %}
       <p class="sf-search-page__term">
-        {{ __('Showing Results for ') }}'<span>{{ data.query.search }}</span>'
+        {{ __('Showing Results for ') }}'<span>{{ data.query.q }}</span>'
       </p>
     {% endif %}
 
