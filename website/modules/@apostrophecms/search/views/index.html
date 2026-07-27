@@ -1,0 +1,68 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+  {{ data.page.title }}
+{% endblock %}
+{% import '@apostrophecms/pager:macros.html' as pager with context %}
+
+{% block extraHead %}
+  {{ super() }}
+{% endblock %}
+
+{% block main %}
+  <div class="sf-search-page">
+    <h1 class="sf-search-page__heading">{{ __('Search Results') }}</h1>
+
+    {% if data.query.q %}
+      <p class="sf-search-page__term">
+        {{ __('Showing Results for ') }}'<span>{{ data.query.q }}</span>'
+      </p>
+    {% endif %}
+
+    {% if data.docs|length > 0 %}
+      <div class="sf-search-page__results">
+        {% for doc in data.docs %}
+          {% if doc.type == 'case-studies' %}
+            {% set meta = __('Case Study') %}
+            {% set resultUrl = doc._url %}
+          {% elif doc.type == 'team-members' %}
+            {% set meta = __('Team Member') %}
+            {% set resultUrl = '/meet-the-team' %}
+          {% elif doc.type == 'testimonials' %}
+            {% set meta = __('Testimonial') %}
+            {% set resultUrl = '/cases' %}
+          {% elif doc.type == 'vacancies' %}
+            {% set meta = __('Job Opening') %}
+            {% set resultUrl = '/careers' %}
+          {% elif doc.type == 'business-partner' %}
+            {% set meta = __('Partner') %}
+            {% set resultUrl = '/about-us' %}
+          {% else %}
+            {% set meta = __('Page') %}
+            {% set resultUrl = doc._url %}
+          {% endif %}
+
+          <div class="sf-search-page__result">
+            <p class="sf-search-page__meta">{{ meta }}</p>
+            <a class="sf-search-page__link" href="{{ resultUrl }}">
+              <span>{{ doc.title }}</span>
+              <span class="sf-search-page__arrow" aria-hidden="true">→</span>
+            </a>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="sf-search-page__empty">
+        {{ __('Sorry, there are no results that match your search.') }}
+      </p>
+    {% endif %}
+
+    {% if data.totalPages > 1 %}
+      <div>
+        {{
+          pager.render({ page: data.currentPage, total: data.totalPages, class: 'c-pagination', shown: 2 }, data.url)
+        }}
+      </div>
+    {% endif %}
+  </div>
+{% endblock %}
