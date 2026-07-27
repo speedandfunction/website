@@ -3,7 +3,6 @@ module.exports = {
   options: {
     label: 'Testimonial',
     pluralLabel: 'Testimonials',
-    searchable: false,
     shortcut: false,
   },
   fields: {

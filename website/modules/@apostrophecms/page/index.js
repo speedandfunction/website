@@ -32,6 +32,12 @@ module.exports = {
           title: 'Case Studies',
         },
       },
+      {
+        slug: '/search',
+        parkedId: 'search',
+        title: 'Search',
+        type: '@apostrophecms/search',
+      },
     ],
   },
 };
