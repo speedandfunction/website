@@ -5,8 +5,9 @@ document.addEventListener('DOMContentLoaded', function() {
   if (!menuButton || !menu) return;
 
   menuButton.addEventListener('click', () => {
-    menu.classList.toggle('open');
+    const isOpen = menu.classList.toggle('open');
     menuButton.classList.toggle('open');
+    menuButton.setAttribute('aria-expanded', isOpen);
   });
 
   const menuLinks = menu.querySelectorAll('a');
@@ -14,6 +15,7 @@ document.addEventListener('DOMContentLoaded', function() {
     link.addEventListener('click', () => {
       menu.classList.remove('open');
       menuButton.classList.remove('open');
+      menuButton.setAttribute('aria-expanded', 'false');
     });
   });
 
@@ -22,6 +24,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (!menu.contains(event.target) && !menuButton.contains(event.target)) {
       menu.classList.remove('open');
       menuButton.classList.remove('open');
+      menuButton.setAttribute('aria-expanded', 'false');
     }
   });
 });

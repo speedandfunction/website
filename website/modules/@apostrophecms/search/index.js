@@ -1,5 +1,5 @@
 module.exports = {
   options: {
-    perPage: 999
-  }
+    perPage: 99,
+  },
 };

@@ -100,7 +100,7 @@
     {% if data.totalPages > 1 %}
     <div class="sr-pagination">
       {{
-        pager.render({ page: data.currentPage, total: data.totalPages, class: 'c-pagination', shown: 2 }, data.url)
+        pager.render({ page: data.currentPage, total: data.totalPages, shown: 2 }, data.url)
       }}
     </div>
     {% endif %}
