@@ -1,68 +1,115 @@
-{% extends 'layout.html' %}
-
-{% block title %}
-  {{ data.page.title }}
-{% endblock %}
 {% import '@apostrophecms/pager:macros.html' as pager with context %}
+{% import 'fragments/utilities.html' as utilities %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ data.page.title }}</title>
+  <link rel="icon" href="/favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="/fonts/fonts.css">
+  <link rel="stylesheet" href="/css/search-results/search-results.css">
+  <script src="/js/search-results-menu.js"></script>
+</head>
+<body>
+<section class="sr">
+  <div class="sr-topgrad-field"></div>
+  <div class="sr-noise"></div>
+  <div class="sr-wrap">
 
-{% block extraHead %}
-  {{ super() }}
-{% endblock %}
+    <div class="sr-top">
+      <a href="/" class="sr-mark">SPEED &amp; FUNCTION</a>
+      <button
+        class="sr-menu"
+        id="nav-icon"
+        aria-label="Toggle menu"
+        aria-expanded="false"
+        aria-controls="main-navigation"
+      >
+        <span class="sr-menu__grid"></span>
+        <span class="sr-menu__grid"></span>
+        <span class="sr-menu__grid"></span>
+        <span class="sr-menu__grid"></span>
+      </button>
+      <nav
+        id="main-navigation"
+        class="sf-nav"
+        data-menu
+        aria-label="Main navigation"
+      >
+        <ol class="sf-nav__list">
+          {% for item in data.global.primaryNav %}
+          <li>{% render utilities.navLink(item.menuItem) %}</li>
+          {% endfor %}
+        </ol>
+      </nav>
+    </div>
 
-{% block main %}
-  <div class="sf-search-page">
-    <h1 class="sf-search-page__heading">{{ __('Search Results') }}</h1>
+    <div class="sr-hero">
+      <h1>Search Results</h1>
 
-    {% if data.query.q %}
-      <p class="sf-search-page__term">
-        {{ __('Showing Results for ') }}'<span>{{ data.query.q }}</span>'
-      </p>
-    {% endif %}
+      {% if data.query.q %}
+      <div class="sr-status">
+        <span class="sr-pulse"></span>
+        <span class="sr-status-text">Showing </span>
+        <span class="sr-status-count">{{ data.total or data.docs|length }}</span>
+        <span class="sr-status-text"> Results for </span>
+        <span class="sr-status-query">"{{ data.query.q }}"</span>
+      </div>
+      {% endif %}
+    </div>
 
     {% if data.docs|length > 0 %}
-      <div class="sf-search-page__results">
-        {% for doc in data.docs %}
-          {% if doc.type == 'case-studies' %}
-            {% set meta = __('Case Study') %}
-            {% set resultUrl = doc._url %}
-          {% elif doc.type == 'team-members' %}
-            {% set meta = __('Team Member') %}
-            {% set resultUrl = '/meet-the-team' %}
-          {% elif doc.type == 'testimonials' %}
-            {% set meta = __('Testimonial') %}
-            {% set resultUrl = '/cases' %}
-          {% elif doc.type == 'vacancies' %}
-            {% set meta = __('Job Opening') %}
-            {% set resultUrl = '/careers' %}
-          {% elif doc.type == 'business-partner' %}
-            {% set meta = __('Partner') %}
-            {% set resultUrl = '/about-us' %}
-          {% else %}
-            {% set meta = __('Page') %}
-            {% set resultUrl = doc._url %}
-          {% endif %}
+    <nav class="sr-results">
+      {% for doc in data.docs %}
+        {% if doc.type == 'case-studies' %}
+          {% set meta = 'Case Studies' %}
+          {% set resultUrl = doc._url %}
+        {% elif doc.type == 'team-members' %}
+          {% set meta = 'Team Member' %}
+          {% set resultUrl = '/meet-the-team' %}
+        {% elif doc.type == 'testimonials' %}
+          {% set meta = 'Testimonial' %}
+          {% set resultUrl = '/cases' %}
+        {% elif doc.type == 'vacancies' %}
+          {% set meta = 'Careers' %}
+          {% set resultUrl = '/careers' %}
+        {% elif doc.type == 'business-partner' %}
+          {% set meta = 'Partner' %}
+          {% set resultUrl = '/about-us' %}
+        {% else %}
+          {% set meta = 'Page' %}
+          {% set resultUrl = doc._url %}
+        {% endif %}
 
-          <div class="sf-search-page__result">
-            <p class="sf-search-page__meta">{{ meta }}</p>
-            <a class="sf-search-page__link" href="{{ resultUrl }}">
-              <span>{{ doc.title }}</span>
-              <span class="sf-search-page__arrow" aria-hidden="true">→</span>
-            </a>
+        <a class="sr-row" href="{{ resultUrl }}">
+          <div class="sr-row-content">
+            <span class="sr-category">{{ meta }}</span>
+            <span class="sr-title">{{ doc.title }}</span>
           </div>
-        {% endfor %}
-      </div>
+          <span class="sr-arrow">→</span>
+        </a>
+      {% endfor %}
+    </nav>
     {% else %}
-      <p class="sf-search-page__empty">
-        {{ __('Sorry, there are no results that match your search.') }}
-      </p>
+    <p class="sr-empty">
+      Sorry, there are no results that match your search.
+    </p>
     {% endif %}
 
     {% if data.totalPages > 1 %}
-      <div>
-        {{
-          pager.render({ page: data.currentPage, total: data.totalPages, class: 'c-pagination', shown: 2 }, data.url)
-        }}
-      </div>
+    <div class="sr-pagination">
+      {{
+        pager.render({ page: data.currentPage, total: data.totalPages, class: 'c-pagination', shown: 2 }, data.url)
+      }}
+    </div>
     {% endif %}
+
+    <div class="sr-foot">
+      <div class="sr-foot-l"><a href="mailto:letschat@speedandfunction.com">letschat@speedandfunction.com</a><a href="https://www.linkedin.com/company/speed-and-function/posts/">LinkedIn</a></div>
+      <div class="sr-foot-r"><a href="https://www.speedandfunction.com/privacy-policy">Privacy Policy</a><a href="/">© 2026 S&amp;F</a></div>
+    </div>
   </div>
-{% endblock %}
+</section>
+</body>
+</html>
