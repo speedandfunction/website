@@ -52,6 +52,12 @@ module.exports = {
                     withType: '@apostrophecms/page',
                     max: 1,
                     required: true,
+                    builders: {
+                      project: {
+                        title: 1,
+                        _url: 1,
+                      },
+                    },
                     if: {
                       linkType: 'page',
                     },
