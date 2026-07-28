@@ -174,23 +174,31 @@ body {
 }
 
 .ca-hero h1 {
-  font-size: 52px;
+  font-size: 120px;
   font-weight: 700;
-  line-height: 1.22;
-  letter-spacing: -1px;
+  line-height: 0.9;
+  letter-spacing: -2.8px;
+  vertical-align: middle;
   max-width: 1180px;
   text-wrap: balance;
   color: #141414;
+  padding-right: 6px;
   animation: fade-up .8s cubic-bezier(.16,1,.3,1) .1s both;
+}
+
+.ca-hero h1 .h1-break {
+  display: none;
 }
 
 .ca-hero h1 .grad {
   font-weight: 800;
-  background: linear-gradient(95deg, #0173D7 0%, #00A896 45%, #00897B 80%, #F57600 100%);
+  background: linear-gradient(90deg, #0173D7 0%, #009BA6 42%, #10FFE5 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
   color: transparent;
+  padding-right: 0.05em;
+  margin-right: -0.05em;
 }
 
 .ca-cue {
@@ -202,11 +210,13 @@ body {
 }
 
 .ca-cue .cue-txt {
-  font-size: 18px;
-  font-weight: 600;
+  font-size: 30px;
+  font-weight: 500;
   letter-spacing: 0.01em;
   color: #6B6B6B;
-  line-height: 1.4;
+  line-height: 1.2;
+  max-width: 1000px;
+  display: block;
 }
 
 .ca-cue .cue-txt br {
@@ -214,7 +224,7 @@ body {
 }
 
 .ca-search {
-  margin-top: 44px;
+  margin-top: 80px;
   display: flex;
   align-items: center;
   gap: 20px;
@@ -236,14 +246,14 @@ svg.sicon {
   background: transparent;
   outline: none;
   font-family: inherit;
-  font-size: 21px;
+  font-size: 30px;
   font-weight: 500;
   letter-spacing: -0.2px;
   color: #141414;
 }
 
 .ca-search input::placeholder {
-  color: #9A9A9A;
+  color: #9DA0A6;
 }
 
 .ca-search .sgo {
@@ -419,9 +429,15 @@ svg.sicon {
   }
 
   .ca-hero h1 {
-    font-size: 26px;
-    line-height: 1.24;
-    letter-spacing: -0.4px;
+    font-size: 40px;
+    line-height: 0.9;
+    letter-spacing: -2.8px;
+    max-width: none;
+    padding-right: 4px;
+  }
+
+  .ca-hero h1 .h1-break {
+    display: block;
   }
 
   .ca-cue {
@@ -430,7 +446,10 @@ svg.sicon {
   }
 
   .ca-cue .cue-txt {
-    font-size: 13px;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.2;
+    max-width: 360px;
   }
 
   .ca-cue .cue-txt br {
@@ -438,7 +457,7 @@ svg.sicon {
   }
 
   .ca-search {
-    margin-top: 28px;
+    margin-top: 44px;
     gap: 12px;
     min-height: 44px;
     padding-bottom: 14px;
@@ -450,12 +469,17 @@ svg.sicon {
     min-width: 0;
   }
 
+  .ca-search input::placeholder {
+    color: #6b6b6b;
+  }
+
   .ca-search:focus-within {
     border-bottom-color: #00897B;
   }
 
   .ca-search .sgo {
     font-size: 16px;
+    color: #9a9a9a;
   }
 
   .ca-index {
@@ -492,15 +516,15 @@ svg.sicon {
   }
 
   .ca-row .rn {
-    font-size: 10px;
+    font-size: 7px;
     letter-spacing: 0.06em;
     flex: 0 0 auto;
   }
 
   .ca-row .rt {
-    font-size: 16px;
+    font-size: 14px;
     letter-spacing: -0.2px;
-    line-height: 1.3;
+    line-height: 1.2;
   }
 
   .ca-row .ra {
