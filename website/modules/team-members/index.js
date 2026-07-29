@@ -5,6 +5,7 @@ module.exports = {
     label: 'Team Member',
     pluralLabel: 'Team Members',
     shortcut: false,
+    searchable: false,
     sort: {
       title: 1,
       updatedAt: -1,

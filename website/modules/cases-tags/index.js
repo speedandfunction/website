@@ -9,6 +9,7 @@ module.exports = {
       title: 1,
     },
     shortcut: false,
+    searchable: false,
   },
   fields: {
     add: {

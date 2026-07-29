@@ -67,7 +67,7 @@
           {% set resultUrl = doc._url %}
         {% elif doc.type == 'team-members' %}
           {% set meta = 'Team Member' %}
-          {% set resultUrl = '/meet-the-team' %}
+          {% set resultUrl = '/cases' %}
         {% elif doc.type == 'testimonials' %}
           {% set meta = 'Testimonial' %}
           {% set resultUrl = '/cases' %}
@@ -76,7 +76,7 @@
           {% set resultUrl = '/careers' %}
         {% elif doc.type == 'business-partner' %}
           {% set meta = 'Partner' %}
-          {% set resultUrl = '/about-us' %}
+          {% set resultUrl = '/cases' %}
         {% else %}
           {% set meta = 'Page' %}
           {% set resultUrl = doc._url %}
