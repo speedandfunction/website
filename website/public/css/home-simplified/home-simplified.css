@@ -210,7 +210,7 @@ body {
 }
 
 .ca-cue .cue-txt {
-  font-size: 30px;
+  font-size: 24px;
   font-weight: 500;
   letter-spacing: 0.01em;
   color: #6B6B6B;
@@ -246,7 +246,7 @@ svg.sicon {
   background: transparent;
   outline: none;
   font-family: inherit;
-  font-size: 30px;
+  font-size: 24px;
   font-weight: 500;
   letter-spacing: -0.2px;
   color: #141414;
@@ -307,7 +307,7 @@ svg.sicon {
 }
 
 .ca-row .rt {
-  font-size: 30px;
+  font-size: 24px;
   font-weight: 700;
   letter-spacing: -0.8px;
   color: #141414;
