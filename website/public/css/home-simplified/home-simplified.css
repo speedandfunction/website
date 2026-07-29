@@ -174,10 +174,10 @@ body {
 }
 
 .ca-hero h1 {
-  font-size: 120px;
+  font-size: 100px;
   font-weight: 700;
   line-height: 0.9;
-  letter-spacing: -2.8px;
+  letter-spacing: -2px;
   vertical-align: middle;
   max-width: 1180px;
   text-wrap: balance;
@@ -431,7 +431,7 @@ svg.sicon {
   .ca-hero h1 {
     font-size: 40px;
     line-height: 0.9;
-    letter-spacing: -2.8px;
+    letter-spacing: -0.6px;
     max-width: none;
     padding-right: 4px;
   }
