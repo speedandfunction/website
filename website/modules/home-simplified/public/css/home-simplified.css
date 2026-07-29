@@ -217,7 +217,7 @@ body {
   font-size: 52px;
   font-weight: 700;
   line-height: 1.22;
-  letter-spacing: -1px;
+  letter-spacing: -2px;
   max-width: 1180px;
   text-wrap: balance;
   color: #141414;
@@ -462,7 +462,7 @@ svg.sicon {
   .ca-hero h1 {
     font-size: 26px;
     line-height: 1.24;
-    letter-spacing: -0.4px;
+    letter-spacing: -0.6px;
   }
 
   .ca-cue {

@@ -4,6 +4,7 @@ module.exports = {
     label: 'Category',
     pluralLabel: 'Categories',
     shortcut: false,
+    searchable: false,
   },
   fields: {
     add: {
