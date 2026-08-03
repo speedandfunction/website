@@ -3,12 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Speed &amp; Function — The New Site Is On Its Way</title>
+  <title>Speed &amp; Function — Co-Creating Software That Amplifies Purpose</title>
+  <meta name="title" content="Speed &amp; Function — Co-Creating Software That Amplifies Purpose">
+  <meta name="description" content="We co-create software that amplifies purpose. For 17 years, S&amp;F has partnered with organizations to design, build, and scale products that matter.">
+  <meta property="og:title" content="Speed &amp; Function — Co-Creating Software That Amplifies Purpose">
+  <meta property="og:description" content="We co-create software that amplifies purpose. For 17 years, S&amp;F has partnered with organizations to design, build, and scale products that matter.">
+  <meta property="twitter:title" content="Speed &amp; Function — Co-Creating Software That Amplifies Purpose">
+  <meta property="twitter:description" content="We co-create software that amplifies purpose. For 17 years, S&amp;F has partnered with organizations to design, build, and scale products that matter.">
   <link rel="icon" href="/favicon.ico" type="image/x-icon">
   <link rel="stylesheet" href="/fonts/fonts.css">
   <link rel="stylesheet" href="/css/home-simplified/home-simplified.css">
 </head>
 <body>
+{% set home_url = data.home._url %}
 <section class="ca">
   <div class="ca-topgrad-field"></div>
   <div class="ca-noise"></div>
@@ -16,7 +23,7 @@
 
     <div class="ca-top">
       <div class="ca-mark">SPEED &amp; FUNCTION</div>
-      <a class="ca-pill" href="https://www.speedandfunction.com/let-s-talk"><span class="dot"></span>Let's Talk</a>
+      <a class="ca-pill" href="{{ home_url }}let-s-talk"><span class="dot"></span>Let's Talk</a>
     </div>
 
     <div class="ca-hero">
@@ -36,14 +43,14 @@
     </div>
 
     <nav class="ca-index">
-      <a class="ca-row" href="https://speedandfunction.com/landings/apostrophe"><span class="rl"><span class="rn">01</span><span class="rt">Website Development and Maintenance</span></span><span class="ra">→</span></a>
-      <a class="ca-row" href="https://www.speedandfunction.com/cases"><span class="rl"><span class="rn">02</span><span class="rt">Case Studies</span></span><span class="ra">→</span></a>
-      <a class="ca-row" href="https://www.speedandfunction.com/careers"><span class="rl"><span class="rn">03</span><span class="rt">Careers</span></span><span class="ra">→</span></a>
+      <a class="ca-row" href="{{ home_url }}landings/apostrophe"><span class="rl"><span class="rn">01</span><span class="rt">Website Development and Maintenance</span></span><span class="ra">→</span></a>
+      <a class="ca-row" href="{{ home_url }}cases"><span class="rl"><span class="rn">02</span><span class="rt">Case Studies</span></span><span class="ra">→</span></a>
+      <a class="ca-row" href="{{ home_url }}careers"><span class="rl"><span class="rn">03</span><span class="rt">Careers</span></span><span class="ra">→</span></a>
     </nav>
 
     <div class="ca-foot">
       <div class="l"><a href="mailto:letschat@speedandfunction.com">letschat@speedandfunction.com</a><a href="https://www.linkedin.com/company/speed-and-function/posts/">LinkedIn</a></div>
-      <div class="r"><a href="https://www.speedandfunction.com/privacy-policy">Privacy Policy</a><a href="/">© 2026 S&amp;F</a></div>
+      <div class="r"><a href="{{ home_url }}privacy-policy">Privacy Policy</a><a href="/">© 2026 S&amp;F</a></div>
     </div>
   </div>
 </section>
