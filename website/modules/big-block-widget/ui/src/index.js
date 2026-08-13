@@ -1,4 +1,5 @@
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+// eslint-disable-next-line import/no-named-as-default
 import gsap from 'gsap';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -13,6 +14,7 @@ const animateWidget = (widget) => {
       toggleActions: 'play none none reverse',
     },
     opacity: 1,
+    // eslint-disable-next-line id-length
     y: 0,
     duration: 0.8,
     ease: 'power2.out',
@@ -20,9 +22,7 @@ const animateWidget = (widget) => {
 };
 
 const animateHeroLines = (widget) => {
-  const heroLines = widget.querySelectorAll(
-    '.sf-big-block-widget__hero-line'
-  );
+  const heroLines = widget.querySelectorAll('.sf-big-block-widget__hero-line');
   if (heroLines.length) {
     gsap.from(heroLines, {
       scrollTrigger: {
@@ -30,6 +30,7 @@ const animateHeroLines = (widget) => {
         start: 'top 80%',
       },
       opacity: 0,
+      // eslint-disable-next-line id-length
       y: 20,
       duration: 0.7,
       stagger: 0.15,
@@ -47,6 +48,7 @@ const animateCta = (widget) => {
         start: 'top 80%',
       },
       opacity: 0,
+      // eslint-disable-next-line id-length
       y: 20,
       duration: 0.8,
       delay: 0.2,
@@ -81,6 +83,7 @@ const animateBodyText = (widget) => {
         start: 'top 80%',
       },
       opacity: 0,
+      // eslint-disable-next-line id-length
       y: 20,
       duration: 0.8,
       delay: 0.3,
@@ -91,7 +94,7 @@ const animateBodyText = (widget) => {
 
 const animateTestimonials = (widget) => {
   const testimonials = widget.querySelectorAll(
-    '.sf-big-block-widget__testimonial'
+    '.sf-big-block-widget__testimonial',
   );
   if (testimonials.length) {
     gsap.from(testimonials, {
@@ -100,6 +103,7 @@ const animateTestimonials = (widget) => {
         start: 'top 60%',
       },
       opacity: 0,
+      // eslint-disable-next-line id-length
       y: 30,
       duration: 0.8,
       stagger: 0.15,
@@ -117,6 +121,7 @@ const animateFinalCta = (widget) => {
         start: 'top 80%',
       },
       opacity: 0,
+      // eslint-disable-next-line id-length
       y: 30,
       duration: 0.8,
       ease: 'power2.out',
