@@ -16,6 +16,7 @@ module.exports = {
         'buttons': {},
         'whitespace': {},
         'container': {},
+        'big-block': {},
         '@apostrophecms/rich-text': {
           ...headingToolbar,
         },

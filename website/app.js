@@ -114,6 +114,7 @@ function createAposConfig() {
       'contact-widget': {},
       'page-intro-widget': {},
       'whitespace-widget': {},
+      'big-block-widget': {},
       /*
        * 'links-buttons-widget': {},
        * 'team-carousel-widget': {},
