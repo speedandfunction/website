@@ -19,7 +19,7 @@
     <!-- Body Section -->
     <div class="sf-big-block-widget__body">
       <p class="sf-big-block-widget__intro">
-        <span class="sf-big-block-widget__intro-line"></span>Most software projects don't fail because the tech is wrong.</span>
+        <span class="sf-big-block-widget__intro-line">Most software projects don't fail because the tech is wrong.</span>
         <span class="sf-big-block-widget__intro-line">They fail because complexity is underestimated, and the human side of the work is left unsupported.</span>
       </p>
       <p class="sf-big-block-widget__description">
@@ -49,92 +49,32 @@
     <div class="sf-big-block-widget__testimonials">
       <span class="sf-big-block-widget__section-label">Social proof</span>
       <h2 class="sf-big-block-widget__testimonials-title">Trusted by visionary leaders</h2>
-      
+
       <div class="sf-big-block-widget__testimonial-grid">
-        <!-- Testimonial 1 -->
+        {% for testimonial in data.widget._testimonials %}
         <div class="sf-big-block-widget__testimonial">
-          <p class="sf-big-block-widget__testimonial-text">"The Developmental Sprint® app enables individuals and teams to overcome hurdles to success. Within three months of our initial conversation with S&F, we had our first beta-version to test with a client. Within six months, we were using it as a cornerstone of our business expansion."</p>
+          <p class="sf-big-block-widget__testimonial-text">"{{ testimonial.feedback }}"</p>
           <div class="sf-big-block-widget__testimonial-author">
-            <p class="sf-big-block-widget__testimonial-name">Andy Fleming</p>
-            <p class="sf-big-block-widget__testimonial-title">CEO & Founding Principal</p>
-            <p class="sf-big-block-widget__testimonial-company">The Developmental Edge</p>
-            <a href="https://developmentaledge.com" class="sf-big-block-widget__testimonial-url" target="_blank" rel="noopener noreferrer">developmentaledge.com</a>
+            {% set attachment = apos.image.first(testimonial.headshot) %}
+            {% if attachment %}
+            <div class="sf-big-block-widget__testimonial-headshot">
+              <img
+                src="{{ apos.attachment.url(attachment, { size: 'full' }) }}"
+                alt="{{ attachment._alt or testimonial.title }}"
+              />
+            </div>
+            {% endif %}
+            <div class="sf-big-block-widget__testimonial-info">
+              <p class="sf-big-block-widget__testimonial-name">{{ testimonial.title }}</p>
+              <p class="sf-big-block-widget__testimonial-title">{{ testimonial.position }}</p>
+              <p class="sf-big-block-widget__testimonial-company">{{ testimonial.organization }}</p>
+              {% if testimonial.url %}
+              <a href="{{ testimonial.url }}" class="sf-big-block-widget__testimonial-url" target="_blank" rel="noopener noreferrer">{{ testimonial.url }}</a>
+              {% endif %}
+            </div>
           </div>
         </div>
-
-        <!-- Testimonial 2 -->
-        <div class="sf-big-block-widget__testimonial">
-          <p class="sf-big-block-widget__testimonial-text">"Thanks for being such a perfect mix of joyfulness and professionalism, which makes it such a treat to work with you."</p>
-          <div class="sf-big-block-widget__testimonial-author">
-            <p class="sf-big-block-widget__testimonial-name">Stephanie Delbecque</p>
-            <p class="sf-big-block-widget__testimonial-title">Lead Product Manager</p>
-            <p class="sf-big-block-widget__testimonial-company">Wikimedia Foundation</p>
-            <a href="https://wikimediafoundation.org" class="sf-big-block-widget__testimonial-url" target="_blank" rel="noopener noreferrer">wikimediafoundation.org</a>
-          </div>
-        </div>
-
-        <!-- Testimonial 3 -->
-        <div class="sf-big-block-widget__testimonial">
-          <p class="sf-big-block-widget__testimonial-text">"S&F never brought a problem to O3. You bring solutions! Great ability to implement design well, manage project/product, and problem solve. The cultural influence of S&F on our own team is great."</p>
-          <div class="sf-big-block-widget__testimonial-author">
-            <p class="sf-big-block-widget__testimonial-name">Mahesh Gaitonde</p>
-            <p class="sf-big-block-widget__testimonial-title">Chief Digital Officer</p>
-            <p class="sf-big-block-widget__testimonial-company">O3 World</p>
-            <a href="https://o3world.com" class="sf-big-block-widget__testimonial-url" target="_blank" rel="noopener noreferrer">o3world.com</a>
-          </div>
-        </div>
-
-        <!-- Testimonial 4 -->
-        <div class="sf-big-block-widget__testimonial">
-          <p class="sf-big-block-widget__testimonial-text">"Speed & Function has provided the engineering backbone of our product infrastructure — not just in a technical capacity, but architecturally and strategically too. Their commitment to our project has been critical. We wouldn't have gotten this far if we hadn't been able to work with them. Everybody has been thoughtful, fun and professional. They'll always let you know when something goes wrong and work with you to improve it."</p>
-          <div class="sf-big-block-widget__testimonial-author">
-            <p class="sf-big-block-widget__testimonial-name">Lane Becker</p>
-            <p class="sf-big-block-widget__testimonial-title">President</p>
-            <p class="sf-big-block-widget__testimonial-company">Wikimedia LLC</p>
-            <a href="https://wikimediafoundation.org" class="sf-big-block-widget__testimonial-url" target="_blank" rel="noopener noreferrer">wikimediafoundation.org</a>
-          </div>
-        </div>
-
-        <!-- Testimonial 5 -->
-        <div class="sf-big-block-widget__testimonial">
-          <p class="sf-big-block-widget__testimonial-text">"Speed & Function connects the dots. Unfortunately, other parts of the world give you only what you ask for. You don't get connecting the dots, problem-solving, or creativity."</p>
-          <div class="sf-big-block-widget__testimonial-author">
-            <p class="sf-big-block-widget__testimonial-name">Robert Scanlon</p>
-            <p class="sf-big-block-widget__testimonial-title">President of Scanlon Consulting Group LLC</p>
-          </div>
-        </div>
-
-        <!-- Testimonial 6 -->
-        <div class="sf-big-block-widget__testimonial">
-          <p class="sf-big-block-widget__testimonial-text">"The team at Speed & Function own this project as much as I own it. They also speak up and voice their ideas. It's rare to get that from an external firm. There's lots of knowledge in the team and even though they are external, they work with us as a team rather than contractors."</p>
-          <div class="sf-big-block-widget__testimonial-author">
-            <p class="sf-big-block-widget__testimonial-name">Ryan Brounley</p>
-            <p class="sf-big-block-widget__testimonial-title">Product Advisor</p>
-            <p class="sf-big-block-widget__testimonial-company">Wikimedia Foundation</p>
-            <a href="https://wikimediafoundation.org" class="sf-big-block-widget__testimonial-url" target="_blank" rel="noopener noreferrer">wikimediafoundation.org</a>
-          </div>
-        </div>
-
-        <!-- Testimonial 7 -->
-        <div class="sf-big-block-widget__testimonial">
-          <p class="sf-big-block-widget__testimonial-text">"S&F is a solid business partner. Nick and his team are willing to do whatever it takes to make a project successful and to keep the customer satisfied. They are professional and thorough."</p>
-          <div class="sf-big-block-widget__testimonial-author">
-            <p class="sf-big-block-widget__testimonial-name">Chris Allison</p>
-            <p class="sf-big-block-widget__testimonial-title">Managing Partner</p>
-            <p class="sf-big-block-widget__testimonial-company">Turnberry Solutions</p>
-            <a href="https://turnberrysolutions.com" class="sf-big-block-widget__testimonial-url" target="_blank" rel="noopener noreferrer">turnberrysolutions.com</a>
-          </div>
-        </div>
-
-        <!-- Testimonial 8 -->
-        <div class="sf-big-block-widget__testimonial">
-          <p class="sf-big-block-widget__testimonial-text">"Nick and team are the best. They've basically turned our digital business around. Fast, efficient, cost-effective, communicative, and collaborative."</p>
-          <div class="sf-big-block-widget__testimonial-author">
-            <p class="sf-big-block-widget__testimonial-name">Shai Reichert</p>
-            <p class="sf-big-block-widget__testimonial-title">Managing Director, Technology</p>
-            <p class="sf-big-block-widget__testimonial-company">W2O Group</p>
-          </div>
-        </div>
+        {% endfor %}
       </div>
     </div>
 

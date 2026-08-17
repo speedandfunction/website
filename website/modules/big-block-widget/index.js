@@ -13,6 +13,23 @@ module.exports = {
     ],
   },
   fields: {
-    // No fields - content is hardcoded in template
+    add: {
+      _testimonials: {
+        label: 'Testimonials',
+        type: 'relationship',
+        withType: 'testimonials',
+        max: 6,
+        builders: {
+          project: {
+            title: 1,
+            position: 1,
+            organization: 1,
+            feedback: 1,
+            url: 1,
+            headshot: 1,
+          },
+        },
+      },
+    },
   },
 };
