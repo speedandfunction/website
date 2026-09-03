@@ -15,19 +15,27 @@ const isEditMode = (widget) => {
 };
 
 const makeWidgetVisible = (widget) => {
+  /* eslint-disable id-length */
   gsap.set(widget, { opacity: 1, y: 0, clearProps: 'transform,opacity' });
   const animElements = widget.querySelectorAll(
     '.sf-hero-section__heading-pre, .sf-hero-section__heading-main, .sf-hero-section__heading-accent, .sf-hero-section__cta, .sf-hero-section__right',
   );
   if (animElements.length) {
-    gsap.set(animElements, { opacity: 1, y: 0, clearProps: 'transform,opacity' });
+    gsap.set(animElements, {
+      opacity: 1,
+      y: 0,
+      clearProps: 'transform,opacity',
+    });
   }
+  /* eslint-enable id-length */
 };
 
 const animateHeading = (widget) => {
   const headingPre = widget.querySelector('.sf-hero-section__heading-pre');
   const headingMain = widget.querySelector('.sf-hero-section__heading-main');
-  const headingAccent = widget.querySelector('.sf-hero-section__heading-accent');
+  const headingAccent = widget.querySelector(
+    '.sf-hero-section__heading-accent',
+  );
   const lines = [headingPre, headingMain, headingAccent].filter(Boolean);
 
   if (lines.length) {
