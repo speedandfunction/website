@@ -11,7 +11,7 @@ module.exports = {
         options: {
           max: 1,
           widgets: {
-            'home-hero': {},
+            'sf-hero': {},
           },
         },
       },

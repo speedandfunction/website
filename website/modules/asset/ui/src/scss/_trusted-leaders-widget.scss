@@ -1,0 +1,205 @@
+/* Trusted Leaders Widget — based on Figma node 2086:397-412 */
+
+.sf-trusted-leaders {
+  margin-top: 80px;
+
+  @include breakpoint-medium {
+    margin-top: 120px;
+  }
+
+  &__container {
+    width: 100%;
+    max-width: $breakpoint-extra-extra-large;
+    margin: 0 auto;
+    padding: 0 40px;
+
+    @include breakpoint-medium {
+      padding: 0 100px;
+    }
+  }
+
+  &__heading {
+    @include font-settings(28px, 110%, 700);
+    color: #232429;
+    letter-spacing: -0.8px;
+    margin: 0 0 40px;
+    text-transform: none;
+    white-space: pre-line;
+
+    @include breakpoint-medium {
+      @include font-settings(36px, 100%, 700);
+      letter-spacing: -1.2px;
+      margin: 0 0 56px;
+    }
+  }
+
+  &__swiper {
+    width: 100%;
+    overflow: hidden;
+  }
+
+  &__slide {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+
+    @include breakpoint-medium {
+      flex-direction: row;
+      align-items: flex-start;
+      gap: 0;
+    }
+  }
+
+  &__left {
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+
+    @include breakpoint-medium {
+      width: 240px;
+      margin-right: 233px;
+      margin-top: 16px;
+    }
+  }
+
+  &__photo {
+    width: 160px;
+    height: 160px;
+    overflow: hidden;
+    flex-shrink: 0;
+
+    @include breakpoint-medium {
+      width: 240px;
+      height: 240px;
+    }
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-top: 16px;
+
+    @include breakpoint-medium {
+      margin-top: 24px;
+    }
+  }
+
+  &__name {
+    @include font-settings(18px, 120%, 700);
+    color: #232429;
+    letter-spacing: -0.4px;
+    margin: 0;
+
+    @include breakpoint-medium {
+      @include font-settings(22px, 120%, 700);
+    }
+  }
+
+  &__position {
+    @include font-settings(14px, 120%, 500);
+    color: #232429;
+    margin: 0;
+    white-space: pre-line;
+  }
+
+  &__organization {
+    @include font-settings(14px, 120%, 500);
+    color: #232429;
+    margin: 0;
+  }
+
+  &__url {
+    @include font-settings(14px, 120%, 700);
+    color: #232429;
+    text-decoration: underline;
+    text-underline-position: from-font;
+    margin-top: 8px;
+    display: inline-block;
+  }
+
+  &__right {
+    flex: 1;
+    display: flex;
+    align-items: flex-start;
+  }
+
+  &__quote {
+    @include font-settings(16px, 140%, 500);
+    color: #232429;
+    margin: 0;
+    white-space: pre-line;
+
+    @include breakpoint-medium {
+      @include font-settings(22px, 140%, 500);
+    }
+  }
+
+  &__quote-mark {
+    display: block;
+    @include font-settings(28px, 0, 700);
+    color: #00a896;
+    letter-spacing: 0.52px;
+    margin-bottom: 8px;
+
+    @include breakpoint-medium {
+      @include font-settings(36px, 0, 700);
+    }
+  }
+
+  &__quote-text {
+    display: block;
+  }
+
+  &__nav {
+    position: relative;
+    z-index: 2;
+    margin-top: -16px;
+
+    @include breakpoint-medium {
+      margin-top: -24px;
+    }
+  }
+
+  &__divider {
+    width: 100%;
+    height: 1px;
+    background: rgba(222, 223, 228, 0.6);
+    margin-top: 48px;
+
+    @include breakpoint-medium {
+      margin-top: 64px;
+    }
+  }
+
+  &__controls {
+    display: flex;
+    justify-content: flex-start;
+    gap: 20px;
+
+    @include breakpoint-medium {
+      justify-content: flex-end;
+      gap: 24px;
+    }
+  }
+
+  &__prev,
+  &__next {
+    @include font-settings(12px, 100%, 700);
+    color: #232429;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    user-select: none;
+
+    &::after {
+      display: none;
+    }
+  }
+}

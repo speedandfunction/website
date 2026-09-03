@@ -92,3 +92,35 @@
   visibility: visible !important;
   transform: translateY(0);
 }
+
+// Ensure all widgets and containers are always visible in Apostrophe edit mode
+body.apos-is-admin,
+body.apos-has-admin-bar,
+[data-apos-refreshable],
+[data-apos-widget] {
+  .sf-container.loading,
+  .breadcrumb.loading,
+  .page-main_content.loading,
+  .loading {
+    opacity: 1 !important;
+    visibility: visible !important;
+    overflow: visible !important;
+    transform: none !important;
+    transition: none !important;
+  }
+
+  .sf-big-block-widget,
+  .sf-big-block-widget__hero-line,
+  .sf-big-block-widget__cta,
+  .sf-big-block-widget__intro,
+  .sf-big-block-widget__testimonial,
+  .sf-big-block-widget__final-cta,
+  .cs_grid,
+  .lozad {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
+    filter: none !important;
+    transition: none !important;
+  }
+}

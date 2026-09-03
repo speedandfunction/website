@@ -14,6 +14,9 @@ module.exports = {
   improve: '@apostrophecms/security-headers',
   options: {
     policies: {
+      apostrophe: {
+        'script-src': "'unsafe-eval'",
+      },
       recaptcha: {
         'script-src': '*.google.com *.gstatic.com',
         'frame-src': '*.google.com *.recaptcha.net',

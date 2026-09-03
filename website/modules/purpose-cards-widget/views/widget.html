@@ -1,0 +1,22 @@
+<section class="sf-purpose-cards" data-purpose-cards-widget>
+  <div class="sf-purpose-cards__container">
+    {% if data.widget.headingMain %}
+    <h2 class="sf-purpose-cards__heading">
+      <span class="sf-purpose-cards__heading-main">{{ data.widget.headingMain }}</span>
+    </h2>
+    {% endif %}
+
+    {% if data.widget.cards and data.widget.cards.length > 0 %}
+    <div class="sf-purpose-cards__grid">
+      {% for card in data.widget.cards %}
+      <div class="sf-purpose-cards__card">
+        <span class="sf-purpose-cards__card-number">{% if loop.index < 10 %}0{% endif %}{{ loop.index }}</span>
+        {% if card.description %}
+        <p class="sf-purpose-cards__card-text">{{ card.description }}</p>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+  </div>
+</section>

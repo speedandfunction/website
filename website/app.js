@@ -115,6 +115,10 @@ function createAposConfig() {
       'page-intro-widget': {},
       'whitespace-widget': {},
       'big-block-widget': {},
+      'sf-hero-widget': {},
+      'purpose-cards-widget': {},
+      'trusted-leaders-widget': {},
+      'cta-block-widget': {},
       /*
        * 'links-buttons-widget': {},
        * 'team-carousel-widget': {},

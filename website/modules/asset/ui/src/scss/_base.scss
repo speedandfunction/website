@@ -28,6 +28,44 @@
     padding: 0 120px;
   }
 }
+
+.sf-container--home {
+  max-width: none;
+  padding-left: 0;
+  padding-right: 0;
+  padding-top: 0;
+  background-color: #ffffff;
+  background-image: url('/images/home-bg-mobile.webp');
+  background-size: cover;
+  background-position: top center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+
+  @include breakpoint-medium {
+    background-image:
+      radial-gradient(
+        ellipse 140% 46% at -15% 30%,
+        #a8f2e9 0%,
+        rgba(168, 242, 233, 0) 70%
+      ),
+      radial-gradient(
+        ellipse 44% 35% at 36% 75%,
+        #f6e7c1 0%,
+        rgba(246, 231, 193, 0) 70%
+      ),
+      radial-gradient(
+        ellipse 180% 56% at 92% 50%,
+        #ffd1ca 0%,
+        rgba(255, 209, 202, 0) 70%
+      );
+    background-size: auto;
+  }
+
+  @include breakpoint-extra-extra-large {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
 .sf-wrapper {
   position: relative;
 }

@@ -1,0 +1,87 @@
+/* CTA Block Widget — based on Figma node 2086:398-387 */
+
+.sf-cta-block {
+  margin-top: 80px;
+  padding-bottom: 60px;
+
+  @include breakpoint-medium {
+    margin-top: 160px;
+    padding-bottom: 144px;
+  }
+
+  &__container {
+    width: 100%;
+    max-width: $breakpoint-extra-extra-large;
+    margin: 0 auto;
+    padding: 0 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 40px;
+
+    @include breakpoint-medium {
+      padding: 0 100px;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0;
+    }
+  }
+
+  &__heading {
+    @include font-settings(28px, 110%, 700);
+    color: #232429;
+    letter-spacing: -0.8px;
+    margin: 0;
+    text-transform: none;
+    white-space: pre-line;
+
+    @include breakpoint-medium {
+      @include font-settings(36px, 100%, 700);
+      letter-spacing: -1.2px;
+    }
+  }
+
+  &__buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  &__button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1.2px solid #232429;
+    height: 64px;
+    padding: 0 32px;
+    text-decoration: none;
+    @include font-settings(14px, 100%, 700);
+    color: #232429;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    transition: background-color 0.2s ease, color 0.2s ease;
+
+    @include breakpoint-medium {
+      min-width: 343px;
+      @include font-settings(16px, 100%, 700);
+    }
+
+    &:hover {
+      background-color: #232429;
+      color: #ffffff;
+    }
+
+    &--placeholder {
+      cursor: default;
+      opacity: 0.5;
+
+      &:hover {
+        background-color: transparent;
+        color: #232429;
+      }
+    }
+  }
+}

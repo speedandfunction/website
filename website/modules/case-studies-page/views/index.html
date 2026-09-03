@@ -13,9 +13,9 @@
 >
   <div class="cs_content">
     <div
-      class="page-main_content loading"
+      class="page-main_content {% if not data.user %}loading{% else %}loaded{% endif %}"
       id="page-main_content"
-      aria-busy="true"
+      aria-busy="{% if not data.user %}true{% else %}false{% endif %}"
     >
       {% area data.page, 'main' %}
     </div>

@@ -4,6 +4,32 @@ import gsap from 'gsap';
 
 gsap.registerPlugin(ScrollTrigger);
 
+const isEditMode = (widget) => {
+  return (
+    Boolean(window.apos?.adminBar) ||
+    document.body.classList.contains('apos-is-admin') ||
+    document.body.classList.contains('apos-has-admin-bar') ||
+    Boolean(widget?.closest?.('[data-apos-widget]')) ||
+    Boolean(widget?.closest?.('[data-apos-refreshable]'))
+  );
+};
+
+const makeWidgetVisible = (widget) => {
+  // eslint-disable-next-line id-length
+  gsap.set(widget, { opacity: 1, y: 0, clearProps: 'transform,opacity' });
+  const animElements = widget.querySelectorAll(
+    '.sf-big-block-widget__hero-line, .sf-big-block-widget__cta, .sf-big-block-widget__intro, .sf-big-block-widget__testimonial, .sf-big-block-widget__final-cta',
+  );
+  if (animElements.length) {
+    gsap.set(animElements, {
+      opacity: 1,
+      // eslint-disable-next-line id-length
+      y: 0,
+      clearProps: 'transform,opacity',
+    });
+  }
+};
+
 const animateWidget = (widget) => {
   // Animate the main widget container on scroll
   gsap.to(widget, {
@@ -11,7 +37,7 @@ const animateWidget = (widget) => {
       trigger: widget,
       start: 'top 80%',
       end: 'top 20%',
-      toggleActions: 'play none none reverse',
+      toggleActions: 'play none none none',
     },
     opacity: 1,
     // eslint-disable-next-line id-length
@@ -129,21 +155,38 @@ const animateFinalCta = (widget) => {
   }
 };
 
+const initSingleWidget = (widget) => {
+  if (isEditMode(widget)) {
+    makeWidgetVisible(widget);
+    return;
+  }
+
+  animateWidget(widget);
+  animateHeroLines(widget);
+  animateCta(widget);
+  animateBodyText(widget);
+  animateTestimonials(widget);
+  animateFinalCta(widget);
+};
+
 const initBigBlockWidget = () => {
   const widgets = document.querySelectorAll('.sf-big-block-widget');
-
   widgets.forEach((widget) => {
-    animateWidget(widget);
-    animateHeroLines(widget);
-    animateCta(widget);
-    animateBodyText(widget);
-    animateTestimonials(widget);
-    animateFinalCta(widget);
+    initSingleWidget(widget);
   });
 };
 
 // Default export function required by ApostropheCMS
 export default () => {
+  if (window.apos?.util?.widgetPlayers) {
+    window.apos.util.widgetPlayers['sf-big-block-widget'] = {
+      selector: '[data-big-block-widget]',
+      player: function (el) {
+        initSingleWidget(el);
+      },
+    };
+  }
+
   // Initialize when DOM is ready
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initBigBlockWidget);
