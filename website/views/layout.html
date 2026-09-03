@@ -34,8 +34,8 @@
       data-barba-namespace="{{ (data.page and data.page.type) or 'default' }}"
       {% endif %}
     >
-      {% render fragments.breadcrumbs() %}
-      <div class="sf-container loading" aria-busy="true" data-reveal="dom">
+      {% render fragments.breadcrumbs(data) %}
+      <div class="sf-container {% if data.page and data.page.type == '@apostrophecms/home-page' %}sf-container--home{% endif %} {% if not data.user %}loading{% else %}loaded{% endif %}" aria-busy="{% if not data.user %}true{% else %}false{% endif %}" data-reveal="dom">
 {% endblock %}
 
 {% block main %}

@@ -51,6 +51,21 @@ const swiperConfigs = [
       },
     },
   },
+  {
+    selector: '.sf-trusted-leaders-swiper',
+    config: {
+      init: false,
+      loop: true,
+      navigation: {
+        el: '.sf-trusted-leaders__controls',
+        nextEl: '.sf-trusted-leaders__next',
+        prevEl: '.sf-trusted-leaders__prev',
+      },
+      modules: [Navigation],
+      slidesPerView: 1,
+      spaceBetween: 0,
+    },
+  },
 ];
 
 // Initialize all swipers with a single function

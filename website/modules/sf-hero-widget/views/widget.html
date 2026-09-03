@@ -1,0 +1,30 @@
+<section class="sf-hero-section" data-sf-hero-widget>
+  <div class="sf-hero-section__container">
+    <div class="sf-hero-section__left">
+      {% if data.widget.headingPre %}
+      <p class="sf-hero-section__heading-pre">{{ data.widget.headingPre }}</p>
+      {% endif %}
+      <h1 class="sf-hero-section__heading">
+        {% if data.widget.headingMain %}
+        <span class="sf-hero-section__heading-main">{{ data.widget.headingMain }}</span>
+        {% endif %}
+        {% if data.widget.headingMain and data.widget.headingAccent %} {% endif %}
+        {% if data.widget.headingAccent %}
+        <span class="sf-hero-section__heading-main">{{ data.widget.headingAccent }}</span>
+        {% endif %}
+      </h1>
+      {% if data.widget.ctaText and data.widget.ctaLink %}
+      <a href="{{ data.widget.ctaLink }}" class="sf-hero-section__cta">
+        {{ data.widget.ctaText }}
+      </a>
+      {% endif %}
+      <div class="sf-hero-section__mobile-separator"></div>
+    </div>
+    {% if data.widget.bodyText %}
+    <div class="sf-hero-section__divider"></div>
+    <div class="sf-hero-section__right">
+      {% area data.widget, 'bodyText' %}
+    </div>
+    {% endif %}
+  </div>
+</section>

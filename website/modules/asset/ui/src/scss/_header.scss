@@ -45,50 +45,39 @@
   border: none;
   background: none;
   padding: 0;
+  color: #232429;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  @include breakpoint-medium {
+    display: none;
+  }
   &:hover,
   &:focus {
-    span {
-      background: $gray-300;
-    }
+    color: #50e4d2;
   }
 
-  span {
-    display: block;
+  &__icon {
     position: absolute;
-    height: 2px;
-    width: 22px;
-    background-color: $gray-500;
-    border-radius: 1px;
-    left: 50%;
-    transform: translateX(-50%);
-    transition: 0.4s ease;
+    width: 24px;
+    height: 24px;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
 
-    &:nth-child(1) {
-      top: 6px;
-    }
-
-    &:nth-child(2) {
-      top: 14px;
-    }
-
-    &:nth-child(3) {
-      top: 22px;
-    }
+  &__icon--close {
+    opacity: 0;
+    transform: scale(0.8);
   }
 
   &.open {
-    span:nth-child(1) {
-      top: 14px;
-      transform: translateX(-50%) rotate(45deg);
-    }
-
-    span:nth-child(2) {
+    .sf-menu__icon--open {
       opacity: 0;
+      transform: scale(0.8);
     }
 
-    span:nth-child(3) {
-      top: 14px;
-      transform: translateX(-50%) rotate(-45deg);
+    .sf-menu__icon--close {
+      opacity: 1;
+      transform: scale(1);
     }
   }
 }
@@ -98,77 +87,183 @@
   background-color: $white;
   z-index: 10;
   transform: translateY(-200%);
-  transition: transform 1s cubic-bezier(0.77, 0, 0.175, 1);
+  visibility: hidden;
+  transition: transform 1s cubic-bezier(0.77, 0, 0.175, 1),
+              visibility 0s linear 1s;
   overflow: hidden;
   overflow-y: auto;
   width: 100%;
   top: $mobile-header-height;
   right: 0;
+  height: calc(100vh - #{$mobile-header-height});
 
   @include breakpoint-medium {
-    top: 40px;
-    right: 30px;
-    width: 230px;
-    padding-right: 10px;
+    position: static;
+    top: auto;
+    right: auto;
+    height: auto;
+    width: auto;
+    padding-right: 0;
+    transform: none;
+    visibility: visible;
+    transition: none;
+    overflow: visible;
+    background-color: transparent;
   }
 
   &.open {
     transform: translateY(0);
-    @include breakpoint-medium {
-      transform: translateY(40px);
-    }
+    visibility: visible;
+    transition: transform 1s cubic-bezier(0.77, 0, 0.175, 1),
+                visibility 0s linear 0s;
   }
 
   &__list {
-    text-align: center;
+    text-align: left;
     list-style-type: none;
-    padding-right: 30px;
+    padding-left: 40px;
+    padding-right: 40px;
     margin-left: 0;
-    margin-top: 0;
-    margin-bottom: 50px;
+    margin-top: 52px;
+    margin-bottom: 0;
 
     @include breakpoint-medium {
-      text-align: right;
-      padding-right: 10px;
-      @include border(border-right);
-      margin-bottom: 20px;
+      display: flex;
+      flex-wrap: nowrap;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 24px;
+      text-align: left;
+      padding-left: 0;
+      padding-right: 0;
+      margin-top: 0;
+      margin-bottom: 0;
+      white-space: nowrap;
     }
   }
 
   li {
     position: relative;
-    margin-bottom: 20px;
+    margin-bottom: 40px;
     display: block;
+
+    @include breakpoint-medium {
+      margin-bottom: 0;
+      display: list-item;
+    }
 
     a {
       position: relative;
-      font-size: 10px;
-      color: $gray-300;
-      font-weight: 500;
+      font-size: 16px;
+      line-height: 100%;
+      color: #232429;
+      font-weight: 700;
       text-transform: uppercase;
       text-decoration: none;
       white-space: nowrap;
+      letter-spacing: 1.2px;
+      display: inline-block;
       @include transition(all);
-      @include truncate-lines(1);
 
       &.active {
-        font-weight: 700;
-        color: $gray-500;
+        color: #00786b;
+
+        &::after {
+          content: '';
+          display: block;
+          height: 2px;
+          background: linear-gradient(to right, #00a896, #50e4d2);
+          margin-top: 4px;
+        }
       }
 
       &:hover,
       &:focus {
-        font-weight: 700;
-        color: $gray-500;
+        color: #00786b;
       }
 
       @include breakpoint-medium {
-        font-size: 14px;
+        @include font-settings(14px, 100%, 700);
+        color: $gray-nav;
+        white-space: nowrap;
+        display: block;
+
+        &.active {
+          color: $gray-500;
+
+          &::after {
+            display: none;
+          }
+        }
 
         &:hover,
         &:focus {
-          padding-right: 10px;
+          padding-right: 0;
+          color: $gray-500;
         }
+      }
+    }
+  }
+}
+
+// Overlay header — floats on top of the hero widget on the homepage.
+// Transparent background; dark text visible on the white hero (Figma 2069:152).
+// When the mobile menu is open, the header gets a white background to match
+// the Figma full-screen menu panel design (Figma 2204:395).
+.sf-header--overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: transparent;
+
+  &:has(.sf-menu.open) {
+    @media (max-width: #{$breakpoint-medium - 1px}) {
+      background-color: $white;
+    }
+  }
+
+  .sf-header__content {
+    width: 100%;
+    max-width: $breakpoint-extra-extra-large;
+    padding: 0 40px;
+
+    @include breakpoint-medium {
+      padding: 0 100px;
+    }
+  }
+
+  .sf-logo {
+    color: #232429;
+
+    &:hover,
+    &:focus {
+      color: #50e4d2;
+    }
+  }
+
+  .sf-menu {
+    color: #232429;
+
+    &:hover,
+    &:focus {
+      color: #50e4d2;
+    }
+  }
+
+  // Desktop nav: gray-999 link colours visible on the white hero background.
+  // Mobile dropdown keeps its white background + dark link colours.
+  @include breakpoint-medium {
+    .sf-nav li a {
+      color: #232429;
+
+      &.active {
+        color: #232429;
+      }
+
+      &:hover,
+      &:focus {
+        color: #232429;
       }
     }
   }

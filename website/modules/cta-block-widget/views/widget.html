@@ -1,0 +1,29 @@
+{% import 'fragments/utilities.html' as utilities %}
+<section class="sf-cta-block" data-cta-block-widget>
+  <div class="sf-cta-block__container">
+    {% if data.widget.heading %}
+    <h2 class="sf-cta-block__heading">{{ data.widget.heading }}</h2>
+    {% endif %}
+
+    {% if data.widget.buttonCollection and data.widget.buttonCollection.length > 0 %}
+    <div class="sf-cta-block__buttons">
+      {% for item in data.widget.buttonCollection %}
+      {% set path = utilities.getPath(item.button) %}
+      {% if path|length > 0 %}
+      <a
+        href="{{ path }}"
+        class="sf-cta-block__button"
+        {% if item.button.target[0] === '_blank' %}target="_blank"{% endif %}
+      >
+        {{ item.button.linkTitle or path }}
+      </a>
+      {% elif item.button.linkTitle %}
+      <span class="sf-cta-block__button sf-cta-block__button--placeholder">
+        {{ item.button.linkTitle }}
+      </span>
+      {% endif %}
+      {% endfor %}
+    </div>
+    {% endif %}
+  </div>
+</section>

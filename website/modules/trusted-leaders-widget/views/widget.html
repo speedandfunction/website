@@ -1,0 +1,81 @@
+<section class="sf-trusted-leaders" data-trusted-leaders-widget>
+  <div class="sf-trusted-leaders__container">
+    {% if data.widget.heading %}
+    <h2 class="sf-trusted-leaders__heading">{{ data.widget.heading }}</h2>
+    {% endif %}
+
+    {% if data.widget._testimonials and data.widget._testimonials.length > 0 %}
+    <div class="sf-trusted-leaders__swiper sf-trusted-leaders-swiper swiper">
+      <div class="swiper-wrapper">
+        {% for testimonial in data.widget._testimonials %}
+        <div class="swiper-slide">
+          <div class="sf-trusted-leaders__slide">
+            <div class="sf-trusted-leaders__left">
+              {% set attachment = apos.image.first(testimonial.headshot) %}
+              <div class="sf-trusted-leaders__photo{% if not data.user %} lozad{% endif %}">
+                <img
+                  {% if attachment %}
+                    srcset="{{ apos.image.srcset(attachment) }}"
+                    src="{{ apos.attachment.url(attachment, { size: data.options.size or 'full' }) }}"
+                    alt="{{ attachment._alt or '' }}"
+                    {% if apos.attachment.hasFocalPoint(attachment) %}
+                      style="object-position: {{ apos.attachment.focalPointToObjectPosition(attachment) }}"
+                    {% endif %}
+                  {% else %}
+                    src="/images/placeholder.jpg"
+                    alt="No photo"
+                  {% endif %}
+                />
+              </div>
+              <div class="sf-trusted-leaders__info">
+                {% if testimonial.title %}
+                <h4 class="sf-trusted-leaders__name">{{ testimonial.title }}</h4>
+                {% endif %}
+                {% if testimonial.position %}
+                <p class="sf-trusted-leaders__position">{{ testimonial.position }}</p>
+                {% endif %}
+                {% if testimonial.organization %}
+                <p class="sf-trusted-leaders__organization">{{ testimonial.organization }}</p>
+                {% endif %}
+                {% if testimonial.url %}
+                {% set urlWithoutProtocol = testimonial.url %}
+                {% if testimonial.url.split('://') | length > 1 %}
+                {% set urlWithoutProtocol = testimonial.url.split('://')[1] %}
+                {% endif %}
+                {% set domainWithOrWithoutWww = urlWithoutProtocol.split('/')[0] %}
+                {% set cleanDomain = domainWithOrWithoutWww | trim | replace('www.', '') %}
+                <a
+                  href="{{ testimonial.url }}"
+                  target="_blank"
+                  class="sf-trusted-leaders__url"
+                  rel="noopener noreferrer"
+                >
+                  {{ cleanDomain }}
+                </a>
+                {% endif %}
+              </div>
+            </div>
+            <div class="sf-trusted-leaders__right">
+              {% if testimonial.feedback %}
+              <blockquote class="sf-trusted-leaders__quote">
+                <span class="sf-trusted-leaders__quote-mark">«</span>
+                <span class="sf-trusted-leaders__quote-text">{{ testimonial.feedback }}</span>
+              </blockquote>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="sf-trusted-leaders__nav">
+      <div class="sf-trusted-leaders__controls">
+        <div class="sf-trusted-leaders__prev">← prev</div>
+        <div class="sf-trusted-leaders__next">next →</div>
+      </div>
+      <div class="sf-trusted-leaders__divider"></div>
+    </div>
+    {% endif %}
+  </div>
+</section>

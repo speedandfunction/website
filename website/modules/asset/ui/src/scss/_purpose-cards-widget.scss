@@ -1,0 +1,78 @@
+/* Purpose Cards Widget — based on Figma node 2069:181-193 */
+
+.sf-purpose-cards {
+  &__container {
+    width: 100%;
+    max-width: $breakpoint-extra-extra-large;
+    margin: 0 auto;
+    padding: 0 40px;
+
+    @include breakpoint-medium {
+      padding: 0 100px;
+    }
+  }
+
+  &__heading {
+    @include font-settings(26px, 100%, 700);
+    color: #232429;
+    letter-spacing: -1.2px;
+    margin: 0 0 32px;
+    text-transform: none;
+
+    @include breakpoint-medium {
+      @include font-settings(36px, 100%, 700);
+      letter-spacing: -1.2px;
+      margin: 0 0 40px;
+    }
+  }
+
+  &__heading-main {
+    display: inline;
+    color: #232429;
+    white-space: pre-line;
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+
+    @include breakpoint-medium {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+  }
+
+  &__card {
+    border: 1px solid rgba(222, 223, 228, 0.6);
+    padding: 24px;
+    min-height: 160px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    @include breakpoint-medium {
+      padding: 32px;
+      min-height: 232px;
+      gap: 20px;
+    }
+  }
+
+  &__card-number {
+    @include font-settings(12px, 100%, 700);
+    color: #00a896;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+  }
+
+  &__card-text {
+    @include font-settings(16px, 140%, 500);
+    color: #828388;
+    margin: 0;
+    white-space: pre-line;
+
+    @include breakpoint-medium {
+      @include font-settings(18px, 140%, 500);
+    }
+  }
+}
