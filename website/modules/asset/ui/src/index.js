@@ -111,14 +111,12 @@ function initBarbaPageTransitions() {
       const initializeApostropheForm = (container) => {
         const form = container.querySelector('form[data-apos-form-form]');
         if (!form) {
-          return false;
+          // No form to wire up, so the SPA transition is already sufficient.
+          return true;
         }
 
-        if (!window?.apos?.aposForm) {
-          return false;
-        }
-
-        if (typeof window.apos.aposForm.enableAll !== 'function') {
+        if (typeof window?.apos?.aposForm?.enableAll !== 'function') {
+          // The form runtime only self-registers on a full page load.
           return false;
         }
 
@@ -135,13 +133,14 @@ function initBarbaPageTransitions() {
          * position here; the load-time restore relies on it surviving the reload.
          */
         window.location.reload();
-      } else {
-        /*
-         * SPA transition: the saved scroll position (if any) has been applied
-         * above, so it is safe to clear now.
-         */
-        clearSavedScrollPosition();
+        return undefined;
       }
+
+      /*
+       * SPA transition: the saved scroll position (if any) has been applied
+       * above, so it is safe to clear now.
+       */
+      clearSavedScrollPosition();
 
       // Remove the previous page container to avoid blinking
       data.current.container.remove();

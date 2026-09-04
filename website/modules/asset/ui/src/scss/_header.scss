@@ -115,7 +115,9 @@
   overflow: hidden;
   overflow-y: auto;
   width: 100%;
-  top: calc(#{$mobile-header-height} + 6px);
+  // Offsets resolve against .sf-header__content, which the 6px top bar has
+  // already pushed down, so no extra 6px here or a gap opens under the header.
+  top: $mobile-header-height;
   right: 0;
   height: calc(100vh - #{$mobile-header-height} - 6px);
 
@@ -192,10 +194,12 @@
 
         &::after {
           content: '';
-          display: block;
+          position: absolute;
+          left: 0;
+          right: 0;
+          bottom: -6px;
           height: 2px;
           background: linear-gradient(to right, #00a896, #50e4d2);
-          margin-top: 4px;
         }
       }
 
@@ -211,11 +215,7 @@
         display: block;
 
         &.active {
-          color: $gray-500;
-
-          &::after {
-            display: none;
-          }
+          color: #00786b;
         }
 
         &:hover,
@@ -284,7 +284,7 @@
       color: #232429;
 
       &.active {
-        color: #232429;
+        color: #00786b;
       }
 
       &:hover,
