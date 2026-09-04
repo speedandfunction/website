@@ -56,6 +56,28 @@
   }
 }
 
+@keyframes sfPageFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+// First-visit whole-page fade-in. Pure CSS so it needs no JS trigger and
+// degrades gracefully; public-bundle.css is a blocking <link> in <head>,
+// so the starting opacity applies before first paint.
+.sf-fade-in {
+  animation: sfPageFadeIn 0.8s ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sf-fade-in {
+    animation: none;
+  }
+}
+
 // Loading/Loaded states for reveal animations
 .loading {
   opacity: 0;
@@ -95,9 +117,11 @@
 
 // Ensure all widgets and containers are always visible in Apostrophe edit mode
 body.apos-is-admin,
-body.apos-has-admin-bar,
-[data-apos-refreshable],
-[data-apos-widget] {
+body.apos-has-admin-bar {
+  .sf-fade-in {
+    animation: none !important;
+  }
+
   .sf-container.loading,
   .breadcrumb.loading,
   .page-main_content.loading,

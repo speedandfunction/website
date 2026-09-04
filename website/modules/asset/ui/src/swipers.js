@@ -78,6 +78,28 @@ const initAllSwipers = function () {
         const swiperConfig = { ...config };
         const swiper = new Swiper(element, swiperConfig);
         swiper.init();
+
+        // Keyboard activation for custom navigation controls (role="button").
+        const nav = element.querySelector(config.navigation.el);
+        if (nav) {
+          nav.addEventListener('keydown', function (event) {
+            if (event.key !== 'Enter' && event.key !== ' ') {
+              return;
+            }
+            const target = event.target.closest(
+              '.sf-trusted-leaders__prev, .sf-trusted-leaders__next',
+            );
+            if (!target) {
+              return;
+            }
+            event.preventDefault();
+            if (target.classList.contains('sf-trusted-leaders__prev')) {
+              swiper.slidePrev();
+            } else {
+              swiper.slideNext();
+            }
+          });
+        }
       });
     }
   });

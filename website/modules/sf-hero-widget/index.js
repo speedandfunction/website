@@ -14,25 +14,21 @@ module.exports = {
   },
   fields: {
     add: {
-      headingPre: {
-        label: 'Heading (first line)',
+      heading: {
+        label: 'Heading',
         type: 'string',
-        help: 'The first line of the heading, e.g. "You don\'t need more code."',
-      },
-      headingMain: {
-        label: 'Heading (main line)',
-        type: 'string',
-        help: 'The main line of the heading, e.g. "You need software that can handle complexity —"',
-      },
-      headingAccent: {
-        label: 'Heading (accent / gradient)',
-        type: 'string',
-        help: 'The gradient-coloured part of the heading, e.g. "in the tech and in the team"',
+        textarea: true,
+        help: 'Enter the heading text. Use line breaks to separate lines: line 1 appears as a pre-heading, remaining lines form the main heading.',
       },
       ctaText: {
         label: 'CTA Text',
         type: 'string',
-        help: 'Call-to-action button text',
+        help: 'Call-to-action button text (desktop)',
+      },
+      ctaTextMobile: {
+        label: 'CTA Text (Mobile)',
+        type: 'string',
+        help: 'Call-to-action button text shown on mobile only',
       },
       ctaLink: {
         label: 'CTA Link',
@@ -63,10 +59,9 @@ module.exports = {
     },
     group: {
       fields: {
-        headingPre: 1,
-        headingMain: 1,
-        headingAccent: 1,
+        heading: 1,
         ctaText: 1,
+        ctaTextMobile: 1,
         ctaLink: 1,
         bodyText: 1,
       },

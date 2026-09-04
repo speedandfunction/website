@@ -562,13 +562,13 @@
   padding-bottom: 16px;
   position: sticky;
   z-index: 1;
-  top: $mobile-header-height;
+  top: calc(#{$mobile-header-height} + 6px);
 
   @include breakpoint-medium {
     flex-wrap: nowrap;
     align-items: flex-start;
     justify-content: flex-start;
-    top: $desktop-header-height;
+    top: calc(#{$desktop-header-height} + 6px);
     margin-top: 20px;
   }
 }
@@ -722,11 +722,11 @@
 
 .filter-anchor {
   position: relative;
-  top: -$mobile-header-height;
+  top: calc(-#{$mobile-header-height} - 6px);
   height: 0;
   visibility: hidden;
   @include breakpoint-medium {
-    top: -$desktop-header-height;
+    top: calc(-#{$desktop-header-height} - 6px);
   }
 }
 

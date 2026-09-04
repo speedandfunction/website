@@ -1,21 +1,40 @@
 <section class="sf-hero-section" data-sf-hero-widget>
   <div class="sf-hero-section__container">
     <div class="sf-hero-section__left">
-      {% if data.widget.headingPre %}
-      <p class="sf-hero-section__heading-pre">{{ data.widget.headingPre }}</p>
+      {# Support both the new single `heading` textarea and the legacy
+         `headingPre` / `headingMain` / `headingAccent` fields. #}
+      {% if not data.widget.heading and (data.widget.headingPre or data.widget.headingMain or data.widget.headingAccent) %}
+        {% set legacy = [] %}
+        {% if data.widget.headingPre %}{% set legacy = legacy.concat([data.widget.headingPre]) %}{% endif %}
+        {% if data.widget.headingMain %}{% set legacy = legacy.concat([data.widget.headingMain]) %}{% endif %}
+        {% if data.widget.headingAccent %}{% set legacy = legacy.concat([data.widget.headingAccent]) %}{% endif %}
+        {% set headingLines = legacy %}
+      {% elif data.widget.heading %}
+        {% set headingLines = data.widget.heading.split('\n') %}
+      {% else %}
+        {% set headingLines = [] %}
       {% endif %}
+      {% if headingLines.length > 1 %}
+      <p class="sf-hero-section__heading-pre">{{ headingLines[0] }}</p>
       <h1 class="sf-hero-section__heading">
-        {% if data.widget.headingMain %}
-        <span class="sf-hero-section__heading-main">{{ data.widget.headingMain }}</span>
-        {% endif %}
-        {% if data.widget.headingMain and data.widget.headingAccent %} {% endif %}
-        {% if data.widget.headingAccent %}
-        <span class="sf-hero-section__heading-main">{{ data.widget.headingAccent }}</span>
-        {% endif %}
+        {% for line in headingLines.slice(1) %}
+        <span class="sf-hero-section__heading-main">{{ line }}</span>
+        {% if not loop.last %} {% endif %}
+        {% endfor %}
       </h1>
+      {% elif headingLines.length == 1 %}
+      <h1 class="sf-hero-section__heading">
+        <span class="sf-hero-section__heading-main">{{ headingLines[0] }}</span>
+      </h1>
+      {% endif %}
       {% if data.widget.ctaText and data.widget.ctaLink %}
-      <a href="{{ data.widget.ctaLink }}" class="sf-hero-section__cta">
-        {{ data.widget.ctaText }}
+      <a href="{{ data.widget.ctaLink }}" class="sf-hero-section__cta sf-hero-section__cta--desktop">
+        <span>{{ data.widget.ctaText }}</span>
+      </a>
+      {% endif %}
+      {% if data.widget.ctaTextMobile and data.widget.ctaLink %}
+      <a href="{{ data.widget.ctaLink }}" class="sf-hero-section__cta sf-hero-section__cta--mobile">
+        <span>{{ data.widget.ctaTextMobile }}</span>
       </a>
       {% endif %}
       <div class="sf-hero-section__mobile-separator"></div>

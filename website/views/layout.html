@@ -21,9 +21,10 @@
   {% component '@apostrophecms/seo:tagManagerBody' with data %}
   <a class="sr-only" href="#main">Skip to content</a>
   <div
-    class="bp-wrapper relative"
+    class="bp-wrapper relative{% if not data.user %} sf-fade-in{% endif %}"
     data-barba="wrapper"
   >
+    <div class="sf-top-bar" aria-hidden="true"></div>
     {% render fragments.header() %}
     <main
       class="bp-main"
@@ -46,16 +47,7 @@
       </div>
     </main>
     {% render fragments.footer() %}
-    <noscript>
-      <style>
-        .breadcrumb.loading,
-        .sf-container.loading {
-          opacity: 1 !important;
-          overflow: visible !important;
-          visibility: visible !important;
-        }
-      </style>
-    </noscript>
+    {% render fragments.noscriptFallback() %}
   </div>
   {# Close .bp-wrapper #}
 {% endblock %}

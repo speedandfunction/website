@@ -41,7 +41,7 @@
   &__slide {
     display: flex;
     flex-direction: column;
-    gap: 32px;
+    gap: 0;
 
     @include breakpoint-medium {
       flex-direction: row;
@@ -89,6 +89,38 @@
     @include breakpoint-medium {
       margin-top: 24px;
     }
+
+    // Desktop variant: visible from breakpoint-medium up, hidden on mobile.
+    &--desktop {
+      display: none;
+
+      @include breakpoint-medium {
+        display: flex;
+      }
+    }
+
+    // Mobile variant: visible on mobile, hidden from breakpoint-medium up.
+    &--mobile {
+      display: flex;
+      margin-top: 40px;
+      gap: 0;
+
+      .sf-trusted-leaders__name {
+        margin-bottom: 10px;
+      }
+
+      .sf-trusted-leaders__position {
+        margin-bottom: 2px;
+      }
+
+      .sf-trusted-leaders__url {
+        margin-top: 20px;
+      }
+
+      @include breakpoint-medium {
+        display: none;
+      }
+    }
   }
 
   &__name {
@@ -128,6 +160,11 @@
     flex: 1;
     display: flex;
     align-items: flex-start;
+    margin-top: 10px;
+
+    @include breakpoint-medium {
+      margin-top: 0;
+    }
   }
 
   &__quote {
@@ -160,7 +197,7 @@
   &__nav {
     position: relative;
     z-index: 2;
-    margin-top: -16px;
+    margin-top: 42px;
 
     @include breakpoint-medium {
       margin-top: -24px;
@@ -200,6 +237,23 @@
 
     &::after {
       display: none;
+    }
+  }
+
+  // Short label ("prev") on mobile, full label ("previous") from tablet up.
+  &__label--short {
+    display: inline;
+
+    @include breakpoint-medium {
+      display: none;
+    }
+  }
+
+  &__label--full {
+    display: none;
+
+    @include breakpoint-medium {
+      display: inline;
     }
   }
 }
