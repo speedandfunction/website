@@ -133,7 +133,7 @@ function initBarbaPageTransitions() {
          * position here; the load-time restore relies on it surviving the reload.
          */
         window.location.reload();
-        return;
+        return undefined;
       }
 
       /*
