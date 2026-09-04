@@ -15,11 +15,11 @@
         class="sf-cta-block__button"
         {% if item.button.target[0] === '_blank' %}target="_blank"{% endif %}
       >
-        {{ item.button.linkTitle or path }}
+        <span>{{ item.button.linkTitle or path }}</span>
       </a>
       {% elif item.button.linkTitle %}
       <span class="sf-cta-block__button sf-cta-block__button--placeholder">
-        {{ item.button.linkTitle }}
+        <span>{{ item.button.linkTitle }}</span>
       </span>
       {% endif %}
       {% endfor %}

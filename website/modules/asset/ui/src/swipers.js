@@ -1,4 +1,4 @@
-import { Navigation } from 'swiper/modules';
+import { Mousewheel, Navigation } from 'swiper/modules';
 import Swiper from 'swiper';
 
 // Array of swiper configurations
@@ -56,12 +56,15 @@ const swiperConfigs = [
     config: {
       init: false,
       loop: true,
+      mousewheel: {
+        forceToAxis: true,
+      },
       navigation: {
         el: '.sf-trusted-leaders__controls',
         nextEl: '.sf-trusted-leaders__next',
         prevEl: '.sf-trusted-leaders__prev',
       },
-      modules: [Navigation],
+      modules: [Mousewheel, Navigation],
       slidesPerView: 1,
       spaceBetween: 0,
     },
