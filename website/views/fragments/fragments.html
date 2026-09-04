@@ -122,3 +122,19 @@ data.home._url %}
   </ol>
 </nav>
 {% endif %} {% endfragment %}
+
+{# Without JS, revealLoaded() never runs, so the elements it unhides stay
+   hidden. Force them visible. The page fade-in is pure CSS and needs no
+   fallback here. #}
+{% fragment noscriptFallback() %}
+<noscript>
+  <style>
+    .breadcrumb.loading,
+    .sf-container.loading {
+      opacity: 1 !important;
+      overflow: visible !important;
+      visibility: visible !important;
+    }
+  </style>
+</noscript>
+{% endfragment %}

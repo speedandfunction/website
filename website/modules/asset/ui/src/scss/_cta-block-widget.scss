@@ -79,6 +79,12 @@
       color: #ffffff;
     }
 
+    @include breakpoint-medium {
+      &:hover {
+        color: #ffffff;
+      }
+    }
+
     &--placeholder {
       cursor: default;
       opacity: 0.5;
