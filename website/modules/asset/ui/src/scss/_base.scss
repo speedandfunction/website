@@ -29,20 +29,28 @@
   }
 }
 
+// Fine film-grain overlay matching the Figma background (node 2086:370).
+// Measured from the Figma render: monochrome, per-pixel grain with an
+// amplitude of ~2/255 that also settles flat white down to ~#f7f7f7.
+// noise.png is a 128px tile of gray ~N(128, 31.9) at a constant alpha of
+// 16/255, which reproduces both the grain amplitude and that slight tint.
+// Per-pixel white noise has no low-frequency structure, so it tiles seamlessly.
+$sf-noise-texture: url('/images/noise.png');
+
 .sf-container--home {
   max-width: none;
   padding-left: 0;
   padding-right: 0;
   padding-top: 0;
   background-color: #ffffff;
-  background-image: url('/images/home-bg-mobile.webp');
-  background-size: cover;
-  background-position: top center;
+  background-image: $sf-noise-texture, url('/images/home-bg-mobile.webp');
+  background-size: 128px 128px, cover;
+  background-position: top left, top center;
   background-attachment: fixed;
-  background-repeat: no-repeat;
+  background-repeat: repeat, no-repeat;
 
   @include breakpoint-medium {
-    background-image:
+    background-image: $sf-noise-texture,
       radial-gradient(
         ellipse 140% 46% at -15% 30%,
         #a8f2e9 0%,
@@ -58,7 +66,9 @@
         #ffd1ca 0%,
         rgba(255, 209, 202, 0) 70%
       );
-    background-size: auto;
+    background-size: 128px 128px, auto, auto, auto;
+    background-position: top left, 0 0, 0 0, 0 0;
+    background-repeat: repeat, no-repeat, no-repeat, no-repeat;
   }
 
   @include breakpoint-extra-extra-large {

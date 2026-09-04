@@ -89,8 +89,13 @@
     }
   }
 
+  // Separator directly after the brand: brand already provides the gap.
+  .sf-footer__brand + .sf-footer__separator {
+    margin-top: 0;
+  }
+
   .sf-footer__heading {
-    @include font-settings(12px, 140%, 700);
+    @include font-settings(12px, 100%, 800);
     color: #dedfe4;
     letter-spacing: 1.2px;
     text-transform: uppercase;
@@ -120,14 +125,27 @@
         @include font-settings(14px, 140%, 500);
       }
     }
+
+    // Mobile: paragraphs flow as continuous wrapping text.
+    @media (max-width: #{$breakpoint-medium - 1px}) {
+      p {
+        display: inline;
+        white-space: normal;
+        word-break: break-word;
+
+        & + p::before {
+          content: ' ';
+        }
+      }
+    }
   }
 
   .sf-footer__brand {
-    @include font-settings(12px, 140%, 700);
+    @include font-settings(12px, 100%, 800);
     color: #dedfe4;
     letter-spacing: 1.2px;
     text-transform: uppercase;
-    margin: 0 0 12px;
+    margin: 0 0 10px;
 
     @include breakpoint-medium {
       @include font-settings(14px, 140%, 700);
@@ -138,11 +156,15 @@
 
   .sf-footer__links-left {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: flex-start;
+    flex-wrap: wrap;
+    justify-content: space-between;
     gap: 12px;
 
     @include breakpoint-medium {
+      flex-direction: column;
+      justify-content: flex-start;
       gap: 8px;
     }
   }
@@ -168,10 +190,20 @@
       @include font-settings(14px, 140%, 500);
     }
 
-    &:hover,
-    &:focus {
+    &:hover {
       color: #dedfe4;
       text-decoration: underline;
+    }
+
+    &:focus {
+      outline: none;
+    }
+
+    @include breakpoint-medium {
+      &:focus {
+        color: #dedfe4;
+        text-decoration: underline;
+      }
     }
   }
 

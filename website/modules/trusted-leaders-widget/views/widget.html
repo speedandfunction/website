@@ -4,6 +4,36 @@
     <h2 class="sf-trusted-leaders__heading">{{ data.widget.heading }}</h2>
     {% endif %}
 
+    {% macro infoBlock(testimonial, modifier) %}
+    <div class="sf-trusted-leaders__info{% if modifier %} sf-trusted-leaders__info--{{ modifier }}{% endif %}">
+      {% if testimonial.title %}
+      <h4 class="sf-trusted-leaders__name">{{ testimonial.title }}</h4>
+      {% endif %}
+      {% if testimonial.position %}
+      <p class="sf-trusted-leaders__position">{{ testimonial.position }}</p>
+      {% endif %}
+      {% if testimonial.organization %}
+      <p class="sf-trusted-leaders__organization">{{ testimonial.organization }}</p>
+      {% endif %}
+      {% if testimonial.url %}
+      {% set urlWithoutProtocol = testimonial.url %}
+      {% if testimonial.url.split('://') | length > 1 %}
+      {% set urlWithoutProtocol = testimonial.url.split('://')[1] %}
+      {% endif %}
+      {% set domainWithOrWithoutWww = urlWithoutProtocol.split('/')[0] %}
+      {% set cleanDomain = domainWithOrWithoutWww | trim | replace('www.', '') %}
+      <a
+        href="{{ testimonial.url }}"
+        target="_blank"
+        class="sf-trusted-leaders__url"
+        rel="noopener noreferrer"
+      >
+        {{ cleanDomain }}
+      </a>
+      {% endif %}
+    </div>
+    {% endmacro %}
+
     {% if data.widget._testimonials and data.widget._testimonials.length > 0 %}
     <div class="sf-trusted-leaders__swiper sf-trusted-leaders-swiper swiper">
       <div class="swiper-wrapper">
@@ -27,33 +57,7 @@
                   {% endif %}
                 />
               </div>
-              <div class="sf-trusted-leaders__info">
-                {% if testimonial.title %}
-                <h4 class="sf-trusted-leaders__name">{{ testimonial.title }}</h4>
-                {% endif %}
-                {% if testimonial.position %}
-                <p class="sf-trusted-leaders__position">{{ testimonial.position }}</p>
-                {% endif %}
-                {% if testimonial.organization %}
-                <p class="sf-trusted-leaders__organization">{{ testimonial.organization }}</p>
-                {% endif %}
-                {% if testimonial.url %}
-                {% set urlWithoutProtocol = testimonial.url %}
-                {% if testimonial.url.split('://') | length > 1 %}
-                {% set urlWithoutProtocol = testimonial.url.split('://')[1] %}
-                {% endif %}
-                {% set domainWithOrWithoutWww = urlWithoutProtocol.split('/')[0] %}
-                {% set cleanDomain = domainWithOrWithoutWww | trim | replace('www.', '') %}
-                <a
-                  href="{{ testimonial.url }}"
-                  target="_blank"
-                  class="sf-trusted-leaders__url"
-                  rel="noopener noreferrer"
-                >
-                  {{ cleanDomain }}
-                </a>
-                {% endif %}
-              </div>
+              {{ infoBlock(testimonial, 'desktop') }}
             </div>
             <div class="sf-trusted-leaders__right">
               {% if testimonial.feedback %}
@@ -63,6 +67,7 @@
               </blockquote>
               {% endif %}
             </div>
+            {{ infoBlock(testimonial, 'mobile') }}
           </div>
         </div>
         {% endfor %}
@@ -71,8 +76,8 @@
 
     <div class="sf-trusted-leaders__nav">
       <div class="sf-trusted-leaders__controls">
-        <div class="sf-trusted-leaders__prev">← prev</div>
-        <div class="sf-trusted-leaders__next">next →</div>
+        <div class="sf-trusted-leaders__prev" role="button" aria-label="previous" tabindex="0">←&nbsp;<span class="sf-trusted-leaders__label--short" aria-hidden="true">prev</span><span class="sf-trusted-leaders__label--full" aria-hidden="true">previous</span></div>
+        <div class="sf-trusted-leaders__next" role="button" aria-label="next" tabindex="0">next →</div>
       </div>
       <div class="sf-trusted-leaders__divider"></div>
     </div>

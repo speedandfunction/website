@@ -1,7 +1,25 @@
+.sf-top-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  z-index: 12;
+  background: linear-gradient(
+    93.75deg,
+    #ffc261 0%,
+    #f7edd1 25%,
+    rgba(255, 179, 167, 0.6) 40%,
+    #00a896 55%,
+    #50e4d2 78%,
+    #36ffe7 100%
+  );
+}
+
 .sf-header {
   background-color: $white;
   position: sticky;
-  top: 0;
+  top: 6px;
   height: $mobile-header-height;
   z-index: 11;
 
@@ -52,9 +70,13 @@
   @include breakpoint-medium {
     display: none;
   }
-  &:hover,
-  &:focus {
+  &:hover {
     color: #50e4d2;
+  }
+  &:focus,
+  &:focus-visible {
+    outline: none;
+    color: #232429;
   }
 
   &__icon {
@@ -93,9 +115,9 @@
   overflow: hidden;
   overflow-y: auto;
   width: 100%;
-  top: $mobile-header-height;
+  top: calc(#{$mobile-header-height} + 6px);
   right: 0;
-  height: calc(100vh - #{$mobile-header-height});
+  height: calc(100vh - #{$mobile-header-height} - 6px);
 
   @include breakpoint-medium {
     position: static;
@@ -212,7 +234,7 @@
 // the Figma full-screen menu panel design (Figma 2204:395).
 .sf-header--overlay {
   position: absolute;
-  top: 0;
+  top: 6px;
   left: 0;
   right: 0;
   background-color: transparent;
@@ -245,9 +267,13 @@
   .sf-menu {
     color: #232429;
 
-    &:hover,
-    &:focus {
+    &:hover {
       color: #50e4d2;
+    }
+    &:focus,
+    &:focus-visible {
+      outline: none;
+      color: #232429;
     }
   }
 
