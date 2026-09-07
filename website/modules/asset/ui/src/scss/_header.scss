@@ -108,10 +108,14 @@
   position: absolute;
   background-color: $white;
   z-index: 10;
-  transform: translateY(-200%);
+  transform: translateY(-100%);
+  opacity: 0;
   visibility: hidden;
-  transition: transform 1s cubic-bezier(0.77, 0, 0.175, 1),
-              visibility 0s linear 1s;
+  // Expo-out easing starts immediately and decelerates, so the panel reads as
+  // instant on tap instead of the slow ramp-in of an ease-in-out curve.
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 0.3s ease-out,
+              visibility 0s linear 0.45s;
   overflow: hidden;
   overflow-y: auto;
   width: 100%;
@@ -129,6 +133,7 @@
     width: auto;
     padding-right: 0;
     transform: none;
+    opacity: 1;
     visibility: visible;
     transition: none;
     overflow: visible;
@@ -137,8 +142,10 @@
 
   &.open {
     transform: translateY(0);
+    opacity: 1;
     visibility: visible;
-    transition: transform 1s cubic-bezier(0.77, 0, 0.175, 1),
+    transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+                opacity 0.25s ease-out,
                 visibility 0s linear 0s;
   }
 
@@ -241,7 +248,10 @@
 
   &:has(.sf-menu.open) {
     @media (max-width: #{$breakpoint-medium - 1px}) {
+      // Fade the white in alongside the sliding panel. Without a transition the
+      // header snaps to white while the menu is still off-screen.
       background-color: $white;
+      transition: background-color 0.3s ease-out;
     }
   }
 

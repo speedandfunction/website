@@ -1,0 +1,30 @@
+<section class="sf-info-columns" data-info-columns-widget>
+  <div class="sf-info-columns__container">
+    {% if data.widget.heading %}
+    <h2 class="sf-info-columns__heading">{{ data.widget.heading }}</h2>
+    {% endif %}
+
+    {% set hasLeft = data.widget.leftColumn and data.widget.leftColumn.items and data.widget.leftColumn.items.length > 0 %}
+    {% set hasRight = data.widget.rightColumn and data.widget.rightColumn.items and data.widget.rightColumn.items.length > 0 %}
+
+    {% if hasLeft or hasRight %}
+    <div class="sf-info-columns__divider"></div>
+    {% endif %}
+
+    <div class="sf-info-columns__grid{% if hasLeft and hasRight %} sf-info-columns__grid--divided{% endif %}">
+      {% if data.widget.leftColumn %}
+      <div class="sf-info-columns__column sf-info-columns__column--left">
+        {% area data.widget, 'leftColumn' %}
+      </div>
+      {% endif %}
+      {% if hasLeft and hasRight %}
+      <div class="sf-info-columns__mobile-separator"></div>
+      {% endif %}
+      {% if data.widget.rightColumn %}
+      <div class="sf-info-columns__column sf-info-columns__column--right">
+        {% area data.widget, 'rightColumn' %}
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</section>

@@ -16,10 +16,4 @@ const initFilterModal = function () {
   });
 };
 
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initFilterModal);
-} else {
-  initFilterModal();
-}
-
 export { initFilterModal };

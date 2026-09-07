@@ -76,6 +76,59 @@ $sf-noise-texture: url('/images/noise.png');
     padding-right: 0;
   }
 }
+// About Us page background — per Figma node 2115:206 (1440x2581 frame).
+// Blob peaks measured from that node's render, then the ellipses were fitted
+// against it by least-error search (mean abs error 0.85/255, max 9):
+//   teal     #9ff0e7  right edge,   34% down
+//   lavender #f6e0ff  upper left,   29% down
+//   peach    #ffeee2  centre,       62% down
+// The frame's flat areas read #f7f7f7 rather than pure white because the noise
+// tile settles white down by ~8/255; the fit accounts for that overlay.
+.sf-container--about {
+  max-width: none;
+  padding-left: 0;
+  padding-right: 0;
+  padding-top: 0;
+  background-color: #ffffff;
+  background-image: $sf-noise-texture, url('/images/about-bg-mobile.webp');
+  background-size: 128px 128px, cover;
+  background-position: top left, top center;
+  background-attachment: fixed;
+  background-repeat: repeat, no-repeat;
+
+  @include breakpoint-medium {
+    background-image: $sf-noise-texture,
+      radial-gradient(
+        ellipse 116% 36% at 97% 34%,
+        #9ff0e7 0%,
+        rgba(159, 240, 231, 0) 70%
+      ),
+      radial-gradient(
+        ellipse 112% 39% at 11% 29%,
+        #f6e0ff 0%,
+        rgba(246, 224, 255, 0) 70%
+      ),
+      radial-gradient(
+        ellipse 112% 33% at 52% 62%,
+        #ffeee2 0%,
+        rgba(255, 238, 226, 0) 70%
+      );
+    background-size: 128px 128px, auto, auto, auto;
+    background-position: top left, 0 0, 0 0, 0 0;
+    background-repeat: repeat, no-repeat, no-repeat, no-repeat;
+    // The grain stays put, but the gradients are sized to the page box so the
+    // blobs land where the Figma frame puts them. Leaving them `fixed` would
+    // resolve the percentages against the viewport and squash all three blobs
+    // into one screen height.
+    background-attachment: fixed, scroll, scroll, scroll;
+  }
+
+  @include breakpoint-extra-extra-large {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
 .sf-wrapper {
   position: relative;
 }

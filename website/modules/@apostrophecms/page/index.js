@@ -19,6 +19,10 @@ module.exports = {
         label: 'Home - Simplified',
       },
       {
+        name: '@apostrophecms/about-page',
+        label: 'About Page',
+      },
+      {
         name: 'case-studies-page',
         label: 'Case Studies Page',
       },

@@ -39,6 +39,13 @@
     @include breakpoint-medium {
       grid-template-columns: repeat(3, 1fr);
     }
+
+    // When there are exactly 4 cards, show all 4 in a single row.
+    &[data-count='4'] {
+      @include breakpoint-medium {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
   }
 
   &__card {
@@ -73,6 +80,27 @@
         margin-top: -1px;
       }
     }
+
+    // 4-column layout: reset 3-column border rules and apply 4-column ones.
+    .sf-purpose-cards__grid[data-count='4'] & {
+      @include breakpoint-medium {
+        // Override 3n+1 left-border reset with 4n+1.
+        &:nth-child(3n + 1) {
+          margin-left: -1px;
+        }
+        &:nth-child(4n + 1) {
+          margin-left: 0;
+        }
+
+        // All 4 cards are in one row, no top margin collapse needed.
+        &:nth-child(n + 4) {
+          margin-top: 0;
+        }
+        &:nth-child(n + 5) {
+          margin-top: -1px;
+        }
+      }
+    }
   }
 
   &__card-number {
@@ -80,6 +108,16 @@
     color: #00a896;
     letter-spacing: 1.2px;
     text-transform: uppercase;
+  }
+
+  &__card-title {
+    @include font-settings(16px, 140%, 700);
+    color: #232429;
+    margin: 0;
+
+    @include breakpoint-medium {
+      @include font-settings(18px, 140%, 700);
+    }
   }
 
   &__card-text {

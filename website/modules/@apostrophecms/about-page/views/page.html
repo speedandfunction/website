@@ -1,0 +1,11 @@
+{# About Us page — same structure as Homepage but with the
+   lavender/teal background gradient from the Figma design. #}
+
+{% extends "layout.html" %}
+
+{% block main %}
+  <div class="sf-about-bg">
+    {% area data.page, 'header' %}
+    {% area data.page, 'main' %}
+  </div>
+{% endblock %}
