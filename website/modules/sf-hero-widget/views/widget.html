@@ -8,24 +8,14 @@
         {% if data.widget.headingPre %}{% set legacy = legacy.concat([data.widget.headingPre]) %}{% endif %}
         {% if data.widget.headingMain %}{% set legacy = legacy.concat([data.widget.headingMain]) %}{% endif %}
         {% if data.widget.headingAccent %}{% set legacy = legacy.concat([data.widget.headingAccent]) %}{% endif %}
-        {% set headingLines = legacy %}
+        {% set headingText = legacy.join('\n') %}
       {% elif data.widget.heading %}
-        {% set headingLines = data.widget.heading.split('\n') %}
+        {% set headingText = data.widget.heading %}
       {% else %}
-        {% set headingLines = [] %}
+        {% set headingText = '' %}
       {% endif %}
-      {% if headingLines.length > 1 %}
-      <p class="sf-hero-section__heading-pre">{{ headingLines[0] }}</p>
-      <h1 class="sf-hero-section__heading">
-        {% for line in headingLines.slice(1) %}
-        <span class="sf-hero-section__heading-main">{{ line }}</span>
-        {% if not loop.last %} {% endif %}
-        {% endfor %}
-      </h1>
-      {% elif headingLines.length == 1 %}
-      <h1 class="sf-hero-section__heading">
-        <span class="sf-hero-section__heading-main">{{ headingLines[0] }}</span>
-      </h1>
+      {% if headingText %}
+      <h1 class="sf-hero-section__heading">{{ headingText }}</h1>
       {% endif %}
       {% if data.widget.ctaText and data.widget.ctaLink %}
       <a href="{{ data.widget.ctaLink }}" class="sf-hero-section__cta sf-hero-section__cta--desktop">

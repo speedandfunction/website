@@ -9,6 +9,8 @@ import { initPhoneFormatting } from './js/phoneFormat';
 import { initSmoothCounters } from './smoothCounters';
 import { initFontChanger } from './initFontChanger';
 import { initImageLozad } from './initImageLozad';
+import { initFilterModal } from './initFilterModal';
+import { initSearchHandler } from './searchHandler';
 import { setupTagSearchForInput } from './searchInputHandler';
 import { initClientSideFiltering } from './clientSideFiltering';
 import {
@@ -73,6 +75,8 @@ function initializeAllComponents() {
   initCaseStudiesTagFilter();
   initCaseStudiesFilterHandler();
   initClientSideFiltering();
+  initFilterModal();
+  initSearchHandler();
 }
 
 function initBarbaPageTransitions() {

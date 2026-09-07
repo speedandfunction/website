@@ -117,6 +117,7 @@ function createAposConfig() {
       'big-block-widget': {},
       'sf-hero-widget': {},
       'purpose-cards-widget': {},
+      'info-columns-widget': {},
       'trusted-leaders-widget': {},
       'cta-block-widget': {},
       /*
@@ -142,6 +143,7 @@ function createAposConfig() {
       // The project"s first custom page type.
       'default-page': {},
       'home-simplified': {},
+      '@apostrophecms/about-page': {},
       '@apostrophecms/import-export': {},
       'cases-tags': {},
       'case-studies': {},

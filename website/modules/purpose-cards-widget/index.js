@@ -21,6 +21,11 @@ module.exports = {
         min: 1,
         fields: {
           add: {
+            title: {
+              label: 'Title (optional)',
+              type: 'string',
+              help: 'Card title, e.g. "Development"',
+            },
             description: {
               label: 'Description',
               type: 'string',

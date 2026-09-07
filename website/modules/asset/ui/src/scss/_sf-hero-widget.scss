@@ -17,8 +17,7 @@
   body.apos-has-admin-bar &,
   [data-apos-widget] &,
   [data-apos-refreshable] & {
-    .sf-hero-section__heading-pre,
-    .sf-hero-section__heading-main,
+    .sf-hero-section__heading,
     .sf-hero-section__cta,
     .sf-hero-section__right {
       opacity: 1 !important;
@@ -41,7 +40,7 @@
       flex-direction: row;
       align-items: flex-start;
       padding: 160px 100px 100px;
-      gap: 94px;
+      gap: 60px;
     }
   }
 
@@ -49,21 +48,8 @@
     flex: 1 1 auto;
 
     @include breakpoint-medium {
-      flex: 0 0 610px;
-      max-width: 610px;
-    }
-  }
-
-  &__heading-pre {
-    @include font-settings(42px, 42px, 700);
-    color: #232429;
-    letter-spacing: -1.6px;
-    margin: 0 0 0;
-
-    @include breakpoint-medium {
-      @include font-settings(58px, 100%, 700);
-      letter-spacing: -1.6px;
-      margin: 0 0 8px;
+      flex: 0 0 680px;
+      max-width: 680px;
     }
   }
 
@@ -73,18 +59,11 @@
     letter-spacing: -1.6px;
     margin: 0;
     text-transform: none;
+    white-space: pre-line;
 
     @include breakpoint-medium {
       @include font-settings(58px, 100%, 700);
       letter-spacing: -1.6px;
-    }
-  }
-
-  &__heading-main {
-    display: inline;
-
-    @include breakpoint-medium {
-      display: inline;
     }
   }
 

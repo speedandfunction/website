@@ -36,6 +36,7 @@ module.exports = {
         'home-hero': {},
         'sf-hero': {},
         'purpose-cards': {},
+        'info-columns': {},
         'trusted-leaders': {},
         'cta-block': {},
         'leadership-team': {},
