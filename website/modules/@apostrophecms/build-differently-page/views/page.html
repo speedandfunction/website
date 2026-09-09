@@ -1,0 +1,11 @@
+{# Build Differently page — same structure as Homepage/About Us but with the
+   peach-cloud background gradient from the Figma design (node 2277:516). #}
+
+{% extends "layout.html" %}
+
+{% block main %}
+  <div class="sf-build-bg">
+    {% area data.page, 'header' %}
+    {% area data.page, 'main' %}
+  </div>
+{% endblock %}

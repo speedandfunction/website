@@ -24,6 +24,7 @@ module.exports = {
             title: {
               label: 'Title (optional)',
               type: 'string',
+              textarea: true,
               help: 'Card title, e.g. "Development"',
             },
             description: {

@@ -39,6 +39,7 @@ module.exports = {
         'info-columns': {},
         'trusted-leaders': {},
         'cta-block': {},
+        'statement-cta': {},
         'leadership-team': {},
       },
       columns: 2,

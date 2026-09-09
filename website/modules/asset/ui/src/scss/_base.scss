@@ -129,6 +129,57 @@ $sf-noise-texture: url('/images/noise.png');
   }
 }
 
+// Build Differently page background — per Figma node 2277:517 (1440x1751).
+// The three ellipses were fitted by least-squares against that node's render
+// (mean abs error 0.27/255, max 4.8). The render already carries the grain
+// overlay, so it was de-grained and un-composited against the noise tile
+// before fitting; otherwise the ~8/255 the grain takes off white gets absorbed
+// into the blob colours and washes them out.
+//   peach #ffe2cd  centre,     26% down
+//   teal  #b7f4ed  left edge,  60% down
+//   pink  #ffe2e7  right,      64% down
+.sf-container--build-differently {
+  max-width: none;
+  padding-left: 0;
+  padding-right: 0;
+  padding-top: 0;
+  background-color: #ffffff;
+  background-image: $sf-noise-texture,
+    url('/images/build-differently-bg-mobile.webp');
+  background-size: 128px 128px, cover;
+  background-position: top left, top center;
+  background-attachment: fixed;
+  background-repeat: repeat, no-repeat;
+
+  @include breakpoint-medium {
+    background-image: $sf-noise-texture,
+      radial-gradient(
+        ellipse 72% 34% at 6% 60%,
+        #b7f4ed 0%,
+        rgba(183, 244, 237, 0) 74%
+      ),
+      radial-gradient(
+        ellipse 61% 28% at 80% 64%,
+        #ffe2e7 0%,
+        rgba(255, 226, 231, 0) 72%
+      ),
+      radial-gradient(
+        ellipse 87% 40% at 50% 26%,
+        #ffe2cd 0%,
+        rgba(255, 226, 205, 0) 75%
+      );
+    background-size: 128px 128px, auto, auto, auto;
+    background-position: top left, 0 0, 0 0, 0 0;
+    background-repeat: repeat, no-repeat, no-repeat, no-repeat;
+    background-attachment: fixed, scroll, scroll, scroll;
+  }
+
+  @include breakpoint-extra-extra-large {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
 .sf-wrapper {
   position: relative;
 }

@@ -114,6 +114,7 @@
     @include font-settings(16px, 140%, 700);
     color: #232429;
     margin: 0;
+    white-space: pre-line;
 
     @include breakpoint-medium {
       @include font-settings(18px, 140%, 700);

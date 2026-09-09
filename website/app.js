@@ -120,6 +120,7 @@ function createAposConfig() {
       'info-columns-widget': {},
       'trusted-leaders-widget': {},
       'cta-block-widget': {},
+      'statement-cta-widget': {},
       /*
        * 'links-buttons-widget': {},
        * 'team-carousel-widget': {},
@@ -144,6 +145,7 @@ function createAposConfig() {
       'default-page': {},
       'home-simplified': {},
       '@apostrophecms/about-page': {},
+      '@apostrophecms/build-differently-page': {},
       '@apostrophecms/import-export': {},
       'cases-tags': {},
       'case-studies': {},
