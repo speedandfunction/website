@@ -3,7 +3,7 @@ module.exports = {
   options: {
     refreshOnRestart: true,
     breakpointPreviewMode: {
-      enable: false
-    }
+      enable: false,
+    },
   },
 };
