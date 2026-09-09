@@ -36,7 +36,7 @@
       {% endif %}
     >
       {% render fragments.breadcrumbs(data) %}
-      <div class="sf-container {% if data.page and data.page.type == '@apostrophecms/home-page' %}sf-container--home{% elif data.page and data.page.type == '@apostrophecms/about-page' %}sf-container--about{% endif %} {% if not data.user %}loading{% else %}loaded{% endif %}" aria-busy="{% if not data.user %}true{% else %}false{% endif %}" data-reveal="dom">
+      <div class="sf-container {% if data.page and data.page.type == '@apostrophecms/home-page' %}sf-container--home{% elif data.page and data.page.type == '@apostrophecms/about-page' %}sf-container--about{% elif data.page and data.page.type == '@apostrophecms/build-differently-page' %}sf-container--build-differently{% endif %} {% if not data.user %}loading{% else %}loaded{% endif %}" aria-busy="{% if not data.user %}true{% else %}false{% endif %}" data-reveal="dom">
 {% endblock %}
 
 {% block main %}

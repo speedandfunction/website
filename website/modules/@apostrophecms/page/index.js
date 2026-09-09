@@ -23,6 +23,10 @@ module.exports = {
         label: 'About Page',
       },
       {
+        name: '@apostrophecms/build-differently-page',
+        label: 'Build Differently Page',
+      },
+      {
         name: 'case-studies-page',
         label: 'Case Studies Page',
       },

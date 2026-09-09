@@ -1,0 +1,158 @@
+/* Statement + CTA Widget — based on Figma nodes 2277:574, 2277:581, 2277:570-571, 2277:583-584 */
+
+.sf-statement-cta {
+  margin-top: 80px;
+  // Padding, not margin: this widget is normally the last child of
+  // .sf-container, which has no bottom padding or border, so a bottom margin
+  // would collapse through the container and leave the gap outside the element
+  // that paints the page background gradient — showing the body's white.
+  padding-bottom: 80px;
+
+  @include breakpoint-medium {
+    margin-top: 120px;
+    // Figma: buttons end at y=1611, footer starts at y=1751.
+    padding-bottom: 140px;
+  }
+
+  &__container {
+    width: 100%;
+    max-width: $breakpoint-extra-extra-large;
+    margin: 0 auto;
+    padding: 0 40px;
+
+    @include breakpoint-medium {
+      padding: 0 100px;
+    }
+  }
+
+  &__heading {
+    @include font-settings(26px, 120%, 700);
+    color: #040406;
+    letter-spacing: -1.2px;
+    margin: 0 0 32px;
+    text-transform: none;
+    white-space: pre-line;
+
+    @include breakpoint-medium {
+      @include font-settings(36px, 120%, 700);
+      letter-spacing: -1.2px;
+      // Figma: left=100px, right=25%+52px → width ≈ 75% of content area.
+      max-width: 75%;
+      margin: 0 0 40px;
+    }
+  }
+
+  &__divider {
+    display: none;
+
+    @include breakpoint-medium {
+      display: block;
+      width: 100%;
+      height: 1px;
+      background-color: rgba(222, 223, 228, 0.8);
+      margin: 0 0 60px;
+    }
+  }
+
+  &__buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    // Shrink to the widest button so stretch makes all buttons match
+    // that width without expanding to the full container.
+    width: fit-content;
+    gap: 0;
+
+    @include breakpoint-medium {
+      flex-direction: row;
+      gap: 0;
+    }
+  }
+
+  &__button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1.2px solid #828388;
+    height: 44px;
+    padding: 0 24px;
+    text-decoration: none;
+    @include font-settings(12px, 100%, 700);
+    color: #040406;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s ease;
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: #232429;
+      transform: scaleX(0);
+      transform-origin: 0 50%;
+      transition: transform 0.44s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    span {
+      position: relative;
+      z-index: 1;
+      transition: color 0.26s ease;
+    }
+
+    @include breakpoint-medium {
+      min-width: 305px;
+      height: 64px;
+      padding: 0 32px;
+      border-color: #232429;
+      @include font-settings(16px, 100%, 700);
+      color: #232429;
+
+      // Collapse adjacent borders (Figma: buttons share a 1px border).
+      &:not(:first-child) {
+        margin-left: -1.2px;
+      }
+    }
+
+    &:hover,
+    &:focus {
+      border-color: #232429;
+
+      &::before {
+        transform: scaleX(1);
+      }
+
+      span {
+        color: #ffffff;
+      }
+    }
+
+    &--placeholder {
+      cursor: default;
+      opacity: 0.5;
+
+      &::before {
+        display: none;
+      }
+
+      &:hover,
+      &:focus {
+        border-color: #828388;
+
+        span {
+          color: #040406;
+        }
+
+        @include breakpoint-medium {
+          border-color: #232429;
+
+          span {
+            color: #232429;
+          }
+        }
+      }
+    }
+  }
+}
