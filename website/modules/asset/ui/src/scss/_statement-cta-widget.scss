@@ -62,10 +62,12 @@
     // that width without expanding to the full container.
     width: fit-content;
     gap: 0;
+    margin-top: 40px;
 
     @include breakpoint-medium {
       flex-direction: row;
       gap: 0;
+      margin-top: 60px;
     }
   }
 
@@ -85,6 +87,11 @@
     position: relative;
     overflow: hidden;
     transition: border-color 0.3s ease;
+
+    // Mobile: buttons stack vertically — collapse the shared border.
+    &:not(:first-child) {
+      margin-top: -1.2px;
+    }
 
     &::before {
       content: '';
@@ -110,8 +117,9 @@
       @include font-settings(16px, 100%, 700);
       color: #232429;
 
-      // Collapse adjacent borders (Figma: buttons share a 1px border).
+      // Reset mobile vertical border collapse; apply horizontal instead.
       &:not(:first-child) {
+        margin-top: 0;
         margin-left: -1.2px;
       }
     }
@@ -153,6 +161,84 @@
           }
         }
       }
+    }
+  }
+
+  // Numbered rows — Figma nodes 2294:875–896.
+  // Each row: 1px divider on top, number + title on the left,
+  // description on the right half.
+  &__rows {
+    margin-top: 0;
+  }
+
+  &__row {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 24px 0;
+    border-top: 1px solid rgba(222, 223, 228, 0.8);
+
+    &:first-child {
+      // The heading divider above already provides the top line.
+      border-top: 0;
+    }
+
+    &:last-child {
+      border-bottom: 1px solid rgba(222, 223, 228, 0.8);
+    }
+
+    @include breakpoint-medium {
+      flex-direction: row;
+      align-items: center;
+      gap: 0;
+      // Figma: row height ~130px, divider at top.
+      padding: 0;
+      height: 130px;
+    }
+  }
+
+  &__row-left {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+
+    @include breakpoint-medium {
+      flex-direction: row;
+      align-items: baseline;
+      // Figma: number at 8.33%+20px, title at 8.33%+74px (54px gap),
+      // description at 50%+39px. Left column extends past the midpoint
+      // so the description starts a bit right of centre.
+      flex: 0 0 55%;
+      gap: 54px;
+      padding-right: 48px;
+    }
+  }
+
+  &__row-number {
+    @include font-settings(12px, 100%, 700);
+    color: #00a896;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  &__row-title {
+    @include font-settings(18px, 120%, 700);
+    color: #232429;
+    margin: 0;
+    white-space: pre-line;
+  }
+
+  &__row-description {
+    @include font-settings(18px, 140%, 500);
+    color: #232429;
+    margin: 0;
+
+    @include breakpoint-medium {
+      // Figma: description starts at 50%+39px, width ~541px.
+      flex: 1;
+      max-width: 541px;
     }
   }
 }

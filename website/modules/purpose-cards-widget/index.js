@@ -14,6 +14,17 @@ module.exports = {
         textarea: true,
         help: 'The heading text, e.g. "Purpose-built software for meaningful change"',
       },
+      cardsPerRow: {
+        label: 'Number of cards in row',
+        type: 'select',
+        choices: [
+          { label: '2', value: '2' },
+          { label: '3', value: '3' },
+          { label: '4', value: '4' },
+        ],
+        def: '3',
+        help: 'How many cards to display per row on desktop',
+      },
       cards: {
         label: 'Cards',
         type: 'array',
@@ -40,6 +51,7 @@ module.exports = {
     group: {
       fields: {
         headingMain: 1,
+        cardsPerRow: 1,
         cards: 1,
       },
     },

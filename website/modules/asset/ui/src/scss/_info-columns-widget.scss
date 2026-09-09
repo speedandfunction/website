@@ -32,10 +32,15 @@
   }
 
   &__divider {
-    width: 100%;
-    height: 1px;
-    background-color: rgba(222, 223, 228, 0.8);
-    margin: 0;
+    display: none;
+
+    @include breakpoint-medium {
+      display: block;
+      width: 100%;
+      height: 1px;
+      background-color: rgba(222, 223, 228, 0.8);
+      margin: 0;
+    }
   }
 
   &__grid {

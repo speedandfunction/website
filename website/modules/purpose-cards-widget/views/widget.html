@@ -7,7 +7,7 @@
     {% endif %}
 
     {% if data.widget.cards and data.widget.cards.length > 0 %}
-    <div class="sf-purpose-cards__grid" data-count="{{ data.widget.cards.length }}">
+    <div class="sf-purpose-cards__grid" data-count="{{ data.widget.cards.length }}" data-per-row="{{ data.widget.cardsPerRow or '3' }}">
       {% for card in data.widget.cards %}
       <div class="sf-purpose-cards__card">
         <span class="sf-purpose-cards__card-number">{% if loop.index < 10 %}0{% endif %}{{ loop.index }}</span>

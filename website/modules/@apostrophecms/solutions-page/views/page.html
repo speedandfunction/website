@@ -1,0 +1,12 @@
+{# Solutions page — same structure as Homepage/About Us/Build Differently but
+   with the golden-teal drift background gradient from the Figma design
+   (node 2294:756). #}
+
+{% extends "layout.html" %}
+
+{% block main %}
+  <div class="sf-solutions-bg">
+    {% area data.page, 'header' %}
+    {% area data.page, 'main' %}
+  </div>
+{% endblock %}

@@ -146,6 +146,7 @@ function createAposConfig() {
       'home-simplified': {},
       '@apostrophecms/about-page': {},
       '@apostrophecms/build-differently-page': {},
+      '@apostrophecms/solutions-page': {},
       '@apostrophecms/import-export': {},
       'cases-tags': {},
       'case-studies': {},
