@@ -7,6 +7,24 @@
 
     <div class="sf-statement-cta__divider"></div>
 
+    {% if data.widget.rows and data.widget.rows.length > 0 %}
+    <div class="sf-statement-cta__rows">
+      {% for row in data.widget.rows %}
+      <div class="sf-statement-cta__row">
+        <div class="sf-statement-cta__row-left">
+          <span class="sf-statement-cta__row-number">{% if loop.index < 10 %}0{% endif %}{{ loop.index }}</span>
+          {% if row.title %}
+          <div class="sf-statement-cta__row-title">{{ row.title }}</div>
+          {% endif %}
+        </div>
+        {% if row.description %}
+        <p class="sf-statement-cta__row-description">{{ row.description }}</p>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
     {% if data.widget.buttonCollection and data.widget.buttonCollection.length > 0 %}
     <div class="sf-statement-cta__buttons">
       {% for item in data.widget.buttonCollection %}

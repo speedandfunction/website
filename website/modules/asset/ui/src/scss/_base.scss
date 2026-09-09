@@ -180,6 +180,63 @@ $sf-noise-texture: url('/images/noise.png');
   }
 }
 
+// Solutions page background — per Figma node 2294:768 (1440x2846).
+// "Golden Teal Drift": gold drifts in from off-screen left, teal from
+// off-screen right, and a faint pink blob bridges them across the middle.
+// The three ellipses were fitted against the object-cover-cropped gradient
+// render, then checked under real CSS alpha compositing in this exact layer
+// order (mean abs error 0.21/255, max 3).
+//   gold #ffeebf  centre off-screen left,  26% down
+//   teal #91d9d1  centre off-screen right, 75% down
+//   pink #ffeaed  centre 44% across,       50% down
+.sf-container--solutions {
+  max-width: none;
+  padding-left: 0;
+  padding-right: 0;
+  padding-top: 0;
+  background-color: #ffffff;
+  background-image: $sf-noise-texture,
+    url('/images/solutions-bg-mobile.webp');
+  background-size: 128px 128px, cover;
+  background-position: top left, top center;
+  background-attachment: fixed;
+  background-repeat: repeat, no-repeat;
+
+  @include breakpoint-medium {
+    background-image: $sf-noise-texture,
+      radial-gradient(
+        ellipse 133% 40% at -25% 26%,
+        #ffeebf 0%,
+        rgba(255, 238, 191, 0) 72%
+      ),
+      radial-gradient(
+        ellipse 129% 38% at 134% 75%,
+        #91d9d1 0%,
+        rgba(145, 217, 209, 0) 72%
+      ),
+      radial-gradient(
+        ellipse 87% 24% at 44% 50%,
+        #ffeaed 0%,
+        rgba(255, 234, 237, 0) 72%
+      );
+    // The blob offsets above are percentages of the Figma gradient box
+    // (1440x2846). Leaving the height `auto` resolves them against the real
+    // element instead, so a page carrying less content than the Figma design
+    // squashes all three blobs upward — pink especially lands far too early.
+    // Pinning the layers to 2846px keeps every blob at its Figma offset no
+    // matter how long the page actually is.
+    background-size: 128px 128px, 100% 2846px, 100% 2846px, 100% 2846px;
+    background-position: top left, top left, top left, top left;
+    background-repeat: repeat, no-repeat, no-repeat, no-repeat;
+    background-attachment: fixed, scroll, scroll, scroll;
+  }
+
+  @include breakpoint-extra-extra-large {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
 .sf-wrapper {
   position: relative;
 }

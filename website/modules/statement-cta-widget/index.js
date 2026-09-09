@@ -16,6 +16,30 @@ module.exports = {
         textarea: true,
         help: 'Large statement text, e.g. "With 900+ launches and a 95% retention rate..."',
       },
+      rows: {
+        label: 'Rows',
+        type: 'array',
+        titleField: 'title',
+        inline: true,
+        table: true,
+        help: 'Numbered rows with a title (left) and description (right), separated by divider lines.',
+        fields: {
+          add: {
+            title: {
+              label: 'Title',
+              type: 'string',
+              textarea: true,
+              help: 'Row title, e.g. "Outsourcing"',
+            },
+            description: {
+              label: 'Description',
+              type: 'string',
+              textarea: true,
+              help: 'Row description text',
+            },
+          },
+        },
+      },
       buttonCollection: {
         label: 'Buttons',
         type: 'array',
@@ -34,6 +58,7 @@ module.exports = {
     group: {
       fields: {
         heading: 1,
+        rows: 1,
         buttonCollection: 1,
       },
     },

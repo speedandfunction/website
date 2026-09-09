@@ -7,28 +7,32 @@ module.exports = {
   options: {
     types: [
       {
-        name: 'default-page',
-        label: 'Default',
-      },
-      {
         name: '@apostrophecms/home-page',
-        label: 'Home',
-      },
-      {
-        name: 'home-simplified',
-        label: 'Home - Simplified',
+        label: 'Home (Teal Amber)',
       },
       {
         name: '@apostrophecms/about-page',
-        label: 'About Page',
+        label: 'About Page (Lavender_Teal)',
       },
       {
         name: '@apostrophecms/build-differently-page',
-        label: 'Build Differently Page',
+        label: 'Build Differently Page (Peach Cloud)',
+      },
+      {
+        name: '@apostrophecms/solutions-page',
+        label: 'Solutions Page (Golden Teal Drift)',
       },
       {
         name: 'case-studies-page',
         label: 'Case Studies Page',
+      },
+      {
+        name: 'default-page',
+        label: 'Default',
+      },
+      {
+        name: 'home-simplified',
+        label: 'Home - Simplified',
       },
     ],
     park: [
