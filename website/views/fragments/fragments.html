@@ -1,5 +1,5 @@
 {% import 'fragments/utilities.html' as utilities %} {% fragment header() %}
-<header class="sf-header {% if data.page and (data.page.type == '@apostrophecms/home-page' or data.page.type == '@apostrophecms/about-page' or data.page.type == '@apostrophecms/build-differently-page' or data.page.type == '@apostrophecms/solutions-page') %}sf-header--overlay{% endif %}">
+<header class="sf-header {% if data.page and (data.page.type == '@apostrophecms/home-page' or data.page.type == '@apostrophecms/about-page' or data.page.type == '@apostrophecms/build-differently-page' or data.page.type == '@apostrophecms/solutions-page' or data.page.type == '@apostrophecms/how-we-deliver-page') %}sf-header--overlay{% endif %}">
   <div class="sf-header__content">
     {% render utilities.siteLogo() %}
     <button
@@ -92,7 +92,7 @@
   </div>
 </footer>
 {% endfragment %} {% fragment breadcrumbs() %} {% if data.page._url !=
-data.home._url and data.page.type != '@apostrophecms/about-page' and data.page.type != '@apostrophecms/build-differently-page' and data.page.type != '@apostrophecms/solutions-page' %}
+data.home._url and data.page.type != '@apostrophecms/about-page' and data.page.type != '@apostrophecms/build-differently-page' and data.page.type != '@apostrophecms/solutions-page' and data.page.type != '@apostrophecms/how-we-deliver-page' %}
 <nav
   class="breadcrumb {% if not data.user %}loading{% else %}loaded{% endif %}"
   aria-label="Breadcrumb navigation"

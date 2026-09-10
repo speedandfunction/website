@@ -23,6 +23,10 @@ module.exports = {
         label: 'Solutions Page (Golden Teal Drift)',
       },
       {
+        name: '@apostrophecms/how-we-deliver-page',
+        label: 'How We Deliver Page (Rose Teal Mist)',
+      },
+      {
         name: 'case-studies-page',
         label: 'Case Studies Page',
       },

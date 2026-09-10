@@ -1,0 +1,12 @@
+{# How We Deliver page — same structure as Homepage/About Us/Build Differently/
+   Solutions but with the Rose Teal Mist background gradient from the Figma
+   design (node 2314:1057). #}
+
+{% extends "layout.html" %}
+
+{% block main %}
+  <div class="sf-deliver-bg">
+    {% area data.page, 'header' %}
+    {% area data.page, 'main' %}
+  </div>
+{% endblock %}

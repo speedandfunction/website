@@ -14,6 +14,11 @@
     #50e4d2 78%,
     #36ffe7 100%
   );
+
+  // Sit below the fixed Apostrophe admin bar when logged in.
+  .has-admin-bar & {
+    top: $admin-bar-height;
+  }
 }
 
 .sf-header {
@@ -22,6 +27,13 @@
   top: 6px;
   height: $mobile-header-height;
   z-index: 11;
+
+  // When logged in, the Apostrophe admin bar is fixed to the top of the
+  // viewport, so the sticky offset must clear it or the header sticks
+  // underneath it while scrolling.
+  .has-admin-bar & {
+    top: calc(#{$admin-bar-height} + 6px);
+  }
 
   @include breakpoint-medium {
     height: $desktop-header-height;

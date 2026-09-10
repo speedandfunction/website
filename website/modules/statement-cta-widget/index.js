@@ -16,13 +16,19 @@ module.exports = {
         textarea: true,
         help: 'Large statement text, e.g. "With 900+ launches and a 95% retention rate..."',
       },
+      sideInfo: {
+        label: 'Side info',
+        type: 'string',
+        textarea: true,
+        help: 'Optional paragraph shown to the right of the statement on desktop (below it on mobile).',
+      },
       rows: {
         label: 'Rows',
         type: 'array',
         titleField: 'title',
         inline: true,
         table: true,
-        help: 'Numbered rows with a title (left) and description (right), separated by divider lines.',
+        help: 'Numbered rows with a title (left) and description (right), separated by divider lines. Can also be rendered as cards using the Display Mode option below.',
         fields: {
           add: {
             title: {
@@ -39,6 +45,30 @@ module.exports = {
             },
           },
         },
+      },
+      rowsDisplay: {
+        label: 'Rows display mode',
+        type: 'select',
+        choices: [
+          { label: 'Rows', value: 'rows' },
+          { label: 'Cards', value: 'cards' },
+        ],
+        def: 'rows',
+        help: 'Choose whether to render rows as horizontal divider-separated rows or as bordered cards (3 per row on desktop, stacked on mobile).',
+      },
+      cardsPerRow: {
+        label: 'Number of cards in row',
+        type: 'select',
+        choices: [
+          { label: '2', value: '2' },
+          { label: '3', value: '3' },
+          { label: '4', value: '4' },
+        ],
+        def: '3',
+        if: {
+          rowsDisplay: 'cards',
+        },
+        help: 'How many cards to display per row on desktop (only applies when Rows display mode is "Cards")',
       },
       buttonCollection: {
         label: 'Buttons',
@@ -58,7 +88,10 @@ module.exports = {
     group: {
       fields: {
         heading: 1,
+        sideInfo: 1,
         rows: 1,
+        rowsDisplay: 1,
+        cardsPerRow: 1,
         buttonCollection: 1,
       },
     },

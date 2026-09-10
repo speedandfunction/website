@@ -27,13 +27,14 @@
         <span>{{ data.widget.ctaTextMobile }}</span>
       </a>
       {% endif %}
-      <div class="sf-hero-section__mobile-separator"></div>
     </div>
     {% if data.widget.bodyText %}
+    <div class="sf-hero-section__mobile-separator"></div>
     <div class="sf-hero-section__divider"></div>
     <div class="sf-hero-section__right">
       {% area data.widget, 'bodyText' %}
     </div>
+    <div class="sf-hero-section__mobile-bottom-separator"></div>
     {% endif %}
   </div>
 </section>
