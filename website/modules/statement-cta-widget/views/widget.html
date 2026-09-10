@@ -1,14 +1,24 @@
 {% import 'fragments/utilities.html' as utilities %}
 <section class="sf-statement-cta" data-statement-cta-widget>
   <div class="sf-statement-cta__container">
-    {% if data.widget.heading %}
-    <h2 class="sf-statement-cta__heading">{{ data.widget.heading }}</h2>
+    {% if data.widget.heading or data.widget.sideInfo %}
+    <div class="sf-statement-cta__header{% if data.widget.sideInfo %} sf-statement-cta__header--with-side{% endif %}">
+      {% if data.widget.heading %}
+      <h2 class="sf-statement-cta__heading">{{ data.widget.heading }}</h2>
+      {% endif %}
+      {% if data.widget.sideInfo %}
+      <div class="sf-statement-cta__header-divider"></div>
+      <p class="sf-statement-cta__side-info">{{ data.widget.sideInfo }}</p>
+      {% endif %}
+    </div>
     {% endif %}
 
+    {% if data.widget.rowsDisplay != 'cards' %}
     <div class="sf-statement-cta__divider"></div>
+    {% endif %}
 
     {% if data.widget.rows and data.widget.rows.length > 0 %}
-    <div class="sf-statement-cta__rows">
+    <div class="sf-statement-cta__rows{% if data.widget.rowsDisplay == 'cards' %} sf-statement-cta__rows--cards{% endif %}"{% if data.widget.rowsDisplay == 'cards' %} data-per-row="{{ data.widget.cardsPerRow or '3' }}"{% endif %}>
       {% for row in data.widget.rows %}
       <div class="sf-statement-cta__row">
         <div class="sf-statement-cta__row-left">

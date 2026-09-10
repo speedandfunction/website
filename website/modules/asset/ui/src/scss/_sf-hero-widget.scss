@@ -146,8 +146,26 @@
   &__mobile-separator {
     width: 100%;
     height: 1px;
-    background: rgba(222, 223, 228, 0.6);
-    margin-top: 32px;
+    background-color: #DEDFE4;
+    // Figma mobile (node 2314:1180): 40px above and below the divider.
+    // The container's gap provides 32px, so 8px margin on each side tops it up.
+    margin: 8px 0;
+
+    @include breakpoint-medium {
+      display: none;
+    }
+  }
+
+  // Mobile-only divider after the body text, separating the hero from the
+  // main content below (Figma node 2314:1179, Line 10).
+  &__mobile-bottom-separator {
+    width: 100%;
+    height: 1px;
+    background-color: #DEDFE4;
+    // Figma: 40px from body text bottom to divider. Container gap provides
+    // 32px, so 8px margin-top tops it up. The gap below is handled by the
+    // next widget's margin-top.
+    margin-top: 8px;
 
     @include breakpoint-medium {
       display: none;

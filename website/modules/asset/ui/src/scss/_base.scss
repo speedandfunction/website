@@ -197,9 +197,13 @@ $sf-noise-texture: url('/images/noise.png');
   background-color: #ffffff;
   background-image: $sf-noise-texture,
     url('/images/solutions-bg-mobile.webp');
-  background-size: 128px 128px, cover;
+  // Use 100% auto (not cover) so the image scales to the container width
+  // without stretching vertically. With `scroll` (not `fixed`) the image
+  // is anchored to the element, so the pink blob stays at its natural
+  // position near the top and never creeps to the bottom on narrow phones.
+  background-size: 128px 128px, 100% auto;
   background-position: top left, top center;
-  background-attachment: fixed;
+  background-attachment: scroll, scroll;
   background-repeat: repeat, no-repeat;
 
   @include breakpoint-medium {
@@ -234,6 +238,76 @@ $sf-noise-texture: url('/images/noise.png');
   @include breakpoint-extra-extra-large {
     padding-left: 0;
     padding-right: 0;
+  }
+}
+
+// How We Deliver page background — per Figma gradient node 2314:1058, whose
+// box is exactly the frame size (1440x1816), so the render needs no
+// object-cover crop. Three blobs fitted under real CSS alpha compositing in
+// this exact layer order (mean abs error 0.26/255, max 4.5):
+//   pink     #f7d1d8  centre 50% across, 22% down
+//   teal     #91e8dd  centre 68% across, 68% down
+//   lavender #efe1f8  centre 43% across, 54% down — bridges the other two
+.sf-container--how-we-deliver {
+  max-width: none;
+  padding-left: 0;
+  padding-right: 0;
+  padding-top: 0;
+  background-color: #ffffff;
+  background-image: $sf-noise-texture,
+    url('/images/deliver-bg-mobile.webp');
+  background-size: 128px 128px, 100% auto;
+  background-position: top left, top 100px center;
+  background-attachment: scroll, scroll;
+  background-repeat: repeat, no-repeat;
+
+  @include breakpoint-medium {
+    background-image: $sf-noise-texture,
+      radial-gradient(
+        ellipse 38% 54% at 50% 22%,
+        #f7d1d8 0%,
+        rgba(247, 209, 216, 0) 72%
+      ),
+      radial-gradient(
+        ellipse 35% 50% at 68% 68%,
+        #91e8dd 0%,
+        rgba(145, 232, 221, 0) 72%
+      ),
+      radial-gradient(
+        ellipse 26% 36% at 43% 54%,
+        #efe1f8 0%,
+        rgba(239, 225, 248, 0) 72%
+      );
+    // Pin layers to the Figma frame height (1816px) so blob positions
+    // stay fixed regardless of actual page content length.
+    background-size: 128px 128px, 100% 1816px, 100% 1816px, 100% 1816px;
+    background-position: top left, top left, top left, top left;
+    background-repeat: repeat, no-repeat, no-repeat, no-repeat;
+    background-attachment: fixed, scroll, scroll, scroll;
+  }
+
+  @include breakpoint-extra-extra-large {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  // How We Deliver has less hero content than other pages, so the hero's
+  // default min-height creates excess empty space. Reduce it and tighten
+  // the first widget's top margin to match the Figma spacing.
+  // Mobile: hero padding-bottom (60px) + statement-cta margin-top (20px) = 80px
+  // (Figma: Line 10 at y=614, Heading 2 at y=694).
+  .sf-statement-cta {
+    margin-top: 20px;
+  }
+
+  @include breakpoint-medium {
+    .sf-hero-section {
+      min-height: 650px;
+    }
+
+    .sf-statement-cta {
+      margin-top: 60px;
+    }
   }
 }
 

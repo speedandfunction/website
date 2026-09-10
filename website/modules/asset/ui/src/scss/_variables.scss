@@ -97,6 +97,10 @@ $z-index-modal: 100;
 //not-found-page container height calculation
 $desktop-header-height: 95px;
 $mobile-header-height: 64px;
+// Height of the Apostrophe admin bar (55px row + 1px border-bottom), plus a
+// small buffer, shown when a user is logged in, so the header can offset
+// below it.
+$admin-bar-height: 68px;
 $breadcrumbs-line-height: 18px;
 $sf-container-padding-top: 20px;
 $desktop-not-found-height: calc(

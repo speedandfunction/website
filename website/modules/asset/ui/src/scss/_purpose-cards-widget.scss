@@ -55,11 +55,11 @@
 
   &__card {
     border: 1px solid #DEDFE4;
-    padding: 24px;
+    padding: 40px;
     min-height: 160px;
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 20px;
     // In Figma the cards butt together and overlap by 1px, so adjacent
     // borders collapse into a single shared line (node 2086:406).
     margin-top: -1px;

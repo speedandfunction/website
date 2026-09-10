@@ -21,7 +21,7 @@
   {% component '@apostrophecms/seo:tagManagerBody' with data %}
   <a class="sr-only" href="#main">Skip to content</a>
   <div
-    class="bp-wrapper relative{% if not data.user %} sf-fade-in{% endif %}"
+    class="bp-wrapper relative{% if not data.user %} sf-fade-in{% endif %}{% if data.user %} has-admin-bar{% endif %}"
     data-barba="wrapper"
   >
     <div class="sf-top-bar" aria-hidden="true"></div>
@@ -36,7 +36,7 @@
       {% endif %}
     >
       {% render fragments.breadcrumbs(data) %}
-      <div class="sf-container {% if data.page and data.page.type == '@apostrophecms/home-page' %}sf-container--home{% elif data.page and data.page.type == '@apostrophecms/about-page' %}sf-container--about{% elif data.page and data.page.type == '@apostrophecms/build-differently-page' %}sf-container--build-differently{% elif data.page and data.page.type == '@apostrophecms/solutions-page' %}sf-container--solutions{% endif %} {% if not data.user %}loading{% else %}loaded{% endif %}" aria-busy="{% if not data.user %}true{% else %}false{% endif %}" data-reveal="dom">
+      <div class="sf-container {% if data.page and data.page.type == '@apostrophecms/home-page' %}sf-container--home{% elif data.page and data.page.type == '@apostrophecms/about-page' %}sf-container--about{% elif data.page and data.page.type == '@apostrophecms/build-differently-page' %}sf-container--build-differently{% elif data.page and data.page.type == '@apostrophecms/solutions-page' %}sf-container--solutions{% elif data.page and data.page.type == '@apostrophecms/how-we-deliver-page' %}sf-container--how-we-deliver{% endif %} {% if not data.user %}loading{% else %}loaded{% endif %}" aria-busy="{% if not data.user %}true{% else %}false{% endif %}" data-reveal="dom">
 {% endblock %}
 
 {% block main %}

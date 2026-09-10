@@ -25,20 +25,103 @@
     }
   }
 
+  &__header {
+    display: block;
+    margin-bottom: 32px;
+
+    @include breakpoint-medium {
+      margin-bottom: 40px;
+    }
+  }
+
+  // Only when side info is present do the heading and side info share a row.
+  &__header--with-side {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+
+    @include breakpoint-medium {
+      flex-direction: row;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 0;
+      // Figma: side info bottom (~881px) to first card top (964px) = ~83px.
+      // The side info extends below the heading, so a larger bottom margin
+      // is needed to keep the gap from side info to rows/cards.
+      margin-bottom: 80px;
+    }
+  }
+
   &__heading {
     @include font-settings(26px, 120%, 700);
     color: #040406;
     letter-spacing: -1.2px;
-    margin: 0 0 32px;
+    margin: 0 0 24px;
     text-transform: none;
     white-space: pre-line;
 
     @include breakpoint-medium {
       @include font-settings(36px, 120%, 700);
       letter-spacing: -1.2px;
-      // Figma: left=100px, right=25%+52px → width ≈ 75% of content area.
+      // Without side info: heading keeps its original width (75% of content).
       max-width: 75%;
       margin: 0 0 40px;
+    }
+
+    // With side info: heading narrows to ~40% to leave room on the right.
+    .sf-statement-cta__header--with-side & {
+      @include breakpoint-medium {
+        flex: 0 0 40%;
+        max-width: 40%;
+        margin: 0;
+      }
+    }
+  }
+
+  // Vertical divider between heading and side info (Figma node 2314:1149).
+  // 1px wide, #DEDFE4, fixed height — does not stretch to full content height.
+  // Positioned closer to the side info (matching sf-hero widget pattern where
+  // the divider sits near the right column, not centered between the two).
+  &__header-divider {
+    display: none;
+
+    @include breakpoint-medium {
+      display: block;
+      flex: 0 0 1px;
+      width: 1px;
+      height: 125px;
+      background-color: #DEDFE4;
+      // Push the divider toward the side info: large left gap from heading,
+      // small right gap to side info.
+      margin: 0 0 0 auto;
+      margin-right: 0;
+      align-self: flex-start;
+    }
+  }
+
+  &__side-info {
+    @include font-settings(18px, 140%, 500);
+    color: #232429;
+    margin: 0;
+    white-space: pre-line;
+
+    @include breakpoint-medium {
+      // Figma: side info occupies ~36% of content area (node 2314:1148),
+      // positioned to the right of the heading with a large gap.
+      flex: 0 0 40%;
+      max-width: 40%;
+      // Figma: side info starts ~one line lower than the heading (node 2314:1148
+      // center is 39px below node 2314:1072 center).
+      margin: 0;
+      align-self: flex-start;
+    }
+
+    // With side info: push down one line to match Figma.
+    .sf-statement-cta__header--with-side & {
+      @include breakpoint-medium {
+        margin-top: 40px;
+        padding-left: 100px;
+      }
     }
   }
 
@@ -67,7 +150,8 @@
     @include breakpoint-medium {
       flex-direction: row;
       gap: 0;
-      margin-top: 60px;
+      // Figma: card bottom (1221px) to button top (1301px) = 80px.
+      margin-top: 80px;
     }
   }
 
@@ -234,11 +318,139 @@
     @include font-settings(18px, 140%, 500);
     color: #232429;
     margin: 0;
+    white-space: pre-line;
 
     @include breakpoint-medium {
       // Figma: description starts at 50%+39px, width ~541px.
       flex: 1;
       max-width: 541px;
+    }
+  }
+
+  // ── Cards display mode ──────────────────────────────────────────────
+  // Figma nodes 2314:1151–1165: three bordered cards per row on desktop,
+  // stacked on mobile. Each card has number, title, description stacked
+  // vertically with 40px padding and a 1px translucent border. Cards butt
+  // together with -1px margins to collapse shared borders (like purpose
+  // cards).
+  &__rows--cards {
+    .sf-statement-cta__row {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 20px;
+      padding: 40px;
+      border: 1px solid rgba(222, 223, 228, 0.6);
+      // Mobile: stack vertically, collapse shared borders.
+      margin-top: -1px;
+
+      &:first-child {
+        margin-top: 0;
+      }
+
+      // Reset the row-mode divider and height behaviour.
+      border-top: 1px solid rgba(222, 223, 228, 0.6);
+      height: auto;
+
+      @include breakpoint-medium {
+        align-items: stretch;
+        gap: 20px;
+        padding: 32px;
+        min-height: 232px;
+        margin-top: 0;
+        margin-left: -1px;
+
+        &:first-child {
+          margin-left: 0;
+        }
+
+        // Rows after the first collapse against the row above.
+        &:nth-child(n + 4) {
+          margin-top: -1px;
+        }
+      }
+    }
+
+    .sf-statement-cta__row-left {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 20px;
+
+      @include breakpoint-medium {
+        flex-direction: column;
+        align-items: flex-start;
+        flex: none;
+        gap: 20px;
+        padding-right: 0;
+      }
+    }
+
+    .sf-statement-cta__row-description {
+      @include breakpoint-medium {
+        flex: none;
+        max-width: none;
+      }
+    }
+
+    // 3-column grid on desktop.
+    display: grid;
+    grid-template-columns: 1fr;
+
+    @include breakpoint-medium {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    &[data-per-row='2'] {
+      @include breakpoint-medium {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    &[data-per-row='4'] {
+      @include breakpoint-medium {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+    // Per-column border-collapse rules (mirror purpose-cards).
+    .sf-statement-cta__row {
+      @include breakpoint-medium {
+        // Reset 3-column rules before applying per-row overrides.
+        &:nth-child(3n + 1) {
+          margin-left: -1px;
+        }
+      }
+    }
+
+    // 2-column border collapse.
+    &[data-per-row='2'] .sf-statement-cta__row {
+      @include breakpoint-medium {
+        &:nth-child(2n + 1) {
+          margin-left: 0;
+        }
+        &:nth-child(n + 3) {
+          margin-top: -1px;
+        }
+        &:nth-child(n + 4) {
+          margin-top: 0;
+        }
+      }
+    }
+
+    // 4-column border collapse.
+    &[data-per-row='4'] .sf-statement-cta__row {
+      @include breakpoint-medium {
+        &:nth-child(4n + 1) {
+          margin-left: 0;
+        }
+        &:nth-child(n + 5) {
+          margin-top: -1px;
+        }
+        &:nth-child(n + 4) {
+          margin-top: 0;
+        }
+      }
     }
   }
 }
