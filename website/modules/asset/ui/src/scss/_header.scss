@@ -56,10 +56,6 @@
     text-transform: uppercase;
     color: $gray-500;
     text-decoration: none;
-    &:hover,
-    &:focus {
-      color: $gray-300;
-    }
     @include font-settings(16px, 110%, 700);
     @include breakpoint-medium {
       @include font-settings(14px, 110%, 800);
@@ -211,11 +207,16 @@
       text-decoration: none;
       white-space: nowrap;
       letter-spacing: 1.2px;
-      display: inline-block;
+      display: block;
+      width: 100%;
       @include transition(all);
 
-      &.active {
-        color: #00786b;
+      // Animated underline that grows from left to right on hover.
+      // Sits on the inner <span> so it follows the text width, not the
+      // full block width of the link.
+      span {
+        position: relative;
+        display: inline-block;
 
         &::after {
           content: '';
@@ -225,6 +226,22 @@
           bottom: -6px;
           height: 2px;
           background: linear-gradient(to right, #00a896, #50e4d2);
+          transform: scaleX(0);
+          transform-origin: 0 50%;
+          transition: transform 0.34s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+      }
+
+      &:hover span::after,
+      &:focus span::after {
+        transform: scaleX(1);
+      }
+
+      &.active {
+        color: #00786b;
+
+        span::after {
+          transform: scaleX(1);
         }
       }
 
@@ -238,6 +255,7 @@
         color: $gray-nav;
         white-space: nowrap;
         display: block;
+        width: auto;
 
         &.active {
           color: #00786b;
@@ -247,6 +265,12 @@
         &:focus {
           padding-right: 0;
           color: $gray-500;
+        }
+
+        // Keep the active highlight on hover instead of reverting to gray.
+        &.active:hover,
+        &.active:focus {
+          color: #00786b;
         }
       }
     }
@@ -285,11 +309,6 @@
 
   .sf-logo {
     color: #232429;
-
-    &:hover,
-    &:focus {
-      color: #50e4d2;
-    }
   }
 
   .sf-menu {
@@ -318,6 +337,11 @@
       &:hover,
       &:focus {
         color: #232429;
+      }
+
+      &.active:hover,
+      &.active:focus {
+        color: #00786b;
       }
     }
   }

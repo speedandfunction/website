@@ -1,0 +1,41 @@
+<section class="sf-vacancies-widget" data-vacancies-widget>
+  <div class="sf-vacancies-widget__container">
+    {% if data.widget._vacancies and data.widget._vacancies.length %}
+      {% if data.widget.listTitle %}
+      <div class="sf-vacancies-widget__header">
+        <h2 class="sf-vacancies-widget__heading">{{ data.widget.listTitle }}</h2>
+      </div>
+      {% endif %}
+
+      <div class="sf-vacancies-widget__rows">
+        {% for vacancy in data.widget._vacancies %}
+        <div class="sf-vacancies-widget__row">
+          <span class="sf-vacancies-widget__row-number">{% if loop.index < 10 %}0{% endif %}{{ loop.index }}</span>
+          {% if vacancy.title %}
+          <h3 class="sf-vacancies-widget__row-title">{{ vacancy.title }}</h3>
+          {% endif %}
+          {% if vacancy.description %}
+          <p class="sf-vacancies-widget__row-description">{{ vacancy.description }}</p>
+          {% endif %}
+          {% if vacancy.link %}
+          <a
+            class="sf-vacancies-widget__row-link"
+            href="{{ vacancy.link }}"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            read more &rarr;
+          </a>
+          {% endif %}
+        </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      {% if data.widget.emptyTitle %}
+      <div class="sf-vacancies-widget__header">
+        <h2 class="sf-vacancies-widget__heading">{{ data.widget.emptyTitle }}</h2>
+      </div>
+      {% endif %}
+    {% endif %}
+  </div>
+</section>

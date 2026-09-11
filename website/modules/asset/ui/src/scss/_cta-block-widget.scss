@@ -35,6 +35,7 @@
     margin: 0;
     text-transform: none;
     white-space: pre-line;
+    text-wrap: balance;
 
     @include breakpoint-medium {
       @include font-settings(36px, 100%, 700);

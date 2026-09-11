@@ -121,6 +121,7 @@ function createAposConfig() {
       'trusted-leaders-widget': {},
       'cta-block-widget': {},
       'statement-cta-widget': {},
+      'vacancies-widget': {},
       /*
        * 'links-buttons-widget': {},
        * 'team-carousel-widget': {},
@@ -148,6 +149,7 @@ function createAposConfig() {
       '@apostrophecms/build-differently-page': {},
       '@apostrophecms/solutions-page': {},
       '@apostrophecms/how-we-deliver-page': {},
+      '@apostrophecms/careers-page': {},
       '@apostrophecms/import-export': {},
       'cases-tags': {},
       'case-studies': {},

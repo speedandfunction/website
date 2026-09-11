@@ -27,6 +27,10 @@ module.exports = {
         label: 'How We Deliver Page (Rose Teal Mist)',
       },
       {
+        name: '@apostrophecms/careers-page',
+        label: 'Careers Page (Rose Teal Mist)',
+      },
+      {
         name: 'case-studies-page',
         label: 'Case Studies Page',
       },

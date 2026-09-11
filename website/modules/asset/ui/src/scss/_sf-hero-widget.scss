@@ -62,6 +62,9 @@
     margin: 0;
     text-transform: none;
     white-space: pre-line;
+    // Balance line breaks on mobile so short words like "to" don't end up
+    // alone on their own line.
+    text-wrap: balance;
 
     @include breakpoint-medium {
       @include font-settings(58px, 100%, 700);
@@ -180,9 +183,18 @@
       grid-column: 2;
       grid-row: 2;
       width: 1px;
-      height: 175px;
+      // Stretch to match the height of the body text in the same grid row.
+      height: 100%;
       background-color: #DEDFE4;
-      align-self: start;
+      align-self: stretch;
+    }
+  }
+
+  // On the How We Deliver page the pink gradient background makes the default
+  // #DEDFE4 divider hard to see. Use a darker colour there only.
+  .sf-container--how-we-deliver &__divider {
+    @include breakpoint-medium {
+      background-color: #C8C9CE;
     }
   }
 
@@ -198,6 +210,7 @@
       @include font-settings(16px, 140%, 500);
       color: #232429;
       margin: 0 0 16px;
+      text-wrap: balance;
 
       @include breakpoint-medium {
         @include font-settings(18px, 140%, 500);

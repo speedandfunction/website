@@ -40,6 +40,7 @@ module.exports = {
         'trusted-leaders': {},
         'cta-block': {},
         'statement-cta': {},
+        'vacancies': {},
         'leadership-team': {},
       },
       columns: 2,

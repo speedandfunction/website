@@ -1,0 +1,12 @@
+{# Careers page — same structure as Homepage/About Us/Build Differently/
+   Solutions/How We Deliver but with the Rose Teal Mist background gradient
+   from the Figma design (node 2442:96). #}
+
+{% extends "layout.html" %}
+
+{% block main %}
+  <div class="sf-careers-bg">
+    {% area data.page, 'header' %}
+    {% area data.page, 'main' %}
+  </div>
+{% endblock %}
