@@ -89,13 +89,22 @@
       display: block;
       flex: 0 0 1px;
       width: 1px;
-      height: 125px;
+      // Start at the heading's top (no margin-top) and stretch to the
+      // bottom of the side-info text (the tallest item in the row).
+      height: auto;
+      align-self: stretch;
       background-color: #DEDFE4;
       // Push the divider toward the side info: large left gap from heading,
       // small right gap to side info.
       margin: 0 0 0 auto;
-      margin-right: 0;
-      align-self: flex-start;
+    }
+  }
+
+  // On the How We Deliver page the pink gradient background makes the default
+  // #DEDFE4 header divider hard to see. Use a darker colour there only.
+  .sf-container--how-we-deliver &__header-divider {
+    @include breakpoint-medium {
+      background-color: #C8C9CE;
     }
   }
 
@@ -120,7 +129,11 @@
     .sf-statement-cta__header--with-side & {
       @include breakpoint-medium {
         margin-top: 40px;
-        padding-left: 100px;
+        // Align side-info text with the hero body text column.
+        // Hero body text starts at 901px from container edge; without this
+        // padding the side-info would start at 944px, so we use 57px
+        // (100px - 43px) to align them.
+        padding-left: 57px;
       }
     }
   }

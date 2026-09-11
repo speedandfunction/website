@@ -21,7 +21,7 @@
   {% set path = getPath(link) %}
   {% set currentPath = data.page._url %}
   {% if path %}
-      <a aria-label="{{ link.linkTitle or pageTitle or path }}" href="{{ path }}" class="{{ class }}{% if path == currentPath %} active{% endif %}" {% if link.target[0] === '_blank' %} target="_blank" {% endif %}>{{ link.linkTitle or pageTitle or path }}</a>
+      <a aria-label="{{ link.linkTitle or pageTitle or path }}" href="{{ path }}" class="{{ class }}{% if path == currentPath %} active{% endif %}" {% if link.target[0] === '_blank' %} target="_blank" {% endif %}><span>{{ link.linkTitle or pageTitle or path }}</span></a>
   {% endif %}
 {% endfragment %}
 

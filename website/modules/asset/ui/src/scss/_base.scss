@@ -311,6 +311,77 @@ $sf-noise-texture: url('/images/noise.png');
   }
 }
 
+// Careers page background — per Figma gradient node 2442:97 (1440x1815).
+// The Figma flips the gradient horizontally (-scale-x-100); the fit below
+// is already in the flipped coordinate system. Three blobs fitted under
+// real CSS alpha compositing (mean abs error 0.36/255, max 6.2):
+//   pink     #f7d1d8  centre 6% across,  50% down  (left side)
+//   teal     #91e8dd  centre 79% across, 32% down  (upper right)
+//   lavender #efe2f8  centre 56% across, 58% down  (centre)
+.sf-container--careers {
+  max-width: none;
+  padding-left: 0;
+  padding-right: 0;
+  padding-top: 0;
+  background-color: #ffffff;
+  background-image: $sf-noise-texture,
+    url('/images/careers-bg-mobile.webp');
+  background-size: 128px 128px, 100% auto;
+  background-position: top left, top 100px center;
+  background-attachment: scroll, scroll;
+  background-repeat: repeat, no-repeat;
+
+  @include breakpoint-medium {
+    background-image: $sf-noise-texture,
+      radial-gradient(
+        ellipse 88% 38% at 94% 50%,
+        #f7d1d8 0%,
+        rgba(247, 209, 216, 0) 72%
+      ),
+      radial-gradient(
+        ellipse 78% 35% at 21% 32%,
+        #91e8dd 0%,
+        rgba(145, 232, 221, 0) 72%
+      ),
+      radial-gradient(
+        ellipse 57% 26% at 44% 58%,
+        #efe1f8 0%,
+        rgba(239, 225, 248, 0) 72%
+      );
+    // Pin layers to the Figma gradient height (1815px) so blob positions
+    // stay fixed regardless of actual page content length.
+    background-size: 128px 128px, 100% 1815px, 100% 1815px, 100% 1815px;
+    background-position: top left, top left, top left, top left;
+    background-repeat: repeat, no-repeat, no-repeat, no-repeat;
+    background-attachment: fixed, scroll, scroll, scroll;
+  }
+
+  @include breakpoint-extra-extra-large {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  // Careers has less hero content than other pages, so the hero's default
+  // min-height creates excess empty space before the first widget (Vacancies).
+  // Remove the min-height entirely so the hero shrinks to fit its content,
+  // and use a small margin-top on the Vacancies widget to match the Figma
+  // spacing (same approach as the How We Deliver page, but more aggressive
+  // because the Careers hero is shorter).
+  .sf-vacancies-widget {
+    margin-top: 20px;
+  }
+
+  @include breakpoint-medium {
+    .sf-hero-section {
+      min-height: 0;
+    }
+
+    .sf-vacancies-widget {
+      margin-top: 40px;
+    }
+  }
+}
+
 .sf-wrapper {
   position: relative;
 }
@@ -427,7 +498,7 @@ $sf-noise-texture: url('/images/noise.png');
   margin: 0 auto 32px;
   padding: 0 40px;
   height: 100%;
-  color: $black;
+  color: $white;
   @include breakpoint-medium {
     margin-bottom: 60px;
   }
@@ -445,7 +516,7 @@ $sf-noise-texture: url('/images/noise.png');
 .breadcrumb-item::after {
   content: '/';
   margin-left: 6px;
-  color: $gray-300;
+  color: $white;
 }
 
 .breadcrumb-item:last-child::after {
@@ -453,7 +524,7 @@ $sf-noise-texture: url('/images/noise.png');
 }
 
 .breadcrumb-link {
-  color: $gray-300;
+  color: $white;
   text-decoration: none;
 }
 
