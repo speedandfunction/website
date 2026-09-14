@@ -382,6 +382,205 @@ $sf-noise-texture: url('/images/noise.png');
   }
 }
 
+// Privacy Policy page background — CSS ellipses fitted against Figma node
+// 2590:182 under real alpha compositing (mean absolute error 0.33/255):
+//   gold  #fff2d4 centre 41% across, 35% down
+//   peach #ffe5d5 centre off-screen left, 45% down
+//   teal  #8dd8d0 centre off-screen right, 68% down
+.sf-container--privacy {
+  max-width: none;
+  padding-left: 0;
+  padding-right: 0;
+  padding-top: 100px;
+  background-color: #ffffff;
+  background-image: $sf-noise-texture,
+    url('/images/privacy-bg-mobile.webp');
+  background-size: 128px 128px, 100% auto;
+  background-position: top left, top 100px center;
+  background-attachment: scroll, scroll;
+  background-repeat: repeat, no-repeat;
+
+  @include breakpoint-medium {
+    padding-top: 207px;
+    background-image: $sf-noise-texture,
+      radial-gradient(
+        ellipse 124% 27% at 41% 35%,
+        #fff2d4 0%,
+        rgba(255, 242, 212, 0) 72%
+      ),
+      radial-gradient(
+        ellipse 134% 36% at -16% 45%,
+        #ffe5d5 0%,
+        rgba(255, 229, 213, 0) 72%
+      ),
+      radial-gradient(
+        ellipse 178% 42% at 153% 68%,
+        #8dd8d0 0%,
+        rgba(141, 216, 208, 0) 72%
+      );
+    background-size: 128px 128px, 100% 3436px, 100% 3436px, 100% 3436px;
+    background-position: top left, top left, top left, top left;
+    background-repeat: repeat, no-repeat, no-repeat, no-repeat;
+    background-attachment: fixed, scroll, scroll, scroll;
+  }
+
+  @include breakpoint-extra-extra-large {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+// Privacy Policy page content container and title — per Figma node 2596:402.
+.sf-privacy-bg {
+  padding-bottom: 80px;
+
+  @include breakpoint-medium {
+    padding-bottom: 140px;
+  }
+
+  &__container {
+    width: 100%;
+    max-width: $breakpoint-extra-extra-large;
+    margin: 0 auto;
+    padding: 0 40px;
+
+    @include breakpoint-medium {
+      padding: 0 100px;
+    }
+  }
+
+  &__title {
+    @include font-settings(42px, 100%, 700);
+    color: #232429;
+    letter-spacing: -1.6px;
+    margin: 0 0 40px;
+    text-transform: none;
+    text-wrap: balance;
+
+    @include breakpoint-medium {
+      @include font-settings(58px, 100%, 700);
+      letter-spacing: -1.6px;
+      margin: 0 0 60px;
+    }
+  }
+
+  // Rich text widget styling — scoped to Privacy Policy page only.
+  // Covers both public mode ([data-rich-text]) and edit mode (.ProseMirror).
+  // H2/H3 per Figma node 2596:383: 36px, Poppins Bold, line-height 100%,
+  // color #040406, letter-spacing -1.2px, with divider line above each section.
+  // Paragraph per Figma node 2596:384: 18px, Poppins Medium, line-height 140%,
+  // color #232429.
+  .apos-area,
+  [data-rich-text] {
+    margin: 0;
+    padding: 0;
+  }
+
+  [data-rich-text],
+  .ProseMirror {
+    h2,
+    h3 {
+      @include font-settings(26px, 100%, 700);
+      color: #040406;
+      letter-spacing: -1.2px;
+      margin: 40px 0 0;
+      padding-top: 40px;
+      border-top: 1px solid rgba(222, 223, 228, 0.8);
+      text-transform: none;
+
+      @include breakpoint-medium {
+        @include font-settings(36px, 100%, 700);
+        letter-spacing: -1.2px;
+      }
+    }
+
+    p {
+      margin: 0;
+      @include font-settings(16px, 140%, 500);
+      color: #232429;
+      word-break: break-word;
+      text-wrap: balance;
+
+      @include breakpoint-medium {
+        @include font-settings(18px, 140%, 500);
+      }
+    }
+
+    // Spacing between elements within rich text (per Figma nodes
+    // 2596:383/384/385/386/387):
+    //   previous content → divider (heading margin-top): 40px
+    //   divider → heading text (heading padding-top):    40px
+    //   heading → paragraph:                            20px
+    //   paragraph → paragraph:                          16px
+    // The upper spacing belongs to the heading because each policy section
+    // can be a separate Apostrophe rich text widget.
+    h2 + p,
+    h3 + p {
+      margin-top: 20px;
+    }
+
+    p + p {
+      margin-top: 16px;
+    }
+
+    // Bold text within paragraphs
+    strong {
+      font-weight: 700;
+      color: #232429;
+    }
+
+    // Underlined links
+    a {
+      color: #232429;
+      text-decoration: underline;
+    }
+
+    // List styling per Figma node 2596:401:
+    // ul: list-disc, mb-0, no padding
+    // li: ms-[27px] (margin-left 27px), mb-0 (no spacing between items)
+    // Items are tightly packed — line-height 140% provides vertical rhythm.
+    ul {
+      margin: 8px 0 0;
+      padding: 0;
+      list-style: disc outside;
+
+      @include breakpoint-medium {
+        margin-top: 12px;
+      }
+    }
+
+    li {
+      @include font-settings(16px, 140%, 500);
+      color: #232429;
+      margin: 0 0 0 27px;
+      padding: 0;
+
+      @include breakpoint-medium {
+        @include font-settings(18px, 140%, 500);
+      }
+
+      // No spacing between list items (Figma: mb-0 on all items)
+      & + li {
+        margin-top: 0;
+      }
+
+      // Edit mode wraps list item content in <p> — reset its margin
+      > p {
+        margin: 0;
+      }
+    }
+
+    // Spacing after a list before the next paragraph
+    ul + p {
+      margin-top: 16px;
+
+      @include breakpoint-medium {
+        margin-top: 20px;
+      }
+    }
+  }
+}
+
 .sf-wrapper {
   position: relative;
 }
