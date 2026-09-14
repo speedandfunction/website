@@ -1,0 +1,17 @@
+{# Privacy Policy page — content-only page with the Warm Teal Peach
+   background gradient from the Figma design (node 2590:182).
+   No hero area; rich text is the only widget available.
+   Page title is rendered as an h1 heading (Figma node 2596:402). #}
+
+{% extends "layout.html" %}
+
+{% block main %}
+  <div class="sf-privacy-bg">
+    <div class="sf-privacy-bg__container">
+      {% if data.page.title %}
+      <h1 class="sf-privacy-bg__title">{{ data.page.title }}</h1>
+      {% endif %}
+      {% area data.page, 'main' %}
+    </div>
+  </div>
+{% endblock %}

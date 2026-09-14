@@ -31,6 +31,10 @@ module.exports = {
         label: 'Careers Page (Rose Teal Mist)',
       },
       {
+        name: '@apostrophecms/privacy-policy-page',
+        label: 'Privacy Policy Page (Warm Teal Peach)',
+      },
+      {
         name: 'case-studies-page',
         label: 'Case Studies Page',
       },
