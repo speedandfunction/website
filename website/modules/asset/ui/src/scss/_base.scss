@@ -294,10 +294,10 @@ $sf-noise-texture: url('/images/noise.png');
   // How We Deliver has less hero content than other pages, so the hero's
   // default min-height creates excess empty space. Reduce it and tighten
   // the first widget's top margin to match the Figma spacing.
-  // Mobile: hero padding-bottom (60px) + statement-cta margin-top (20px) = 80px
-  // (Figma: Line 10 at y=614, Heading 2 at y=694).
+  // Mobile: the gap below the hero comes from the hero container's
+  // padding-bottom (60px) alone; the statement-cta adds no top margin.
   .sf-statement-cta {
-    margin-top: 20px;
+    margin-top: 0;
   }
 
   @include breakpoint-medium {
