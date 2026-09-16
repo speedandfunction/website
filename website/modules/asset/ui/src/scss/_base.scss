@@ -363,19 +363,24 @@ $sf-noise-texture: url('/images/noise.png');
 
   // Careers has less hero content than other pages, so the hero's default
   // min-height creates excess empty space before the first widget (Vacancies).
-  // Remove the min-height entirely so the hero shrinks to fit its content,
-  // and use a small margin-top on the Vacancies widget to match the Figma
-  // spacing (same approach as the How We Deliver page, but more aggressive
-  // because the Careers hero is shorter).
+  // Remove the min-height so the hero shrinks to fit its content, hide the
+  // mobile-bottom-separator, and use a 20px margin-top on the Vacancies
+  // widget so the gap from the hero body text (sf-hero-section__right) to
+  // the Vacancies container is exactly 80px on mobile
+  // (60px hero padding-bottom + 20px margin-top).
+  .sf-hero-section {
+    min-height: 0;
+  }
+
+  .sf-hero-section__mobile-bottom-separator {
+    display: none;
+  }
+
   .sf-vacancies-widget {
     margin-top: 20px;
   }
 
   @include breakpoint-medium {
-    .sf-hero-section {
-      min-height: 0;
-    }
-
     .sf-vacancies-widget {
       margin-top: 40px;
     }
@@ -472,6 +477,8 @@ $sf-noise-texture: url('/images/noise.png');
   // color #232429.
   .apos-area,
   [data-rich-text] {
+    width: 100%;
+    max-width: none;
     margin: 0;
     padding: 0;
   }
@@ -499,7 +506,7 @@ $sf-noise-texture: url('/images/noise.png');
       @include font-settings(16px, 140%, 500);
       color: #232429;
       word-break: break-word;
-      text-wrap: balance;
+      text-wrap: wrap;
 
       @include breakpoint-medium {
         @include font-settings(18px, 140%, 500);

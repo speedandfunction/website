@@ -118,46 +118,63 @@
     }
   }
 
+  // "Read more" is a bordered button, not a text link — Figma nodes
+  // 2651:715 (desktop, 204x64) and 2654:723 (mobile, 144x44). Same
+  // bordered-button + fill hover pattern as sf-statement-cta__button.
   &__row-link {
     grid-area: link;
     justify-self: start;
-    display: inline;
-    @include font-settings(16px, 100%, 700);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 44px;
+    padding: 0 24px;
+    border: 1.2px solid #232429;
+    @include font-settings(12px, 100%, 700);
     color: #232429;
     letter-spacing: 1.2px;
     text-transform: uppercase;
     text-decoration: none;
     white-space: nowrap;
-    transition: color 0.24s ease;
     position: relative;
-    margin-top: 20px;
+    overflow: hidden;
+    transition: border-color 0.3s ease;
 
-    &::after {
+    &::before {
       content: '';
       position: absolute;
-      left: 0;
-      right: 0;
-      bottom: -2px;
-      height: 2px;
-      background: linear-gradient(to right, #00a896, #50e4d2);
+      inset: 0;
+      background: #232429;
       transform: scaleX(0);
       transform-origin: 0 50%;
-      transition: transform 0.34s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: transform 0.44s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    span {
+      position: relative;
+      z-index: 1;
+      transition: color 0.26s ease;
     }
 
     &:hover,
     &:focus {
-      color: #00786b;
+      border-color: #232429;
 
-      &::after {
+      &::before {
         transform: scaleX(1);
+      }
+
+      span {
+        color: #ffffff;
       }
     }
 
     @include breakpoint-medium {
       align-self: start;
       justify-self: end;
-      margin-top: 0;
+      height: 64px;
+      padding: 0 40px;
+      @include font-settings(16px, 100%, 700);
     }
   }
 }
