@@ -18,6 +18,7 @@ import {
   getSavedScrollPosition,
   clearSavedScrollPosition,
 } from './scrollMemory';
+import { scrollToTopAndRevealHeader } from './headerReveal';
 
 function revealLoaded() {
   document
@@ -90,7 +91,7 @@ function initBarbaPageTransitions() {
         const nextUrl = data.next.url.href;
         const savedScroll = getSavedScrollPosition(nextUrl);
         if (savedScroll === null) {
-          window.scrollTo(0, 0);
+          scrollToTopAndRevealHeader();
         } else {
           // Restore the scroll position when returning to the cases listing.
           window.scrollTo(0, savedScroll);
