@@ -17,7 +17,7 @@ const letsTalkWidgets = {
 module.exports = {
   extend: '@apostrophecms/page-type',
   options: {
-    label: 'Let\'s Talk Page',
+    label: "Let's Talk Page",
   },
   fields: {
     add: {

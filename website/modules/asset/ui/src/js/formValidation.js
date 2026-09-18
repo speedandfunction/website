@@ -116,18 +116,16 @@ const scrollToFirstInvalidField = (form) => {
         '.validation-error:not(:empty), .apos-form-error:not(:empty)',
       );
 
-    if (!isInvalid) {
-      continue;
+    if (isInvalid) {
+      const scrollTarget = wrapper || field;
+      if (typeof scrollTarget.scrollIntoView === 'function') {
+        scrollTarget.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+      if (typeof field.focus === 'function') {
+        field.focus({ preventScroll: true });
+      }
+      break;
     }
-
-    const scrollTarget = wrapper || field;
-    if (typeof scrollTarget.scrollIntoView === 'function') {
-      scrollTarget.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
-    if (typeof field.focus === 'function') {
-      field.focus({ preventScroll: true });
-    }
-    break;
   }
 };
 
