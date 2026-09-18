@@ -19,7 +19,7 @@ import {
   clearSavedScrollPosition,
 } from './scrollMemory';
 import { scrollToTopAndRevealHeader } from './headerReveal';
-
+import { initRecaptcha } from './js/recaptcha';
 function revealLoaded() {
   document
     .querySelectorAll(
@@ -180,6 +180,8 @@ function initBarbaPageTransitions() {
     });
 
     barba.hooks.after(() => {
+      initRecaptcha();
+
       // Update menu active state
       const currentPath = window.location.pathname;
       const menuLinks = document.querySelectorAll('.sf-nav__list a');
