@@ -36,7 +36,7 @@ module.exports = {
       },
       {
         name: '@apostrophecms/lets-talk-page',
-        label: 'Let\'s Talk Page (Golden Teal Drift)',
+        label: "Let's Talk Page (Golden Teal Drift)",
       },
       {
         name: 'case-studies-page',
