@@ -19,7 +19,7 @@ import {
   clearSavedScrollPosition,
 } from './scrollMemory';
 import { scrollToTopAndRevealHeader } from './headerReveal';
-import { initRecaptcha } from './js/recaptcha';
+import { initRecaptcha, startRecaptcha } from './js/recaptcha';
 function revealLoaded() {
   document
     .querySelectorAll(
@@ -244,7 +244,7 @@ export default () => {
   initConfiguration();
 
   initializeAllComponents();
-
+  startRecaptcha();
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', revealLoaded);
   } else {

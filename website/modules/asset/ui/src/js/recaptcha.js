@@ -1,9 +1,16 @@
 let recaptchaScriptPromise = null;
+let recaptchaObserver = null;
+
+const getRecaptchaWidgets = (container) => {
+  const widgets = Array.from(container.querySelectorAll('.g-recaptcha'));
+  if (container.matches?.('.g-recaptcha')) widgets.unshift(container);
+  return widgets;
+};
 
 const renderRecaptchaWidgets = (container) => {
   if (!window.grecaptcha?.render) return;
 
-  container.querySelectorAll('.g-recaptcha').forEach((widget) => {
+  getRecaptchaWidgets(container).forEach((widget) => {
     if (widget.dataset.recaptchaRendered || widget.querySelector('iframe')) {
       widget.dataset.recaptchaRendered = 'true';
       return;
@@ -37,7 +44,7 @@ const loadRecaptchaScript = () => {
 };
 
 const initRecaptcha = (container = document) => {
-  const widgets = container.querySelectorAll('.g-recaptcha');
+  const widgets = getRecaptchaWidgets(container);
   if (!widgets.length) return;
 
   if (window.grecaptcha?.render) {
@@ -52,4 +59,22 @@ const initRecaptcha = (container = document) => {
     });
 };
 
-export { initRecaptcha };
+const observeRecaptcha = () => {
+  if (recaptchaObserver || !document.body) return;
+
+  recaptchaObserver = new MutationObserver((mutations) => {
+    mutations.forEach(({ addedNodes }) => {
+      addedNodes.forEach((node) => {
+        if (node.nodeType === Node.ELEMENT_NODE) initRecaptcha(node);
+      });
+    });
+  });
+  recaptchaObserver.observe(document.body, { childList: true, subtree: true });
+};
+
+const startRecaptcha = () => {
+  observeRecaptcha();
+  initRecaptcha();
+};
+
+export { initRecaptcha, startRecaptcha };
