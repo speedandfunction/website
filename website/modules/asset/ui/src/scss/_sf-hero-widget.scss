@@ -210,10 +210,12 @@
       @include font-settings(16px, 140%, 500);
       color: #232429;
       margin: 0 0 16px;
+      // Balanced line breaks on mobile only — desktop keeps natural wrapping.
       text-wrap: balance;
 
       @include breakpoint-medium {
         @include font-settings(18px, 140%, 500);
+        text-wrap: wrap;
       }
 
       &:last-child {

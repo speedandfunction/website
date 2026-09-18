@@ -7,6 +7,9 @@ recaptchaReady = form.enableRecaptcha and recaptchaSite %} {% set
 onSubmitSuccess = form.onSubmitSuccess %}
 
 <div class="{{ prependIfPrefix('') }}" data-apos-form-wrapper>
+  {% if data.widget.heading %}
+  <h2 class="sf-form-heading">{{ data.widget.heading }}</h2>
+  {% endif %}
   {% if not apos.area.isEmpty(form, 'intro') %} {% area form, 'intro' %} {%
   endif %} {% if form %} {% set params = false %} {% if form.queryParamList %}
   {% set params = '' %} {% for param in form.queryParamList %} {% if loop.last
