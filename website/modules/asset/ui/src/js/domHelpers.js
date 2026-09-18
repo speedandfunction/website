@@ -23,6 +23,7 @@ const showValidationError = (field, message) => {
   errorElement.textContent = message;
 
   field.classList.add('has-error');
+  field.setAttribute('aria-invalid', 'true');
 };
 
 const clearValidationError = (field) => {
@@ -39,6 +40,7 @@ const clearValidationError = (field) => {
   }
 
   field.classList.remove('has-error');
+  field.removeAttribute('aria-invalid');
 };
 
 const showError = (field, message) => {

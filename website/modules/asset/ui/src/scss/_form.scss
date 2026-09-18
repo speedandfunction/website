@@ -1,3 +1,23 @@
+// Let's Talk form — Figma nodes 2450:411 (desktop) and 2554:4 (mobile).
+// Styles the native @apostrophecms/form widget both when placed directly in a
+// page area ([data-apos-form-wrapper]) and inside the contact-widget section
+// (.sf-contact-form).
+
+.sf-contact-form,
+[data-apos-form-wrapper] {
+  width: 100%;
+  max-width: $breakpoint-extra-extra-large;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 40px;
+  padding-right: 40px;
+
+  @include breakpoint-medium {
+    padding-left: 100px;
+    padding-right: 100px;
+  }
+}
+
 .sf-contact-form {
   position: relative;
   margin-top: 32px;
@@ -6,145 +26,181 @@
     margin-top: 52px;
   }
 
-  .sf-form {
-    position: relative;
-    min-width: 295px;
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 23px 15px;
-    border: 1px solid $gray-border;
-    margin-bottom: 84px;
-    @include font-settings(14px, 150%, $font-weight-medium);
-
-    @include breakpoint-medium {
-      padding: 24px 44px;
-      margin-bottom: 248px;
-    }
-
-    .sf-button {
-      min-width: 93px;
-      margin: 0 auto;
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-      bottom: -65px;
-
-      @include breakpoint-medium {
-        bottom: -136px;
-      }
-    }
-
-    .g-recaptcha {
-      position: relative;
-      margin-top: 24px;
-    }
-    .validation-error {
-      bottom: -4px;
-      left: 5px;
-      @include breakpoint-medium {
-        left: 25px;
-      }
-    }
-
-    .apos-form-error {
-      bottom: -12px;
-      left: 5px;
-    }
-  }
-
-  .apos-form-captcha-error {
-    bottom: 0px;
-    left: 18px;
-    @include breakpoint-medium {
-      left: 48px;
-    }
-  }
-
-  label {
-    margin-bottom: 12px;
-    color: $gray-500;
-  }
-}
-
-.sf-input {
-  height: 37px;
-
-  @include breakpoint-medium {
-    height: 53px;
-  }
-}
-
-.sf-textarea,
-.sf-input {
-  box-sizing: border-box;
-  border-radius: 0;
-  border: 1px solid $whisper;
-  padding: 8px 16px;
-  line-height: 140%;
-  margin-bottom: 24px;
-
-  @include breakpoint-medium {
-    padding: 16px 25px;
-  }
-
-  &::placeholder {
-    color: $gray-300;
-  }
-
-  &:focus {
-    outline: 0;
-    border-left: 0;
-    border-right: 0;
-    border-top: 0;
+  // The wrapper already inherits the column from the section.
+  [data-apos-form-wrapper] {
+    max-width: none;
+    margin-left: 0;
+    margin-right: 0;
     padding-left: 0;
-    border-color: $gray-300;
+    padding-right: 0;
   }
 
-  &:focus:invalid {
-    border-color: $red;
+  // Heading above the form — per Figma node 2450:502 (36px Poppins Bold,
+  // #040406, tracking -1.2px, line-height 100%).
+  &__heading,
+  .sf-form-heading {
+    @include font-settings(26px, 100%, 700);
+    color: #040406;
+    letter-spacing: -1.2px;
+    margin: 0 0 40px;
+    text-transform: none;
+
+    @include breakpoint-medium {
+      @include font-settings(36px, 100%, 700);
+      letter-spacing: -1.2px;
+    }
+  }
+}
+
+// Standalone form heading — used when @apostrophecms/form is placed directly
+// in a page area (not wrapped in .sf-contact-form).
+.sf-form-heading {
+  @include font-settings(26px, 100%, 700);
+  color: #040406;
+  letter-spacing: -1.2px;
+  margin: 0 0 40px;
+  text-transform: none;
+
+  @include breakpoint-medium {
+    @include font-settings(36px, 100%, 700);
+    letter-spacing: -1.2px;
+  }
+}
+
+.sf-form {
+  position: relative;
+}
+
+// Field wrapper — 40px between fields on both breakpoints
+// (Figma: input bottom -> next label top).
+.apos-form-input-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 40px;
+}
+
+// Field labels — indented to align with the input text inside the box
+// (Figma: label x=60/140 vs input edge x=40/100).
+.apos-form-label,
+.apos-form-fieldset legend {
+  display: block;
+  @include font-settings(16px, 140%, 700);
+  color: #232429;
+  padding-left: 20px;
+  margin: 0 0 10px;
+
+  @include breakpoint-medium {
+    @include font-settings(18px, 120%, 700);
+    padding-left: 40px;
   }
 }
 
 .sf-input,
-.sf-textarea,
-.sf-input::placeholder,
-.sf-textarea::placeholder {
+.sf-textarea {
+  box-sizing: border-box;
+  width: 100%;
+  height: 60px;
+  border-radius: 0;
+  background: transparent;
+  padding: 0 20px;
+  margin-bottom: 0;
+  @include font-settings(16px, 140%, $font-weight-medium);
+  color: #232429;
+
+  @include breakpoint-medium {
+    padding: 0 40px;
+    @include font-settings(18px, 120%, $font-weight-medium);
+  }
+
+  &::placeholder {
+    color: $gray-nav;
+    @include font-settings(12px, 140%, $font-weight-medium);
+
+    @include breakpoint-medium {
+      font-size: 14px;
+    }
+  }
+
+  &:focus {
+    outline: 0;
+  }
+
+  // Mobile browsers paint their own light autofill background over the
+  // transparent input — keep it transparent and preserve the text color.
+  &:-webkit-autofill,
+  &:-webkit-autofill:hover,
+  &:-webkit-autofill:focus {
+    -webkit-text-fill-color: #232429;
+    -webkit-box-shadow: 0 0 0 1000px transparent inset;
+    caret-color: #232429;
+    transition: background-color 5000s ease-in-out 0s;
+  }
+}
+
+// Text inputs — full box while empty; underline only once filled
+// (Figma node 2455:555: 1px #828388 bottom line under the filled field).
+.sf-input {
+  border: 1px solid rgba(222, 223, 228, 0.6);
+
+  &:focus,
+  &:not(:placeholder-shown) {
+    border-color: transparent;
+    border-bottom-color: $gray-nav;
+  }
+
+  // Error state — only after form submission validation (Figma email field).
+  // Do not use :invalid here: browser validity must not show the orange state
+  // merely because the field receives focus.
+  .is-validation-submitted &.has-error,
+  &.apos-form-input-error {
+    border: 2px solid #f57600;
+  }
+}
+
+.sf-textarea {
+  border: 1px solid rgba(222, 223, 228, 0.6);
+  padding-top: 20px;
+  padding-bottom: 20px;
+  min-height: unset;
+  overflow: hidden;
+  resize: none;
+
+  &:focus {
+    border-color: $gray-nav;
+  }
+
+  .is-validation-submitted &.has-error,
+  &.apos-form-input-error {
+    border: 2px solid #f57600;
+  }
+
+  @include breakpoint-medium {
+    height: 120px;
+  }
+}
+
+.sf-input,
+.sf-input::placeholder {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.sf-textarea {
-  min-height: unset;
-  overflow: hidden;
-  resize: none;
-}
-
-.apos-areas-widgets-list {
-  label {
-    margin-bottom: 12px;
-    color: $gray-500;
-  }
-}
-
-.apos-form-input-wrapper {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-}
-
-.sf-field-textarea {
-  display: flex;
-  flex-direction: column;
-}
-
+// Checkboxes/radio group (Figma: "What kind of support are you looking for?").
+// Radio fields render the fieldset directly without .apos-form-input-wrapper,
+// so the 40px field gap lives here too (collapses to 40 when nested).
 .apos-form-fieldset {
   border: 0;
   padding: 0;
-  margin: 0;
+  margin: 0 0 40px;
 
   legend {
-    margin-bottom: 12px;
+    margin-bottom: 24px;
+
+    @include breakpoint-medium {
+      margin-bottom: 20px;
+    }
   }
 
   .apos-form-field-optional {
@@ -152,7 +208,102 @@
   }
 
   div {
-    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+
+    &:last-of-type {
+      margin-bottom: 0;
+    }
+
+    @include breakpoint-medium {
+      gap: 20px;
+    }
+  }
+
+  input[type='checkbox'],
+  input[type='radio'] {
+    appearance: none;
+    -webkit-appearance: none;
+    flex: none;
+    width: 10px;
+    height: 10px;
+    margin: 0;
+    border: 1px solid $gray-nav;
+    background: transparent;
+    cursor: pointer;
+    border-radius: 0;
+
+    &[type='checkbox']:checked {
+      background-color: #000;
+      border-color: #000;
+    }
+
+    @include breakpoint-medium {
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  label {
+    @include font-settings(16px, 120%, $font-weight-medium);
+    color: #232429;
+    margin: 0;
+
+    @include breakpoint-medium {
+      font-size: 18px;
+    }
+  }
+}
+
+// Extra breathing room around the checkbox group on desktop
+// (Figma: 80px before/after vs the usual 40px field gap). Margins collapse
+// between siblings, so this is the total gap, not an addition.
+[data-apos-form-checkboxes],
+[data-apos-form-radio] {
+  @include breakpoint-medium {
+    margin-top: 80px;
+  }
+}
+
+.g-recaptcha {
+  position: relative;
+  margin-top: 60px;
+
+  @include breakpoint-medium {
+    margin-top: 80px;
+  }
+}
+
+// Submit button — Figma: bordered outline, left-aligned
+// (mobile 133x44/12px, desktop 223x64/16px).
+.sf-form .sf-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 133px;
+  height: 44px;
+  margin-top: 40px;
+  padding: 0;
+  background: transparent;
+  border: 1px solid #232429;
+  color: #232429;
+  @include font-settings(12px, 100%, 700);
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+
+  @include breakpoint-medium {
+    width: 223px;
+    height: 64px;
+    font-size: 16px;
+  }
+}
+
+.apos-areas-widgets-list {
+  label {
+    margin-bottom: 12px;
+    color: $gray-500;
   }
 }
 
@@ -179,14 +330,105 @@
   }
 }
 
-.validation-error,
-.apos-form-error,
-.apos-form-captcha-error {
+// Field-level error text — sits inside the input at the right edge
+// (Figma node 2554:73: "Email is required", Poppins Medium,
+// #f57600). Custom validation creates .validation-error; native Apostrophe
+// validation uses .apos-form-label-message. Keep custom messages hidden until
+// the submit validation pass has run.
+.validation-error {
+  visibility: hidden;
+}
+
+// Mobile: message sits under the input, inside the 40px field gap.
+// Desktop: bottom-anchored to the input's vertical center (input is 60px and
+// the last in-flow child, so wrapper bottom = input bottom), keeping the
+// message on the same line as the input text.
+.is-validation-submitted
+  .apos-form-input-wrapper
+  .validation-error,
+.is-validation-submitted
+  .apos-form-input-wrapper
+  .apos-form-label-message.apos-form-error {
   position: absolute;
-  color: $error-color;
-  font-size: 12px;
-  margin-top: -5px;
-  margin-bottom: 10px;
-  font-weight: 500;
-  line-height: 110%;
+  top: 100%;
+  bottom: auto;
+  visibility: visible;
+  left: 0;
+  margin: 8px 0 0;
+  @include font-settings(12px, 140%, $font-weight-medium);
+  color: #f57600;
+  max-width: 100%;
+  pointer-events: none;
+
+  @include breakpoint-medium {
+    top: auto;
+    bottom: 30px;
+    transform: translateY(50%);
+    left: auto;
+    right: 40px;
+    margin: 0;
+    font-size: 14px;
+  }
+}
+
+// Mobile: "!" marker inside the right edge of the errored box (Figma node
+// 2554:75, 12px Poppins Medium #f57600, 20px from the field border,
+// vertically centred on the input). Desktop shows the full message inside
+// the input instead, so the marker is hidden there.
+.is-validation-submitted
+  .apos-form-input-wrapper:has(
+    .sf-input.has-error,
+    .sf-textarea.has-error,
+    .apos-form-input-error
+  )::after {
+  content: '!';
+  position: absolute;
+  bottom: 30px;
+  transform: translateY(50%);
+  right: 20px;
+  @include font-settings(12px, 140%, $font-weight-medium);
+  color: #f57600;
+  pointer-events: none;
+
+  @include breakpoint-medium {
+    display: none;
+  }
+}
+
+// Mobile only: make room for the message under the input so it keeps clear
+// distance from the next field (message is ~25px below the input bottom).
+// Desktop keeps 40px — the message stays inside the input there.
+.is-validation-submitted
+  .apos-form-input-wrapper:has(.has-error, .apos-form-input-error) {
+  margin-bottom: 64px;
+
+  @include breakpoint-medium {
+    margin-bottom: 40px;
+  }
+}
+
+// Keep validation text centered inside the taller desktop textarea (120px)
+// if it is returned by the native Apostrophe validator.
+.is-validation-submitted
+  .sf-field-textarea
+  .apos-form-label-message.apos-form-error,
+.is-validation-submitted
+  .sf-field-textarea
+  .validation-error {
+  @include breakpoint-medium {
+    bottom: 60px;
+  }
+}
+
+// Form-level errors — below the form / under the captcha, in flow.
+.apos-form-error,
+.apos-form-captcha-error,
+.validation-error {
+  color: #f57600;
+  @include font-settings(12px, 140%, $font-weight-medium);
+  margin-top: 10px;
+
+  @include breakpoint-medium {
+    font-size: 14px;
+  }
 }

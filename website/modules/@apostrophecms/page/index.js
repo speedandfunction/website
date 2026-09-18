@@ -35,6 +35,10 @@ module.exports = {
         label: 'Privacy Policy Page (Warm Teal Peach)',
       },
       {
+        name: '@apostrophecms/lets-talk-page',
+        label: 'Let\'s Talk Page (Golden Teal Drift)',
+      },
+      {
         name: 'case-studies-page',
         label: 'Case Studies Page',
       },

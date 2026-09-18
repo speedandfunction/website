@@ -151,6 +151,7 @@ function createAposConfig() {
       '@apostrophecms/how-we-deliver-page': {},
       '@apostrophecms/careers-page': {},
       '@apostrophecms/privacy-policy-page': {},
+      '@apostrophecms/lets-talk-page': {},
       '@apostrophecms/import-export': {},
       'cases-tags': {},
       'case-studies': {},

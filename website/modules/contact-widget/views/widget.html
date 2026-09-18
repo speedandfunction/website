@@ -1,3 +1,6 @@
 <section class="sf-section sf-contact-form" data-contact-widget>
+  {% if data.widget.heading %}
+    <h2 class="sf-contact-form__heading">{{ data.widget.heading }}</h2>
+  {% endif %}
   {% area data.widget, 'form' %}
 </section>

@@ -100,18 +100,34 @@ const initFormValidation = (form, validateFieldFn) => {
 const collectFormData = (form) => new FormData(form);
 
 const scrollToFirstInvalidField = (form) => {
-  const fields = form.querySelectorAll('input, textarea, select');
-  for (const field of fields) {
-    const errorText = field
-      .closest('.sf-field')
-      ?.querySelector('.validation-error')
-      ?.textContent?.trim();
+  const fields = form.querySelectorAll(
+    'input:not([type="submit"]):not([type="button"]):not([type="hidden"]), textarea, select',
+  );
 
-    if (errorText) {
-      field.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      field.focus();
-      break;
+  for (const field of fields) {
+    const wrapper = field.closest(
+      '.sf-field, .apos-form-input-wrapper, .apos-form-fieldset',
+    );
+    const isInvalid =
+      field.classList.contains('has-error') ||
+      field.classList.contains('apos-form-input-error') ||
+      field.getAttribute('aria-invalid') === 'true' ||
+      wrapper?.querySelector(
+        '.validation-error:not(:empty), .apos-form-error:not(:empty)',
+      );
+
+    if (!isInvalid) {
+      continue;
     }
+
+    const scrollTarget = wrapper || field;
+    if (typeof scrollTarget.scrollIntoView === 'function') {
+      scrollTarget.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    if (typeof field.focus === 'function') {
+      field.focus({ preventScroll: true });
+    }
+    break;
   }
 };
 
@@ -211,6 +227,7 @@ const sendFormData = (form, formData) => {
 
 const handleFormSubmit = (event, form, validateFieldFn) => {
   event.preventDefault();
+  form.classList.add('is-validation-submitted');
 
   let hasError = false;
 
@@ -243,6 +260,7 @@ const handleFormSubmit = (event, form, validateFieldFn) => {
     .then((isValid) => {
       if (!isValid) {
         hasError = true;
+        scrollToFirstInvalidField(form);
       }
       if (!hasError) {
         return onValidateForm(true, form, validateFieldFn);
