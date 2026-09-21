@@ -4,6 +4,221 @@
     margin: 0 auto;
   }
 
+  // Page intro — heading, description, divider and the numbers row
+  // (Figma node 2831:2883, Lavender Teal frame).
+  &_intro {
+    margin-bottom: 48px;
+
+    @include breakpoint-medium {
+      margin-bottom: 96px;
+    }
+
+    &__heading {
+      margin: 0;
+      @include font-settings(42px, 100%, $font-weight-extra-bold);
+      color: #232429;
+      letter-spacing: -1.6px;
+      white-space: pre-line;
+      text-wrap: balance;
+
+      @include breakpoint-medium {
+        font-size: 58px;
+      }
+    }
+
+    &__description {
+      margin: 20px 0 0;
+      max-width: 556px;
+      @include font-settings(16px, 140%, $font-weight-bold);
+      color: #232429;
+      text-wrap: balance;
+
+      @include breakpoint-medium {
+        font-size: 18px;
+      }
+    }
+
+    &__divider {
+      width: 100%;
+      height: 1px;
+      background-color: #dedfe4;
+      margin-top: 32px;
+
+      @include breakpoint-medium {
+        margin-top: 40px;
+      }
+    }
+
+    &__numbers {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px 72px;
+      margin: 32px 0 0;
+      padding: 0;
+      list-style: none;
+
+      @include breakpoint-medium {
+        margin-top: 40px;
+      }
+    }
+
+    &__number {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    &__number-value {
+      @include font-settings(42px, 100%, $font-weight-extra-bold);
+      color: #232429;
+      letter-spacing: -1.6px;
+
+      @include breakpoint-medium {
+        font-size: 58px;
+      }
+    }
+
+    &__number-label {
+      @include font-settings(14px, 100%, $font-weight-extra-bold);
+      color: #232429;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+    }
+  }
+
+  // Featured projects slider — full-bleed bordered image box (1440x800 at
+  // Figma y=723) with a 600x600 white card overlaying its left edge
+  // (Figma nodes 2822:1936/1938/1954/1955/1957/1958/1960/1961).
+  &_featured {
+    // Break out of the .cs_container padding: the bordered box spans the
+    // full container width (x=0 in the Figma frame).
+    margin-right: -40px;
+    margin-bottom: 48px;
+    margin-left: -40px;
+
+    @include breakpoint-medium {
+      margin-right: -100px;
+      margin-bottom: 96px;
+      margin-left: -100px;
+    }
+
+    &__slide {
+      position: relative;
+      height: auto;
+      border: 1px solid rgba(222, 223, 228, 0.2);
+      background-color: #fff;
+
+      @include breakpoint-medium {
+        height: 800px;
+      }
+    }
+
+    &__image {
+      display: block;
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      object-fit: cover;
+
+      @include breakpoint-medium {
+        position: absolute;
+        inset: 0;
+        height: 100%;
+      }
+    }
+
+    &__card {
+      display: flex;
+      flex-direction: column;
+      padding: 32px 24px 40px;
+      background-color: #fff;
+
+      @include breakpoint-medium {
+        position: absolute;
+        top: 100px;
+        left: 100px;
+        width: 600px;
+        height: 600px;
+        padding: 60px;
+      }
+    }
+
+    &__client {
+      @include font-settings(12px, 100%, $font-weight-extra-bold);
+      color: #828388;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      text-decoration: underline;
+      text-underline-position: from-font;
+
+      @include breakpoint-medium {
+        font-size: 14px;
+      }
+    }
+
+    &__title {
+      margin: 16px 0 0;
+      @include font-settings(32px, 110%, $font-weight-extra-bold);
+      color: #232429;
+      letter-spacing: -1.6px;
+      text-wrap: balance;
+
+      @include breakpoint-medium {
+        margin-top: 20px;
+        font-size: 58px;
+        line-height: 100%;
+      }
+    }
+
+    &__cta {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      align-self: flex-start;
+      height: 56px;
+      padding: 0 40px;
+      margin-top: auto;
+      border: 1px solid #232429;
+      @include font-settings(14px, 100%, $font-weight-extra-bold);
+      color: #232429;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: background-color 0.3s ease, color 0.3s ease;
+
+      &:hover {
+        color: #fff;
+        background-color: #232429;
+      }
+
+      @include breakpoint-medium {
+        height: 64px;
+        font-size: 16px;
+      }
+    }
+
+    &__nav {
+      display: flex;
+      gap: 20px;
+      padding: 0 40px;
+      margin-top: 40px;
+
+      @include breakpoint-medium {
+        padding: 0 100px;
+      }
+    }
+
+    &__nav-btn {
+      padding: 0;
+      border: 0;
+      background: none;
+      cursor: pointer;
+      @include font-settings(12px, 100%, $font-weight-extra-bold);
+      color: #232429;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+    }
+  }
+
   &_content {
     display: flex;
     flex-direction: column;

@@ -1,4 +1,4 @@
-import { Mousewheel, Navigation } from 'swiper/modules';
+import { Autoplay, Mousewheel, Navigation } from 'swiper/modules';
 import Swiper from 'swiper';
 
 // Array of swiper configurations
@@ -11,6 +11,7 @@ const swiperConfigs = [
       autoplay: {
         delay: 5000,
       },
+      modules: [Autoplay],
     },
   },
   {
@@ -26,6 +27,27 @@ const swiperConfigs = [
         prevEl: '.swiper-button-prev',
       },
       modules: [Navigation],
+      slidesPerView: 1,
+    },
+  },
+  {
+    selector: '.cs_featured__swiper',
+    config: {
+      loop: true,
+      speed: 800,
+      autoplay: {
+        delay: 5000,
+      },
+      mousewheel: {
+        forceToAxis: true,
+        releaseOnEdges: true,
+      },
+      navigation: {
+        el: '.cs_featured__nav',
+        nextEl: '.cs_featured__next',
+        prevEl: '.cs_featured__prev',
+      },
+      modules: [Autoplay, Mousewheel, Navigation],
       slidesPerView: 1,
     },
   },
@@ -56,15 +78,20 @@ const swiperConfigs = [
     config: {
       init: false,
       loop: true,
+      speed: 800,
+      autoplay: {
+        delay: 5000,
+      },
       mousewheel: {
         forceToAxis: true,
+        releaseOnEdges: true,
       },
       navigation: {
         el: '.sf-trusted-leaders__controls',
         nextEl: '.sf-trusted-leaders__next',
         prevEl: '.sf-trusted-leaders__prev',
       },
-      modules: [Mousewheel, Navigation],
+      modules: [Autoplay, Mousewheel, Navigation],
       slidesPerView: 1,
       spaceBetween: 0,
     },

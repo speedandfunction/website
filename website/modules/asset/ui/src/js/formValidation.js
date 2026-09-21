@@ -85,7 +85,7 @@ const validateForm = async (form, validateFieldFn) => {
 const initFormValidation = (form, validateFieldFn) => {
   if (form) {
     // If form is provided, initialize it directly
-    initFormWithValidation(form, validateFieldFn);
+    initFormWithValidation(form, validateFieldFn || validateField);
   } else {
     // Otherwise, wait for DOM content loaded and initialize all forms
     document.addEventListener('DOMContentLoaded', () => {
