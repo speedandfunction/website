@@ -17,7 +17,97 @@
       id="page-main_content"
       aria-busy="{% if not data.user %}true{% else %}false{% endif %}"
     >
-      {% area data.page, 'main' %}
+      {% if data.page.heading or data.page.description or (data.page.numbers and data.page.numbers.length) %}
+      <div class="cs_intro">
+        {% if data.page.heading %}
+        <h1 class="cs_intro__heading">{{ data.page.heading }}</h1>
+        {% endif %}
+        {% if data.page.description %}
+        <p class="cs_intro__description">{{ data.page.description }}</p>
+        {% endif %}
+        {% if data.page.numbers and data.page.numbers.length %}
+        <div class="cs_intro__divider" aria-hidden="true"></div>
+        <ul class="cs_intro__numbers">
+          {% for item in data.page.numbers %}
+          <li class="cs_intro__number">
+            <span class="cs_intro__number-value">{{ item.value }}</span>
+            <span class="cs_intro__number-label">{{ item.label }}</span>
+          </li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+      </div>
+      {% endif %}
+
+      {% if data.page._featuredCases and data.page._featuredCases.length %}
+      <div class="cs_featured">
+        <div class="cs_featured__swiper swiper">
+          <div class="swiper-wrapper">
+            {% for caseStudy in data.page._featuredCases %}
+            {% set picture = apos.image.first(caseStudy.picture) %}
+            <div class="swiper-slide cs_featured__slide">
+              {% if picture %}
+              <img
+                class="cs_featured__image{% if not data.user %} lozad{% endif %}"
+                srcset="{{ apos.image.srcset(picture) }}"
+                src="{{ apos.attachment.url(picture, { size: 'full' }) }}"
+                alt="{{ picture._alt or caseStudy.portfolioTitle or caseStudy.title }}"
+                {% if apos.attachment.hasFocalPoint(picture) %}
+                  style="object-position: {{ apos.attachment.focalPointToObjectPosition(picture) }}"
+                {% endif %}
+              />
+              {% endif %}
+              <div class="cs_featured__card">
+                {% if caseStudy.clientWebsite %}
+                <a
+                  href="{{ caseStudy.clientWebsite }}"
+                  class="cs_featured__client"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  >{{ caseStudy.title }}</a
+                >
+                {% endif %}
+                <h2 class="cs_featured__title">
+                  {{ caseStudy.portfolioTitle or caseStudy.title }}
+                </h2>
+                {% if caseStudy.fullStoryUrl %}
+                <a
+                  href="{{ caseStudy.fullStoryUrl }}"
+                  class="cs_featured__cta"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  >Read The Full Story <span aria-hidden="true">→</span></a
+                >
+                {% elif caseStudy._url %}
+                <a href="{{ data.buildCaseStudyUrl(caseStudy._url) }}" class="cs_featured__cta"
+                  >Read The Full Story <span aria-hidden="true">→</span></a
+                >
+                {% endif %}
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+          {% if data.page._featuredCases.length > 1 %}
+          <div class="cs_featured__nav">
+            <button
+              type="button"
+              class="cs_featured__nav-btn cs_featured__prev"
+              aria-label="Previous featured project"
+            >
+              <span aria-hidden="true">←</span> previous
+            </button>
+            <button
+              type="button"
+              class="cs_featured__nav-btn cs_featured__next"
+              aria-label="Next featured project"
+            >
+              next <span aria-hidden="true">→</span>
+            </button>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+      {% endif %}
     </div>
 
     <div id="filter" class="filter-anchor"></div>

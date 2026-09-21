@@ -66,12 +66,14 @@ function initCaseStudiesTagFilter({
   );
 }
 
-function initializeAllComponents() {
+function initializeAllComponents(container = document) {
   initImageLozad();
   initAllSwipers();
   initSmoothCounters();
   initFontChanger();
-  initFormValidation();
+  container.querySelectorAll('.sf-form').forEach((form) => {
+    initFormValidation(form);
+  });
   initPhoneFormatting();
   initCaseStudiesTagFilter();
   initCaseStudiesFilterHandler();
@@ -79,7 +81,6 @@ function initializeAllComponents() {
   initFilterModal();
   initSearchHandler();
 }
-
 function initBarbaPageTransitions() {
   if (!document.querySelector('[data-barba="container"]')) return;
 
@@ -110,7 +111,7 @@ function initBarbaPageTransitions() {
         video.play();
       }
 
-      initializeAllComponents();
+      initializeAllComponents(data.next.container);
 
       // Initialize Apostrophe forms before removing old content
       const initializeApostropheForm = (container) => {
@@ -198,7 +199,6 @@ function initBarbaPageTransitions() {
     });
   });
 }
-
 function initAnchorNavigation() {
   const anchors = document.querySelectorAll('a[href^="#"]');
   if (!anchors.length) return;

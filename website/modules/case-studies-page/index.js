@@ -1,4 +1,3 @@
-const mainWidgets = require('../../lib/mainWidgets');
 const NavigationService = require('./services/NavigationService');
 const UrlService = require('./services/UrlService');
 
@@ -52,16 +51,56 @@ module.exports = {
   },
   fields: {
     add: {
-      main: {
-        type: 'area',
-        options: mainWidgets,
+      heading: {
+        label: 'Heading',
+        type: 'string',
+        textarea: true,
+      },
+      description: {
+        label: 'Description',
+        type: 'string',
+        textarea: true,
+      },
+      numbers: {
+        label: 'Numbers',
+        type: 'array',
+        titleField: 'value',
+        inline: true,
+        style: 'table',
+        fields: {
+          add: {
+            value: {
+              label: 'Value',
+              type: 'string',
+              required: true,
+            },
+            label: {
+              label: 'Label',
+              type: 'string',
+              required: true,
+            },
+          },
+        },
+      },
+      _featuredCases: {
+        label: 'Featured Projects',
+        type: 'relationship',
+        withType: 'case-studies',
+        help: 'Case studies displayed in the featured slider below the numbers.',
+        projection: {
+          title: 1,
+          clientWebsite: 1,
+          picture: 1,
+          portfolioTitle: 1,
+          fullStoryUrl: 1,
+          _url: 1,
+        },
       },
     },
     remove: ['orphan'],
     group: {
-      mainArea: {
-        label: 'Main page content',
-        fields: ['main'],
+      basics: {
+        fields: ['heading', 'description', 'numbers', '_featuredCases'],
       },
     },
   },
