@@ -1,17 +1,53 @@
 .cs {
-  &_container {
+  // Shared content column for the hero and listing bands — full-bleed bands,
+  // 1440px max-width inner column (x=40 mobile / x=100 desktop).
+  &_section-inner {
     max-width: 1440px;
     margin: 0 auto;
+    padding: 0 40px;
+
+    @include breakpoint-medium {
+      padding: 0 100px;
+    }
+  }
+
+  // Hero band — heading/description/numbers on a per-band gradient:
+  // mobile Figma 2862:4543 rows 0-638 (MAE 0.18/255), desktop 2831:2883
+  // rows 0-723 (MAE 0.19/255).
+  &_hero {
+    padding: 110px 0 60px;
+    background-image: radial-gradient(
+      ellipse 600% 234% at -130% 182%,
+      #f5e6ff 0%,
+      rgba(245, 230, 255, 0) 72%
+    );
+    background-size: 100% 638px;
+    background-position: top left;
+    background-repeat: no-repeat;
+
+    @include breakpoint-medium {
+      padding: 207px 0 100px;
+      background-image:
+        radial-gradient(
+          ellipse 142% 168% at 109% 165%,
+          #96eee4 0%,
+          rgba(150, 238, 228, 0) 72%
+        ),
+        radial-gradient(
+          ellipse 157% 183% at -16% 133%,
+          #f3daff 0%,
+          rgba(243, 218, 255, 0) 72%
+        );
+      background-size: 100% 723px, 100% 723px;
+      background-position: top left, top left;
+      background-repeat: no-repeat;
+    }
   }
 
   // Page intro — heading, description, divider and the numbers row
   // (Figma node 2831:2883, Lavender Teal frame).
   &_intro {
-    margin-bottom: 48px;
-
-    @include breakpoint-medium {
-      margin-bottom: 96px;
-    }
+    margin-bottom: 0;
 
     &__heading {
       margin: 0;
@@ -42,7 +78,7 @@
       width: 100%;
       height: 1px;
       background-color: #dedfe4;
-      margin-top: 32px;
+      margin-top: 20px;
 
       @include breakpoint-medium {
         margin-top: 40px;
@@ -51,13 +87,17 @@
 
     &__numbers {
       display: flex;
-      flex-wrap: wrap;
-      gap: 24px 72px;
-      margin: 32px 0 0;
+      flex-wrap: nowrap;
+      justify-content: space-between;
+      gap: 0 16px;
+      margin: 20px 0 0;
       padding: 0;
       list-style: none;
 
       @include breakpoint-medium {
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        gap: 24px 72px;
         margin-top: 40px;
       }
     }
@@ -65,11 +105,15 @@
     &__number {
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 10px;
+
+      @include breakpoint-medium {
+        gap: 16px;
+      }
     }
 
     &__number-value {
-      @include font-settings(42px, 100%, $font-weight-extra-bold);
+      @include font-settings(26px, 100%, $font-weight-extra-bold);
       color: #232429;
       letter-spacing: -1.6px;
 
@@ -79,10 +123,14 @@
     }
 
     &__number-label {
-      @include font-settings(14px, 100%, $font-weight-extra-bold);
+      @include font-settings(12px, 100%, $font-weight-extra-bold);
       color: #232429;
       letter-spacing: 1.2px;
       text-transform: uppercase;
+
+      @include breakpoint-medium {
+        font-size: 14px;
+      }
     }
   }
 
@@ -90,17 +138,6 @@
   // Figma y=723) with a 600x600 white card overlaying its left edge
   // (Figma nodes 2822:1936/1938/1954/1955/1957/1958/1960/1961).
   &_featured {
-    // Break out of the .cs_container padding: the bordered box spans the
-    // full container width (x=0 in the Figma frame).
-    margin-right: -40px;
-    margin-bottom: 48px;
-    margin-left: -40px;
-
-    @include breakpoint-medium {
-      margin-right: -100px;
-      margin-bottom: 96px;
-      margin-left: -100px;
-    }
 
     &__slide {
       position: relative;
@@ -116,7 +153,7 @@
     &__image {
       display: block;
       width: 100%;
-      aspect-ratio: 4 / 3;
+      aspect-ratio: 440 / 300;
       object-fit: cover;
 
       @include breakpoint-medium {
@@ -129,13 +166,14 @@
     &__card {
       display: flex;
       flex-direction: column;
-      padding: 32px 24px 40px;
+      padding: 20px 40px 40px;
       background-color: #fff;
 
       @include breakpoint-medium {
         position: absolute;
         top: 100px;
-        left: 100px;
+        // Aligned to the 1440px content column even on wider viewports.
+        left: max(100px, calc((100% - 1440px) / 2 + 100px));
         width: 600px;
         height: 600px;
         padding: 60px;
@@ -156,16 +194,16 @@
     }
 
     &__title {
-      margin: 16px 0 0;
-      @include font-settings(32px, 110%, $font-weight-extra-bold);
+      margin: 20px 0 0;
+      @include font-settings(26px, 120%, $font-weight-extra-bold);
       color: #232429;
-      letter-spacing: -1.6px;
+      letter-spacing: 0;
       text-wrap: balance;
 
       @include breakpoint-medium {
-        margin-top: 20px;
         font-size: 58px;
         line-height: 100%;
+        letter-spacing: -1.6px;
       }
     }
 
@@ -174,11 +212,11 @@
       align-items: center;
       justify-content: center;
       align-self: flex-start;
-      height: 56px;
-      padding: 0 40px;
-      margin-top: auto;
+      height: 44px;
+      padding: 0 24px;
+      margin-top: 30px;
       border: 1px solid #232429;
-      @include font-settings(14px, 100%, $font-weight-extra-bold);
+      @include font-settings(12px, 100%, $font-weight-extra-bold);
       color: #232429;
       letter-spacing: 1.2px;
       text-transform: uppercase;
@@ -192,18 +230,69 @@
 
       @include breakpoint-medium {
         height: 64px;
+        padding: 0 40px;
+        margin-top: auto;
         font-size: 16px;
       }
     }
 
-    &__nav {
-      display: flex;
-      gap: 20px;
-      padding: 0 40px;
-      margin-top: 40px;
+    // The CTA copy differs per breakpoint ("Read more" on mobile).
+    &__cta-label--mobile {
+      @include breakpoint-medium {
+        display: none;
+      }
+    }
+
+    &__cta-label--desktop {
+      display: none;
 
       @include breakpoint-medium {
-        padding: 0 100px;
+        display: inline;
+      }
+    }
+
+    // Wraps the prev/next buttons (desktop) and pagination dots (mobile)
+    // at the top of the listing band — carries the spacing under the slider.
+    &__controls {
+      margin-bottom: 80px;
+
+      @include breakpoint-medium {
+        margin-bottom: 100px;
+      }
+    }
+
+    &__nav {
+      display: none;
+      gap: 20px;
+
+      @include breakpoint-medium {
+        display: flex;
+      }
+    }
+
+    &__pagination {
+      display: flex;
+      justify-content: flex-end;
+      gap: 4px;
+
+      @include breakpoint-medium {
+        display: none;
+      }
+    }
+
+    &__dot {
+      width: 6px;
+      height: 6px;
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      margin: 0;
+      background: #828388;
+      opacity: 1;
+      cursor: pointer;
+
+      &--active {
+        background: #00897b;
       }
     }
 
@@ -216,6 +305,72 @@
       color: #232429;
       letter-spacing: 1.2px;
       text-transform: uppercase;
+    }
+  }
+
+  // Listing band — controls, search, filters, rows on a per-band gradient:
+  // mobile Figma 2862:4543 rows 1198-4500 (MAE 0.28/255, pinned to 3302px),
+  // desktop 2831:2883 from y=1523 (MAE 0.16/255, pinned to 1652px).
+  &_listing {
+    padding: 48px 0 120px;
+    background-image:
+      radial-gradient(
+        ellipse 600% 49% at 118% 64%,
+        #ffeee2 0%,
+        rgba(255, 238, 226, 0) 72%
+      ),
+      radial-gradient(
+        ellipse 491% 51% at 300% 21%,
+        #b5eeed 0%,
+        rgba(181, 238, 237, 0) 72%
+      ),
+      radial-gradient(
+        ellipse 600% 55% at -64% 10%,
+        #f1e3fd 0%,
+        rgba(241, 227, 253, 0) 72%
+      );
+    background-size: 100% 3302px, 100% 3302px, 100% 3302px;
+    background-position: top left, top left, top left;
+    background-repeat: no-repeat;
+
+    @include breakpoint-medium {
+      padding: 100px 0 180px;
+      background-image:
+        radial-gradient(
+          ellipse 178% 96% at -20% -55%,
+          #ecd2fa 0%,
+          rgba(236, 210, 250, 0) 72%
+        ),
+        radial-gradient(
+          ellipse 164% 79% at 120% -34%,
+          #96eadc 0%,
+          rgba(150, 234, 220, 0) 72%
+        ),
+        radial-gradient(
+          ellipse 124% 61% at 50% 30%,
+          #ffeee1 0%,
+          rgba(255, 238, 225, 0) 72%
+        );
+      background-size: 100% 1652px, 100% 1652px, 100% 1652px;
+      background-position: top left, top left, top left;
+      background-repeat: no-repeat;
+    }
+
+    // Slider controls sit at the top of the band — smaller top padding.
+    &--after-nav {
+      padding-top: 20px;
+
+      @include breakpoint-medium {
+        padding-top: 40px;
+      }
+    }
+
+    &--no-featured {
+      padding-top: 0;
+    }
+
+    .cs_content {
+      margin-bottom: 0;
     }
   }
 
@@ -287,33 +442,30 @@
   &_list {
     display: flex;
     flex-direction: column;
-    gap: 32px;
+    // Children carry their own vertical rhythm (boxes, chips, dividers).
+    gap: 0;
     align-items: stretch;
     min-height: calc(100vh - 330px);
-
-    @include breakpoint-medium {
-      // Children carry their own vertical rhythm (dividers, chips row).
-      gap: 0;
-    }
   }
 }
 
 // Section headings above the search bar and the filter row
 // (Figma nodes 2822:2010 / 2822:2063 — 36px Bold, tracking -1.2).
 .cs_section-heading {
-  margin: 0 0 24px;
-  @include font-settings(24px, 110%, $font-weight-extra-bold);
+  margin: 0 0 20px;
+  @include font-settings(26px, 100%, $font-weight-extra-bold);
   color: #040406;
   letter-spacing: -1.2px;
 
   @include breakpoint-medium {
     margin-bottom: 40px;
     font-size: 36px;
+    line-height: 110%;
   }
 
-  // "Filters" sits 100px below the search bar on desktop.
+  // "Filters" sits 60px below the search bar on mobile, 100px on desktop.
   &:not(:first-of-type) {
-    margin-top: 48px;
+    margin-top: 60px;
 
     @include breakpoint-medium {
       margin-top: 100px;
@@ -321,33 +473,30 @@
   }
 }
 
-// Thin dividers framing the filter area (Figma lines 2828:2094 / 2831:2200).
-// Desktop only — on mobile the filter row collapses into the modal trigger.
+// Thin dividers framing the filter area (Figma lines 2828:2094 / 2831:2200;
+// mobile 2862:4543 — 10px below the info row).
 .cs_filter-line {
-  display: none;
+  display: block;
+  height: 1px;
+  background: #dedfe4;
+  margin: 10px 0 0;
 
   @include breakpoint-medium {
-    display: block;
-    height: 1px;
-    background: #dedfe4;
     margin: 12px 0 20px;
   }
 }
 
-// The second divider (below the selected-tag chips) keeps the 40px rhythm.
+// The second divider (below the selected-tag chips) sits directly above the
+// list — its bottom margin is 0 so the first row's own spacing sets the
+// 40px gap (desktop Figma: line y=2278, first row content y=2318).
 .cs_list > .cs_filter-line {
-  @include breakpoint-medium {
-    margin: 40px 0;
-  }
+  margin: 40px 0 0;
 }
 
 // New search bar (separate from .cs_search-form to avoid conflicts)
 .cs_search-bar-wrapper {
   width: 100%;
-  margin-bottom: 20px;
-  @include breakpoint-medium {
-    margin-bottom: 0;
-  }
+  margin-bottom: 0;
 }
 
 .cs_search-bar-form {
@@ -360,7 +509,7 @@
   display: flex;
   align-items: center;
   width: 100%;
-  height: 56px;
+  height: 60px;
   border: 1px solid #828388;
   box-sizing: border-box;
   transition: border-color 0.2s ease;
@@ -378,8 +527,8 @@
 .cs_search-bar-icon {
   position: absolute;
   left: 20px;
-  width: 16px;
-  height: 16px;
+  width: 14px;
+  height: 14px;
   pointer-events: none;
   z-index: 1;
 }
@@ -393,6 +542,7 @@
   background: transparent;
   font-size: 14px;
   font-weight: $font-weight-medium;
+  line-height: 1.4;
   color: #232429;
   outline: none;
   box-shadow: none;
@@ -442,41 +592,46 @@
   display: flex;
 }
 
-// Tags styling — on desktop the sections become a horizontal row of
-// 231x65 dropdown boxes (Figma y=2047, x=100/371/642/913, gap 40).
-// Below breakpoint-medium the stacked accordion look is kept for the
-// mobile filter modal.
+// Tags styling — on mobile a stack of full-width 60px boxes overlapping by
+// 1px (Figma 2862:4543, pitch 59px, first box 40px below the divider); on
+// desktop a horizontal row of 231x65 dropdown boxes (Figma y=2047,
+// x=100/371/642/913, gap 40).
 .tags-filter {
-  border: 1px solid $gray-border;
+  width: 100%;
+  margin-top: 40px;
   flex-shrink: 0;
   font-style: $font-style-normal;
-  max-width: 262px;
-  width: 100%;
-  max-height: 1076px;
-  overflow-y: auto;
-  overflow-x: hidden;
 
   @include breakpoint-medium {
     display: flex;
     align-items: flex-start;
     gap: 40px;
-    max-width: none;
-    max-height: none;
-    overflow: visible;
-    border: 0;
+    margin-top: 0;
   }
 
   .filter-section {
-    &:first-of-type {
+    position: relative;
+
+    // Consecutive boxes share a 1px border seam.
+    & + .filter-section {
+      margin-top: -1px;
+    }
+
+    // A box with selections renders above its neighbours so the teal
+    // border is not covered by the 1px overlap.
+    &--has-selection {
+      z-index: 1;
+
       .filter-category {
-        &::before {
-          content: none;
-        }
+        border-color: #00897b;
+        background: rgba(0, 137, 123, 0.1);
       }
     }
   }
 }
 
+// The panel row styling below is shared by the inline mobile panel and the
+// desktop dropdown (Figma open panel 2822:1759 / mobile 2862:4543).
 .filter-content {
   max-height: 0;
   opacity: 0;
@@ -487,21 +642,26 @@
     transform 0.3s ease 0.1s,
     padding-bottom 0.5s ease;
   overflow: hidden;
+  // Border and padding only when open — the collapsed panel must not take
+  // any layout height (mobile box pitch depends on it).
+  border: 0;
+  padding: 0 20px;
+  background: #fff;
 
   .tag-search {
-    @include font-settings(11px, 140%, $font-weight-medium);
-    border: 1px solid rgba($gray-200, 0.4);
-    padding: 12px;
-    margin: 16px 0 11px;
-    color: $gray-300;
+    margin: 0 0 16px;
+    padding: 10px 12px;
+    font-size: 14px;
+    font-weight: $font-weight-medium;
+    line-height: 140%;
+    color: #232429;
+    border: 1px solid #dedfe4;
     width: 100%;
 
     &:focus {
       outline: 0;
-      border-left: 0;
-      border-right: 0;
-      border-top: 0;
-      padding-left: 0;
+      padding-left: 12px;
+      border: 1px solid #232429;
     }
   }
 
@@ -514,7 +674,6 @@
   }
 
   .tag-item {
-    margin-bottom: 6px;
     opacity: 0;
     transform: translateY(10px);
     animation: fadeInUp 0.4s ease-out forwards;
@@ -531,8 +690,7 @@
       .tag-link {
         &::before {
           content: '';
-          background-color: $gray-500;
-          background-image: var(--check-mark-url, url(/images/check_mark.svg));
+          background-color: #232429;
         }
       }
     }
@@ -546,18 +704,17 @@
     }
   }
 
+  // Rows: [20px checkbox] label … count.
   .tag-link {
     display: flex;
     align-items: center;
     gap: 6px;
     text-decoration: none;
     cursor: pointer;
-    padding: 8px 8px;
-    margin-left: -8px;
-    margin-right: 0;
-    color: $gray-300;
-    @include font-settings(11px, 140%, $font-weight-medium);
-    text-transform: capitalize;
+    padding: 10px 0;
+    margin: 0;
+    color: #232429;
+    @include font-settings(14px, 140%, $font-weight-medium);
     transition:
       background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
       color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
@@ -565,31 +722,25 @@
 
     &:hover,
     &:focus-visible {
-      background-color: rgba($gray-100, 0.6);
-      color: $gray-500;
-      transform: translateX(4px);
-
       &::before {
-        background-color: rgba($gray-200, 0.8);
-        transform: scale(1.1);
-        box-shadow: 0 2px 4px rgba($gray-300, 0.2);
+        background-color: rgba(0, 137, 123, 0.1);
       }
     }
 
     &::before {
       content: '';
       display: inline-block;
-      width: 14px;
-      height: 14px;
-      background-color: $gray-100;
+      width: 20px;
+      height: 20px;
+      background-color: transparent;
+      border: 1px solid #232429;
+      border-radius: 0;
       background-repeat: no-repeat;
       background-position: center;
       background-size: 10px 10px;
-      margin-right: 10px;
+      margin-right: 20px;
       vertical-align: middle;
-      margin-top: -1px;
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      border-radius: 2px;
       flex-shrink: 0;
     }
 
@@ -600,8 +751,8 @@
     .tag-count {
       flex-shrink: 0;
       white-space: nowrap;
-      margin-left: 4px;
-      color: $gray-300;
+      margin-left: auto;
+      color: #232429;
     }
   }
 }
@@ -613,46 +764,35 @@
   @include font-settings(11px, 140%, $font-weight-medium);
 }
 
+// Figma: underlined uppercase "show more".
 .tags__show-more {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
   background: none;
   border: none;
-  color: $gray-400;
-  font-weight: $font-weight-medium;
-  font-size: 11px;
-  line-height: 140%;
   cursor: pointer;
-  padding: 8px;
-  width: 100%;
-  min-width: 228px;
-  justify-content: flex-start;
-  transition:
-    background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-    color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-    transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  margin: 0 -8px;
+  padding: 0;
+  margin: 8px 0 0 40px;
+  min-width: 0;
+  width: auto;
+  font-size: 14px;
+  font-weight: $font-weight-extra-bold;
+  letter-spacing: 1.2px;
+  line-height: 140%;
+  text-transform: uppercase;
+  text-decoration: underline;
+  text-underline-position: from-font;
+  color: #232429;
+  transition: color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
 
-  &:hover {
-    background-color: rgba($gray-100, 0.6);
-    color: $gray-500;
-    transform: translateX(4px);
-  }
-
+  &:hover,
   &:focus-visible {
-    background-color: rgba($gray-100, 0.6);
-    color: $gray-500;
-    transform: translateX(4px);
+    background: none;
+    transform: none;
+    color: #00897b;
     outline: none;
-
-    .tags__show-more--icon {
-      img {
-        transform: scale(1.1);
-        filter: drop-shadow(0 2px 4px rgba($gray-300, 0.2));
-      }
-    }
   }
 
   &--icon {
@@ -672,7 +812,7 @@
   }
 
   &--text {
-    text-transform: capitalize;
+    text-transform: uppercase;
     transition: opacity 0.2s ease;
     line-height: 1.1;
   }
@@ -704,7 +844,8 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      @include font-settings(18px, 140%, $font-weight-extra-bold);
+      // Unselected title is Medium; Bold only with selections (Figma 2831:2129).
+      @include font-settings(18px, 140%, $font-weight-medium);
       color: #232429;
       transition:
         border-color 0.2s ease,
@@ -734,9 +875,11 @@
 
         &::before {
           position: absolute;
-          right: 12px;
+          // 20px from the border like the Figma icon frame (2831:2114); the
+          // glyph's visual weight sits ~2px low, so lift it to the title level.
+          right: 20px;
           top: 50%;
-          margin-top: -4px;
+          margin-top: -5px;
         }
       }
     }
@@ -746,6 +889,8 @@
       .filter-category {
         border-color: #00897b;
         background: rgba(0, 137, 123, 0.1);
+        // Selected title switches to Bold teal (Figma 2822:2019).
+        font-weight: $font-weight-extra-bold;
       }
 
       .filter-category__title {
@@ -881,68 +1026,62 @@
   }
 }
 
+// Mobile (<768px) inline filter box: full-width 60px rows, 1px #828388
+// border, whole-box toggle hit area (Figma 2862:4543). Desktop rules live in
+// the breakpoint-medium block below.
 .filter-section {
-  padding: 0 24px;
+  padding: 0;
 
   .filter-category {
-    @include font-settings(14px, 150%, $font-weight-extra-bold);
-    color: $gray-500;
+    @include font-settings(14px, 140%, $font-weight-medium);
+    color: #232429;
     margin: 0;
-    padding: 12px 0;
+    padding: 0 20px;
+    height: 60px;
+    border: 1px solid #828388;
+    background: transparent;
     position: relative;
     display: flex;
-    justify-content: space-between;
     align-items: center;
-
-    &::before,
-    &::after {
-      content: '';
-      position: absolute;
-      left: -24px;
-      right: -24px;
-      bottom: 0;
-      border-bottom: 1px solid rgba($gray-border, 0.3);
-      transition: border-color 0.3s ease;
-    }
-
-    &::before {
-      top: 0;
-      bottom: initial;
-      border-bottom: none;
-      border-top: 1px solid $gray-border;
-    }
+    gap: 8px;
+    transition:
+      border-color 0.2s ease,
+      background-color 0.2s ease;
 
     &__title {
-      flex: 1;
+      flex: none;
+    }
+
+    &__count {
+      margin-right: 28px;
+      @include font-settings(14px, 140%, $font-weight-extra-bold);
+      color: #00897b;
     }
 
     &__expand-button {
-      width: 16px;
-      height: 16px;
+      position: absolute;
+      inset: 0;
+      width: auto;
+      height: auto;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      flex-shrink: 0;
 
       &:focus {
         outline: none;
-        box-shadow: 0 0 0 2px rgba($gray-400, 0.5);
-        border-radius: 3px;
       }
 
       &:focus:not(:focus-visible) {
         box-shadow: none;
       }
 
-      &:hover {
-        &::before {
-          border-color: $gray-400;
-        }
-      }
-
       &::before {
         content: '';
+        position: absolute;
+        right: 20px;
+        top: 50%;
+        margin-top: -5px;
         width: 8px;
         height: 8px;
         border-right: 2px solid $gray-500;
@@ -952,6 +1091,19 @@
           transform 0.3s ease,
           border-color 0.3s ease;
       }
+    }
+  }
+
+  // Box with active selections — teal tint and bold label.
+  &--has-selection {
+    .filter-category {
+      border-color: #00897b;
+      background: rgba(0, 137, 123, 0.1);
+      font-weight: $font-weight-extra-bold;
+    }
+
+    .filter-category__title {
+      color: #00897b;
     }
   }
 
@@ -967,10 +1119,7 @@
 
     &:checked {
       ~ .filter-category {
-        &::before,
-        &::after {
-          border-color: $gray-border;
-        }
+        border-color: #232429;
 
         .filter-category__expand-button {
           &::before {
@@ -983,7 +1132,8 @@
         max-height: 5000px;
         opacity: 1;
         transform: translateY(0);
-        padding-bottom: 24px;
+        border: 1px solid #232429;
+        padding: 20px;
       }
     }
   }
@@ -1029,14 +1179,13 @@
   gap: 16px;
   justify-content: space-between;
   min-height: 28px;
-  position: sticky;
-  z-index: 1;
-  top: calc(#{$mobile-header-height} + 6px);
 
   @include breakpoint-medium {
     flex-wrap: nowrap;
     align-items: center;
     justify-content: flex-start;
+    position: sticky;
+    z-index: 1;
     top: calc(#{$desktop-header-height} + 6px);
   }
 }
@@ -1050,7 +1199,7 @@
   white-space: nowrap;
   font-weight: $font-weight-extra-bold;
   color: #00897b;
-  @include responsive-font(14px, 18px);
+  @include responsive-font(16px, 18px);
   @include responsive-line-height(140%, 140%);
 }
 
@@ -1064,34 +1213,10 @@
   }
 }
 
-.filters-cta {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 12px;
-  background: $white;
-  border: 1px solid $gray-400;
-  font-style: $font-style-normal;
-  color: $gray-400;
-  cursor: pointer;
-  text-transform: uppercase;
-  transform: scale(1);
-  @include transition(transform, 0.3s);
-  @include font-settings(10px, 140%, $font-weight-extra-bold);
-
-  &:hover,
-  &:focus {
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-    transform: scale(1.05);
-  }
-
-  @include breakpoint-medium {
-    display: none;
-  }
-}
-
-// Chips row sits 40px below the dropdown boxes (Figma y=2152).
+// Chips row: 20px below the last filter box on mobile, 40px on desktop.
 .selected-tags {
+  margin-top: 20px;
+
   @include breakpoint-medium {
     margin-top: 40px;
   }
@@ -1100,40 +1225,26 @@
 .selected-tags-list {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 10px;
   list-style: none;
   padding: 0;
   margin: 0;
-  @include breakpoint-medium {
-    gap: 10px;
-  }
 }
 
 // Selected-tag chips — teal tint + border (Figma 2831:2149/2150).
 .selected-tag {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 6px 12px;
-  background-color: $gray-100;
-  font-weight: $font-weight-medium;
-  font-size: 10px;
-  line-height: 140%;
-  text-transform: capitalize;
-  color: $gray-300;
-  min-height: 24px;
-  @include breakpoint-medium {
-    font-size: 12px;
-    font-weight: $font-weight-extra-bold;
-    line-height: 110%;
-    height: 38px;
-    gap: 12px;
-    padding: 0 20px;
-    background-color: rgba(0, 137, 123, 0.1);
-    border: 1px solid #00897b;
-    color: #00897b;
-    text-transform: none;
-  }
+  font-weight: $font-weight-extra-bold;
+  font-size: 12px;
+  line-height: 110%;
+  height: 38px;
+  // Figma 2831:2149/2161 — text 20px in, cross 10px in with a 10px gap.
+  gap: 10px;
+  padding: 0 10px 0 20px;
+  background-color: rgba(0, 137, 123, 0.1);
+  border: 1px solid #00897b;
+  color: #00897b;
 }
 
 .remove-tag {
@@ -1143,54 +1254,36 @@
   width: 16px;
   height: 16px;
   font-size: 16px;
-  color: $gray-300;
+  color: #00897b;
   text-decoration: none;
   @include truncate-lines(1);
-
-  @include breakpoint-medium {
-    color: #00897b;
-  }
 }
 
-// Figma: "Clear all" as plain 18px bold text + close icon, no box.
+// Figma: "Clear all" as plain bold text + close icon, no box.
 .clear-all {
   display: flex;
   align-items: center;
-  padding: 4px 8px;
-  border: 1px solid $red;
-  background-color: $white;
-  font-weight: $font-weight-medium;
-  font-size: 11px;
+  margin-left: auto;
+  padding: 0;
+  border: 0;
+  background: none;
+  font-size: 16px;
+  font-weight: $font-weight-extra-bold;
   line-height: 140%;
-  color: $gray-300;
-  height: 24px;
-  min-width: 87px;
-  text-transform: capitalize;
+  color: #232429;
   white-space: nowrap;
+
   @include breakpoint-medium {
-    margin-left: auto;
-    height: auto;
-    padding: 0;
-    min-width: 0;
-    border: 0;
-    background: none;
     font-size: 18px;
-    font-weight: $font-weight-extra-bold;
-    color: #232429;
-    text-transform: none;
   }
 }
 
 .clear-all-link {
-  color: inherit;
+  color: #232429;
   text-decoration: none;
 
-  @include breakpoint-medium {
-    color: #232429;
-
-    &:hover {
-      color: #00897b;
-    }
+  &:hover {
+    color: #00897b;
   }
 }
 
@@ -1200,10 +1293,7 @@
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  gap: 8px;
-  @include breakpoint-medium {
-    gap: 12px;
-  }
+  gap: 12px;
 }
 
 .clear-text {
@@ -1217,8 +1307,8 @@
   display: grid;
   place-items: center;
   font-size: 16px;
-  width: 16px;
-  height: 16px;
+  width: 22px;
+  height: 22px;
 }
 
 .filter-anchor {
@@ -1231,12 +1321,14 @@
   }
 }
 
-// Case Study preview card with loading state transition
+// Case Study rows — a single-column numbered list at every breakpoint
+// (Figma node 2831:2883, rows y=2278-3302).
 .cs_grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 32px;
-  margin: 0 auto;
+  display: block;
+  width: 100%;
+  // First row starts 40px below the divider above the list (mobile);
+  // on desktop the row's own top padding provides the gap.
+  margin: 40px 0 0;
   min-width: 0;
   opacity: 0;
   transform: translateY(30px);
@@ -1246,7 +1338,7 @@
     forwards;
 
   @include breakpoint-medium {
-    grid-template-columns: repeat(2, 1fr);
+    margin-top: 0;
   }
 
   .cs_details-page {
@@ -1315,128 +1407,186 @@
   @include responsive-line-height(150%, 150%);
 }
 
+// Rows — mobile: full-bleed white cards with 40px gaps (Figma 2862:4543);
+// desktop: numbered 27px | 222x176 image | fluid details columns
+// (Figma node 2831:2883: 256px row pitch, 40px gaps).
 .cs_card {
-  background-color: $white;
-  border: 1px solid $whisper;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: 1fr;
+  margin: 0 -40px 40px;
+  padding: 0;
+  background: #fff;
   text-decoration: none;
   opacity: 0;
   transform: translateY(25px);
   filter: blur(1px);
   animation: cardFadeInUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   @for $i from 1 through 12 {
     &:nth-child(#{$i}) {
       animation-delay: #{0.6 + ($i * 0.08)}s;
     }
   }
 
+  @include breakpoint-medium {
+    grid-template-columns: 27px 222px minmax(0, 1fr);
+    column-gap: 40px;
+    align-items: start;
+    margin: 0;
+    padding: 40px 0;
+    border-bottom: 1px solid #dedfe4;
+    background: none;
+  }
+
   &:hover {
-    box-shadow: 0 8px 32px rgba($black, 0.12);
-    transform: translateY(-6px);
-  }
-
-  @include breakpoint-large {
-    border: none;
-  }
-
-  .image {
-    display: block;
-    margin: 0 auto;
-    max-width: 100%;
-    height: auto;
-    max-height: 140px;
-    object-fit: cover;
-
-    @include breakpoint-large {
-      width: 437px;
-      max-height: 240px;
+    .portfolio-title {
+      color: #00897b;
     }
   }
 
-  .placeholder-image-container {
-    width: 100%;
-    max-height: 240px;
-    height: 100%;
-    overflow: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: rgba($gray-400, 0.5);
+  &__number {
+    display: none;
+    white-space: nowrap;
+    @include font-settings(12px, normal, $font-weight-extra-bold);
+    color: #6b6b6b;
+    letter-spacing: 1.44px;
 
-    @include breakpoint-large {
-      align-items: flex-start;
-      padding-top: 50px;
+    @include breakpoint-medium {
+      display: block;
+      font-size: 14px;
+      // Vertically centred on the 176px-tall image.
+      line-height: 176px;
     }
   }
 
-  .placeholder-image {
-    max-width: 100%;
-    max-height: 100%;
+  &__media {
+    .image {
+      display: block;
+      width: 100%;
+      aspect-ratio: 440 / 200;
+      height: auto;
+      object-fit: cover;
+
+      @include breakpoint-medium {
+        width: 222px;
+        height: 176px;
+        aspect-ratio: auto;
+      }
+    }
+
+    .placeholder-image-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      aspect-ratio: 440 / 200;
+      overflow: hidden;
+      background-color: rgba($gray-400, 0.5);
+
+      @include breakpoint-medium {
+        width: 222px;
+        height: 176px;
+        aspect-ratio: auto;
+      }
+    }
+
+    .placeholder-image {
+      max-width: 100%;
+      max-height: 100%;
+    }
   }
 
   .cs_details {
-    background: $white;
-    padding: 24px;
+    margin-top: 0;
+    padding: 20px 40px 40px;
+    min-width: 0;
 
-    @include breakpoint-large {
-      width: 397px;
-      height: 195px;
-      margin: -94px auto 0;
+    @include breakpoint-medium {
+      padding: 0;
     }
 
     .cname {
-      @include responsive-font(16px, 22px);
-      @include responsive-line-height(150%, 110%);
-      @include text-truncate-cs-preview-card($height: 24px);
-      font-style: $font-style-normal;
+      margin: 0;
+      @include font-settings(12px, 1, $font-weight-extra-bold);
+      color: #828388;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+
+      @include breakpoint-medium {
+        font-size: 14px;
+      }
+    }
+  }
+
+  &__meta {
+    display: none;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px 10px;
+    margin-top: 10px;
+    @include font-settings(12px, 1, $font-weight-extra-bold);
+    color: #828388;
+
+    @include breakpoint-medium {
+      display: flex;
+    }
+  }
+
+  &__meta-sep {
+    flex-shrink: 0;
+    width: 2px;
+    height: 12px;
+    background-color: #00897b;
+  }
+
+  .portfolio-title {
+    margin: 20px 0 0;
+    @include font-settings(18px, 1.2, $font-weight-extra-bold);
+    color: #232429;
+    letter-spacing: 0;
+    text-wrap: balance;
+    transition: color 0.2s ease;
+
+    @include breakpoint-medium {
+      max-width: 620px;
+      font-size: 26px;
+      letter-spacing: -0.6px;
+      color: #191919;
+    }
+  }
+
+  &__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 40px 0 0;
+    padding: 0;
+    list-style: none;
+
+    @include breakpoint-medium {
+      margin-top: 20px;
+    }
+  }
+
+  &__tag {
+    display: flex;
+    align-items: center;
+    height: 38px;
+    padding: 0 20px;
+    border: 1px solid #dedfe4;
+    background: transparent;
+    @include font-settings(12px, 1, $font-weight-medium);
+    color: #5c5c5a;
+
+
+    &--more {
       font-weight: $font-weight-extra-bold;
-      color: $gray-500;
-      margin: 0 0 4px;
     }
 
-    .type {
-      @include responsive-font(10px, 10px);
-      @include responsive-line-height(140%, 140%);
-      @include text-truncate-cs-preview-card($height: 14px);
-      color: $gray-300;
-      font-style: $font-style-normal;
+    &.is-active {
+      border-color: #00897b;
+      background: rgba(0, 137, 123, 0.1);
+      color: #00897b;
       font-weight: $font-weight-extra-bold;
-      margin-bottom: 12px;
-    }
-
-    .industry {
-      @include responsive-font(10px, 10px);
-      @include responsive-line-height(140%, 140%);
-      @include text-truncate-cs-preview-card($height: 14px);
-      font-style: $font-style-normal;
-      font-weight: $font-weight-medium;
-      color: $gray-300;
-      margin-bottom: 4px;
-    }
-
-    .portfolio-title {
-      @include responsive-font(14px, 14px);
-      @include responsive-line-height(150%, 150%);
-      @include text-truncate-cs-preview-card(
-        $height: 42px,
-        $is-multiline: true
-      );
-      font-style: $font-style-normal;
-      font-weight: $font-weight-medium;
-      color: $gray-500;
-      margin: 0 0 16px;
-    }
-
-    .stack {
-      @include responsive-font(11px, 11px);
-      @include responsive-line-height(120%, 120%);
-      @include text-truncate-cs-preview-card($height: 13px);
-      font-style: $font-style-normal;
-      font-weight: $font-weight-300;
-      color: $gray-300;
     }
   }
 }
@@ -1911,135 +2061,6 @@
     }
   }
 
-  .filter-modal__backdrop {
-    transition: none;
-  }
-}
-
-// Styles for Filters in modal popup for mobile version
-@media (max-width: $breakpoint-medium) {
-  .clear-all,
-  .selected-tags,
-  .tags-filter {
-    display: none;
-  }
-
-  #filter-modal {
-    &.active {
-      .clear-all,
-      .selected-tags,
-      .tags-filter {
-        display: block;
-      }
-    }
-  }
-}
-
-.filter-modal {
-  display: block;
-  position: fixed;
-  z-index: $z-index-modal;
-  inset: 0;
-  pointer-events: none;
-
-  .selected-tags {
-    margin-bottom: 32px;
-  }
-
-  .tags-filter {
-    max-width: none;
-    max-height: none;
-    overflow-y: visible;
-    overflow-x: visible;
-  }
-
-  &__backdrop {
-    position: absolute;
-    inset: 0;
-    background: rgba($black, 0.5);
-    z-index: 1;
-    opacity: 1;
-    transition: opacity 0.2s ease-in-out;
-  }
-
-  &__content {
-    position: sticky;
-    left: 20px;
-    right: 20px;
-    top: 90px;
-    width: 90vw;
-    max-width: 400px;
-    min-width: 300px;
-    background: #fff;
-    z-index: 2;
-    padding: 0 16px 60px;
-    max-height: 90vh;
-    overflow-y: auto;
-    box-shadow: 0 8px 32px rgba($black, 0.18);
-  }
-
-  &__button-wrapper {
-    z-index: 3;
-    position: sticky;
-    background: white;
-    top: 0;
-    display: flex;
-    align-items: center;
-    width: 100%;
-    padding: 24px 0 14px;
-  }
-
-  &__button {
-    background: transparent;
-    border: 0;
-    padding: 4px 6px;
-    cursor: pointer;
-    font-style: $font-style-normal;
-    text-transform: lowercase;
-    color: $gray-300;
-    @include font-settings(11px, 120%, $font-weight-300);
-  }
-
-  &__body {
-    margin-top: 26px;
-  }
-
-  .filter-header {
-    color: $gray-500;
-    margin: 0 0 32px;
-    padding-bottom: 12px;
-    border-bottom: 1px solid rgba($gray-200, 0.4);
-    @include font-settings(14px, 150%, $font-weight-extra-bold);
-  }
-
-  &__top-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 16px;
-  }
-
-  &:not(.active) {
-    pointer-events: none;
-    opacity: 0;
-  }
-
-  &.active {
-    pointer-events: auto;
-    opacity: 1;
-  }
-}
-
-.back-icon {
-  background-image: url('/images/arrow-back.svg');
-  background-size: contain;
-  background-repeat: no-repeat;
-  width: 20px;
-  height: 8px;
-  margin-right: 12px;
-  vertical-align: middle;
-  display: inline-block;
 }
 
 .infinite-scroll-error {

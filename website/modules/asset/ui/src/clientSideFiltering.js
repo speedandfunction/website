@@ -82,6 +82,37 @@ const handleResize = function () {
   updateCategoriesVisibility();
 };
 
+/*
+ * Uncheck every open filter-category toggle except the one inside
+ * `clickedSection`, keeping aria-expanded in sync. Dropdown panels are wide
+ * absolute overlays, so opening another category also closes the previous
+ * one (passed as clickedSection by the label's own toggle click).
+ */
+const closeFilterDropdowns = function (clickedSection) {
+  document
+    .querySelectorAll('.filter-category__toggle:checked')
+    .forEach(function (toggle) {
+      if (toggle.closest('.filter-section') === clickedSection) {
+        return;
+      }
+      toggle.checked = false;
+      const button = document.querySelector(`label[for="${toggle.id}"]`);
+      if (button) {
+        button.setAttribute('aria-expanded', 'false');
+      }
+    });
+};
+
+const handleFilterDropdownOutsideClick = function (event) {
+  closeFilterDropdowns(event.target.closest('.filter-section'));
+};
+
+const handleFilterDropdownEscape = function (event) {
+  if (event.key === 'Escape') {
+    closeFilterDropdowns(null);
+  }
+};
+
 export const initClientSideFiltering = function () {
   if (!document.querySelector('.cs_list')) {
     return;
@@ -92,6 +123,8 @@ export const initClientSideFiltering = function () {
   window.addEventListener('popstate', handlePopState);
   window.addEventListener('resize', handleResize);
   document.addEventListener('click', handleFilterClick);
+  document.addEventListener('click', handleFilterDropdownOutsideClick);
+  document.addEventListener('keydown', handleFilterDropdownEscape);
 
   // Keep aria-expanded in sync with checkbox state
   document.addEventListener('change', function (event) {

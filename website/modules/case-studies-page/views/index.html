@@ -11,13 +11,14 @@
   id="case-studies-page-data"
   data-default-visible-tags="{{ data.defaultVisibleTagsCount }}"
 >
-  <div class="cs_content">
-    <div
-      class="page-main_content {% if not data.user %}loading{% else %}loaded{% endif %}"
-      id="page-main_content"
-      aria-busy="{% if not data.user %}true{% else %}false{% endif %}"
-    >
-      {% if data.page.heading or data.page.description or (data.page.numbers and data.page.numbers.length) %}
+  <div
+    class="page-main_content {% if not data.user %}loading{% else %}loaded{% endif %}"
+    id="page-main_content"
+    aria-busy="{% if not data.user %}true{% else %}false{% endif %}"
+  >
+    <section class="cs_hero">
+      <div class="cs_section-inner">
+        {% if data.page.heading or data.page.description or (data.page.numbers and data.page.numbers.length) %}
       <div class="cs_intro">
         {% if data.page.heading %}
         <h1 class="cs_intro__heading">{{ data.page.heading }}</h1>
@@ -37,9 +38,11 @@
         </ul>
         {% endif %}
       </div>
-      {% endif %}
+        {% endif %}
+      </div>
+    </section>
 
-      {% if data.page._featuredCases and data.page._featuredCases.length %}
+    {% if data.page._featuredCases and data.page._featuredCases.length %}
       <div class="cs_featured">
         <div class="cs_featured__swiper swiper">
           <div class="swiper-wrapper">
@@ -76,39 +79,46 @@
                   class="cs_featured__cta"
                   target="_blank"
                   rel="noopener noreferrer"
-                  >Read The Full Story <span aria-hidden="true">→</span></a
+                  ><span class="cs_featured__cta-label cs_featured__cta-label--desktop">Read The Full Story</span><span class="cs_featured__cta-label cs_featured__cta-label--mobile">Read more</span> <span aria-hidden="true">→</span></a
                 >
                 {% elif caseStudy._url %}
                 <a href="{{ data.buildCaseStudyUrl(caseStudy._url) }}" class="cs_featured__cta"
-                  >Read The Full Story <span aria-hidden="true">→</span></a
+                  ><span class="cs_featured__cta-label cs_featured__cta-label--desktop">Read The Full Story</span><span class="cs_featured__cta-label cs_featured__cta-label--mobile">Read more</span> <span aria-hidden="true">→</span></a
                 >
                 {% endif %}
               </div>
             </div>
             {% endfor %}
           </div>
-          {% if data.page._featuredCases.length > 1 %}
-          <div class="cs_featured__nav">
-            <button
-              type="button"
-              class="cs_featured__nav-btn cs_featured__prev"
-              aria-label="Previous featured project"
-            >
-              <span aria-hidden="true">←</span> previous
-            </button>
-            <button
-              type="button"
-              class="cs_featured__nav-btn cs_featured__next"
-              aria-label="Next featured project"
-            >
-              next <span aria-hidden="true">→</span>
-            </button>
-          </div>
-          {% endif %}
         </div>
       </div>
+    {% endif %}
+  </div>
+
+  {% set featuredCount = data.page._featuredCases.length if data.page._featuredCases else 0 %}
+  <section class="cs_listing{% if featuredCount > 1 %} cs_listing--after-nav{% elif featuredCount == 0 %} cs_listing--no-featured{% endif %}">
+    <div class="cs_section-inner cs_content">
+      {% if featuredCount > 1 %}
+      <div class="cs_featured__controls">
+        <div class="cs_featured__nav">
+          <button
+            type="button"
+            class="cs_featured__nav-btn cs_featured__prev"
+            aria-label="Previous featured project"
+          >
+            <span aria-hidden="true">←</span> previous
+          </button>
+          <button
+            type="button"
+            class="cs_featured__nav-btn cs_featured__next"
+            aria-label="Next featured project"
+          >
+            next <span aria-hidden="true">→</span>
+          </button>
+        </div>
+        <div class="cs_featured__pagination"></div>
+      </div>
       {% endif %}
-    </div>
 
     <div id="filter" class="filter-anchor"></div>
 
@@ -169,7 +179,6 @@
     <h2 class="cs_section-heading">Filters</h2>
 
     <div class="cs_filter-info">
-      <div class="filters-cta">Filter Case Studies</div>
       {% set hasActiveFilters = data.query.industry or data.query.stack or
       data.query.caseStudyType or data.query.partner or data.query.search %}
       <p class="items-count{% if not hasActiveFilters %} is-hidden{% endif %}">
@@ -404,58 +413,76 @@
           data-partner="{% for partner in article._partner or [] %}{{ partner.slug }}{% if not loop.last %},{% endif %}{% endfor %}"
           data-search="{{ [
             article.title,
-            article.portfolioTitle,
-            article.descriptor,
-            article.objective,
-            article.challenge,
-            article.solution,
-            article.results
+            article.portfolioTitle
           ] | join(' ') | lower }} {% for industry in article._industry or [] %}{{ industry.title | lower }} {% endfor %}{% for tech in article._stack or [] %}{{ tech.title | lower }} {% endfor %}{% for type in article._caseStudyType or [] %}{{ type.title | lower }} {% endfor %}{% for partner in article._partner or [] %}{{ partner.title | lower }} {% endfor %}"
         >
-          {% set picture = apos.image.first(article.picture) %} {% if picture is
-          defined %}
-          <img
-            class="image"
-            loading="lazy"
-            src="{{ apos.attachment.url(picture, { size: data.options.size or 'full' }) }}"
-            alt="{{ picture._alt or '' }}"
-            width="{{ apos.attachment.getWidth(picture) }}"
-            height="{{ apos.attachment.getHeight(picture) }}"
-          />
-          {% else %}
-          <div class="placeholder-image-container">
+          <span class="cs_card__number" aria-hidden="true"
+            >{% if loop.index < 10 %}00{% elif loop.index < 100 %}0{% endif %}{{ loop.index }}</span
+          >
+          {% set picture = apos.image.first(article.picture) %}
+          <div class="cs_card__media">
+            {% if picture is defined %}
             <img
-              class="placeholder-image"
+              class="image{% if not data.user %} lozad{% endif %}"
               loading="lazy"
-              src="/images/logo.svg"
-              alt="Placeholder banner for {{ article.title }}"
-              width="160"
-              height="50"
+              {% if not data.user %}data-{% endif %}srcset="{{ apos.image.srcset(picture) }}"
+              {% if not data.user %}data-{% endif %}src="{{ apos.attachment.url(picture, { size: data.options.size or 'full' }) }}"
+              alt="{{ picture._alt or article.portfolioTitle or article.title }}"
+              width="{{ apos.attachment.getWidth(picture) }}"
+              height="{{ apos.attachment.getHeight(picture) }}"
+              {% if apos.attachment.hasFocalPoint(picture) %}
+                data-object-position="{{ apos.attachment.focalPointToObjectPosition(picture) }}"
+              {% endif %}
             />
-          </div>
-          {% endif %}
-          <div class="cs_details">
-            <h3 class="cname">{{ article.title }}</h3>
-            <div class="type">
-              {% if article._caseStudyType and article._caseStudyType.length %}
-              {% for type in article._caseStudyType %} {{ type.title | e }}{% if
-              not loop.last %}, {% endif %} {% endfor %} {% endif %}
+            {% else %}
+            <div class="placeholder-image-container">
+              <img
+                class="placeholder-image"
+                loading="lazy"
+                src="/images/logo.svg"
+                alt="Placeholder banner for {{ article.title }}"
+                width="160"
+                height="50"
+              />
             </div>
-            <div class="industry">
-              {% if article._industry.length %} {% for industry in
-              article._industry %} {{ industry.title }}{% if not loop.last %},
-              {% endif %} {% endfor %} {% endif %}
-            </div>
-
-            {% if article.portfolioTitle %}
-            <h4 class="portfolio-title">{{ article.portfolioTitle }}</h4>
             {% endif %}
-
-            <div class="stack">
-              {% if article._stack.length %} {% for tech in article._stack %} {{
-              tech.title }}{% if not loop.last %}, {% endif %} {% endfor %} {%
-              endif %}
+          </div>
+          <div class="cs_details">
+            <p class="cname">{{ article.title }}</p>
+            <div class="cs_card__meta">
+              {% if article._industry.length %}
+              <span class="industry"
+                >{% for industry in article._industry %}{{ industry.title }}{% if
+                not loop.last %}, {% endif %}{% endfor %}</span
+              >
+              {% endif %}
+              {% if article._industry.length and article._caseStudyType and article._caseStudyType.length %}
+              <span class="cs_card__meta-sep" aria-hidden="true"></span>
+              {% endif %}
+              {% if article._caseStudyType and article._caseStudyType.length %}
+              <span class="type"
+                >{% for type in article._caseStudyType %}{{ type.title | e }}{% if
+                not loop.last %}, {% endif %}{% endfor %}</span
+              >
+              {% endif %}
             </div>
+            <h3 class="portfolio-title">{{ article.portfolioTitle or article.title }}</h3>
+            {% if article._stack and article._stack.length %}
+            <ul class="cs_card__tags">
+              {% for tech in article._stack %}{% if loop.index <= 6 %}
+              <li
+                class="cs_card__tag"
+                data-filter-type="stack"
+                data-tag-value="{{ tech.slug }}"
+              >
+                {{ tech.title }}
+              </li>
+              {% endif %}{% endfor %}
+              {% if article._stack.length > 6 %}
+              <li class="cs_card__tag cs_card__tag--more">+{{ article._stack.length - 6 }}</li>
+              {% endif %}
+            </ul>
+            {% endif %}
           </div>
         </a>
         {# CARD END: {{ article.title }} #} {% endfor %}
@@ -471,24 +498,8 @@
         </p>
       </div>
     </div>
-
-    <div id="filter-modal" class="filter-modal">
-      <div class="filter-modal__backdrop"></div>
-      <div class="filter-modal__content">
-        <div class="filter-modal__button-wrapper">
-          <button
-            type="button"
-            class="filter-modal__button"
-            aria-label="Close filter modal"
-          >
-            <i class="back-icon"></i>
-            back to all projects
-          </button>
-        </div>
-        <div class="filter-modal__body"></div>
-      </div>
     </div>
-  </div>
+  </section>
 </div>
 
 <noscript>

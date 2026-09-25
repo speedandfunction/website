@@ -472,74 +472,25 @@ $sf-noise-texture: url('/images/noise.png');
   }
 }
 
-// Case Studies page background — "Lavender Teal" (Figma node 2831:2883).
-// The gradient asset covers the top 3175px of the 1440x4009 frame; below it
-// the page is white until the dark footer at y=3698. Ellipses fitted against
-// the object-cover render (mean absolute error 0.6/255):
-//   peach    #ffeee1 centre 50% across, 37% down
-//   teal     #a6f0e8 centre 7% across,  66% down
-//   lavender #f3ddff centre off-screen right, 72% down
+// Case Studies page background — white + fixed noise texture at every
+// breakpoint. The per-band gradients live on .cs_hero and .cs_listing
+// (Figma nodes 2831:2883 desktop / 2862:4543 mobile).
 .sf-container--case-studies {
   max-width: none;
   padding-left: 0;
   padding-right: 0;
-  // Clear the overlay header — Figma node 2831:2883: heading top at ~207px.
-  padding-top: 100px;
+  // The hero band starts at the page top, behind the transparent header.
+  padding-top: 0;
   background-color: #ffffff;
-  background-image: $sf-noise-texture,
-    url('/images/case-studies-bg-mobile.webp');
-  // Stretch the image over the full container height so the gradient always
-  // reaches the footer, whatever the page length.
-  background-size: 128px 128px, 100% 100%;
-  background-position: top left, top center;
-  background-attachment: scroll, scroll;
-  background-repeat: repeat, no-repeat;
-
-  @include breakpoint-medium {
-    padding-top: 207px;
-    background-image: $sf-noise-texture,
-      radial-gradient(
-        ellipse 240% 76% at 107% 72%,
-        #f3ddff 0%,
-        rgba(243, 221, 255, 0) 72%
-      ),
-      radial-gradient(
-        ellipse 240% 66% at 7% 66%,
-        #a6f0e8 0%,
-        rgba(166, 240, 232, 0) 72%
-      ),
-      radial-gradient(
-        ellipse 240% 64% at 50% 37%,
-        #ffeee1 0%,
-        rgba(255, 238, 225, 0) 72%
-      );
-    // Pin layers to the Figma gradient container height (3175px) so blob
-    // positions stay fixed regardless of actual page content length.
-    background-size: 128px 128px, 100% 3175px, 100% 3175px, 100% 3175px;
-    background-position: top left, top left, top left, top left;
-    background-repeat: repeat, no-repeat, no-repeat, no-repeat;
-    background-attachment: fixed, scroll, scroll, scroll;
-  }
+  background-image: $sf-noise-texture;
+  background-size: 128px 128px;
+  background-position: top left;
+  background-repeat: repeat;
+  background-attachment: fixed;
 
   @include breakpoint-extra-extra-large {
     padding-left: 0;
     padding-right: 0;
-  }
-
-  // The container's own padding was zeroed for the full-bleed gradient, so
-  // restore the Figma content column (x=40 mobile / x=100 desktop) here.
-  // Also the gap to the footer — Figma node 2831:2883: last card content ends
-  // ~3518, footer begins at 3698 = ~180px (.cs_content adds a 48px margin).
-  .cs_container {
-    padding-left: 40px;
-    padding-right: 40px;
-    padding-bottom: 72px;
-
-    @include breakpoint-medium {
-      padding-left: 100px;
-      padding-right: 100px;
-      padding-bottom: 132px;
-    }
   }
 }
 
