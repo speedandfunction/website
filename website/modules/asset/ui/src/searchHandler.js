@@ -40,6 +40,18 @@ const restoreFilterState = () => {
   FILTER_TYPES.forEach((filterType) => {
     filterState[filterType].clear();
     toValueArray(saved[filterType]).forEach((value) => {
+      /*
+       * Skip persisted values that no longer match a rendered tag item
+       * (renamed/removed tags, or storage carried over from another
+       * environment). Restoring them would leave a filter type active with
+       * no matching cards and hide the entire listing.
+       */
+      const tagItem = document.querySelector(
+        `.tag-item[data-filter-type="${filterType}"][data-tag-value="${CSS.escape(value)}"]`,
+      );
+      if (!tagItem) {
+        return;
+      }
       filterState[filterType].add(value);
       updateTagActiveState(filterType, value, true);
     });

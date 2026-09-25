@@ -53,7 +53,7 @@
                 src="{{ apos.attachment.url(picture, { size: 'full' }) }}"
                 alt="{{ picture._alt or caseStudy.portfolioTitle or caseStudy.title }}"
                 {% if apos.attachment.hasFocalPoint(picture) %}
-                  style="object-position: {{ apos.attachment.focalPointToObjectPosition(picture) }}"
+                  data-object-position="{{ apos.attachment.focalPointToObjectPosition(picture) }}"
                 {% endif %}
               />
               {% endif %}
@@ -112,6 +112,8 @@
 
     <div id="filter" class="filter-anchor"></div>
 
+    <h2 class="cs_section-heading">Search cases, clients, technologies</h2>
+
     <div class="cs_search-bar-wrapper">
       <form class="cs_search-bar-form" action="{{ data.url }}" method="get" role="search">
         <div class="cs_search-bar-input-wrapper">
@@ -126,7 +128,7 @@
             class="cs_search-bar-input"
             id="case-studies-search"
             name="search"
-            placeholder="Search case studies"
+            placeholder="Try a title, technology or partner"
             value="{{ data.query.search or '' }}"
             autocomplete="off"
             aria-label="Search case studies"
@@ -164,6 +166,8 @@
       </form>
     </div>
 
+    <h2 class="cs_section-heading">Filters</h2>
+
     <div class="cs_filter-info">
       <div class="filters-cta">Filter Case Studies</div>
       {% set hasActiveFilters = data.query.industry or data.query.stack or
@@ -189,33 +193,9 @@
           </span>
         </a>
       </div>
-
-      <div class="selected-tags{% if not hasActiveFilters %} is-hidden{% endif %}">
-        <ul class="selected-tags-list">
-          {% for filterType in ['industry', 'stack', 'caseStudyType', 'partner'] %} {% if
-          data.query[filterType] %} {% for tag in data.piecesFilters[filterType]
-          %} {# Check if tag is selected (handle both array and string) #} {%
-          set isTagSelected = false %} {% if data.query[filterType].length is
-          defined %} {# It's an array (multiple values) #} {% set isTagSelected
-          = tag.value in data.query[filterType] %} {% else %} {# It's a string
-          (single value) #} {% set isTagSelected = tag.value ==
-          data.query[filterType] %} {% endif %} {% if isTagSelected %}
-          <li class="selected-tag">
-            {{ tag.label }}
-            <a
-              class="remove-tag"
-              href="javascript:void(0)"
-              data-filter-type="{{ filterType }}"
-              data-tag-value="{{ tag.value }}"
-              aria-label="Remove {{ filterType }} tag {{ tag.label }}"
-            >
-              <img src="/images/close.svg" alt="Close Icon" />
-            </a>
-          </li>
-          {% endif %} {% endfor %} {% endif %} {% endfor %}
-        </ul>
-      </div>
     </div>
+
+    <div class="cs_filter-line" aria-hidden="true"></div>
 
     <div class="cs_list{% if not data.pieces or not data.pieces.length %} cs_list--empty{% endif %}">
       <div class="tags-filter">
@@ -223,10 +203,10 @@
         ['industry', 'Industry'], ['caseStudyType', 'Case Type'], ['stack',
         'Technology'], ['partner', 'Partner'] ] %} {% set tags = data.piecesFilters[filterType] %} {% if
         tags and tags.length %}
-        <div class="filter-section">
+        <div class="filter-section{% if data.query[filterType] %} filter-section--has-selection{% endif %}">
           <!-- prettier-ignore -->
           {% set hasActiveFilter = data.query[filterType] %}
-          {% set shouldBeOpen = loop.first or hasActiveFilter %}
+          {% set shouldBeOpen = hasActiveFilter %}
           <input
             type="checkbox"
             id="filter-toggle-{{ filterType }}"
@@ -235,7 +215,10 @@
             aria-labelledby="filter-category-{{ filterType }}"
           />
           <div class="filter-category" id="filter-category-{{ filterType }}">
-            <span class="filter-category__title">{{ filterLabel }}:</span>
+            <span class="filter-category__title">{{ filterLabel }}</span>
+            <span
+              class="filter-category__count{% if not hasActiveFilter %} is-hidden{% endif %}"
+            >{% if hasActiveFilter %}{% if hasActiveFilter.join is defined %}{{ hasActiveFilter.length }}{% else %}1{% endif %}{% endif %}</span>
             <label
               for="filter-toggle-{{ filterType }}"
               class="filter-category__expand-button"
@@ -381,6 +364,34 @@
         </div>
         {% endif %} {% endfor %}
       </div>
+
+      <div class="selected-tags{% if not hasActiveFilters %} is-hidden{% endif %}">
+        <ul class="selected-tags-list">
+          {% for filterType in ['industry', 'stack', 'caseStudyType', 'partner'] %} {% if
+          data.query[filterType] %} {% for tag in data.piecesFilters[filterType]
+          %} {# Check if tag is selected (handle both array and string) #} {%
+          set isTagSelected = false %} {% if data.query[filterType].length is
+          defined %} {# It's an array (multiple values) #} {% set isTagSelected
+          = tag.value in data.query[filterType] %} {% else %} {# It's a string
+          (single value) #} {% set isTagSelected = tag.value ==
+          data.query[filterType] %} {% endif %} {% if isTagSelected %}
+          <li class="selected-tag">
+            {{ tag.label }}
+            <a
+              class="remove-tag"
+              href="javascript:void(0)"
+              data-filter-type="{{ filterType }}"
+              data-tag-value="{{ tag.value }}"
+              aria-label="Remove {{ filterType }} tag {{ tag.label }}"
+            >
+              <img src="/images/close.svg" alt="Close Icon" />
+            </a>
+          </li>
+          {% endif %} {% endfor %} {% endif %} {% endfor %}
+        </ul>
+      </div>
+
+      <div class="cs_filter-line" aria-hidden="true"></div>
 
       <div class="cs_grid{% if not data.pieces or not data.pieces.length %} is-hidden{% endif %}" id="case-studies-grid">
         {% for article in data.pieces %} {# CARD START: {{ article.title }} #}

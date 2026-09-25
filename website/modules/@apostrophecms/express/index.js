@@ -7,6 +7,18 @@ module.exports = {
       // If this still says `undefined`, set a real secret!
       secret: getEnv('SESSION_SECRET'),
     },
+    apiKeys: {
+      /*
+       * Use your own key value. Ideally use a strong, randomly generated
+       * key.
+       */
+      ...(process.env.EDITOR_KEY && {
+        // The user role associated with this key
+        [process.env.EDITOR_KEY]: {
+          role: 'admin',
+        },
+      }),
+    },
   },
   middleware(_self) {
     return {

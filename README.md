@@ -190,6 +190,7 @@ Environment variables are stored in the `.env` file. For production, you should 
 
 - `SESSION_SECRET`: Set to a secure random string
 - `NODE_ENV`: Change to `production`
+- `EDITOR_KEY`: Optional. A strong, randomly generated key that grants `admin` access to the REST API (create/edit content). Clients send it as `Authorization: ApiKey <key>` or as the `apikey` query parameter. If unset, API key auth is disabled.
 
 ## Container Management
 

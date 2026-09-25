@@ -67,8 +67,8 @@ function initCaseStudiesTagFilter({
 }
 
 function initializeAllComponents(container = document) {
-  initImageLozad();
   initAllSwipers();
+  initImageLozad();
   initSmoothCounters();
   initFontChanger();
   container.querySelectorAll('.sf-form').forEach((form) => {
