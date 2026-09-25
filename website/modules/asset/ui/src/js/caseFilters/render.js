@@ -43,6 +43,31 @@ const openCategoriesForActiveFilters = () => {
   });
 };
 
+// Sync each filter box with its selected-item count and visual state.
+const updateFilterCategoryStates = () => {
+  FILTER_TYPES.forEach((filterType) => {
+    const toggle = document.getElementById(`filter-toggle-${filterType}`);
+    const filterSection = toggle?.closest('.filter-section');
+    if (!filterSection) {
+      return;
+    }
+
+    const selectedCount = filterState[filterType].size;
+    const count = filterSection.querySelector('.filter-category__count');
+    filterSection.classList.toggle(
+      'filter-section--has-selection',
+      selectedCount > 0,
+    );
+    count?.classList.toggle('is-hidden', selectedCount === 0);
+    if (count) {
+      count.textContent = '';
+      if (selectedCount > 0) {
+        count.textContent = String(selectedCount);
+      }
+    }
+  });
+};
+
 // Pluralize the items-found label without a ternary.
 const getItemsFoundText = (visibleCount) => {
   let noun = 'Items';
@@ -202,6 +227,7 @@ const updateSelectedTagsList = () => {
  * search change so the chips, cards, and counts stay in sync.
  */
 const refreshFilterUi = () => {
+  updateFilterCategoryStates();
   updateSelectedTagsList();
   applyCardFiltering();
   recalculateTagCounts();

@@ -169,6 +169,7 @@
     * `NODE_ENV=production`
     * `APOS_MONGODB_URI=mongodb://<mongodb-hostname>:27017/apostrophe`
     * `SESSION_SECRET=<from parameter store>`
+    * `EDITOR_KEY=<from parameter store>` (optional, enables REST API key auth)
     * `APOS_S3_BUCKET=sf-website-s3-attachments-<env>`
     * `APOS_S3_REGION=us-east-1`
     * `APOS_CDN_URL=<cloudfront-distribution-url>`

@@ -279,17 +279,65 @@
     }
   }
 
+  /*
+   * Stacked on every breakpoint: the filter dropdowns form a full-width row
+   * above the grid (Figma), so the grid must span the full content width
+   * rather than sharing a row with a filter sidebar.
+   */
   &_list {
     display: flex;
     flex-direction: column;
     gap: 32px;
-    align-items: center;
+    align-items: stretch;
     min-height: calc(100vh - 330px);
 
     @include breakpoint-medium {
-      flex-direction: row;
-      align-items: flex-start;
+      // Children carry their own vertical rhythm (dividers, chips row).
+      gap: 0;
     }
+  }
+}
+
+// Section headings above the search bar and the filter row
+// (Figma nodes 2822:2010 / 2822:2063 — 36px Bold, tracking -1.2).
+.cs_section-heading {
+  margin: 0 0 24px;
+  @include font-settings(24px, 110%, $font-weight-extra-bold);
+  color: #040406;
+  letter-spacing: -1.2px;
+
+  @include breakpoint-medium {
+    margin-bottom: 40px;
+    font-size: 36px;
+  }
+
+  // "Filters" sits 100px below the search bar on desktop.
+  &:not(:first-of-type) {
+    margin-top: 48px;
+
+    @include breakpoint-medium {
+      margin-top: 100px;
+    }
+  }
+}
+
+// Thin dividers framing the filter area (Figma lines 2828:2094 / 2831:2200).
+// Desktop only — on mobile the filter row collapses into the modal trigger.
+.cs_filter-line {
+  display: none;
+
+  @include breakpoint-medium {
+    display: block;
+    height: 1px;
+    background: #dedfe4;
+    margin: 12px 0 20px;
+  }
+}
+
+// The second divider (below the selected-tag chips) keeps the 40px rhythm.
+.cs_list > .cs_filter-line {
+  @include breakpoint-medium {
+    margin: 40px 0;
   }
 }
 
@@ -304,8 +352,7 @@
 
 .cs_search-bar-form {
   width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
+  margin: 0;
 }
 
 .cs_search-bar-input-wrapper {
@@ -314,27 +361,25 @@
   align-items: center;
   width: 100%;
   height: 56px;
-  background: $white;
-  border: 1px solid rgba($gray-200, 0.4);
+  border: 1px solid #828388;
   box-sizing: border-box;
   transition: border-color 0.2s ease;
 
+  @include breakpoint-medium {
+    height: 65px;
+  }
+
   &:focus-within {
     outline: 0;
-    border: none;
-    border-bottom: 1px solid rgba($gray-200, 0.4);
-
-    .cs_search-bar-icon {
-      display: none;
-    }
+    border-color: #232429;
   }
 }
 
 .cs_search-bar-icon {
   position: absolute;
-  left: 1rem;
-  width: 24px;
-  height: 24px;
+  left: 20px;
+  width: 16px;
+  height: 16px;
   pointer-events: none;
   z-index: 1;
 }
@@ -343,17 +388,21 @@
   flex: 1;
   width: 100%;
   height: 100%;
-  padding: 0 1rem 0 3rem;
+  padding: 0 1rem 0 46px;
   border: none;
   background: transparent;
   font-size: 14px;
   font-weight: $font-weight-medium;
-  color: $gray-500;
+  color: #232429;
   outline: none;
   box-shadow: none;
 
   &::placeholder {
-    color: $gray-300;
+    color: #232429;
+  }
+
+  @include breakpoint-medium {
+    font-size: 18px;
   }
 
   &:focus {
@@ -393,7 +442,10 @@
   display: flex;
 }
 
-// Tags styling
+// Tags styling — on desktop the sections become a horizontal row of
+// 231x65 dropdown boxes (Figma y=2047, x=100/371/642/913, gap 40).
+// Below breakpoint-medium the stacked accordion look is kept for the
+// mobile filter modal.
 .tags-filter {
   border: 1px solid $gray-border;
   flex-shrink: 0;
@@ -404,120 +456,22 @@
   overflow-y: auto;
   overflow-x: hidden;
 
+  @include breakpoint-medium {
+    display: flex;
+    align-items: flex-start;
+    gap: 40px;
+    max-width: none;
+    max-height: none;
+    overflow: visible;
+    border: 0;
+  }
+
   .filter-section {
     &:first-of-type {
       .filter-category {
         &::before {
           content: none;
         }
-      }
-    }
-  }
-}
-
-.filter-section {
-  padding: 0 24px;
-
-  .filter-category {
-    @include font-settings(14px, 150%, $font-weight-extra-bold);
-    color: $gray-500;
-    margin: 0;
-    padding: 12px 0;
-    position: relative;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    &::before,
-    &::after {
-      content: '';
-      position: absolute;
-      left: -24px;
-      right: -24px;
-      bottom: 0;
-      border-bottom: 1px solid rgba($gray-border, 0.3);
-      transition: border-color 0.3s ease;
-    }
-
-    &::before {
-      top: 0;
-      bottom: initial;
-      border-bottom: none;
-      border-top: 1px solid $gray-border;
-    }
-
-    &__title {
-      flex: 1;
-    }
-
-    &__expand-button {
-      width: 16px;
-      height: 16px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      flex-shrink: 0;
-
-      &:focus {
-        outline: none;
-        box-shadow: 0 0 0 2px rgba($gray-400, 0.5);
-        border-radius: 3px;
-      }
-
-      &:focus:not(:focus-visible) {
-        box-shadow: none;
-      }
-
-      &:hover {
-        &::before {
-          border-color: $gray-400;
-        }
-      }
-
-      &::before {
-        content: '';
-        width: 8px;
-        height: 8px;
-        border-right: 2px solid $gray-500;
-        border-bottom: 2px solid $gray-500;
-        transform: rotate(45deg);
-        transition:
-          transform 0.3s ease,
-          border-color 0.3s ease;
-      }
-    }
-  }
-
-  .filter-category__toggle {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border: 0;
-
-    &:checked {
-      ~ .filter-category {
-        &::before,
-        &::after {
-          border-color: $gray-border;
-        }
-
-        .filter-category__expand-button {
-          &::before {
-            transform: rotate(225deg);
-          }
-        }
-      }
-
-      ~ .filter-content {
-        max-height: 5000px;
-        opacity: 1;
-        transform: translateY(0);
-        padding-bottom: 24px;
       }
     }
   }
@@ -734,6 +688,308 @@
   }
 }
 
+@include breakpoint-medium {
+  .tags-filter .filter-section {
+    position: relative;
+    width: 231px;
+    padding: 0;
+
+    .filter-category {
+      position: relative;
+      height: 65px;
+      padding: 0 20px;
+      margin: 0;
+      border: 1px solid #828388;
+      background: transparent;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      @include font-settings(18px, 140%, $font-weight-extra-bold);
+      color: #232429;
+      transition:
+        border-color 0.2s ease,
+        background-color 0.2s ease;
+
+      &::before,
+      &::after {
+        content: none;
+      }
+
+      &__title {
+        flex: none;
+      }
+
+      &__count {
+        margin-right: 28px;
+        @include font-settings(18px, 140%, $font-weight-extra-bold);
+        color: #00897b;
+      }
+
+      // The label covers the whole box so clicking anywhere toggles it.
+      &__expand-button {
+        position: absolute;
+        inset: 0;
+        width: auto;
+        height: auto;
+
+        &::before {
+          position: absolute;
+          right: 12px;
+          top: 50%;
+          margin-top: -4px;
+        }
+      }
+    }
+
+    // Box with active selections — teal tint (Figma 2822:2020).
+    &--has-selection {
+      .filter-category {
+        border-color: #00897b;
+        background: rgba(0, 137, 123, 0.1);
+      }
+
+      .filter-category__title {
+        color: #00897b;
+      }
+    }
+
+    // Open state — dark frame like the dropdown panel (Figma 2822:1761).
+    .filter-category__toggle:checked ~ .filter-category {
+      border-color: #232429;
+    }
+
+    .filter-content {
+      position: absolute;
+      top: calc(100% - 1px);
+      left: 0;
+      z-index: 30;
+      width: 456px;
+      max-width: calc(100vw - 80px);
+      background: #fff;
+      border: 1px solid #232429;
+      // Vertical padding only when open — the collapsed panel is 0-height.
+      padding: 0 20px;
+      pointer-events: none;
+    }
+
+    .filter-category__toggle:checked ~ .filter-content {
+      max-height: 420px;
+      overflow-y: auto;
+      padding: 20px;
+      pointer-events: auto;
+    }
+
+    // Keep the last dropdown inside the content column.
+    &:last-child .filter-content {
+      left: auto;
+      right: 0;
+    }
+
+    // Dropdown panel contents (Figma open panel 2822:1759). Nested under
+    // .filter-content so these rules outrank the base accordion styles.
+    .filter-content {
+      .tag-search {
+        margin: 0 0 16px;
+        padding: 10px 12px;
+        font-size: 14px;
+        color: #232429;
+        border: 1px solid #dedfe4;
+
+        &:focus {
+          padding-left: 12px;
+          border: 1px solid #232429;
+        }
+      }
+
+      // Rows: [20px checkbox] label … count.
+      .tag-item {
+        margin-bottom: 0;
+
+        &.active .tag-link::before {
+          background-color: #232429;
+          background-image: none;
+        }
+      }
+
+      .tag-link {
+        padding: 10px 0;
+        margin: 0;
+        color: #232429;
+        @include font-settings(14px, 140%, $font-weight-medium);
+        text-transform: none;
+
+        &::before {
+          width: 20px;
+          height: 20px;
+          margin-right: 20px;
+          margin-top: 0;
+          background-color: transparent;
+          border: 1px solid #232429;
+          border-radius: 0;
+        }
+
+        &:hover,
+        &:focus-visible {
+          background-color: transparent;
+          transform: none;
+
+          &::before {
+            transform: none;
+            box-shadow: none;
+            background-color: rgba(0, 137, 123, 0.1);
+          }
+        }
+
+        .tag-count {
+          margin-left: auto;
+          color: #232429;
+        }
+      }
+
+      .no-tags-message {
+        color: #232429;
+        font-size: 14px;
+      }
+
+      // Figma: underlined uppercase "show more".
+      .tags__show-more {
+        min-width: 0;
+        width: auto;
+        padding: 0;
+        margin: 8px 0 0 40px;
+        font-size: 14px;
+        font-weight: $font-weight-extra-bold;
+        letter-spacing: 1.2px;
+        text-transform: uppercase;
+        text-decoration: underline;
+        text-underline-position: from-font;
+        color: #232429;
+        gap: 8px;
+
+        &:hover,
+        &:focus-visible {
+          background: none;
+          transform: none;
+          color: #00897b;
+        }
+
+        &--text {
+          text-transform: uppercase;
+        }
+      }
+    }
+  }
+}
+
+.filter-section {
+  padding: 0 24px;
+
+  .filter-category {
+    @include font-settings(14px, 150%, $font-weight-extra-bold);
+    color: $gray-500;
+    margin: 0;
+    padding: 12px 0;
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    &::before,
+    &::after {
+      content: '';
+      position: absolute;
+      left: -24px;
+      right: -24px;
+      bottom: 0;
+      border-bottom: 1px solid rgba($gray-border, 0.3);
+      transition: border-color 0.3s ease;
+    }
+
+    &::before {
+      top: 0;
+      bottom: initial;
+      border-bottom: none;
+      border-top: 1px solid $gray-border;
+    }
+
+    &__title {
+      flex: 1;
+    }
+
+    &__expand-button {
+      width: 16px;
+      height: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+
+      &:focus {
+        outline: none;
+        box-shadow: 0 0 0 2px rgba($gray-400, 0.5);
+        border-radius: 3px;
+      }
+
+      &:focus:not(:focus-visible) {
+        box-shadow: none;
+      }
+
+      &:hover {
+        &::before {
+          border-color: $gray-400;
+        }
+      }
+
+      &::before {
+        content: '';
+        width: 8px;
+        height: 8px;
+        border-right: 2px solid $gray-500;
+        border-bottom: 2px solid $gray-500;
+        transform: rotate(45deg);
+        transition:
+          transform 0.3s ease,
+          border-color 0.3s ease;
+      }
+    }
+  }
+
+  .filter-category__toggle {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+
+    &:checked {
+      ~ .filter-category {
+        &::before,
+        &::after {
+          border-color: $gray-border;
+        }
+
+        .filter-category__expand-button {
+          &::before {
+            transform: rotate(225deg);
+          }
+        }
+      }
+
+      ~ .filter-content {
+        max-height: 5000px;
+        opacity: 1;
+        transform: translateY(0);
+        padding-bottom: 24px;
+      }
+    }
+  }
+}
+
+
 // Pagination
 .pagination-container {
   margin-top: 3rem;
@@ -764,7 +1020,8 @@
   }
 }
 
-// Filter info
+// Filter info row — "N items found" on the left, "Clear all" on the right
+// (Figma y=1992; the divider below it is .cs_filter-line).
 .cs_filter-info {
   display: flex;
   flex-wrap: wrap;
@@ -772,19 +1029,15 @@
   gap: 16px;
   justify-content: space-between;
   min-height: 28px;
-  background: $white;
-  border-bottom: 1px solid $gray-border;
-  padding-bottom: 16px;
   position: sticky;
   z-index: 1;
   top: calc(#{$mobile-header-height} + 6px);
 
   @include breakpoint-medium {
     flex-wrap: nowrap;
-    align-items: flex-start;
+    align-items: center;
     justify-content: flex-start;
     top: calc(#{$desktop-header-height} + 6px);
-    margin-top: 20px;
   }
 }
 
@@ -793,12 +1046,12 @@
 }
 
 .items-count {
-  font-weight: $font-weight-extra-bold;
-  color: $gray-500;
   margin: 0;
   white-space: nowrap;
-  @include responsive-font(24px, 22px);
-  @include responsive-line-height(110%, 127%);
+  font-weight: $font-weight-extra-bold;
+  color: #00897b;
+  @include responsive-font(14px, 18px);
+  @include responsive-line-height(140%, 140%);
 }
 
 .items-count__mobile {
@@ -837,6 +1090,13 @@
   }
 }
 
+// Chips row sits 40px below the dropdown boxes (Figma y=2152).
+.selected-tags {
+  @include breakpoint-medium {
+    margin-top: 40px;
+  }
+}
+
 .selected-tags-list {
   display: flex;
   flex-wrap: wrap;
@@ -845,10 +1105,11 @@
   padding: 0;
   margin: 0;
   @include breakpoint-medium {
-    gap: 12px;
+    gap: 10px;
   }
 }
 
+// Selected-tag chips — teal tint + border (Figma 2831:2149/2150).
 .selected-tag {
   display: flex;
   align-items: center;
@@ -862,10 +1123,16 @@
   color: $gray-300;
   min-height: 24px;
   @include breakpoint-medium {
-    font-size: 11px;
+    font-size: 12px;
+    font-weight: $font-weight-extra-bold;
     line-height: 110%;
-    height: 28px;
+    height: 38px;
     gap: 12px;
+    padding: 0 20px;
+    background-color: rgba(0, 137, 123, 0.1);
+    border: 1px solid #00897b;
+    color: #00897b;
+    text-transform: none;
   }
 }
 
@@ -879,8 +1146,13 @@
   color: $gray-300;
   text-decoration: none;
   @include truncate-lines(1);
+
+  @include breakpoint-medium {
+    color: #00897b;
+  }
 }
 
+// Figma: "Clear all" as plain 18px bold text + close icon, no box.
 .clear-all {
   display: flex;
   align-items: center;
@@ -896,16 +1168,30 @@
   text-transform: capitalize;
   white-space: nowrap;
   @include breakpoint-medium {
-    margin-right: 8px;
-    height: 28px;
-    padding: 6px 12px;
-    min-width: 99px;
+    margin-left: auto;
+    height: auto;
+    padding: 0;
+    min-width: 0;
+    border: 0;
+    background: none;
+    font-size: 18px;
+    font-weight: $font-weight-extra-bold;
+    color: #232429;
+    text-transform: none;
   }
 }
 
 .clear-all-link {
-  color: $gray-300;
+  color: inherit;
   text-decoration: none;
+
+  @include breakpoint-medium {
+    color: #232429;
+
+    &:hover {
+      color: #00897b;
+    }
+  }
 }
 
 .clear-all-content {

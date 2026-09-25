@@ -9,18 +9,13 @@ const hasSelectedTagsInCategory = function (filterType) {
   return selectedTags.length > 0;
 };
 
-const isDesktop = function () {
-  return window.innerWidth > 1024;
-};
-
 const updateCategoriesVisibility = function () {
   const checkboxes = document.querySelectorAll('.filter-category__toggle');
   checkboxes.forEach(function (checkbox) {
     const filterType = checkbox.id.replace('filter-toggle-', '');
     const hasSelectedTags = hasSelectedTagsInCategory(filterType);
-    const isIndustryCategory = filterType === 'industry';
 
-    const shouldBeOpen = hasSelectedTags || (isIndustryCategory && isDesktop());
+    const shouldBeOpen = hasSelectedTags;
     if (shouldBeOpen && !checkbox.checked) {
       checkbox.checked = true;
       const button = document.querySelector(`label[for="${checkbox.id}"]`);
