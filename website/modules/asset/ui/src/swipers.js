@@ -1,4 +1,4 @@
-import { Autoplay, Mousewheel, Navigation } from 'swiper/modules';
+import { Autoplay, Mousewheel, Navigation, Pagination } from 'swiper/modules';
 import Swiper from 'swiper';
 
 // Array of swiper configurations
@@ -47,7 +47,13 @@ const swiperConfigs = [
         nextEl: '.cs_featured__next',
         prevEl: '.cs_featured__prev',
       },
-      modules: [Autoplay, Mousewheel, Navigation],
+      pagination: {
+        el: '.cs_featured__pagination',
+        clickable: true,
+        bulletClass: 'cs_featured__dot',
+        bulletActiveClass: 'cs_featured__dot--active',
+      },
+      modules: [Autoplay, Mousewheel, Navigation, Pagination],
       slidesPerView: 1,
     },
   },

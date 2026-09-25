@@ -1,5 +1,6 @@
 /* eslint-disable sort-imports */
 import barba from '@barba/core';
+import barbaPrefetch from '@barba/prefetch';
 import { enhanceBarbaWithFilterHandling } from './enhanceBarbaWithFilterHandling';
 import { gsap } from 'gsap';
 import { initAllSwipers } from './swipers';
@@ -9,7 +10,6 @@ import { initPhoneFormatting } from './js/phoneFormat';
 import { initSmoothCounters } from './smoothCounters';
 import { initFontChanger } from './initFontChanger';
 import { initImageLozad } from './initImageLozad';
-import { initFilterModal } from './initFilterModal';
 import { initSearchHandler } from './searchHandler';
 import { setupTagSearchForInput } from './searchInputHandler';
 import { initClientSideFiltering } from './clientSideFiltering';
@@ -78,7 +78,6 @@ function initializeAllComponents(container = document) {
   initCaseStudiesTagFilter();
   initCaseStudiesFilterHandler();
   initClientSideFiltering();
-  initFilterModal();
   initSearchHandler();
 }
 function initBarbaPageTransitions() {
@@ -155,7 +154,7 @@ function initBarbaPageTransitions() {
         opacity: 0,
       });
     };
-
+    barba.use(barbaPrefetch);
     barba.init({
       prefetchIgnore: false,
       cacheIgnore: false,
@@ -295,6 +294,5 @@ export default () => {
       if (filterAnchor) filterAnchor.scrollIntoView({ behavior: 'smooth' });
     }
   }, 300);
-
   if (apos.adminBar) initSmoothCounters();
 };

@@ -5,7 +5,7 @@ const initImageLozad = function () {
     image.style.objectPosition = image.dataset.objectPosition;
   });
 
-  const observer = lozad();
+  const observer = lozad('.lozad', { rootMargin: '200px 0px' });
   observer.observe();
 };
 

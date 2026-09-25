@@ -1,6 +1,35 @@
 const NavigationService = require('./services/NavigationService');
 const UrlService = require('./services/UrlService');
 
+/*
+ * Listing cards need only these fields. The projection keeps long-text
+ * fields (descriptor, objective, challenge, solution, results), testimonials
+ * and unused URLs out of the payload. Relationship storage fields stay so
+ * the joins and collectFilterOptions keep working.
+ */
+const PIECES_LISTING_PROJECTION = {
+  title: 1,
+  slug: 1,
+  aposDocId: 1,
+  aposLocale: 1,
+  picture: 1,
+  portfolioTitle: 1,
+  industryIds: 1,
+  stackIds: 1,
+  caseStudyTypeIds: 1,
+  partnerIds: 1,
+};
+
+const FILTER_DOC_PROJECTION = {
+  title: 1,
+  slug: 1,
+  aposDocId: 1,
+};
+
+const LISTING_CACHE_TTL = 60 * 1000;
+const PAGE_CACHE_MAX_AGE = 60;
+const listingCache = new Map();
+
 const createDocMapById = function (docs) {
   const map = {};
   docs.forEach((doc) => {
@@ -25,6 +54,58 @@ const collectFilterOptions = function (pieces, fieldName, docMap) {
   const options = Object.values(values);
   options.sort((first, second) => first.label.localeCompare(second.label));
   return options;
+};
+
+const getListingCacheKey = function (req) {
+  return `${req.data.page.aposLocale}:${req.mode || 'published'}`;
+};
+
+const loadListingData = async function (self, req) {
+  const canCache = !req.user && self.isSafeToCache(req);
+  let cacheKey = null;
+  if (canCache) {
+    cacheKey = getListingCacheKey(req);
+  }
+  const cached = cacheKey && listingCache.get(cacheKey);
+
+  if (cached && cached.expiresAt > Date.now()) {
+    return cached.data;
+  }
+
+  const [pieces, casesTags, businessPartners] = await Promise.all([
+    self.pieces.find(req).project(PIECES_LISTING_PROJECTION).toArray(),
+    self.apos.modules['cases-tags']
+      .find(req)
+      .project(FILTER_DOC_PROJECTION)
+      .toArray(),
+    self.apos.modules['business-partner']
+      .find(req)
+      .project(FILTER_DOC_PROJECTION)
+      .toArray(),
+  ]);
+
+  const tagMap = createDocMapById(casesTags);
+  const partnerMap = createDocMapById(businessPartners);
+  const data = {
+    pieces,
+    casesTags,
+    businessPartners,
+    piecesFilters: {
+      industry: collectFilterOptions(pieces, 'industryIds', tagMap),
+      stack: collectFilterOptions(pieces, 'stackIds', tagMap),
+      caseStudyType: collectFilterOptions(pieces, 'caseStudyTypeIds', tagMap),
+      partner: collectFilterOptions(pieces, 'partnerIds', partnerMap),
+    },
+  };
+
+  if (cacheKey) {
+    listingCache.set(cacheKey, {
+      data,
+      expiresAt: Date.now() + LISTING_CACHE_TTL,
+    });
+  }
+
+  return data;
 };
 
 const runSetupShowData = async function (self, req) {
@@ -107,37 +188,24 @@ module.exports = {
 
   methods(self) {
     return {
+      async indexPage(req) {
+        await self.beforeIndex(req);
+        let template = 'index';
+        if (self.apos.util.isAjaxRequest(req)) {
+          template = 'indexAjax';
+        }
+        self.setTemplate(req, template);
+      },
       async beforeIndex(req) {
-        // Load all case studies and tags for frontend filtering
-        const [pieces, casesTags, businessPartners] = await Promise.all([
-          self.pieces.find(req).toArray(),
-          self.apos.modules['cases-tags'].find(req).toArray(),
-          self.apos.modules['business-partner'].find(req).toArray(),
-        ]);
+        const listing = await loadListingData(self, req);
         req.data = {
           ...req.data,
-          pieces,
-          totalPieces: pieces.length,
+          ...listing,
+          totalPieces: listing.pieces.length,
           totalPages: 1,
-          casesTags,
-          businessPartners,
+          currentPage: 1,
         };
 
-        // Build filter options from all tags
-        const tagMap = createDocMapById(casesTags);
-        const partnerMap = createDocMapById(businessPartners);
-        req.data.piecesFilters = {
-          industry: collectFilterOptions(pieces, 'industryIds', tagMap),
-          stack: collectFilterOptions(pieces, 'stackIds', tagMap),
-          caseStudyType: collectFilterOptions(
-            pieces,
-            'caseStudyTypeIds',
-            tagMap,
-          ),
-          partner: collectFilterOptions(pieces, 'partnerIds', partnerMap),
-        };
-
-        // Attach URL helpers for template
         UrlService.attachIndexData(req, {
           industry: {},
           stack: {},
@@ -151,6 +219,32 @@ module.exports = {
       setupShowData(req) {
         return runSetupShowData(self, req);
       },
+    };
+  },
+
+  handlers(self) {
+    const clearListingCache = function () {
+      listingCache.clear();
+    };
+    return {
+      /*
+       * Scope HTTP page caching to this page type only. setMaxAge sends
+       * `Cache-Control: max-age` for cacheable anonymous requests and
+       * `no-store` otherwise (editors, sessions with state).
+       */
+      '@apostrophecms/page:serve': {
+        setCaseStudiesCacheHeaders(req) {
+          if (req.data.page && req.data.page.type === 'case-studies-page') {
+            self.setMaxAge(req, PAGE_CACHE_MAX_AGE);
+          }
+        },
+      },
+      'case-studies:afterSave': { clearListingCache },
+      'case-studies:afterDelete': { clearListingCache },
+      'cases-tags:afterSave': { clearListingCache },
+      'cases-tags:afterDelete': { clearListingCache },
+      'business-partner:afterSave': { clearListingCache },
+      'business-partner:afterDelete': { clearListingCache },
     };
   },
 };

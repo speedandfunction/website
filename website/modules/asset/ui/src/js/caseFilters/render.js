@@ -91,6 +91,11 @@ const applyCardFiltering = () => {
     card.classList.toggle('is-hidden', !matches);
     if (matches) {
       visibleCount += 1;
+      // Renumber the visible rows so the list reads 001, 002, ... with no gaps.
+      const number = card.querySelector('.cs_card__number');
+      if (number) {
+        number.textContent = String(visibleCount).padStart(3, '0');
+      }
     }
   });
 
@@ -149,6 +154,20 @@ const recalculateTagCounts = () => {
       countSpan.textContent = `[ ${count} ]`;
     }
   });
+};
+
+// Reflect the active filter selections on each card's tech chips.
+const updateCardTagStates = () => {
+  document
+    .querySelectorAll('.cs_card__tag[data-filter-type]')
+    .forEach((tag) => {
+      const { filterType, tagValue } = tag.dataset;
+      const activeSet = filterState[filterType];
+      tag.classList.toggle(
+        'is-active',
+        Boolean(activeSet) && activeSet.has(tagValue),
+      );
+    });
 };
 
 // Resolve a tag's human-readable label, falling back to its raw value.
@@ -231,6 +250,7 @@ const refreshFilterUi = () => {
   updateSelectedTagsList();
   applyCardFiltering();
   recalculateTagCounts();
+  updateCardTagStates();
 };
 
 export {
@@ -238,6 +258,7 @@ export {
   openCategoriesForActiveFilters,
   recalculateTagCounts,
   refreshFilterUi,
+  updateCardTagStates,
   updateSelectedTagsList,
   updateTagActiveState,
 };
