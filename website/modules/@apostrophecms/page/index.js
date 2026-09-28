@@ -43,6 +43,10 @@ module.exports = {
         label: 'Case Studies Page',
       },
       {
+        name: 'meet-team-page',
+        label: 'Meet the Team Page (Warm Teal Peach)',
+      },
+      {
         name: 'default-page',
         label: 'Default',
       },

@@ -16,6 +16,16 @@ module.exports = {
         textarea: true,
         help: 'Section heading, e.g. "See how we build for change"',
       },
+      theme: {
+        label: 'Theme',
+        type: 'select',
+        def: 'light',
+        help: 'Dark renders the full-width band variant (Figma node 3006:262).',
+        choices: [
+          { label: 'Light', value: 'light' },
+          { label: 'Dark', value: 'dark' },
+        ],
+      },
       buttonCollection: {
         label: 'Create Button(s)',
         type: 'array',
@@ -34,6 +44,7 @@ module.exports = {
     group: {
       fields: {
         heading: 1,
+        theme: 1,
         buttonCollection: 1,
       },
     },

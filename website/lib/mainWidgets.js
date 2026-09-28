@@ -42,6 +42,7 @@ module.exports = {
         'statement-cta': {},
         'vacancies': {},
         'leadership-team': {},
+        'leadership-new': {},
       },
       columns: 2,
     },

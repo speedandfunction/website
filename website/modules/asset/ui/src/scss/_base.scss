@@ -542,6 +542,58 @@ $sf-noise-texture: url('/images/noise.png');
   }
 }
 
+// Meet the Team page background — per Figma node 3006:70 (1440x3163 frame).
+// The three ellipses were fitted against that node's render:
+//   gold  #f6e7c1  right edge,  24% down
+//   teal  #a8e7df  left edge,   70% down
+//   peach #ffe7d8  centre,      45% down
+.sf-container--meet-team {
+  max-width: none;
+  padding-left: 0;
+  padding-right: 0;
+  padding-top: 0;
+  background-color: #ffffff;
+  background-image: $sf-noise-texture,
+    url('/images/meet-team-bg-mobile.webp');
+  // Stretch the image over the full container height so the gradient covers
+  // the page from the header down to the footer, whatever the page length
+  // (asset 440x5276 was designed for a fixed-height frame).
+  background-size: 128px 128px, 100% 100%;
+  background-position: top left, top center;
+  background-attachment: scroll, scroll;
+  background-repeat: repeat, no-repeat;
+
+  @include breakpoint-medium {
+    background-image: $sf-noise-texture,
+      radial-gradient(
+        ellipse 140% 60% at 100% 30%,
+        rgba(246, 226, 170, 0.34) 0%,
+        rgba(246, 226, 170, 0) 72%
+      ),
+      radial-gradient(
+        ellipse 110% 68% at -8% 70%,
+        rgba(168, 231, 223, 0.28) 0%,
+        rgba(168, 231, 223, 0) 72%
+      ),
+      radial-gradient(
+        ellipse 125% 70% at 54% 45%,
+        rgba(255, 231, 216, 0.32) 0%,
+        rgba(255, 231, 216, 0) 72%
+      );
+    // Pin layers to the Figma gradient height so blob positions stay fixed
+    // regardless of actual page content length.
+    background-size: 128px 128px, 100% 3163px, 100% 3163px, 100% 3163px;
+    background-position: top left, top left, top left, top left;
+    background-repeat: repeat, no-repeat, no-repeat, no-repeat;
+    background-attachment: fixed, scroll, scroll, scroll;
+  }
+
+  @include breakpoint-extra-extra-large {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
 // Privacy Policy page content container and title — per Figma node 2596:402.
 .sf-privacy-bg {
   padding-bottom: 80px;
