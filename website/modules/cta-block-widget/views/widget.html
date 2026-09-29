@@ -1,5 +1,5 @@
 {% import 'fragments/utilities.html' as utilities %}
-<section class="sf-cta-block" data-cta-block-widget>
+<section class="sf-cta-block sf-cta-block--{{ data.widget.theme or 'light' }}" data-cta-block-widget>
   <div class="sf-cta-block__container">
     {% if data.widget.heading %}
     <h2 class="sf-cta-block__heading">{{ data.widget.heading }}</h2>

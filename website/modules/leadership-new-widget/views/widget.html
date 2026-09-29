@@ -1,0 +1,83 @@
+{% set members = data.widget._teamMembers or [] %}
+{% if members.length or data.user %}
+<section class="sf-leadership-new" data-leadership-new-widget>
+  <div class="sf-leadership-new__container">
+    <div class="sf-leadership-new__head">
+      <div class="sf-leadership-new__head-text">
+        {% if data.widget.heading %}
+        <h2 class="sf-leadership-new__heading">{{ data.widget.heading }}</h2>
+        {% endif %}
+        {% if data.widget.intro %}
+        <p class="sf-leadership-new__intro">{{ data.widget.intro }}</p>
+        {% endif %}
+      </div>
+      {% set anyHeadshot %}{% for member in members %}{% if apos.image.first(member.headshot) %}1{% endif %}{% endfor %}{% endset %}
+      {% if anyHeadshot | length %}
+      <ul class="sf-leadership-new__avatars">
+        {% for member in members %}
+          {% set attachment = apos.image.first(member.headshot) %}
+          {% if attachment %}
+          <li class="sf-leadership-new__avatars-item">
+            <img
+              class="sf-leadership-new__avatar"
+              src="{{ apos.attachment.url(attachment, { size: 'one-sixth' }) }}"
+              alt="{{ member.title }}"
+              width="100"
+              height="100"
+            />
+          </li>
+          {% endif %}
+        {% endfor %}
+      </ul>
+      {% endif %}
+    </div>
+
+    {% if members.length %}
+    <div class="sf-leadership-new__divider"></div>
+
+    <div class="sf-leadership-new__grid">
+      {% for member in members %}
+      <article class="sf-leadership-new__member">
+        <div class="sf-leadership-new__portrait">
+          {% set attachment = apos.image.first(member.headshot) %}
+          {% if attachment %}
+          <img
+            class="sf-leadership-new__photo{% if not data.user %} lozad{% endif %}"
+            srcset="{{ apos.image.srcset(attachment) }}"
+            src="{{ apos.attachment.url(attachment, { size: 'full' }) }}"
+            alt="{{ attachment._alt or member.title }}"
+            width="{{ apos.attachment.getWidth(attachment) }}"
+            height="{{ apos.attachment.getHeight(attachment) }}"
+            {% if apos.attachment.hasFocalPoint(attachment) %}
+              data-object-position="{{ apos.attachment.focalPointToObjectPosition(attachment) }}"
+            {% endif %}
+          />
+          {% endif %}
+          {% if member.experience %}
+          <span class="sf-leadership-new__joined">joined in {{ member.experience }}</span>
+          {% endif %}
+        </div>
+        <h3 class="sf-leadership-new__name">{{ member.title }}</h3>
+        {% if member.position %}
+        <p class="sf-leadership-new__position">{{ member.position }}</p>
+        {% endif %}
+        {% if member.bio %}
+        <p class="sf-leadership-new__bio">{{ member.bio }}</p>
+        {% endif %}
+        <div class="sf-leadership-new__rule"></div>
+        {% if member.linkedin %}
+        <a
+          class="sf-leadership-new__link"
+          href="{{ member.linkedin }}"
+          target="_blank"
+          rel="noopener noreferrer"
+          >linkedin <span aria-hidden="true">→</span></a
+        >
+        {% endif %}
+      </article>
+      {% endfor %}
+    </div>
+    {% endif %}
+  </div>
+</section>
+{% endif %}
