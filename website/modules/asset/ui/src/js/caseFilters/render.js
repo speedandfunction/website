@@ -33,9 +33,9 @@ const openCategoriesForActiveFilters = () => {
     const checkbox = document.getElementById(`filter-toggle-${filterType}`);
     if (checkbox && !checkbox.checked) {
       checkbox.checked = true;
-      const button = document.querySelector(
-        `label[for="filter-toggle-${filterType}"]`,
-      );
+      const button = checkbox
+        .closest('.filter-section')
+        ?.querySelector('.filter-category__expand-button');
       if (button) {
         button.setAttribute('aria-expanded', 'true');
       }
@@ -122,9 +122,10 @@ const applyCardFiltering = () => {
 
 /*
  * Recalculate each tag's visible-match count (standard faceted-search recount):
- * for tag V in type T, count cards that would match if V were added to T's
- * active set (OR-combined with other active tags in T), still applying AND
- * against all other filter types' current selections.
+ * for tag V in type T, count the cards carrying V that still satisfy all
+ * OTHER filter types' current selections and the search term. T's own
+ * selections are ignored so a selected tag's count doesn't inflate the rest
+ * of its list.
  */
 const recalculateTagCounts = () => {
   const cards = document.querySelectorAll('.cs_card');
@@ -140,7 +141,7 @@ const recalculateTagCounts = () => {
     FILTER_TYPES.forEach((type) => {
       tempState[type] = new Set(filterState[type]);
     });
-    tempState[filterType].add(tagValue);
+    tempState[filterType] = new Set([tagValue]);
 
     let count = 0;
     cards.forEach((card) => {
@@ -200,7 +201,7 @@ const buildSelectedTag = (filterType, value) => {
   removeLink.setAttribute('aria-label', `Remove ${filterType} tag ${label}`);
 
   const icon = document.createElement('img');
-  icon.setAttribute('src', '/images/close.svg');
+  icon.setAttribute('src', '/images/close-teal.svg');
   icon.setAttribute('alt', 'Close Icon');
 
   removeLink.appendChild(icon);

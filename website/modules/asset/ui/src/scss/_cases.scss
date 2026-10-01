@@ -212,6 +212,9 @@
       align-items: center;
       justify-content: center;
       align-self: flex-start;
+      // Flex drops the space text node before the arrow span — restore the
+      // Figma separation (~8px between label and →).
+      gap: 8px;
       height: 44px;
       padding: 0 24px;
       margin-top: 30px;
@@ -221,11 +224,34 @@
       letter-spacing: 1.2px;
       text-transform: uppercase;
       text-decoration: none;
-      transition: background-color 0.3s ease, color 0.3s ease;
+      position: relative;
+      overflow: hidden;
 
-      &:hover {
-        color: #fff;
-        background-color: #232429;
+      &::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: #232429;
+        transform: scaleX(0);
+        transform-origin: 0 50%;
+        transition: transform 0.44s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      span {
+        position: relative;
+        z-index: 1;
+        transition: color 0.26s ease;
+      }
+
+      &:hover,
+      &:focus {
+        &::before {
+          transform: scaleX(1);
+        }
+
+        span {
+          color: #ffffff;
+        }
       }
 
       @include breakpoint-medium {
@@ -334,7 +360,9 @@
     background-repeat: no-repeat;
 
     @include breakpoint-medium {
-      padding: 100px 0 180px;
+      // Bottom padding = gap from the last card's divider to the footer —
+      // Figma 2978:2: line y=3558, footer top y=3698 → 140px.
+      padding: 100px 0 140px;
       background-image:
         radial-gradient(
           ellipse 178% 96% at -20% -55%,
@@ -486,10 +514,11 @@
   }
 }
 
-// The second divider (below the selected-tag chips) sits directly above the
-// list — its bottom margin is 0 so the first row's own spacing sets the
-// 40px gap (desktop Figma: line y=2278, first row content y=2318).
-.cs_list > .cs_filter-line {
+// The second divider (below the selected-tag chips) is the last child of the
+// sticky filters band — its bottom margin is 0 so the first row's own
+// spacing sets the 40px gap (desktop Figma: line y=2278, first row content
+// y=2318).
+.cs_filters-bar > .cs_filter-line:last-child {
   margin: 40px 0 0;
 }
 
@@ -514,23 +543,71 @@
   box-sizing: border-box;
   transition: border-color 0.2s ease;
 
+  // Caret line that replaces the magnifier icon while the field is focused
+  // or filled. Mobile: 2x12px flush with the box's left edge (Figma
+  // 2862:5033); desktop: 2x16px at the magnifier's spot (Figma 2831:2907).
+  &::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 2px;
+    height: 12px;
+    margin-top: -6px;
+    background: #232429;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 1;
+    transition: opacity 0.2s ease;
+
+    @include breakpoint-medium {
+      left: 20px;
+      height: 16px;
+      margin-top: -8px;
+    }
+  }
+
   @include breakpoint-medium {
     height: 65px;
   }
 
-  &:focus-within {
+  // Same as .sf-input: full box while empty, single bottom line once the
+  // field is focused or has text — on all breakpoints. The magnifier also
+  // swaps for the caret line.
+  &:focus-within,
+  &:has(.cs_search-bar-input:not(:placeholder-shown)) {
     outline: 0;
-    border-color: #232429;
+    border-color: transparent;
+    border-bottom-color: $gray-nav;
+
+    .cs_search-bar-icon {
+      opacity: 0;
+    }
+
+    // Mobile: the caret moves to the left edge, so the text hugs it — Figma
+    // 2862:5026 puts the text 10px right of the line (x=50 vs caret x=40).
+    .cs_search-bar-input {
+      padding-left: 10px;
+
+      @include breakpoint-medium {
+        padding-left: 46px;
+      }
+    }
+
+    &::after {
+      opacity: 1;
+    }
   }
 }
 
 .cs_search-bar-icon {
   position: absolute;
   left: 20px;
-  width: 14px;
-  height: 14px;
+  width: 16px;
+  height: 16px;
   pointer-events: none;
   z-index: 1;
+  transition: opacity 0.2s ease;
 }
 
 .cs_search-bar-input {
@@ -565,9 +642,11 @@
 .cs_search-bar-clear {
   display: none;
   position: absolute;
-  right: 1rem;
-  width: 16px;
-  height: 16px;
+  right: 0;
+  // basil:cross-solid is a 32x32 frame with the glyph filling the middle
+  // ~11px — render at 32px so the visible × matches Figma (2831:2898).
+  width: 32px;
+  height: 32px;
   padding: 0;
   border: none;
   background: transparent;
@@ -577,8 +656,8 @@
   justify-content: center;
 
   img {
-    width: 16px;
-    height: 16px;
+    width: 32px;
+    height: 32px;
   }
 
   &:hover {
@@ -690,7 +769,7 @@
       .tag-link {
         &::before {
           content: '';
-          background-color: #232429;
+          background-color: #00897b;
         }
       }
     }
@@ -764,7 +843,8 @@
   @include font-settings(11px, 140%, $font-weight-medium);
 }
 
-// Figma: underlined uppercase "show more".
+// Figma: underlined uppercase "show more". No left margin — its left edge
+// sits level with the checkbox column.
 .tags__show-more {
   display: flex;
   align-items: center;
@@ -773,7 +853,7 @@
   border: none;
   cursor: pointer;
   padding: 0;
-  margin: 8px 0 0 40px;
+  margin: 8px 0 0;
   min-width: 0;
   width: auto;
   font-size: 14px;
@@ -866,7 +946,7 @@
         color: #00897b;
       }
 
-      // The label covers the whole box so clicking anywhere toggles it.
+      // The button covers the whole box so clicking anywhere toggles it.
       &__expand-button {
         position: absolute;
         inset: 0;
@@ -908,7 +988,9 @@
       top: calc(100% - 1px);
       left: 0;
       z-index: 30;
-      width: 456px;
+      // Span the trigger box + gap + next box, so the right edge lands on
+      // the next filter box's border: 231 + 40 + 231 = 502px.
+      width: 502px;
       max-width: calc(100vw - 80px);
       background: #fff;
       border: 1px solid #232429;
@@ -951,7 +1033,7 @@
         margin-bottom: 0;
 
         &.active .tag-link::before {
-          background-color: #232429;
+          background-color: #00897b;
           background-image: none;
         }
       }
@@ -996,12 +1078,12 @@
         font-size: 14px;
       }
 
-      // Figma: underlined uppercase "show more".
+      // Figma: underlined uppercase "show more" — level with checkboxes.
       .tags__show-more {
         min-width: 0;
         width: auto;
         padding: 0;
-        margin: 8px 0 0 40px;
+        margin: 8px 0 0;
         font-size: 14px;
         font-weight: $font-weight-extra-bold;
         letter-spacing: 1.2px;
@@ -1067,13 +1149,20 @@
       align-items: center;
       justify-content: center;
       cursor: pointer;
+      // Native <button> — strip UA chrome so the box keeps its flat look.
+      padding: 0;
+      border: 0;
+      background: transparent;
 
       &:focus {
         outline: none;
       }
 
-      &:focus:not(:focus-visible) {
-        box-shadow: none;
+      // Keyboard focus indicator — the button covers the whole box, so the
+      // ring draws around the box itself.
+      &:focus-visible {
+        outline: 2px solid #00897b;
+        outline-offset: -2px;
       }
 
       &::before {
@@ -1139,6 +1228,86 @@
   }
 }
 
+// Mobile open state (Figma 2862:4913): the trigger box switches to the same
+// teal treatment as a selected one, with a teal flipped chevron; its panel
+// hangs flush below under a light border, and the in-panel search field
+// spans edge to edge at the top — its own darker border doubles as the
+// panel's top outline.
+@media (max-width: #{$breakpoint-medium - 1}) {
+  .filter-section {
+    .filter-category__toggle:checked {
+      ~ .filter-category {
+        border-color: #00897b;
+        background: rgba(0, 137, 123, 0.1);
+        color: #00897b;
+        font-weight: $font-weight-extra-bold;
+
+        .filter-category__expand-button::before {
+          border-color: #00897b;
+        }
+      }
+
+      ~ .filter-content {
+        margin-top: -1px;
+        border-color: #dedfe4;
+        padding: 0 0 20px;
+      }
+    }
+
+    .filter-content {
+      // Zero side padding in every state — children carry their own 20px
+      // insets and the search field stays edge to edge. Without this the
+      // collapsed padding (0 20px) snaps back on close and visibly narrows
+      // the search field mid-transition.
+      padding-left: 0;
+      padding-right: 0;
+
+      .tag-search {
+        height: 60px;
+        margin: 0 0 20px;
+        padding: 0 20px 0 44px;
+        border-color: #828388;
+        color: #232429;
+        background: url('/images/search.svg') no-repeat left 20px center /
+          14px 14px;
+
+        &::placeholder {
+          color: #232429;
+          opacity: 1;
+        }
+
+        &:focus {
+          padding-left: 44px;
+          border-color: #232429;
+        }
+      }
+
+      .tags-list {
+        padding: 0 20px;
+      }
+
+      .tag-link {
+        gap: 0;
+        padding: 5px 0;
+
+        &::before {
+          width: 10px;
+          height: 10px;
+          margin-right: 20px;
+        }
+      }
+
+      .tags__show-more {
+        margin: 8px 20px 0;
+      }
+
+      .no-tags-message {
+        margin: 0 20px;
+      }
+    }
+  }
+}
+
 
 // Pagination
 .pagination-container {
@@ -1170,6 +1339,24 @@
   }
 }
 
+// Filters band — "items found" row, tag dropdowns, selected chips and the
+// divider below them. On desktop the whole band sticks under the fixed 6px
+// top bar while the results list scrolls underneath (the overlay header on
+// this page scrolls away, so no header clearance is needed). Mobile keeps it
+// in flow: the stacked filter boxes would fill the viewport.
+.cs_filters-bar {
+  @include breakpoint-medium {
+    position: sticky;
+    top: 6px;
+    z-index: 5;
+    // Fully transparent so the listing band's pastel gradient shows through;
+    // the blur alone keeps cards readable as they scroll underneath.
+    background-color: transparent;
+    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px);
+  }
+}
+
 // Filter info row — "N items found" on the left, "Clear all" on the right
 // (Figma y=1992; the divider below it is .cs_filter-line).
 .cs_filter-info {
@@ -1184,9 +1371,6 @@
     flex-wrap: nowrap;
     align-items: center;
     justify-content: flex-start;
-    position: sticky;
-    z-index: 1;
-    top: calc(#{$desktop-header-height} + 6px);
   }
 }
 
@@ -1257,6 +1441,13 @@
   color: #00897b;
   text-decoration: none;
   @include truncate-lines(1);
+
+  // The SVG's intrinsic size is 32px — constrain it to the 16px frame or
+  // the truncate overflow clips the visible glyph away entirely.
+  img {
+    width: 16px;
+    height: 16px;
+  }
 }
 
 // Figma: "Clear all" as plain bold text + close icon, no box.
@@ -1309,6 +1500,11 @@
   font-size: 16px;
   width: 22px;
   height: 22px;
+
+  img {
+    width: 22px;
+    height: 22px;
+  }
 }
 
 .filter-anchor {
@@ -1379,7 +1575,9 @@
   @include breakpoint-medium {
     min-height: calc(100vh - 290px);
   }
+}
 
+.cs_filters-bar--empty {
   .tags-filter {
     display: none;
   }

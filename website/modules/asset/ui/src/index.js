@@ -10,6 +10,7 @@ import { initPhoneFormatting } from './js/phoneFormat';
 import { initSmoothCounters } from './smoothCounters';
 import { initFontChanger } from './initFontChanger';
 import { initImageLozad } from './initImageLozad';
+import { initAnchorNavigation } from './initAnchorNavigation';
 import { initSearchHandler } from './searchHandler';
 import { setupTagSearchForInput } from './searchInputHandler';
 import { initClientSideFiltering } from './clientSideFiltering';
@@ -198,23 +199,6 @@ function initBarbaPageTransitions() {
     });
   });
 }
-function initAnchorNavigation() {
-  const anchors = document.querySelectorAll('a[href^="#"]');
-  if (!anchors.length) return;
-
-  apos.util.onReady(() => {
-    anchors.forEach((anchor) => {
-      anchor.addEventListener('click', function (event) {
-        event.preventDefault();
-        const target = document.querySelector(anchor.getAttribute('href'));
-        target.scrollIntoView({
-          behavior: 'smooth',
-        });
-      });
-    });
-  });
-}
-
 function initMenuToggle() {
   apos.util.onReady(() => {
     const menuButton = document.getElementById('nav-icon');
