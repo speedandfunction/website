@@ -190,19 +190,6 @@ const handleFormSubmit = (event) => {
   event.preventDefault();
 };
 
-const handleSearchFocus = (event) => {
-  event.target.setAttribute(
-    'placeholder',
-    'Try a title, technology, or partner',
-  );
-};
-
-const handleSearchBlur = (event) => {
-  if (!event.target.value) {
-    event.target.setAttribute('placeholder', 'Search case studies');
-  }
-};
-
 // Attach the search input, form, and clear-button listeners.
 const bindSearchListeners = (searchForm, searchInput, clearButton) => {
   const handleSearchInput = (event) => {
@@ -213,8 +200,6 @@ const bindSearchListeners = (searchForm, searchInput, clearButton) => {
 
   searchInput.addEventListener('input', handleSearchInput);
   searchForm.addEventListener('submit', handleFormSubmit);
-  searchInput.addEventListener('focus', handleSearchFocus);
-  searchInput.addEventListener('blur', handleSearchBlur);
 
   if (clearButton) {
     clearButton.addEventListener('click', handleClearClick);

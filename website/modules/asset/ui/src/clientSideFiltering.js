@@ -9,6 +9,16 @@ const hasSelectedTagsInCategory = function (filterType) {
   return selectedTags.length > 0;
 };
 
+/*
+ * The expand button is a sibling of the hidden toggle checkbox inside the
+ * same filter section.
+ */
+const getExpandButton = function (toggle) {
+  return toggle
+    .closest('.filter-section')
+    ?.querySelector('.filter-category__expand-button');
+};
+
 const updateCategoriesVisibility = function () {
   const checkboxes = document.querySelectorAll('.filter-category__toggle');
   checkboxes.forEach(function (checkbox) {
@@ -18,13 +28,13 @@ const updateCategoriesVisibility = function () {
     const shouldBeOpen = hasSelectedTags;
     if (shouldBeOpen && !checkbox.checked) {
       checkbox.checked = true;
-      const button = document.querySelector(`label[for="${checkbox.id}"]`);
+      const button = getExpandButton(checkbox);
       if (button) {
         button.setAttribute('aria-expanded', 'true');
       }
     } else if (!shouldBeOpen && checkbox.checked) {
       checkbox.checked = false;
-      const button = document.querySelector(`label[for="${checkbox.id}"]`);
+      const button = getExpandButton(checkbox);
       if (button) {
         button.setAttribute('aria-expanded', 'false');
       }
@@ -96,7 +106,7 @@ const closeFilterDropdowns = function (clickedSection) {
         return;
       }
       toggle.checked = false;
-      const button = document.querySelector(`label[for="${toggle.id}"]`);
+      const button = getExpandButton(toggle);
       if (button) {
         button.setAttribute('aria-expanded', 'false');
       }
@@ -132,7 +142,7 @@ export const initClientSideFiltering = function () {
     if (!checkbox) {
       return;
     }
-    const button = document.querySelector(`label[for="${checkbox.id}"]`);
+    const button = getExpandButton(checkbox);
     if (button) {
       if (checkbox.checked) {
         button.setAttribute('aria-expanded', 'true');

@@ -18,13 +18,19 @@
           {% set attachment = apos.image.first(member.headshot) %}
           {% if attachment %}
           <li class="sf-leadership-new__avatars-item">
-            <img
-              class="sf-leadership-new__avatar"
-              src="{{ apos.attachment.url(attachment, { size: 'one-sixth' }) }}"
-              alt="{{ member.title }}"
-              width="100"
-              height="100"
-            />
+            <a
+              class="sf-leadership-new__avatar-link"
+              href="#sf-leadership-new-{{ data.widget._id }}-member-{{ loop.index }}"
+              aria-label="Scroll to {{ member.title }}"
+            >
+              <img
+                class="sf-leadership-new__avatar"
+                src="{{ apos.attachment.url(attachment, { size: 'one-sixth' }) }}"
+                alt="{{ member.title }}"
+                width="100"
+                height="100"
+              />
+            </a>
           </li>
           {% endif %}
         {% endfor %}
@@ -37,7 +43,10 @@
 
     <div class="sf-leadership-new__grid">
       {% for member in members %}
-      <article class="sf-leadership-new__member">
+      <article
+        class="sf-leadership-new__member"
+        id="sf-leadership-new-{{ data.widget._id }}-member-{{ loop.index }}"
+      >
         <div class="sf-leadership-new__portrait">
           {% set attachment = apos.image.first(member.headshot) %}
           {% if attachment %}

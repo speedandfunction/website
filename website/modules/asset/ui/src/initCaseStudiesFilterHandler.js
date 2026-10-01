@@ -78,27 +78,28 @@ const reorderSelectedTagsFirst = function () {
   });
 };
 
-// Setup keyboard event handlers for filter buttons
-const setupKeydownHandlers = function (filterButtons) {
-  const handleKeyDown = function (event) {
-    if (event.key === 'Enter' || event.key === ' ') {
-      event.preventDefault();
-      // Find the associated checkbox and trigger click
-      const checkboxId = event.target.getAttribute('for');
-      const checkbox = document.getElementById(checkboxId);
-      if (checkbox) {
-        checkbox.click();
-      }
+/*
+ * Expand buttons cover the whole filter box; clicking one toggles the
+ * hidden checkbox that drives the CSS open state (native <button> gives
+ * Enter/Space activation for free).
+ */
+const setupExpandButtonHandlers = function (filterButtons) {
+  const handleClick = function (event) {
+    const checkbox = event.target
+      .closest('.filter-section')
+      ?.querySelector('.filter-category__toggle');
+    if (checkbox) {
+      checkbox.click();
     }
   };
 
   filterButtons.forEach(function (button) {
-    button.addEventListener('keydown', handleKeyDown);
+    button.addEventListener('click', handleClick);
   });
 
   return function () {
     filterButtons.forEach(function (button) {
-      button.removeEventListener('keydown', handleKeyDown);
+      button.removeEventListener('click', handleClick);
     });
   };
 };
@@ -107,7 +108,9 @@ const setupKeydownHandlers = function (filterButtons) {
 const setupAriaExpandedHandlers = function (checkboxes) {
   const updateAriaExpanded = function (event) {
     const checkbox = event.target;
-    const button = document.querySelector(`label[for="${checkbox.id}"]`);
+    const button = checkbox
+      .closest('.filter-section')
+      ?.querySelector('.filter-category__expand-button');
     if (button) {
       button.setAttribute('aria-expanded', checkbox.checked.toString());
     }
@@ -140,12 +143,12 @@ const setupFilterAccessibility = function () {
     return emptyCleanup;
   }
 
-  const keydownCleanup = setupKeydownHandlers(filterButtons);
+  const expandCleanup = setupExpandButtonHandlers(filterButtons);
   const ariaCleanup = setupAriaExpandedHandlers(checkboxes);
 
   // Return combined cleanup function
   return function () {
-    keydownCleanup();
+    expandCleanup();
     ariaCleanup();
   };
 };
