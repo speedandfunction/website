@@ -1,6 +1,5 @@
 /* eslint-disable sort-imports */
 import barba from '@barba/core';
-import barbaPrefetch from '@barba/prefetch';
 import { enhanceBarbaWithFilterHandling } from './enhanceBarbaWithFilterHandling';
 import { gsap } from 'gsap';
 import { initAllSwipers } from './swipers';
@@ -12,20 +11,20 @@ import { initFontChanger } from './initFontChanger';
 import { initImageLozad } from './initImageLozad';
 import { initAnchorNavigation } from './initAnchorNavigation';
 import { initSearchHandler } from './searchHandler';
+import { initDeferredCards } from './deferredCards';
 import { setupTagSearchForInput } from './searchInputHandler';
 import { initClientSideFiltering } from './clientSideFiltering';
 import {
   saveScrollPosition,
   getSavedScrollPosition,
   clearSavedScrollPosition,
+  isCaseStudyPage,
 } from './scrollMemory';
 import { scrollToTopAndRevealHeader } from './headerReveal';
 import { initRecaptcha, startRecaptcha } from './js/recaptcha';
 function revealLoaded() {
   document
-    .querySelectorAll(
-      '.breadcrumb.loading, .sf-container.loading, .page-main_content.loading',
-    )
+    .querySelectorAll('.sf-container.loading, .page-main_content.loading')
     .forEach((el) => {
       el.classList.remove('loading');
       el.classList.add('loaded');
@@ -80,9 +79,12 @@ function initializeAllComponents(container = document) {
   initCaseStudiesFilterHandler();
   initClientSideFiltering();
   initSearchHandler();
+  initDeferredCards();
 }
 function initBarbaPageTransitions() {
   if (!document.querySelector('[data-barba="container"]')) return;
+  // Barba is temporarily disabled on single case study pages.
+  if (isCaseStudyPage(window.location.pathname)) return;
 
   apos.util.onReady(() => {
     initCaseStudiesFilterHandler();
@@ -155,12 +157,14 @@ function initBarbaPageTransitions() {
         opacity: 0,
       });
     };
-    barba.use(barbaPrefetch);
     barba.init({
       prefetchIgnore: false,
       cacheIgnore: false,
       preventRunning: true,
       timeout: 10000,
+      // Links to a single case study use a normal page load.
+      prevent: ({ href }) =>
+        isCaseStudyPage(new URL(href, window.location.origin).pathname),
       transitions: [
         {
           sync: false,

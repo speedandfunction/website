@@ -91,38 +91,7 @@
     </div>
   </div>
 </footer>
-{% endfragment %} {% fragment breadcrumbs() %} {% if data.page._url !=
-data.home._url and data.page.type != '@apostrophecms/about-page' and data.page.type != '@apostrophecms/build-differently-page' and data.page.type != '@apostrophecms/solutions-page' and data.page.type != '@apostrophecms/how-we-deliver-page' and data.page.type != '@apostrophecms/careers-page' and data.page.type != '@apostrophecms/privacy-policy-page' and data.page.type != '@apostrophecms/lets-talk-page' and data.page.type != 'meet-team-page' and data.page.type != 'case-studies-page' %}
-<nav
-  class="breadcrumb {% if not data.user %}loading{% else %}loaded{% endif %}"
-  aria-label="Breadcrumb navigation"
-  aria-busy="{% if not data.user %}true{% else %}false{% endif %}"
->
-  <ol class="breadcrumb-list">
-    {% for page in data.page._ancestors %}
-    <li class="breadcrumb-item">
-      <a href="{{ page._url }}" class="breadcrumb-link">
-        {% if page._url == data.home._url %} Home {% else %} {{ page.title }} {%
-        endif %}
-      </a>
-    </li>
-    {% endfor %} {% if data.piece %}
-    <li class="breadcrumb-item">
-      <a href="{{ data.page._url }}" class="breadcrumb-link">
-        {{ data.page.title }}
-      </a>
-    </li>
-    <li class="breadcrumb-item breadcrumb-item-current" aria-current="page">
-      <span>{{ data.piece.title }}</span>
-    </li>
-    {% else %}
-    <li class="breadcrumb-item breadcrumb-item-current" aria-current="page">
-      <span>{{ data.page.title }}</span>
-    </li>
-    {% endif %}
-  </ol>
-</nav>
-{% endif %} {% endfragment %}
+{% endfragment %}
 
 {# Without JS, revealLoaded() never runs, so the elements it unhides stay
    hidden. Force them visible. The page fade-in is pure CSS and needs no
@@ -130,7 +99,6 @@ data.home._url and data.page.type != '@apostrophecms/about-page' and data.page.t
 {% fragment noscriptFallback() %}
 <noscript>
   <style>
-    .breadcrumb.loading,
     .sf-container.loading {
       opacity: 1 !important;
       overflow: visible !important;

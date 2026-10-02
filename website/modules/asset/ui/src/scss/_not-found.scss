@@ -11,8 +11,11 @@
   background: $white;
 
   @include breakpoint-medium {
-    min-height: $desktop-not-found-height;
     padding-bottom: 80px;
+  }
+
+  @include breakpoint-extra-large {
+    min-height: $desktop-not-found-height;
   }
 
   .not-found-content {

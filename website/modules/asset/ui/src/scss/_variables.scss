@@ -101,21 +101,10 @@ $mobile-header-height: 64px;
 // small buffer, shown when a user is logged in, so the header can offset
 // below it.
 $admin-bar-height: 68px;
-$breadcrumbs-line-height: 18px;
 $sf-container-padding-top: 20px;
 $desktop-not-found-height: calc(
-  100vh -
-    (
-      $desktop-header-height + $breadcrumbs-line-height +
-        $sf-container-padding-top
-    ) *
-    2
+  100vh - ($desktop-header-height + $sf-container-padding-top) * 2
 );
 $mobile-not-found-height: calc(
-  100vh -
-    (
-      $mobile-header-height + $breadcrumbs-line-height +
-        $sf-container-padding-top
-    ) *
-    2
+  100vh - ($mobile-header-height + $sf-container-padding-top) * 2
 );

@@ -54,6 +54,7 @@
                 class="cs_featured__image{% if not data.user %} lozad{% endif %}"
                 srcset="{{ apos.image.srcset(picture) }}"
                 src="{{ apos.attachment.url(picture, { size: 'full' }) }}"
+                {% if loop.first %}fetchpriority="high"{% endif %}
                 alt="{{ picture._alt or caseStudy.portfolioTitle or caseStudy.title }}"
                 {% if apos.attachment.hasFocalPoint(picture) %}
                   data-object-position="{{ apos.attachment.focalPointToObjectPosition(picture) }}"
@@ -403,89 +404,17 @@
     <div class="cs_list{% if not data.pieces or not data.pieces.length %} cs_list--empty{% endif %}">
       <div class="cs_grid{% if not data.pieces or not data.pieces.length %} is-hidden{% endif %}" id="case-studies-grid">
         {% for article in data.pieces %} {# CARD START: {{ article.title }} #}
-        <a
-          href="{{ data.buildCaseStudyUrl(article._url) }}"
-          class="cs_card"
-          data-industry="{% for industry in article._industry or [] %}{{ industry.slug }}{% if not loop.last %},{% endif %}{% endfor %}"
-          data-stack="{% for tech in article._stack or [] %}{{ tech.slug }}{% if not loop.last %},{% endif %}{% endfor %}"
-          data-case-study-type="{% for type in article._caseStudyType or [] %}{{ type.slug }}{% if not loop.last %},{% endif %}{% endfor %}"
-          data-partner="{% for partner in article._partner or [] %}{{ partner.slug }}{% if not loop.last %},{% endif %}{% endfor %}"
-          data-search="{{ [
-            article.title,
-            article.portfolioTitle
-          ] | join(' ') | lower }} {% for industry in article._industry or [] %}{{ industry.title | lower }} {% endfor %}{% for tech in article._stack or [] %}{{ tech.title | lower }} {% endfor %}{% for type in article._caseStudyType or [] %}{{ type.title | lower }} {% endfor %}{% for partner in article._partner or [] %}{{ partner.title | lower }} {% endfor %}"
-        >
-          <span class="cs_card__number" aria-hidden="true"
-            >{% if loop.index < 10 %}00{% elif loop.index < 100 %}0{% endif %}{{ loop.index }}</span
-          >
-          {% set picture = apos.image.first(article.picture) %}
-          <div class="cs_card__media">
-            {% if picture is defined %}
-            <img
-              class="image{% if not data.user %} lozad{% endif %}"
-              loading="lazy"
-              {% if not data.user %}data-{% endif %}srcset="{{ apos.image.srcset(picture) }}"
-              {% if not data.user %}data-{% endif %}src="{{ apos.attachment.url(picture, { size: data.options.size or 'full' }) }}"
-              alt="{{ picture._alt or article.portfolioTitle or article.title }}"
-              width="{{ apos.attachment.getWidth(picture) }}"
-              height="{{ apos.attachment.getHeight(picture) }}"
-              {% if apos.attachment.hasFocalPoint(picture) %}
-                data-object-position="{{ apos.attachment.focalPointToObjectPosition(picture) }}"
-              {% endif %}
-            />
-            {% else %}
-            <div class="placeholder-image-container">
-              <img
-                class="placeholder-image"
-                loading="lazy"
-                src="/images/logo.svg"
-                alt="Placeholder banner for {{ article.title }}"
-                width="160"
-                height="50"
-              />
-            </div>
-            {% endif %}
-          </div>
-          <div class="cs_details">
-            <p class="cname">{{ article.title }}</p>
-            <div class="cs_card__meta">
-              {% if article._industry.length %}
-              <span class="industry"
-                >{% for industry in article._industry %}{{ industry.title }}{% if
-                not loop.last %}, {% endif %}{% endfor %}</span
-              >
-              {% endif %}
-              {% if article._industry.length and article._caseStudyType and article._caseStudyType.length %}
-              <span class="cs_card__meta-sep" aria-hidden="true"></span>
-              {% endif %}
-              {% if article._caseStudyType and article._caseStudyType.length %}
-              <span class="type"
-                >{% for type in article._caseStudyType %}{{ type.title | e }}{% if
-                not loop.last %}, {% endif %}{% endfor %}</span
-              >
-              {% endif %}
-            </div>
-            <h3 class="portfolio-title">{{ article.portfolioTitle or article.title }}</h3>
-            {% if article._stack and article._stack.length %}
-            <ul class="cs_card__tags">
-              {% for tech in article._stack %}{% if loop.index <= 6 %}
-              <li
-                class="cs_card__tag"
-                data-filter-type="stack"
-                data-tag-value="{{ tech.slug }}"
-              >
-                {{ tech.title }}
-              </li>
-              {% endif %}{% endfor %}
-              {% if article._stack.length > 6 %}
-              <li class="cs_card__tag cs_card__tag--more">+{{ article._stack.length - 6 }}</li>
-              {% endif %}
-            </ul>
-            {% endif %}
-          </div>
-        </a>
+        {% include 'caseCard.html' %}
         {# CARD END: {{ article.title }} #} {% endfor %}
       </div>
+      {% if data.deferredCardsUrl %}
+      <div
+        id="cs-deferred-cards"
+        hidden
+        data-url="{{ data.deferredCardsUrl }}"
+        data-count="{{ data.deferredCardsCount }}"
+      ></div>
+      {% endif %}
       <div
         class="cs_empty-state cs_empty-state--standalone{% if data.pieces and data.pieces.length %} is-hidden{% endif %}"
         role="status"

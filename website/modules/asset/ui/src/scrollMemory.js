@@ -17,6 +17,13 @@ const isCasesListing = function (pathname) {
   return pathname === CASES_PATH;
 };
 
+// Single case study pages live at /cases/<slug>.
+const CASE_STUDY_PATH = /^\/cases\/[^/]+\/?$/u;
+
+const isCaseStudyPage = function (pathname) {
+  return CASE_STUDY_PATH.test(pathname);
+};
+
 // Save current scroll position for a given URL if it is the cases listing.
 const saveScrollPosition = function (url) {
   try {
@@ -72,4 +79,5 @@ export {
   getSavedScrollPosition,
   clearSavedScrollPosition,
   isCasesListing,
+  isCaseStudyPage,
 };

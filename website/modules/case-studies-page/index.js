@@ -26,6 +26,8 @@ const FILTER_DOC_PROJECTION = {
   aposDocId: 1,
 };
 
+const INITIAL_CARD_COUNT = 24;
+const DEFERRED_CARDS_PARAM = 'cardsFrom';
 const LISTING_CACHE_TTL = 60 * 1000;
 const PAGE_CACHE_MAX_AGE = 60;
 const listingCache = new Map();
@@ -106,6 +108,44 @@ const loadListingData = async function (self, req) {
   }
 
   return data;
+};
+
+const getFragmentOffset = function (req) {
+  const offset = Number.parseInt(req.query[DEFERRED_CARDS_PARAM], 10);
+  if (Number.isNaN(offset) || offset < 0) {
+    return null;
+  }
+  return offset;
+};
+
+/*
+ * Decide which cards this response renders. A fragment request returns the
+ * cards from its offset on. Anonymous, unfiltered page loads render only the
+ * first INITIAL_CARD_COUNT cards; the client fetches the rest when idle so
+ * instant client-side filtering still covers every card.
+ */
+const selectCardsToRender = function (req, pieces) {
+  const fragmentOffset = getFragmentOffset(req);
+  if (fragmentOffset !== null) {
+    return {
+      pieces: pieces.slice(fragmentOffset),
+      cardOffset: fragmentOffset,
+    };
+  }
+  const canDefer =
+    !req.user &&
+    !NavigationService.hasFilterParams(req.query) &&
+    pieces.length > INITIAL_CARD_COUNT;
+  if (!canDefer) {
+    return { pieces, cardOffset: 0 };
+  }
+  return {
+    pieces: pieces.slice(0, INITIAL_CARD_COUNT),
+    cardOffset: 0,
+    // eslint-disable-next-line no-underscore-dangle
+    deferredCardsUrl: `${req.data.page._url}?${DEFERRED_CARDS_PARAM}=${INITIAL_CARD_COUNT}`,
+    deferredCardsCount: pieces.length - INITIAL_CARD_COUNT,
+  };
 };
 
 const runSetupShowData = async function (self, req) {
@@ -191,7 +231,10 @@ module.exports = {
       async indexPage(req) {
         await self.beforeIndex(req);
         let template = 'index';
-        if (self.apos.util.isAjaxRequest(req)) {
+        if (getFragmentOffset(req) !== null) {
+          template = 'caseCards';
+          req.res.set('X-Robots-Tag', 'noindex');
+        } else if (self.apos.util.isAjaxRequest(req)) {
           template = 'indexAjax';
         }
         self.setTemplate(req, template);
@@ -201,6 +244,7 @@ module.exports = {
         req.data = {
           ...req.data,
           ...listing,
+          ...selectCardsToRender(req, listing.pieces),
           totalPieces: listing.pieces.length,
           totalPages: 1,
           currentPage: 1,
@@ -225,6 +269,7 @@ module.exports = {
   handlers(self) {
     const clearListingCache = function () {
       listingCache.clear();
+      NavigationService.clearNavigationCache();
     };
     return {
       /*
