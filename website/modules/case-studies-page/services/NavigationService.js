@@ -1,5 +1,32 @@
 const SearchService = require('./SearchService');
 
+const NAV_CACHE_TTL = 60 * 1000;
+const navListingCache = new Map();
+
+const FILTER_QUERY_KEYS = [
+  'industry',
+  'stack',
+  'caseStudyType',
+  'partner',
+  'search',
+];
+
+/*
+ * Prev/next needs _url (slug) and _id; relationship IDs keep filtered
+ * navigation working when the URL carries filter params.
+ */
+const NAV_PROJECTION = {
+  title: 1,
+  slug: 1,
+  aposDocId: 1,
+  aposLocale: 1,
+  updatedAt: 1,
+  industryIds: 1,
+  stackIds: 1,
+  caseStudyTypeIds: 1,
+  partnerIds: 1,
+};
+
 /**
  * NavigationService - Single Responsibility: Case study navigation
  *
@@ -25,17 +52,14 @@ class NavigationService {
     } else if (slugs) {
       slugList = [slugs];
     }
-    const docPromises = slugList.map(async (slug) => {
-      const results = await apos.modules[moduleKey]
-        .find(req, { slug })
-        .toArray();
-      if (results.length > 0) {
-        return results[0];
-      }
-      return null;
-    });
-    const docs = await Promise.all(docPromises);
-    return docs.filter((doc) => doc).map((doc) => doc.aposDocId);
+    if (slugList.length === 0) {
+      return [];
+    }
+    const docs = await apos.modules[moduleKey]
+      .find(req, { slug: { $in: slugList } })
+      .project({ aposDocId: 1 })
+      .toArray();
+    return docs.map((doc) => doc.aposDocId);
   }
 
   /**
@@ -151,19 +175,50 @@ class NavigationService {
    * @param {Object} pageModule - Page module for filter application
    * @returns {Promise<Array>} Promise resolving to array of case study objects
    */
-  static async getAllCaseStudies(
-    req,
-    apos,
-    applyFilters = false,
-    pageModule = null,
-  ) {
-    let query = apos.modules['case-studies'].find(req);
+  static async getAllCaseStudies(req, apos, applyFilters = false) {
+    const hasFilters = NavigationService.hasFilterParams(req.query);
+    const cacheKey = `${req.locale}:${req.mode || 'published'}`;
+    const useCache = !req.user && !hasFilters;
 
-    if (applyFilters && req.query) {
+    if (useCache) {
+      const cached = navListingCache.get(cacheKey);
+      if (cached && cached.expiresAt > Date.now()) {
+        return cached.docs;
+      }
+    }
+
+    let query = apos.modules['case-studies'].find(req).project(NAV_PROJECTION);
+
+    if (applyFilters && hasFilters) {
       query = await NavigationService.applyFiltersToQuery(query, req, apos);
     }
 
-    return await query.sort({ updatedAt: -1 }).toArray();
+    const docs = await query.sort({ updatedAt: -1 }).toArray();
+
+    if (useCache) {
+      navListingCache.set(cacheKey, {
+        docs,
+        expiresAt: Date.now() + NAV_CACHE_TTL,
+      });
+    }
+
+    return docs;
+  }
+
+  /** Checks whether the request query carries filter or search params. */
+  static hasFilterParams(query) {
+    if (!query) {
+      return false;
+    }
+    return FILTER_QUERY_KEYS.some((key) => {
+      const value = query[key];
+      return Boolean(value && value.length !== 0);
+    });
+  }
+
+  /** Clears the memoized case-study ordering (called on save/delete). */
+  static clearNavigationCache() {
+    navListingCache.clear();
   }
 
   /**
@@ -184,18 +239,16 @@ class NavigationService {
    * @returns {Object} Object with prev and next case studies
    */
   static calculatePrevNext(allCaseStudies, currentIndex) {
-    let prev = null;
-    let next = null;
-
-    if (currentIndex > 0) {
-      prev = allCaseStudies[currentIndex - 1];
+    const count = allCaseStudies.length;
+    if (currentIndex < 0 || count < 2) {
+      return { prev: null, next: null };
     }
 
-    if (currentIndex < allCaseStudies.length - 1) {
-      next = allCaseStudies[currentIndex + 1];
-    }
-
-    return { prev, next };
+    // Wrap around: prev of the first is the last, next of the last is the first.
+    return {
+      prev: allCaseStudies[(currentIndex - 1 + count) % count],
+      next: allCaseStudies[(currentIndex + 1) % count],
+    };
   }
 
   /**
@@ -211,7 +264,6 @@ class NavigationService {
       req,
       apos,
       true,
-      pageModule,
     );
 
     const currentIndex = NavigationService.findCurrentIndex(

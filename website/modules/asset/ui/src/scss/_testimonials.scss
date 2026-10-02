@@ -212,34 +212,90 @@
 }
 
 .cs_testimonials {
-  .sf-testimonials-container {
-    margin-top: 32px;
+  // The area renders testimonials-carousel with the trusted-leaders markup;
+  // on the show page it sits inside .cs-show__rows as a row (border + padding).
+  padding: 40px 0;
+  border-bottom: 1px solid #dedfe4;
+
+  @include breakpoint-medium {
+    padding: 40px 0;
+  }
+
+  // The widget root carries .sf-section margins — the row padding replaces it.
+  .sf-section {
+    margin-bottom: 0;
+  }
+
+  .sf-trusted-leaders__container {
+    // .cs_section-inner already provides the column — cancel the widget's
+    // own container padding/max-width.
+    max-width: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .sf-trusted-leaders__divider {
+    display: none;
+  }
+
+  // Show-page geometry (Figma 2987:711): left column ends at x=440, the
+  // quote column is 900px wide. Photo top sits 23px below the « mark;
+  // name is 20px below the photo.
+  .sf-trusted-leaders__left {
+    @include breakpoint-medium {
+      margin-right: 100px;
+      margin-top: 23px;
+    }
+  }
+
+  .sf-trusted-leaders__info--desktop {
+    @include breakpoint-medium {
+      margin-top: 20px;
+    }
+  }
+
+  .sf-trusted-leaders__quote {
+    // Mobile Figma 2991:1400: 16px Bold; desktop 2987:841: 36px Medium.
+    @include font-settings(16px, 140%, 700);
 
     @include breakpoint-medium {
-      margin-top: 52px;
+      @include font-settings(36px, 140%, 500);
+      letter-spacing: -0.4px;
+    }
+  }
+
+  // Mobile sizes (Figma 2991:1055): photo 165px, mark 36px, name 16px,
+  // position 12px.
+  .sf-trusted-leaders__photo {
+    width: 165px;
+    height: 165px;
+
+    @include breakpoint-medium {
+      width: 240px;
+      height: 240px;
+    }
+  }
+
+  .sf-trusted-leaders__quote-mark {
+    @include font-settings(36px, 0, 600);
+  }
+
+  .sf-trusted-leaders__info--mobile {
+    .sf-trusted-leaders__name {
+      font-size: 16px;
+      margin-bottom: 10px;
     }
 
-    &[data-testimonial-count='1'] {
-      .sf-testimonials {
-        .sf-person-wrapper {
-          .sf-person__content {
-            max-height: 150px;
-            @media (min-width: 768px) {
-              max-height: 300px;
-            }
-          }
-        }
-      }
+    .sf-trusted-leaders__position,
+    .sf-trusted-leaders__organization {
+      font-size: 12px;
     }
+  }
 
-    &:not([data-testimonial-count='1']) {
-      .sf-testimonials {
-        .sf-person-wrapper {
-          .sf-person__content {
-            max-height: 150px;
-          }
-        }
-      }
+  // No controls for a single testimonial.
+  .sf-testimonials-container[data-testimonial-count='1'] {
+    .sf-trusted-leaders__nav {
+      display: none;
     }
   }
 }

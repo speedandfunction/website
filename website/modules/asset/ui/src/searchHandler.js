@@ -27,6 +27,8 @@ import {
   updateTagActiveState,
 } from './js/caseFilters/render';
 
+import { saveScrollPosition } from './scrollMemory';
+
 const SEARCH_INPUT_ID = 'case-studies-search';
 const VISIBLE_CLASS = 'cs_search-bar-clear--visible';
 
@@ -82,6 +84,8 @@ const setupReturnIntentOnCardClick = () => {
     }
     persistFilterState();
     markFilterReturnIntent();
+    // Barba's beforeLeave no longer runs for case study links (hard load).
+    saveScrollPosition(window.location.href);
   });
 };
 

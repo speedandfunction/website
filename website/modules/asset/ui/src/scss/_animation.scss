@@ -96,8 +96,7 @@
   transform: translateY(0);
 }
 
-// Specific loading states for breadcrumbs and containers
-.breadcrumb.loading,
+// Specific loading states for containers
 .sf-container.loading {
   opacity: 0 !important;
   visibility: hidden !important;
@@ -108,7 +107,6 @@
     transform 0.5s ease-out;
 }
 
-.breadcrumb.loaded,
 .sf-container.loaded {
   opacity: 1 !important;
   visibility: visible !important;
@@ -123,7 +121,6 @@ body.apos-has-admin-bar {
   }
 
   .sf-container.loading,
-  .breadcrumb.loading,
   .page-main_content.loading,
   .loading {
     opacity: 1 !important;

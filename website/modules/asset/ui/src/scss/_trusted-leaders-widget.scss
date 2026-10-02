@@ -159,6 +159,7 @@
   &__right {
     flex: 1;
     display: flex;
+    flex-wrap: wrap;
     align-items: flex-start;
     margin-top: 10px;
 
@@ -192,6 +193,28 @@
 
   &__quote-text {
     display: block;
+  }
+
+  // Optional "Case Study: …" reference rendered by testimonials-carousel
+  // when the testimonial piece is linked to a case study.
+  &__case-study {
+    margin-top: 24px;
+    @include font-settings(12px, 140%, 500);
+    color: #828388;
+    flex-basis: 100%;
+    align-self: flex-end;
+
+    &-title {
+      margin: 0;
+      @include font-settings(12px, 140%, 700);
+      color: #232429;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+    }
+
+    p {
+      margin: 4px 0 0;
+    }
   }
 
   &__nav {

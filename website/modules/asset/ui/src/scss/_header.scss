@@ -35,7 +35,9 @@
     top: calc(#{$admin-bar-height} + 6px);
   }
 
-  @include breakpoint-medium {
+  // The desktop nav (~900px wide) does not fit between 768-991px, so the
+  // mobile header/dropdown stays until breakpoint-extra-large.
+  @include breakpoint-extra-large {
     height: $desktop-header-height;
   }
 
@@ -75,7 +77,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  @include breakpoint-medium {
+  @include breakpoint-extra-large {
     display: none;
   }
   &:hover {
@@ -133,7 +135,7 @@
   right: 0;
   height: calc(100vh - #{$mobile-header-height} - 6px);
 
-  @include breakpoint-medium {
+  @include breakpoint-extra-large {
     position: static;
     top: auto;
     right: auto;
@@ -166,7 +168,7 @@
     margin-top: 52px;
     margin-bottom: 0;
 
-    @include breakpoint-medium {
+    @include breakpoint-extra-large {
       display: flex;
       flex-wrap: nowrap;
       align-items: center;
@@ -186,13 +188,13 @@
     margin-bottom: 40px;
     display: block;
 
-    @include breakpoint-medium {
+    @include breakpoint-extra-large {
       margin-bottom: 0;
       display: list-item;
     }
 
     &.sf-nav__home-item {
-      @include breakpoint-medium {
+      @include breakpoint-extra-large {
         display: none;
       }
     }
@@ -250,7 +252,7 @@
         color: #00786b;
       }
 
-      @include breakpoint-medium {
+      @include breakpoint-extra-large {
         @include font-settings(14px, 100%, 700);
         color: $gray-nav;
         white-space: nowrap;
@@ -289,7 +291,7 @@
   background-color: transparent;
 
   &:has(.sf-menu.open) {
-    @media (max-width: #{$breakpoint-medium - 1px}) {
+    @media (max-width: #{$breakpoint-extra-large - 1px}) {
       // Fade the white in alongside the sliding panel. Without a transition the
       // header snaps to white while the menu is still off-screen.
       background-color: $white;
@@ -326,7 +328,7 @@
 
   // Desktop nav: gray-999 link colours visible on the white hero background.
   // Mobile dropdown keeps its white background + dark link colours.
-  @include breakpoint-medium {
+  @include breakpoint-extra-large {
     .sf-nav li a {
       color: #232429;
 

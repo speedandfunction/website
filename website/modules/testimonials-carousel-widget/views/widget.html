@@ -2,92 +2,100 @@
   {% area data.widget, 'intro' %} {% set testimonialCount =
   data.widget._testimonials | length %}
 
+  {% macro infoBlock(testimonial, modifier) %}
+  <div class="sf-trusted-leaders__info{% if modifier %} sf-trusted-leaders__info--{{ modifier }}{% endif %}">
+    {% if testimonial.title %}
+    <h4 class="sf-trusted-leaders__name">{{ testimonial.title }}</h4>
+    {% endif %}
+    {% if testimonial.position %}
+    <p class="sf-trusted-leaders__position">{{ testimonial.position }}</p>
+    {% endif %}
+    {% if testimonial.organization %}
+    <p class="sf-trusted-leaders__organization">{{ testimonial.organization }}</p>
+    {% endif %}
+    {% if testimonial.url %}
+    {% set urlWithoutProtocol = testimonial.url %}
+    {% if testimonial.url.split('://') | length > 1 %}
+    {% set urlWithoutProtocol = testimonial.url.split('://')[1] %}
+    {% endif %}
+    {% set domainWithOrWithoutWww = urlWithoutProtocol.split('/')[0] %}
+    {% set cleanDomain = domainWithOrWithoutWww | trim | replace('www.', '') %}
+    <a
+      href="{{ testimonial.url }}"
+      target="_blank"
+      class="sf-trusted-leaders__url"
+      rel="noopener noreferrer"
+    >
+      {{ cleanDomain }}
+    </a>
+    {% endif %}
+  </div>
+  {% endmacro %}
+
+  {% if data.widget._testimonials and data.widget._testimonials.length > 0 %}
   <div
-    class="sf-testimonials-container"
+    class="sf-trusted-leaders__container sf-testimonials-container"
     data-testimonial-count="{{ testimonialCount }}"
   >
-    <div class="sf-person-swiper sf-testimonials swiper">
+    <div class="sf-trusted-leaders-swiper swiper">
       <div class="swiper-wrapper">
         {% for card in data.widget._testimonials %}
         <div class="swiper-slide">
-          <div class="sf-person">
-            <div class="sf-testimonial-header">
+          <div class="sf-trusted-leaders__slide">
+            <div class="sf-trusted-leaders__left">
               {% set attachment = apos.image.first(card.headshot) %}
-              <div
-                class="sf-person__photo{% if not data.user %} lozad{% endif %}"
-              >
-                <!-- prettier-ignore -->
+              <div class="sf-trusted-leaders__photo{% if not data.user %} lozad{% endif %}">
                 <img
-                    {% if attachment %}
-                      srcset="{{ apos.image.srcset(attachment) }}"
-                      src="{{ apos.attachment.url(attachment, { size: data.options.size or 'full' }) }}"
-                      alt="{{ attachment._alt or '' }}"
-                      {% if apos.attachment.hasFocalPoint(attachment) %}
-                        style="object-position: {{ apos.attachment.focalPointToObjectPosition(attachment) }}"
-                      {% endif %}
-                    {% else %}
-                      src="/images/placeholder.jpg"
-                      alt="No photo"
+                  {% if attachment %}
+                    srcset="{{ apos.image.srcset(attachment) }}"
+                    src="{{ apos.attachment.url(attachment, { size: data.options.size or 'full' }) }}"
+                    alt="{{ attachment._alt or '' }}"
+                    {% if apos.attachment.hasFocalPoint(attachment) %}
+                      data-object-position="{{ apos.attachment.focalPointToObjectPosition(attachment) }}"
                     {% endif %}
-                  />
+                  {% else %}
+                    src="/images/placeholder.jpg"
+                    alt="No photo"
+                  {% endif %}
+                />
               </div>
-              <div class="sf-testimonial-header__bio">
-                <div class="sf-person__container">
-                  <div class="sf-person__wrapper">
-                    <h4 class="sf-person__title">{{ card.title }}</h4>
-                  </div>
-                  <h5 class="sf-person__position">{{ card.position }}</h5>
-                  {% if card.organization %}
-                  <h5 class="sf-person__position sf-person__organization">
-                    {{ card.organization }}
-                  </h5>
-                </div>
-                {% endif %} {% if card.url %} {# Remove protocol #} {% set
-                urlWithoutProtocol = card.url %} {% if card.url.split('://') |
-                length > 1 %} {% set urlWithoutProtocol =
-                card.url.split('://')[1] %} {% endif %} {# Remove
-                path/query/fragment #} {% set domainWithOrWithoutWww =
-                urlWithoutProtocol.split('/')[0] %} {# Remove www. if present #}
-                {% set cleanDomain = domainWithOrWithoutWww | trim |
-                replace('www.', '') %}
-                <a
-                  href="{{ card.url }}"
-                  target="_blank"
-                  class="sf-person__url"
-                  rel="noopener noreferrer"
-                >
-                  {{ cleanDomain }}
-                </a>
-                {% endif %}
-              </div>
+              {{ infoBlock(card, 'desktop') }}
             </div>
-            <div class="sf-person-wrapper">
-              <div class="sf-person__content">“{{ card.feedback }}”</div>
+            <div class="sf-trusted-leaders__right">
+              {% if card.feedback %}
+              <blockquote class="sf-trusted-leaders__quote">
+                <span class="sf-trusted-leaders__quote-mark">«</span>
+                <span class="sf-trusted-leaders__quote-text">{{ card.feedback }}</span>
+              </blockquote>
+              {% endif %}
               {% if card._caseStudy %}
-              <div class="card-swiper__case-study">
-                <h5 class="card-swiper__case-study-title">
+              <div class="sf-trusted-leaders__case-study">
+                <h5 class="sf-trusted-leaders__case-study-title">
                   Case Study: {{ card._caseStudy[0].title }}
                 </h5>
-                <p class="card-swiper__case-study-portfolio-title">
+                <p class="sf-trusted-leaders__case-study-portfolio-title">
                   {{ card._caseStudy[0].portfolioTitle }}
                 </p>
-                <p class="card-swiper__case-study-stack">
+                <p class="sf-trusted-leaders__case-study-stack">
                   {{ card._caseStudy[0].stack }}
                 </p>
               </div>
               {% endif %}
             </div>
+            {{ infoBlock(card, 'mobile') }}
           </div>
         </div>
         {% endfor %}
       </div>
+    </div>
 
-      <div class="swiper-controls">
-        <div class="swiper-nav">
-          <div class="swiper-button-prev">previous</div>
-          <div class="swiper-button-next">next</div>
-        </div>
+    <div class="sf-trusted-leaders__nav">
+      <div class="sf-trusted-leaders__controls">
+        <div class="sf-trusted-leaders__prev" role="button" aria-label="previous" tabindex="0">←&nbsp;<span class="sf-trusted-leaders__label--short" aria-hidden="true">prev</span><span class="sf-trusted-leaders__label--full" aria-hidden="true">previous</span></div>
+        <div class="sf-trusted-leaders__next" role="button" aria-label="next" tabindex="0">next →</div>
       </div>
+      <div class="sf-trusted-leaders__divider"></div>
     </div>
   </div>
+  {% endif %}
 </section>
