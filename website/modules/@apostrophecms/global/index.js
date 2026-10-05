@@ -69,6 +69,19 @@ module.exports = {
                 },
               },
             },
+            subItems: {
+              label: 'Sub Items',
+              type: 'array',
+              titleField: 'subItem.linkTitle',
+              fields: {
+                add: {
+                  subItem: {
+                    label: 'Sub Item',
+                    ...linkSchema,
+                  },
+                },
+              },
+            },
           },
         },
       },

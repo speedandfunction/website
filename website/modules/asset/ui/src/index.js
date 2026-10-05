@@ -21,6 +21,7 @@ import {
   isCaseStudyPage,
 } from './scrollMemory';
 import { scrollToTopAndRevealHeader } from './headerReveal';
+import { initNavSubmenus } from './initNavSubmenus';
 import { initRecaptcha, startRecaptcha } from './js/recaptcha';
 function revealLoaded() {
   document
@@ -214,6 +215,8 @@ function initMenuToggle() {
       menu.classList.toggle('open');
       menuButton.classList.toggle('open');
     });
+
+    initNavSubmenus(menu);
 
     const menuLinks = menu.querySelectorAll('a');
     menuLinks.forEach((link) => {

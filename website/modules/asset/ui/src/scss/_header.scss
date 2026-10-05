@@ -28,6 +28,13 @@
   height: $mobile-header-height;
   z-index: 11;
 
+  &:has(.sf-menu.open) {
+    @media (max-width: #{$breakpoint-extra-large - 1px}) {
+      background-color: rgba($white, 0.6);
+      background-image: $sf-noise-texture;
+    }
+  }
+
   // When logged in, the Apostrophe admin bar is fixed to the top of the
   // viewport, so the sticky offset must clear it or the header sticks
   // underneath it while scrolling.
@@ -116,7 +123,12 @@
 
 .sf-nav {
   position: absolute;
-  background-color: $white;
+  // Frosted, see-through mobile panel (Figma 3201:138): the page gradient
+  // shows through, with the same film-grain tile as the submenu.
+  background-color: rgba($white, 0.6);
+  background-image: $sf-noise-texture;
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
   z-index: 10;
   transform: translateY(-100%);
   opacity: 0;
@@ -148,6 +160,9 @@
     transition: none;
     overflow: visible;
     background-color: transparent;
+    background-image: none;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
   }
 
   &.open {
@@ -277,6 +292,167 @@
       }
     }
   }
+
+  // Submenu toggle (chevron) shown only in the mobile menu; on desktop the
+  // dropdown opens on hover instead.
+  // Note: these selectors are written without & so they compile to
+  // ".sf-nav .sf-nav__submenu …" — the extra class is needed to outrank the
+  // ".sf-nav li a" base link styles above.
+  .sf-nav__sub-toggle {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    width: 24px;
+    height: 21px;
+    padding: 0;
+    border: none;
+    background: none;
+    color: #00786b;
+    cursor: pointer;
+
+    @include breakpoint-extra-large {
+      display: none;
+    }
+  }
+
+  // Submenu panel — frosted glass like the Case Studies sticky filters bar
+  // (.cs_filters-bar): same 16px backdrop blur. Blur alone is invisible over
+  // the smooth pastel page gradients, so, as in the Figma glass panel, it
+  // also gets the same film-grain noise tile used on the page backgrounds
+  // (which darkens it a few levels), a faint white tint to lift it back
+  // toward the Figma value, and a 1px light edge.
+  .sf-nav__submenu {
+    display: none;
+    list-style-type: none;
+    margin: 16px 0 0;
+    padding: 40px;
+    background-color: rgba($white, 0.2);
+    background-image: $sf-noise-texture;
+    border: 1px solid rgba($white, 0.6);
+    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px);
+
+    // Mobile: no fill, only the grain over the already frosted menu panel.
+    @media (max-width: #{$breakpoint-extra-large - 1px}) {
+      background-color: transparent;
+
+      // Animated open/close: collapse height, padding and opacity together.
+      display: block;
+      overflow: hidden;
+      max-height: 0;
+      margin-top: 0;
+      padding-top: 0;
+      padding-bottom: 0;
+      border-width: 0;
+      opacity: 0;
+      visibility: hidden;
+      transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                  margin-top 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                  padding 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                  opacity 0.3s ease-out,
+                  visibility 0s linear 0.4s;
+    }
+
+    li {
+      display: block;
+      margin-bottom: 20px;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+
+    a {
+      @include font-settings(14px, 150%, 600);
+      color: #232429;
+      text-transform: none;
+      letter-spacing: normal;
+
+      span::after {
+        display: none;
+      }
+
+      &:hover,
+      &:focus {
+        color: #00786b;
+      }
+    }
+
+    @include breakpoint-extra-large {
+      position: absolute;
+      // The link underline sits 6px below the link box, so a 9px offset
+      // leaves the 4px gap between underline and panel top seen in Figma.
+      top: calc(100% + 9px);
+      left: 0;
+      display: block;
+      width: 246px;
+      margin: 0;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(8px);
+      transition: opacity 0.3s ease-out,
+                  transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+                  visibility 0s linear 0.3s;
+
+      // Invisible strip covering the gap between the nav item and the panel,
+      // so moving the cursor down into the dropdown doesn't break :hover.
+      &::before {
+        content: '';
+        position: absolute;
+        top: -9px;
+        left: 0;
+        right: 0;
+        height: 9px;
+      }
+    }
+  }
+
+  .sf-nav__item--has-sub {
+    &.open > .sf-nav__submenu {
+      display: block;
+
+      @media (max-width: #{$breakpoint-extra-large - 1px}) {
+        max-height: 400px;
+        margin-top: 16px;
+        padding-top: 40px;
+        padding-bottom: 40px;
+        border-width: 1px;
+        opacity: 1;
+        visibility: visible;
+        transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                    margin-top 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                    padding 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                    opacity 0.3s ease-out 0.05s,
+                    visibility 0s linear 0s;
+      }
+    }
+
+    @include breakpoint-extra-large {
+      // Keep the parent link in its active style while the dropdown is open,
+      // matching the design (teal text + gradient underline).
+      &:hover > a,
+      &:focus-within > a {
+        color: #00786b;
+
+        span::after {
+          transform: scaleX(1);
+        }
+      }
+
+      &:hover > .sf-nav__submenu,
+      &:focus-within > .sf-nav__submenu {
+        opacity: 1;
+        visibility: visible;
+        transform: none;
+        transition: opacity 0.25s ease-out,
+                    transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+                    visibility 0s linear 0s;
+      }
+    }
+  }
 }
 
 // Overlay header — floats on top of the hero widget on the homepage.
@@ -294,7 +470,8 @@
     @media (max-width: #{$breakpoint-extra-large - 1px}) {
       // Fade the white in alongside the sliding panel. Without a transition the
       // header snaps to white while the menu is still off-screen.
-      background-color: $white;
+      background-color: rgba($white, 0.6);
+      background-image: $sf-noise-texture;
       transition: background-color 0.3s ease-out;
     }
   }
