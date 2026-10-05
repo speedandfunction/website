@@ -81,6 +81,7 @@ function createAposConfig() {
       // Add global data module
       'global-data': {},
       'robots': {},
+      'llms-txt': {},
 
       // Shared constants module
       '@apostrophecms/shared-constants': {},

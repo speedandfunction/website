@@ -117,6 +117,12 @@ module.exports = {
         type: 'string',
         help: 'Enter your GTM container ID (e.g., GTM-XXXXXXX)',
       },
+      llmsCustomText: {
+        label: 'Custom llms.txt Content',
+        type: 'string',
+        textarea: true,
+        help: 'If provided, this text is served at /llms.txt instead of the auto-generated file.',
+      },
     },
     group: {
       navs: {
@@ -129,7 +135,7 @@ module.exports = {
       },
       seo: {
         label: 'SEO & Analytics',
-        fields: ['seoGoogleTagManager'],
+        fields: ['seoGoogleTagManager', 'llmsCustomText'],
       },
     },
   },
