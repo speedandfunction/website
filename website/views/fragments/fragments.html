@@ -1,5 +1,5 @@
 {% import 'fragments/utilities.html' as utilities %} {% fragment header() %}
-<header class="sf-header {% if data.page and (data.page.type == '@apostrophecms/home-page' or data.page.type == '@apostrophecms/about-page' or data.page.type == '@apostrophecms/build-differently-page' or data.page.type == '@apostrophecms/solutions-page' or data.page.type == '@apostrophecms/how-we-deliver-page' or data.page.type == '@apostrophecms/careers-page' or data.page.type == '@apostrophecms/privacy-policy-page' or data.page.type == '@apostrophecms/lets-talk-page' or data.page.type == 'meet-team-page' or data.page.type == 'case-studies-page') %}sf-header--overlay{% endif %}">
+<header class="sf-header sf-header--overlay">
   <div class="sf-header__content">
     {% render utilities.siteLogo() %}
     <button
@@ -25,7 +25,27 @@
       <ol class="sf-nav__list">
         <li class="sf-nav__home-item"><a href="{{ data.home._url }}" class="{% if data.page._url == data.home._url %}active{% endif %}"><span>Home</span></a></li>
         {% for item in data.global.primaryNav %}
-        <li>{% render utilities.navLink(item.menuItem) %}</li>
+        {% set hasSubItems = item.subItems and item.subItems.length %}
+        <li{% if hasSubItems %} class="sf-nav__item--has-sub"{% endif %}>
+          {% render utilities.navLink(item.menuItem) %}
+          {% if hasSubItems %}
+          <button
+            class="sf-nav__sub-toggle"
+            type="button"
+            aria-expanded="false"
+            aria-label="Toggle {{ item.menuItem.linkTitle }} submenu"
+          >
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M4 4.8L8 8.8L12 4.8L13.6 5.6L8 11.2L2.4 5.6L4 4.8Z" fill="currentColor"/>
+            </svg>
+          </button>
+          <ul class="sf-nav__submenu">
+            {% for sub in item.subItems %}
+            <li>{% render utilities.navLink(sub.subItem, 'sf-nav__submenu-link') %}</li>
+            {% endfor %}
+          </ul>
+          {% endif %}
+        </li>
         {% endfor %}
       </ol>
     </nav>
