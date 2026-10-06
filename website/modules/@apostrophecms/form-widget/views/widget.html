@@ -24,6 +24,7 @@ onSubmitSuccess = form.onSubmitSuccess %}
     action="/api/v1/@apostrophecms/form/submit"
   >
     <input type="hidden" name="_csrf" value="{{ apos.csrfToken }}" />
+    <input type="hidden" name="_id" value="{{ form._id }}" />
     {% area form, 'contents' %} {% if recaptchaReady %} {% include
     "recaptcha-script.html" %}
     <div

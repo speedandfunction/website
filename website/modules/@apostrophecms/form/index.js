@@ -14,6 +14,60 @@ const validateSubmissionSuccess = (result) => {
   }
 };
 
+const verifySubmissionRecaptcha = async (self, req, formData) => {
+  const globalDoc = await self.apos.global.find(req).toObject();
+  if (!globalDoc?.useRecaptcha || !globalDoc?.recaptchaSecret) {
+    return { success: true };
+  }
+
+  return verifyRecaptcha({
+    secret: globalDoc.recaptchaSecret,
+    token: formData['g-recaptcha-response'],
+    remoteip:
+      req.headers['x-forwarded-for']?.split(',').shift().trim() || req.ip,
+  });
+};
+
+const submitToSheets = (self, formData) => {
+  if (!self.formSubmissionHandler) {
+    return null;
+  }
+  return self.formSubmissionHandler.handle(formData);
+};
+
+const runDefaultPipeline = async (self, req, formData) => {
+  /*
+   * The default pipeline validates the submission, stores it in
+   * aposFormSubmissions, and triggers notification emails.
+   */
+  req.body = {
+    ...req.body,
+    data: JSON.stringify({
+      ...formData,
+      recaptcha: formData['g-recaptcha-response'],
+    }),
+  };
+  await self.originalSubmitForm(req);
+};
+
+const sendSubmissionError = (res, error) => {
+  const isClientError = ['invalid', 'notfound'].includes(error.name);
+  const payload = {
+    error: 'An error occurred',
+    message: 'An error occurred',
+  };
+  let status = 500;
+  if (isClientError) {
+    status = 400;
+    payload.error = 'Invalid form submission';
+    payload.message = 'Invalid form submission';
+  }
+  if (error.data?.formErrors) {
+    payload.formErrors = error.data.formErrors;
+  }
+  return res.status(status).json(payload);
+};
+
 const submitRouteHandler = function (self) {
   return async function (req, res) {
     try {
@@ -22,29 +76,27 @@ const submitRouteHandler = function (self) {
         return res.status(400).json({ error: 'Invalid form data' });
       }
 
-      const globalDoc = await self.apos.global.find(req).toObject();
-      const recaptchaToken = formData['g-recaptcha-response'];
-      if (globalDoc.useRecaptcha && globalDoc.recaptchaSecret) {
-        const result = await verifyRecaptcha({
-          secret: globalDoc.recaptchaSecret,
-          token: recaptchaToken,
-          remoteip:
-            req.headers['x-forwarded-for']?.split(',').shift().trim() || req.ip,
-        });
-        if (!result.success) {
-          return res.status(400).json({ error: result.error });
-        }
+      const recaptchaResult = await verifySubmissionRecaptcha(
+        self,
+        req,
+        formData,
+      );
+      if (!recaptchaResult.success) {
+        return res.status(400).json({ error: recaptchaResult.error });
       }
 
-      const result = await self.formSubmissionHandler.handle(formData);
-      if (!result) {
-        return res.status(500).json({ error: 'Form submission failed' });
-      }
+      await runDefaultPipeline(self, req, formData);
+
+      /*
+       * Google Sheets delivery is independent: failures are logged by the
+       * handler but must not fail an already stored and emailed submission.
+       */
+      await submitToSheets(self, formData);
 
       return res.json({ success: true });
     } catch (error) {
       self.apos.util.error('Form submission error:', error);
-      return res.status(500).json({ error: 'An error occurred' });
+      return sendSubmissionError(res, error);
     }
   };
 };
@@ -90,6 +142,16 @@ module.exports = {
   },
 
   init(self) {
+    const originalSubmitForm = self.submitForm;
+    self.originalSubmitForm = originalSubmitForm;
+    self.submitForm = async function (req, data, options) {
+      const result = await originalSubmitForm.call(self, req, data, options);
+      if (self.formSubmissionHandler) {
+        await self.handleFormSubmission(req);
+      }
+      return result;
+    };
+
     try {
       const config = getSheetsAuthConfig();
       const { spreadsheetId, sheets } = config;
@@ -102,13 +164,6 @@ module.exports = {
         errorHandler,
         getSheetsAuthConfig,
       );
-
-      const originalSubmitForm = self.submitForm;
-      self.submitForm = async function (req, data, options) {
-        const result = await originalSubmitForm.call(self, req, data, options);
-        await self.handleFormSubmission(req);
-        return result;
-      };
 
       self.formSubmissionHandler = formSubmissionHandler;
     } catch (error) {
@@ -130,8 +185,11 @@ module.exports = {
   methods(self) {
     return {
       async handleFormSubmission(req) {
-        const formData = req?.body?.data ?? null;
-        if (!formData) {
+        let formData = req?.body?.data ?? null;
+        if (typeof formData === 'string') {
+          formData = JSON.parse(formData);
+        }
+        if (!formData || !self.formSubmissionHandler) {
           return null;
         }
 
