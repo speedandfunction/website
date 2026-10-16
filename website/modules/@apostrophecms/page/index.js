@@ -39,10 +39,6 @@ module.exports = {
         label: "Let's Talk Page (Golden Teal Drift)",
       },
       {
-        name: 'case-studies-page',
-        label: 'Case Studies Page',
-      },
-      {
         name: 'meet-team-page',
         label: 'Meet the Team Page (Warm Teal Peach)',
       },
@@ -62,6 +58,14 @@ module.exports = {
         _defaults: {
           slug: '/cases',
           title: 'Case Studies',
+        },
+      },
+      {
+        parkedId: 'blogParkedId',
+        type: 'blog-page',
+        _defaults: {
+          slug: '/blog-page',
+          title: 'Blog',
         },
       },
       {

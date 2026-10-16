@@ -1,0 +1,69 @@
+{% extends "layout.html" %}
+{% block extraHead %}
+  {{ super() }}
+  <link rel="canonical" href="{{ data.piece._url | e }}" />
+{% endblock %}
+{% block main %}
+{% set piece = data.piece %}
+{% set attachment = apos.image.first(piece.picture) %}
+<article class="blog-post">
+  <div class="blog-post__inner">
+    {% if attachment %}
+    <figure class="blog-post__hero">
+      <img
+        class="blog-post__hero-image"
+        src="{{ apos.attachment.url(attachment, { size: 'full' }) }}"
+        srcset="{{ apos.image.srcset(attachment) }}"
+        alt="{{ attachment._alt or '' }}"
+      />
+      {% if piece._authors and piece._authors.length %}
+      <ul class="blog-post__authors">
+        {% for author in piece._authors %}
+        {% set headshot = apos.image.first(author.headshot) %}
+        {% if headshot %}
+        <li class="blog-post__author" data-name="{{ author.title }}">
+          <img
+            class="blog-post__author-image"
+            src="{{ apos.attachment.url(headshot, { size: 'one-sixth' }) }}"
+            alt="{{ author.title }}"
+          />
+        </li>
+        {% endif %}
+        {% endfor %}
+      </ul>
+      {% endif %}
+    </figure>
+    {% endif %}
+    <header class="blog-post__header">
+      <h1 class="blog-post__title">{{ piece.title }}</h1>
+      {% if piece.excerpt %}
+      <p class="blog-post__excerpt">{{ piece.excerpt }}</p>
+      {% endif %}
+    </header>
+    <div class="blog-post__body">
+      {% area piece, 'body' %}
+    </div>
+    <div class="blog-post__nav-divider" aria-hidden="true"></div>
+    <nav class="blog-post__nav" aria-label="Post navigation">
+      <a class="blog-post__nav-back" href="{{ data.page._url }}"><span>back to all stories</span></a>
+      <span class="blog-post__nav-arrows">
+        {% if data.previous %}
+        <a class="blog-post__nav-btn" href="{{ data.previous._url }}" aria-label="Previous story"><span aria-hidden="true">&larr;</span></a>
+        {% endif %}
+        {% if data.next %}
+        <a class="blog-post__nav-btn" href="{{ data.next._url }}" aria-label="Next story"><span class="blog-post__nav-btn-next" aria-hidden="true">&larr;</span></a>
+        {% endif %}
+      </span>
+    </nav>
+    <section class="blog-post__cta sf-cta-block sf-cta-block--dark">
+      <div class="sf-cta-block__container">
+        <h2 class="sf-cta-block__heading">Ready to meet us for real?</h2>
+        <div class="sf-cta-block__buttons">
+          <a href="/let-s-talk" class="sf-cta-block__button"><span>let’s talk →</span></a>
+        </div>
+      </div>
+    </section>
+  </div>
+</article>
+{% endblock %}
+

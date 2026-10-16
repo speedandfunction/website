@@ -1,0 +1,92 @@
+{% extends "layout.html" %}
+{% block extraHead %}
+  {{ super() }}
+  <link rel="canonical" href="{{ data.page._url | e }}" />
+{% endblock %}
+{% block main %}
+{% set heroImage = apos.image.first(data.page.image) %}
+{% set heroImageMobile = apos.image.first(data.page.imageMobile) %}
+<section class="blog{% if heroImage %} blog--with-image{% endif %}{% if heroImage and heroImageMobile %} blog--with-mobile-image{% endif %}">
+  {% if heroImage %}
+  <figure class="blog__hero blog__hero--desktop">
+    <img
+      class="blog__hero-image"
+      src="{{ apos.attachment.url(heroImage, { size: 'full' }) }}"
+      srcset="{{ apos.image.srcset(heroImage) }}"
+      alt="{{ heroImage._alt or '' }}"
+    />
+  </figure>
+  {% if heroImageMobile %}
+  <figure class="blog__hero blog__hero--mobile">
+    <img
+      class="blog__hero-image"
+      src="{{ apos.attachment.url(heroImageMobile, { size: 'full' }) }}"
+      srcset="{{ apos.image.srcset(heroImageMobile) }}"
+      alt="{{ heroImageMobile._alt or heroImage._alt or '' }}"
+    />
+  </figure>
+  {% endif %}
+  {% endif %}
+  <div class="blog__inner">
+    {% if data.page.heading or data.page.description %}
+    <header class="blog__intro">
+      {% if data.page.heading %}
+      <h1 class="blog__heading">{{ data.page.heading }}</h1>
+      {% endif %}
+      {% if data.page.description %}
+      <p class="blog__description">{{ data.page.description }}</p>
+      {% endif %}
+      {% if heroImage %}
+      <div class="blog__scroll">
+        <span class="blog__scroll-text">Scroll to read</span>
+        <a class="blog__scroll-button" href="#blog-list" aria-label="Scroll to posts">
+          <span class="blog__scroll-arrow" aria-hidden="true">&larr;</span>
+        </a>
+      </div>
+      {% endif %}
+    </header>
+    {% endif %}
+
+    <div id="blog-list">
+      {% area data.page, 'main' %}
+    </div>
+
+    {% if data.pieces and data.pieces.length %}
+    <ul class="blog__list">
+      {% for post in data.pieces %}
+      {% set attachment = apos.image.first(post.picture) %}
+      <li class="blog__card">
+        <a class="blog__card-link" href="{{ post._url }}">
+          {% if attachment %}
+          <img
+            class="blog__card-image"
+            src="{{ apos.attachment.url(attachment, { size: 'one-third' }) }}"
+            srcset="{{ apos.image.srcset(attachment) }}"
+            alt="{{ attachment._alt or '' }}"
+            loading="lazy"
+          />
+          {% endif %}
+          <h2 class="blog__card-title">{{ post.title }}</h2>
+          {% if post.excerpt %}
+          <p class="blog__card-excerpt">{{ post.excerpt }}</p>
+          {% endif %}
+        </a>
+      </li>
+      {% endfor %}
+    </ul>
+
+    {% if data.totalPages > 1 %}
+    <nav class="blog__pagination" aria-label="Pagination">
+      {% if data.currentPage > 1 %}
+      <a class="blog__page-link" href="{{ data.page._url }}?page={{ data.currentPage - 1 }}">&larr; Previous</a>
+      {% endif %}
+      <span class="blog__page-status">{{ data.currentPage }} / {{ data.totalPages }}</span>
+      {% if data.currentPage < data.totalPages %}
+      <a class="blog__page-link" href="{{ data.page._url }}?page={{ data.currentPage + 1 }}">Next &rarr;</a>
+      {% endif %}
+    </nav>
+    {% endif %}
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

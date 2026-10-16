@@ -197,11 +197,6 @@
         }
       }
     }
-    .swiper-slide {
-      @include breakpoint-medium {
-        width: 50% !important;
-      }
-    }
     .swiper-controls {
       display: flex;
       @include breakpoint-medium {

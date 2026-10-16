@@ -1,0 +1,94 @@
+module.exports = {
+  extend: '@apostrophecms/piece-page-type',
+  options: {
+    label: 'Blog Page',
+    pluralLabel: 'Blog Pages',
+    pieces: 'blog',
+    previous: true,
+    next: true,
+  },
+  fields: {
+    add: {
+      heading: {
+        label: 'Heading',
+        type: 'string',
+        textarea: true,
+      },
+      description: {
+        label: 'Description',
+        type: 'string',
+        textarea: true,
+      },
+      image: {
+        label: 'Full-width Image',
+        type: 'area',
+        options: {
+          max: 1,
+          min: 1,
+          widgets: {
+            '@apostrophecms/image': {
+              aspectRatio: [18, 5],
+            },
+          },
+        },
+      },
+      imageMobile: {
+        label: 'Full-width Image (Mobile)',
+        type: 'area',
+        options: {
+          max: 1,
+          min: 1,
+          widgets: {
+            '@apostrophecms/image': {
+              aspectRatio: [22, 15],
+            },
+          },
+        },
+      },
+      main: {
+        label: 'Main Content',
+        type: 'area',
+        options: {
+          widgets: {
+            'cta-block': {},
+            posts: {},
+          },
+        },
+      },
+    },
+    remove: ['orphan'],
+    group: {
+      basics: {
+        fields: ['heading', 'description', 'image', 'imageMobile'],
+      },
+      mainArea: {
+        label: 'Main page content',
+        fields: ['main'],
+      },
+    },
+  },
+  methods(self) {
+    return {
+      async indexPage(req) {
+        req.data.pieces = [];
+        req.data.currentPage = 1;
+        req.data.totalPages = 1;
+        req.data.totalPieces = 0;
+        self.setTemplate(
+          req,
+          self.apos.util.isAjaxRequest(req) ? 'indexAjax' : 'index',
+        );
+        await self.beforeIndex(req);
+      },
+      async beforeShow(req) {
+        const { piece } = req.data;
+        const edge = (createdAt) =>
+          self.pieces.find(req, {}).sort({ createdAt }).limit(1).toObject();
+        const [oldest, newest] = await Promise.all([edge(1), edge(-1)]);
+        const other = (doc) => (doc?._id !== piece._id ? doc : null);
+        req.data.previous ??= other(oldest);
+        req.data.next ??= other(newest);
+      },
+    };
+  },
+};
