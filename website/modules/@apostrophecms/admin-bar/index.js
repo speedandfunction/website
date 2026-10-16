@@ -18,6 +18,10 @@ module.exports = {
         label: 'Categories',
         items: ['categories'],
       },
+      {
+        label: 'Blog',
+        items: ['blog'],
+      },
     ],
   },
 };

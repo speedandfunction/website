@@ -598,6 +598,98 @@ $sf-noise-texture: url('/images/noise.png');
   }
 }
 
+.sf-container--blog-post {
+  max-width: none;
+  padding-left: 0;
+  padding-right: 0;
+  padding-top: 0;
+  background-color: #ffffff;
+  background-image: $sf-noise-texture;
+  background-size: 128px 128px;
+  background-position: top left;
+  background-repeat: repeat;
+  background-attachment: fixed;
+
+  @include breakpoint-medium {
+    background-image: $sf-noise-texture,
+      radial-gradient(
+        ellipse 115% 36% at 10% 40%,
+        #ffeed2 0%,
+        rgba(255, 238, 210, 0) 72%
+      ),
+      radial-gradient(
+        ellipse 154% 33% at 113% 68%,
+        #c4e9e4 0%,
+        rgba(196, 233, 228, 0) 72%
+      ),
+      radial-gradient(
+        ellipse 72% 31% at 82% 34%,
+        #fff4d9 0%,
+        rgba(255, 244, 217, 0) 72%
+      );
+    background-size: 128px 128px, 100% 6690px, 100% 6690px, 100% 6690px;
+    background-position: top left, top left, top left, top left;
+    background-repeat: repeat, no-repeat, no-repeat, no-repeat;
+    background-attachment: fixed, scroll, scroll, scroll;
+  }
+
+  @include breakpoint-extra-extra-large {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+.sf-container--blog {
+  max-width: none;
+  padding-left: 0;
+  padding-right: 0;
+  padding-top: 0;
+  background-color: #ffffff;
+  background-image: $sf-noise-texture,
+    radial-gradient(
+      ellipse 320% 45% at 133% 12%,
+      #bbf2eb 0%,
+      rgba(187, 242, 235, 0) 72%
+    ),
+    radial-gradient(
+      ellipse 257% 33% at -18% 55%,
+      #ffffe4 0%,
+      rgba(255, 255, 228, 0) 72%
+    );
+  background-size: 128px 128px, 100% 3276px, 100% 3276px;
+  background-position: top left, top left, top left;
+  background-repeat: repeat, no-repeat, no-repeat;
+  background-attachment: fixed, scroll, scroll;
+
+  @include breakpoint-medium {
+    background-image: $sf-noise-texture,
+      radial-gradient(
+        ellipse 117% 47% at -8% 33%,
+        #b1e2dc 0%,
+        rgba(177, 226, 220, 0) 72%
+      ),
+      radial-gradient(
+        ellipse 95% 45% at 102% 59%,
+        #fcead2 0%,
+        rgba(252, 234, 210, 0) 72%
+      ),
+      radial-gradient(
+        ellipse 70% 28% at 63% 62%,
+        #ffead1 0%,
+        rgba(255, 234, 209, 0) 72%
+      );
+    background-size: 128px 128px, 100% 3663px, 100% 3663px, 100% 3663px;
+    background-position: top left, top left, top left, top left;
+    background-repeat: repeat, no-repeat, no-repeat, no-repeat;
+    background-attachment: fixed, scroll, scroll, scroll;
+  }
+
+  @include breakpoint-extra-extra-large {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
 // Privacy Policy page content container and title — per Figma node 2596:402.
 .sf-privacy-bg {
   padding-bottom: 80px;

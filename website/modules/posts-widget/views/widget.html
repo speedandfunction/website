@@ -1,0 +1,57 @@
+<section class="sf-posts">
+  <div class="sf-posts__container">
+    <div class="sf-posts__divider" aria-hidden="true"></div>
+    {% if data.widget.title %}
+    <h2 class="sf-posts__heading">{{ data.widget.title }}</h2>
+    {% endif %}
+    {% for item in data.widget.posts %}
+    {% if item._post and item._post.length %}
+    {% set post = item._post[0] %}
+    {% set picture = apos.image.first(post.picture) %}
+    <article class="sf-posts__item">
+      <h3 class="sf-posts__title">{{ post.title }}</h3>
+      <a class="sf-posts__media" href="{{ post._url }}">
+        {% if picture %}
+        <img
+          class="sf-posts__image"
+          src="{{ apos.attachment.url(picture, { size: 'full' }) }}"
+          srcset="{{ apos.image.srcset(picture) }}"
+          alt="{{ picture._alt or '' }}"
+          loading="lazy"
+        />
+        {% endif %}
+        {% if post._authors and post._authors.length %}
+        <ul class="sf-posts__authors">
+          {% for author in post._authors %}
+          {% set headshot = apos.image.first(author.headshot) %}
+          {% if headshot %}
+          <li class="sf-posts__author" data-name="{{ author.title }}">
+            <img
+              class="sf-posts__author-image"
+              src="{{ apos.attachment.url(headshot, { size: 'one-sixth' }) }}"
+              alt="{{ author.title }}"
+            />
+          </li>
+          {% endif %}
+          {% endfor %}
+        </ul>
+        {% endif %}
+      </a>
+      <div class="sf-posts__aside">
+        {% if post.notes and post.notes.length %}
+        <p class="sf-posts__notes-label">In this note, we'll cover:</p>
+        <ul class="sf-posts__notes">
+          {% for note in post.notes %}
+          {% if note.text %}
+          <li>{{ note.text }}</li>
+          {% endif %}
+          {% endfor %}
+        </ul>
+        {% endif %}
+        <a class="sf-posts__button" href="{{ post._url }}"><span>Read the full story</span></a>
+      </div>
+    </article>
+    {% endif %}
+    {% endfor %}
+  </div>
+</section>

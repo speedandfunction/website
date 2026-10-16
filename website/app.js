@@ -121,6 +121,7 @@ function createAposConfig() {
       'info-columns-widget': {},
       'trusted-leaders-widget': {},
       'cta-block-widget': {},
+      'posts-widget': {},
       'statement-cta-widget': {},
       'vacancies-widget': {},
       /*
@@ -140,6 +141,8 @@ function createAposConfig() {
       // Custom Pieces
       'team-members': {},
       'testimonials': {},
+      'blog': {},
+      'blog-page': {},
 
       // `asset` supports the project"s webpack build for client-side assets.
       'asset': {},
