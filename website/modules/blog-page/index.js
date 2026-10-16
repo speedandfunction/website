@@ -51,7 +51,7 @@ module.exports = {
         options: {
           widgets: {
             'cta-block': {},
-            posts: {},
+            'posts': {},
           },
         },
       },
@@ -74,10 +74,11 @@ module.exports = {
         req.data.currentPage = 1;
         req.data.totalPages = 1;
         req.data.totalPieces = 0;
-        self.setTemplate(
-          req,
-          self.apos.util.isAjaxRequest(req) ? 'indexAjax' : 'index',
-        );
+        if (self.apos.util.isAjaxRequest(req)) {
+          self.setTemplate(req, 'indexAjax');
+        } else {
+          self.setTemplate(req, 'index');
+        }
         await self.beforeIndex(req);
       },
       async beforeShow(req) {
@@ -85,7 +86,16 @@ module.exports = {
         const edge = (createdAt) =>
           self.pieces.find(req, {}).sort({ createdAt }).limit(1).toObject();
         const [oldest, newest] = await Promise.all([edge(1), edge(-1)]);
-        const other = (doc) => (doc?._id !== piece._id ? doc : null);
+        const other = (doc) => {
+          if (!doc) {
+            return null;
+          }
+          // eslint-disable-next-line no-underscore-dangle
+          if (doc._id === piece._id) {
+            return null;
+          }
+          return doc;
+        };
         req.data.previous ??= other(oldest);
         req.data.next ??= other(newest);
       },

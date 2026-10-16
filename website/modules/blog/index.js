@@ -50,7 +50,7 @@ module.exports = {
         },
       },
       notes: {
-        label: 'In this note, we\'ll cover',
+        label: "In this note, we'll cover",
         type: 'array',
         inline: true,
         style: 'table',
