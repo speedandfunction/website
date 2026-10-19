@@ -189,7 +189,6 @@ module.exports = {
   middleware(self) {
     return {
       markdownNegotiation: {
-        before: '@apostrophecms/page:serve',
         async middleware(req, res, next) {
           const accept = req.get('accept') || '';
           const wantsMarkdown =
