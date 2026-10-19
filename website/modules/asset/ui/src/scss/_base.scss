@@ -627,7 +627,7 @@ $sf-noise-texture: url('/images/noise.png');
         #fff4d9 0%,
         rgba(255, 244, 217, 0) 72%
       );
-    background-size: 128px 128px, 100% 6690px, 100% 6690px, 100% 6690px;
+    background-size: 128px 128px, 100% 100%, 100% 100%, 100% 100%;
     background-position: top left, top left, top left, top left;
     background-repeat: repeat, no-repeat, no-repeat, no-repeat;
     background-attachment: fixed, scroll, scroll, scroll;

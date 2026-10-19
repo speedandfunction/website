@@ -88,7 +88,13 @@ const handlePopState = function (event) {
   }
 };
 
+let lastViewportWidth = window.innerWidth;
+
 const handleResize = function () {
+  if (window.innerWidth === lastViewportWidth) {
+    return;
+  }
+  lastViewportWidth = window.innerWidth;
   updateCategoriesVisibility();
 };
 
