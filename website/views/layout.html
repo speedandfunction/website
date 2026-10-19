@@ -15,6 +15,26 @@
 {% block extraHead %}
   <link rel="icon" href="{{ apos.asset.url('/modules/asset/favicon/favicon.ico') }}" type="image/x-icon">
   {% component '@apostrophecms/seo:tagManagerHead' with data %}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Speed & Function",
+    "alternateName": "Speed and Function",
+    "url": "https://speedandfunction.com",
+    "logo": "https://speedandfunction.com/modules/asset/favicon/apple-touch-icon.png",
+    "description": "Speed & Function provides digital product engineering, dedicated engineering teams, and CMS transformation.",
+    "sameAs": [
+      "https://www.linkedin.com/company/speedandfunction",
+      "https://github.com/speedandfunction"
+    ],
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "contactType": "sales",
+      "url": "https://speedandfunction.com/let-s-talk"
+    }
+  }
+  </script>
 {% endblock %}
 
 {% block beforeMain %}
