@@ -79,6 +79,7 @@ describe('createAposConfig', () => {
         '@apostrophecms/express',
         '@apostrophecms/template',
         'global-data',
+        'health',
       ],
     },
     {
