@@ -38,6 +38,19 @@ module.exports = {
           },
         },
       },
+      thumbnail: {
+        label: 'Thumbnail',
+        type: 'area',
+        options: {
+          max: 1,
+          min: 1,
+          widgets: {
+            '@apostrophecms/image': {
+              aspectRatio: [700, 413],
+            },
+          },
+        },
+      },
       _authors: {
         label: 'Authors',
         type: 'relationship',
@@ -80,7 +93,14 @@ module.exports = {
     group: {
       basics: {
         label: 'Basics',
-        fields: ['title', 'excerpt', 'picture', '_authors', 'notes'],
+        fields: [
+          'title',
+          'excerpt',
+          'picture',
+          'thumbnail',
+          '_authors',
+          'notes',
+        ],
       },
       content: {
         label: 'Content',

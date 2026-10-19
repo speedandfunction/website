@@ -7,17 +7,17 @@
     {% for item in data.widget.posts %}
     {% if item._post and item._post.length %}
     {% set post = item._post[0] %}
-    {% set picture = apos.image.first(post.picture) %}
+    {% set picture = apos.image.first(post.thumbnail) or apos.image.first(post.picture) %}
     <article class="sf-posts__item">
       <h3 class="sf-posts__title">{{ post.title }}</h3>
       <a class="sf-posts__media" href="{{ post._url }}">
         {% if picture %}
         <img
-          class="sf-posts__image"
-          src="{{ apos.attachment.url(picture, { size: 'full' }) }}"
-          srcset="{{ apos.image.srcset(picture) }}"
-          alt="{{ picture._alt or '' }}"
+          class="sf-posts__image{% if not data.user %} lozad{% endif %}"
           loading="lazy"
+          {% if not data.user %}data-{% endif %}src="{{ apos.attachment.url(picture, { size: 'full' }) }}"
+          {% if not data.user %}data-{% endif %}srcset="{{ apos.image.srcset(picture) }}"
+          alt="{{ picture._alt or '' }}"
         />
         {% endif %}
         {% if post._authors and post._authors.length %}
@@ -27,8 +27,9 @@
           {% if headshot %}
           <li class="sf-posts__author" data-name="{{ author.title }}">
             <img
-              class="sf-posts__author-image"
-              src="{{ apos.attachment.url(headshot, { size: 'one-sixth' }) }}"
+              class="sf-posts__author-image{% if not data.user %} lozad{% endif %}"
+              loading="lazy"
+              {% if not data.user %}data-{% endif %}src="{{ apos.attachment.url(headshot, { size: 'one-sixth' }) }}"
               alt="{{ author.title }}"
             />
           </li>

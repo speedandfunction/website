@@ -29,6 +29,7 @@ module.exports = {
               builders: {
                 project: {
                   title: 1,
+                  thumbnail: 1,
                   picture: 1,
                   notes: 1,
                   _url: 1,

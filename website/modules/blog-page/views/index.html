@@ -10,18 +10,20 @@
   {% if heroImage %}
   <figure class="blog__hero blog__hero--desktop">
     <img
-      class="blog__hero-image"
-      src="{{ apos.attachment.url(heroImage, { size: 'full' }) }}"
-      srcset="{{ apos.image.srcset(heroImage) }}"
+      class="blog__hero-image{% if not data.user %} lozad{% endif %}"
+      loading="lazy"
+      {% if not data.user %}data-{% endif %}src="{{ apos.attachment.url(heroImage, { size: 'full' }) }}"
+      {% if not data.user %}data-{% endif %}srcset="{{ apos.image.srcset(heroImage) }}"
       alt="{{ heroImage._alt or '' }}"
     />
   </figure>
   {% if heroImageMobile %}
   <figure class="blog__hero blog__hero--mobile">
     <img
-      class="blog__hero-image"
-      src="{{ apos.attachment.url(heroImageMobile, { size: 'full' }) }}"
-      srcset="{{ apos.image.srcset(heroImageMobile) }}"
+      class="blog__hero-image{% if not data.user %} lozad{% endif %}"
+      loading="lazy"
+      {% if not data.user %}data-{% endif %}src="{{ apos.attachment.url(heroImageMobile, { size: 'full' }) }}"
+      {% if not data.user %}data-{% endif %}srcset="{{ apos.image.srcset(heroImageMobile) }}"
       alt="{{ heroImageMobile._alt or heroImage._alt or '' }}"
     />
   </figure>
@@ -59,11 +61,11 @@
         <a class="blog__card-link" href="{{ post._url }}">
           {% if attachment %}
           <img
-            class="blog__card-image"
-            src="{{ apos.attachment.url(attachment, { size: 'one-third' }) }}"
-            srcset="{{ apos.image.srcset(attachment) }}"
-            alt="{{ attachment._alt or '' }}"
+            class="blog__card-image{% if not data.user %} lozad{% endif %}"
             loading="lazy"
+            {% if not data.user %}data-{% endif %}src="{{ apos.attachment.url(attachment, { size: 'one-third' }) }}"
+            {% if not data.user %}data-{% endif %}srcset="{{ apos.image.srcset(attachment) }}"
+            alt="{{ attachment._alt or '' }}"
           />
           {% endif %}
           <h2 class="blog__card-title">{{ post.title }}</h2>
