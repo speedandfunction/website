@@ -17,13 +17,12 @@ module.exports = {
         label: 'Title',
         type: 'string',
         required: true,
-        max: 150,
       },
       excerpt: {
         label: 'Excerpt',
         type: 'string',
         textarea: true,
-        max: 300,
+        help: 'Separate paragraphs with a blank line.',
       },
       picture: {
         label: 'Image',

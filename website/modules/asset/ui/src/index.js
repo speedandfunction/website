@@ -21,7 +21,8 @@ import {
   isCaseStudyPage,
 } from './scrollMemory';
 import { scrollToTopAndRevealHeader } from './headerReveal';
-import { initNavSubmenus } from './initNavSubmenus';
+import { initMenuToggle, initSkipLink, setMenuOpen } from './initMenuToggle';
+import { closeNavSubmenus } from './initNavSubmenus';
 import { initRecaptcha, startRecaptcha } from './js/recaptcha';
 function revealLoaded() {
   document
@@ -105,8 +106,8 @@ function initBarbaPageTransitions() {
       const menuButton = document.getElementById('nav-icon');
       const menu = document.querySelector('[data-menu]');
       if (menuButton && menu) {
-        menu.classList.remove('open');
-        menuButton.classList.remove('open');
+        closeNavSubmenus(menu);
+        setMenuOpen(menu, menuButton, false);
       }
 
       const video = data.next.container.querySelector('video');
@@ -204,32 +205,6 @@ function initBarbaPageTransitions() {
     });
   });
 }
-function initMenuToggle() {
-  apos.util.onReady(() => {
-    const menuButton = document.getElementById('nav-icon');
-    const menu = document.querySelector('[data-menu]');
-
-    if (!menuButton || !menu) return;
-
-    menuButton.addEventListener('click', () => {
-      menu.classList.toggle('open');
-      menuButton.classList.toggle('open');
-    });
-
-    initNavSubmenus(menu);
-
-    const menuLinks = menu.querySelectorAll('a');
-    menuLinks.forEach((link) => {
-      link.addEventListener('click', () => {
-        if (apos.user) return;
-
-        menu.classList.remove('open');
-        menuButton.classList.remove('open');
-      });
-    });
-  });
-}
-
 export default () => {
   initConfiguration();
 
@@ -248,6 +223,7 @@ export default () => {
   initBarbaPageTransitions();
   initAnchorNavigation();
   initMenuToggle();
+  initSkipLink();
 
   /*
    * Restore scroll position when returning to the /cases listing after a full

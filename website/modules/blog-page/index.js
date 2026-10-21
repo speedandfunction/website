@@ -13,6 +13,7 @@ module.exports = {
         label: 'Heading',
         type: 'string',
         textarea: true,
+        help: 'Use a line break for the intended wrap, e.g. "The S&F" then "Journal".',
       },
       description: {
         label: 'Description',

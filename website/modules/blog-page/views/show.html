@@ -6,17 +6,31 @@
 {% block main %}
 {% set piece = data.piece %}
 {% set attachment = apos.image.first(piece.picture) %}
-<article class="blog-post">
+{% set attachmentThumbnail = apos.image.first(piece.thumbnail) %}
+<article class="blog-post{% if attachment and attachmentThumbnail %} blog-post--with-thumbnail{% endif %}">
   <div class="blog-post__inner">
     {% if attachment %}
-    <figure class="blog-post__hero">
-      <img
-        class="blog-post__hero-image{% if not data.user %} lozad{% endif %}"
-        loading="lazy"
-        {% if not data.user %}data-{% endif %}src="{{ apos.attachment.url(attachment, { size: 'full' }) }}"
-        {% if not data.user %}data-{% endif %}srcset="{{ apos.image.srcset(attachment) }}"
-        alt="{{ attachment._alt or '' }}"
-      />
+    <div class="blog-post__hero-wrap">
+      <figure class="blog-post__hero blog-post__hero--desktop">
+        <img
+          class="blog-post__hero-image{% if not data.user %} lozad{% endif %}"
+          loading="lazy"
+          {% if not data.user %}data-{% endif %}src="{{ apos.attachment.url(attachment, { size: 'full' }) }}"
+          {% if not data.user %}data-{% endif %}srcset="{{ apos.image.srcset(attachment) }}"
+          alt="{{ attachment._alt or '' }}"
+        />
+      </figure>
+      {% if attachmentThumbnail %}
+      <figure class="blog-post__hero blog-post__hero--mobile">
+        <img
+          class="blog-post__hero-image{% if not data.user %} lozad{% endif %}"
+          loading="lazy"
+          {% if not data.user %}data-{% endif %}src="{{ apos.attachment.url(attachmentThumbnail, { size: 'full' }) }}"
+          {% if not data.user %}data-{% endif %}srcset="{{ apos.image.srcset(attachmentThumbnail) }}"
+          alt="{{ attachmentThumbnail._alt or attachment._alt or '' }}"
+        />
+      </figure>
+      {% endif %}
       {% if piece._authors and piece._authors.length %}
       <ul class="blog-post__authors">
         {% for author in piece._authors %}
@@ -34,12 +48,19 @@
         {% endfor %}
       </ul>
       {% endif %}
-    </figure>
+    </div>
     {% endif %}
     <header class="blog-post__header">
       <h1 class="blog-post__title">{{ piece.title }}</h1>
       {% if piece.excerpt %}
-      <p class="blog-post__excerpt">{{ piece.excerpt }}</p>
+      <div class="blog-post__excerpt">
+        {% for paragraph in piece.excerpt.replace('\r\n', '\n').split('\n\n') %}
+        {% set text = paragraph | trim %}
+        {% if text %}
+        <p>{{ text }}</p>
+        {% endif %}
+        {% endfor %}
+      </div>
       {% endif %}
     </header>
     <div class="blog-post__body">
