@@ -21,7 +21,7 @@ import {
   isCaseStudyPage,
 } from './scrollMemory';
 import { scrollToTopAndRevealHeader } from './headerReveal';
-import { initNavSubmenus } from './initNavSubmenus';
+import { closeNavSubmenus, initNavSubmenus } from './initNavSubmenus';
 import { initRecaptcha, startRecaptcha } from './js/recaptcha';
 function revealLoaded() {
   document
@@ -105,8 +105,8 @@ function initBarbaPageTransitions() {
       const menuButton = document.getElementById('nav-icon');
       const menu = document.querySelector('[data-menu]');
       if (menuButton && menu) {
-        menu.classList.remove('open');
-        menuButton.classList.remove('open');
+        closeNavSubmenus(menu);
+        setMenuOpen(menu, menuButton, false);
       }
 
       const video = data.next.container.querySelector('video');
@@ -204,6 +204,12 @@ function initBarbaPageTransitions() {
     });
   });
 }
+function setMenuOpen(menu, menuButton, isOpen) {
+  menu.classList.toggle('open', isOpen);
+  menuButton.classList.toggle('open', isOpen);
+  menuButton.setAttribute('aria-expanded', String(isOpen));
+}
+
 function initMenuToggle() {
   apos.util.onReady(() => {
     const menuButton = document.getElementById('nav-icon');
@@ -212,20 +218,54 @@ function initMenuToggle() {
     if (!menuButton || !menu) return;
 
     menuButton.addEventListener('click', () => {
-      menu.classList.toggle('open');
-      menuButton.classList.toggle('open');
+      const isOpen = !menu.classList.contains('open');
+      if (!isOpen) {
+        closeNavSubmenus(menu);
+      }
+      setMenuOpen(menu, menuButton, isOpen);
     });
 
     initNavSubmenus(menu);
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key !== 'Escape') {
+        return;
+      }
+
+      if (closeNavSubmenus(menu, { focusToggle: true })) {
+        return;
+      }
+
+      if (!menu.classList.contains('open')) {
+        return;
+      }
+
+      setMenuOpen(menu, menuButton, false);
+      menuButton.focus();
+    });
 
     const menuLinks = menu.querySelectorAll('a');
     menuLinks.forEach((link) => {
       link.addEventListener('click', () => {
         if (apos.user) return;
 
-        menu.classList.remove('open');
-        menuButton.classList.remove('open');
+        closeNavSubmenus(menu);
+        setMenuOpen(menu, menuButton, false);
       });
+    });
+  });
+}
+
+function initSkipLink() {
+  const skipLink = document.querySelector('.sf-skip-link');
+  const main = document.getElementById('main');
+  if (!skipLink || !main) {
+    return;
+  }
+
+  skipLink.addEventListener('click', () => {
+    requestAnimationFrame(() => {
+      main.focus({ preventScroll: false });
     });
   });
 }
@@ -248,6 +288,7 @@ export default () => {
   initBarbaPageTransitions();
   initAnchorNavigation();
   initMenuToggle();
+  initSkipLink();
 
   /*
    * Restore scroll position when returning to the /cases listing after a full

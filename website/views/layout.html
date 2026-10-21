@@ -39,7 +39,7 @@
 
 {% block beforeMain %}
   {% component '@apostrophecms/seo:tagManagerBody' with data %}
-  <a class="sr-only" href="#main">Skip to content</a>
+  <a class="sf-skip-link" href="#main">Skip to content</a>
   <div
     class="bp-wrapper relative{% if not data.user %} sf-fade-in{% endif %}{% if data.user %} has-admin-bar{% endif %}"
     data-barba="wrapper"
@@ -50,6 +50,7 @@
       class="bp-main"
       role="main"
       id="main"
+      tabindex="-1"
       {% if not data.user %}
       data-barba="container"
       data-barba-namespace="{{ (data.page and data.page.type) or 'default' }}"

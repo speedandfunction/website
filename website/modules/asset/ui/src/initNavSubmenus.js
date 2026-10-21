@@ -7,6 +7,27 @@
  * so the width is measured here. The mobile menu keeps its own full-width
  * inline panel, toggled by the chevron button.
  */
+
+export function closeNavSubmenus(menu, options = {}) {
+  const { focusToggle = false } = options;
+  let didClose = false;
+
+  menu.querySelectorAll('.sf-nav__item--has-sub.open').forEach((item) => {
+    item.classList.remove('open');
+    const toggle = item.querySelector('.sf-nav__sub-toggle');
+    if (!toggle) {
+      return;
+    }
+    toggle.setAttribute('aria-expanded', 'false');
+    if (focusToggle && !didClose) {
+      toggle.focus();
+    }
+    didClose = true;
+  });
+
+  return didClose;
+}
+
 export const initNavSubmenus = (menu) => {
   const sizeSubmenus = () => {
     const isDesktop = window.matchMedia('(min-width: 1200px)').matches;
