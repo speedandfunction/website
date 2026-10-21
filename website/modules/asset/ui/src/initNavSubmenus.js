@@ -8,7 +8,7 @@
  * inline panel, toggled by the chevron button.
  */
 
-export function closeNavSubmenus(menu, options = {}) {
+export const closeNavSubmenus = function (menu, options = {}) {
   const { focusToggle = false } = options;
   let didClose = false;
 
@@ -26,7 +26,7 @@ export function closeNavSubmenus(menu, options = {}) {
   });
 
   return didClose;
-}
+};
 
 export const initNavSubmenus = (menu) => {
   const sizeSubmenus = () => {
