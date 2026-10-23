@@ -102,9 +102,11 @@ const initRecaptcha = (container = document) => {
   loadRecaptchaScript()
     .then(() => {
       renderRecaptchaWidgets(container);
+      return null;
     })
     .catch(() => {
       recaptchaScriptPromise = null;
+      return null;
     });
 };
 
