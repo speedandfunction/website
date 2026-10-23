@@ -221,6 +221,9 @@
     position: relative;
     z-index: 2;
     margin-top: 42px;
+    // Negative margin pulls this full-width layer over the slide; let
+    // clicks pass through empty space so the URL link stays usable.
+    pointer-events: none;
 
     @include breakpoint-medium {
       margin-top: -24px;
@@ -242,6 +245,7 @@
     display: flex;
     justify-content: flex-start;
     gap: 20px;
+    pointer-events: auto;
 
     @include breakpoint-medium {
       justify-content: flex-end;
