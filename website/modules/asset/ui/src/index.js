@@ -116,6 +116,11 @@ function initBarbaPageTransitions() {
       }
 
       initializeAllComponents(data.next.container);
+      /*
+       * Barba does not execute script tags from the next page, so reCAPTCHA
+       * must be (re)initialized explicitly on the new container.
+       */
+      initRecaptcha(data.next.container);
 
       // Initialize Apostrophe forms before removing old content
       const initializeApostropheForm = (container) => {
