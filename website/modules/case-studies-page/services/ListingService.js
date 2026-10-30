@@ -63,9 +63,7 @@ const collectFilterOptions = function (pieces, fieldName, docMap) {
 
 const getListingCacheKey = function (req) {
   const locale =
-    (req.data.page && req.data.page.aposLocale) ||
-    req.locale ||
-    'default';
+    (req.data.page && req.data.page.aposLocale) || req.locale || 'default';
   return `${locale}:${req.mode || 'published'}`;
 };
 
@@ -76,10 +74,7 @@ const getListingCacheKey = function (req) {
  * @returns {Promise<object>} Pieces and filter option maps
  */
 const loadListingData = async function (self, req) {
-  const safeToCache = self.isSafeToCache
-    ? self.isSafeToCache(req)
-    : !req.user;
-  const canCache = !req.user && safeToCache;
+  const canCache = !req.user && self.isSafeToCache(req);
   let cacheKey = null;
   if (canCache) {
     cacheKey = getListingCacheKey(req);

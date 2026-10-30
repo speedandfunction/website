@@ -129,7 +129,7 @@ module.exports = {
     return {
       get: {
         // Absolute path — page types share @apostrophecms/page's action.
-        async '/api/v1/case-studies-page/cards'(req) {
+        '/api/v1/case-studies-page/cards'(req) {
           return ListingService.renderDeferredCards(self, req);
         },
       },
