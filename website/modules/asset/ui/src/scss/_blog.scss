@@ -492,6 +492,17 @@
       }
     }
 
+    // Mobile title already has a divider; a leading body h2 would stack a
+    // second line directly under it (or under the excerpt).
+    .apos-area > [data-rich-text]:first-child > h2:first-child,
+    .apos-area > [data-apos-widget]:first-child [data-rich-text] > h2:first-child {
+      @media (max-width: #{$breakpoint-medium - 1px}) {
+        border-top: none;
+        padding-top: 0;
+        margin-top: 40px;
+      }
+    }
+
     p {
       margin: 0 0 24px;
     }

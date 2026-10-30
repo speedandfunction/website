@@ -53,11 +53,9 @@
       }
     }
 
+    // Desktop two-column layout needs ~700 + 138 + aside; with 100px
+    // side padding that overflows below 1440px — stay stacked until then.
     @include breakpoint-medium {
-      display: grid;
-      grid-template-columns: 700px minmax(0, 1fr);
-      column-gap: 138px;
-      align-items: stretch;
       margin: 0;
       padding: 40px 0;
       background: none;
@@ -71,6 +69,13 @@
         }
       }
     }
+
+    @include breakpoint-extra-extra-large {
+      display: grid;
+      grid-template-columns: minmax(0, 700px) minmax(0, 1fr);
+      column-gap: 138px;
+      align-items: stretch;
+    }
   }
 
   &__title {
@@ -78,11 +83,15 @@
     order: 1;
     color: #232429;
     margin: 0 0 24px;
+    min-width: 0;
 
     @include breakpoint-medium {
       @include font-settings(22px, 120%, 700);
       letter-spacing: -0.6px;
       order: 0;
+    }
+
+    @include breakpoint-extra-extra-large {
       grid-column: 1;
       grid-row: 1;
     }
@@ -95,8 +104,9 @@
     text-decoration: none;
     order: 0;
     margin-bottom: 40px;
+    min-width: 0;
 
-    @include breakpoint-medium {
+    @include breakpoint-extra-extra-large {
       margin-bottom: 0;
       grid-column: 1;
       grid-row: 2;
@@ -195,8 +205,9 @@
     flex-direction: column;
     order: 2;
     margin-top: 40px;
+    min-width: 0;
 
-    @include breakpoint-medium {
+    @include breakpoint-extra-extra-large {
       grid-column: 2;
       grid-row: 2;
       margin-top: 0;
@@ -243,9 +254,12 @@
 
     @include breakpoint-medium {
       @include font-settings(14px, 100%, 700);
-      align-self: auto;
       width: 252px;
       height: 64px;
+    }
+
+    @include breakpoint-extra-extra-large {
+      align-self: auto;
       margin-top: auto;
     }
     border: 1.2px solid #232429;
