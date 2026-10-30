@@ -1,152 +1,8 @@
+const ListingService = require('./services/ListingService');
 const NavigationService = require('./services/NavigationService');
 const UrlService = require('./services/UrlService');
 
-/*
- * Listing cards need only these fields. The projection keeps long-text
- * fields (descriptor, objective, challenge, solution, results), testimonials
- * and unused URLs out of the payload. Relationship storage fields stay so
- * the joins and collectFilterOptions keep working.
- */
-const PIECES_LISTING_PROJECTION = {
-  title: 1,
-  slug: 1,
-  aposDocId: 1,
-  aposLocale: 1,
-  picture: 1,
-  portfolioTitle: 1,
-  industryIds: 1,
-  stackIds: 1,
-  caseStudyTypeIds: 1,
-  partnerIds: 1,
-};
-
-const FILTER_DOC_PROJECTION = {
-  title: 1,
-  slug: 1,
-  aposDocId: 1,
-};
-
-const INITIAL_CARD_COUNT = 24;
-const DEFERRED_CARDS_PARAM = 'cardsFrom';
-const LISTING_CACHE_TTL = 60 * 1000;
 const PAGE_CACHE_MAX_AGE = 60;
-const listingCache = new Map();
-
-const createDocMapById = function (docs) {
-  const map = {};
-  docs.forEach((doc) => {
-    map[doc.aposDocId] = {
-      label: doc.title,
-      value: doc.slug,
-    };
-  });
-  return map;
-};
-
-const collectFilterOptions = function (pieces, fieldName, docMap) {
-  const values = {};
-  pieces.forEach((piece) => {
-    const ids = piece[fieldName] || [];
-    ids.forEach((id) => {
-      if (docMap[id]) {
-        values[id] = docMap[id];
-      }
-    });
-  });
-  const options = Object.values(values);
-  options.sort((first, second) => first.label.localeCompare(second.label));
-  return options;
-};
-
-const getListingCacheKey = function (req) {
-  return `${req.data.page.aposLocale}:${req.mode || 'published'}`;
-};
-
-const loadListingData = async function (self, req) {
-  const canCache = !req.user && self.isSafeToCache(req);
-  let cacheKey = null;
-  if (canCache) {
-    cacheKey = getListingCacheKey(req);
-  }
-  const cached = cacheKey && listingCache.get(cacheKey);
-
-  if (cached && cached.expiresAt > Date.now()) {
-    return cached.data;
-  }
-
-  const [pieces, casesTags, businessPartners] = await Promise.all([
-    self.pieces.find(req).project(PIECES_LISTING_PROJECTION).toArray(),
-    self.apos.modules['cases-tags']
-      .find(req)
-      .project(FILTER_DOC_PROJECTION)
-      .toArray(),
-    self.apos.modules['business-partner']
-      .find(req)
-      .project(FILTER_DOC_PROJECTION)
-      .toArray(),
-  ]);
-
-  const tagMap = createDocMapById(casesTags);
-  const partnerMap = createDocMapById(businessPartners);
-  const data = {
-    pieces,
-    casesTags,
-    businessPartners,
-    piecesFilters: {
-      industry: collectFilterOptions(pieces, 'industryIds', tagMap),
-      stack: collectFilterOptions(pieces, 'stackIds', tagMap),
-      caseStudyType: collectFilterOptions(pieces, 'caseStudyTypeIds', tagMap),
-      partner: collectFilterOptions(pieces, 'partnerIds', partnerMap),
-    },
-  };
-
-  if (cacheKey) {
-    listingCache.set(cacheKey, {
-      data,
-      expiresAt: Date.now() + LISTING_CACHE_TTL,
-    });
-  }
-
-  return data;
-};
-
-const getFragmentOffset = function (req) {
-  const offset = Number.parseInt(req.query[DEFERRED_CARDS_PARAM], 10);
-  if (Number.isNaN(offset) || offset < 0) {
-    return null;
-  }
-  return offset;
-};
-
-/*
- * Decide which cards this response renders. A fragment request returns the
- * cards from its offset on. Anonymous, unfiltered page loads render only the
- * first INITIAL_CARD_COUNT cards; the client fetches the rest when idle so
- * instant client-side filtering still covers every card.
- */
-const selectCardsToRender = function (req, pieces) {
-  const fragmentOffset = getFragmentOffset(req);
-  if (fragmentOffset !== null) {
-    return {
-      pieces: pieces.slice(fragmentOffset),
-      cardOffset: fragmentOffset,
-    };
-  }
-  const canDefer =
-    !req.user &&
-    !NavigationService.hasFilterParams(req.query) &&
-    pieces.length > INITIAL_CARD_COUNT;
-  if (!canDefer) {
-    return { pieces, cardOffset: 0 };
-  }
-  return {
-    pieces: pieces.slice(0, INITIAL_CARD_COUNT),
-    cardOffset: 0,
-    // eslint-disable-next-line no-underscore-dangle
-    deferredCardsUrl: `${req.data.page._url}?${DEFERRED_CARDS_PARAM}=${INITIAL_CARD_COUNT}`,
-    deferredCardsCount: pieces.length - INITIAL_CARD_COUNT,
-  };
-};
 
 const runSetupShowData = async function (self, req) {
   try {
@@ -231,20 +87,17 @@ module.exports = {
       async indexPage(req) {
         await self.beforeIndex(req);
         let template = 'index';
-        if (getFragmentOffset(req) !== null) {
-          template = 'caseCards';
-          req.res.set('X-Robots-Tag', 'noindex');
-        } else if (self.apos.util.isAjaxRequest(req)) {
+        if (self.apos.util.isAjaxRequest(req)) {
           template = 'indexAjax';
         }
         self.setTemplate(req, template);
       },
       async beforeIndex(req) {
-        const listing = await loadListingData(self, req);
+        const listing = await ListingService.loadListingData(self, req);
         req.data = {
           ...req.data,
           ...listing,
-          ...selectCardsToRender(req, listing.pieces),
+          ...ListingService.selectCardsToRender(req, listing.pieces),
           totalPieces: listing.pieces.length,
           totalPages: 1,
           currentPage: 1,
@@ -266,9 +119,26 @@ module.exports = {
     };
   },
 
+  /*
+   * Deferred cards must not use /cases?query — Cloudflare challenges every
+   * query-string request to /cases, and fetch() cannot complete that challenge.
+   * Page types share @apostrophecms/page's action, so this route uses an
+   * absolute path (see getRouteUrl) instead of a module-relative name.
+   */
+  apiRoutes(self) {
+    return {
+      get: {
+        // Absolute path — page types share @apostrophecms/page's action.
+        '/api/v1/case-studies-page/cards'(req) {
+          return ListingService.renderDeferredCards(self, req);
+        },
+      },
+    };
+  },
+
   handlers(self) {
-    const clearListingCache = function () {
-      listingCache.clear();
+    const clearCaches = function () {
+      ListingService.clearListingCache();
       NavigationService.clearNavigationCache();
     };
     return {
@@ -284,12 +154,12 @@ module.exports = {
           }
         },
       },
-      'case-studies:afterSave': { clearListingCache },
-      'case-studies:afterDelete': { clearListingCache },
-      'cases-tags:afterSave': { clearListingCache },
-      'cases-tags:afterDelete': { clearListingCache },
-      'business-partner:afterSave': { clearListingCache },
-      'business-partner:afterDelete': { clearListingCache },
+      'case-studies:afterSave': { clearCaches },
+      'case-studies:afterDelete': { clearCaches },
+      'cases-tags:afterSave': { clearCaches },
+      'cases-tags:afterDelete': { clearCaches },
+      'business-partner:afterSave': { clearCaches },
+      'business-partner:afterDelete': { clearCaches },
     };
   },
 };
