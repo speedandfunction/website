@@ -15,6 +15,16 @@
 {% block extraHead %}
   <link rel="icon" href="{{ apos.asset.url('/modules/asset/favicon/favicon.ico') }}" type="image/x-icon">
   {% component '@apostrophecms/seo:tagManagerHead' with data %}
+  {% set ogTitle = data.piece.title or data.page.title %}
+  {% set ogUrl = (data.piece and data.piece._url) or data.page._url %}
+  {# Single expression: Nunjucks scopes set inside if, so nested sets never stick #}
+  {% set pieceImage = apos.image.first(data.piece.picture)
+    if data.piece and data.piece.picture else null %}
+  {% set ogImage = apos.attachment.url(pieceImage, { size: 'full' })
+    if pieceImage else '/images/og-image.png' %}
+  <meta property="og:url" content="{{ ogUrl }}">
+  <meta property="og:title" content="Speed &amp; Function | {{ ogTitle }}">
+  <meta property="og:image" content="{{ ogImage }}">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
