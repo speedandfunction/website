@@ -17,10 +17,14 @@
   {% component '@apostrophecms/seo:tagManagerHead' with data %}
   {% set ogTitle = data.piece.title or data.page.title %}
   {% set ogUrl = (data.piece and data.piece._url) or data.page._url %}
-  {# Single expression: Nunjucks scopes set inside if, so nested sets never stick #}
-  {% set pieceImage = apos.image.first(data.piece.picture)
+  {# Prefer thumbnail (blog ~1.69:1); fall back to picture (case studies) #}
+  {% set thumbImage = apos.image.first(data.piece.thumbnail)
+    if data.piece and data.piece.thumbnail else null %}
+  {% set pictureImage = apos.image.first(data.piece.picture)
     if data.piece and data.piece.picture else null %}
-  {% set ogImage = apos.attachment.url(pieceImage, { size: 'full' })
+  {% set pieceImage = thumbImage or pictureImage %}
+  {# two-thirds (~760px) keeps shares lighter than full (~1MB+ banners) #}
+  {% set ogImage = apos.attachment.url(pieceImage, { size: 'two-thirds' })
     if pieceImage else '/images/og-image.png' %}
   <meta property="og:url" content="{{ ogUrl }}">
   <meta property="og:title" content="Speed &amp; Function | {{ ogTitle }}">
