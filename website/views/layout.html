@@ -23,12 +23,21 @@
   {% set pictureImage = apos.image.first(data.piece.picture)
     if data.piece and data.piece.picture else null %}
   {% set pieceImage = thumbImage or pictureImage %}
-  {# two-thirds (~760px) keeps shares lighter than full (~1MB+ banners) #}
-  {% set ogImage = apos.attachment.url(pieceImage, { size: 'two-thirds' })
-    if pieceImage else '/images/og-image.png' %}
+  {# Crawlers require absolute og:image URLs; relative paths render blank #}
+  {% set siteOrigin = data.home._url
+    if data.home and data.home._url
+    else 'https://speedandfunction.com/' %}
+  {% set pieceImageUrl = apos.attachment.url(pieceImage, { size: 'two-thirds' })
+    if pieceImage else null %}
+  {% set ogImage = pieceImageUrl
+    if pieceImageUrl
+    else (siteOrigin + 'images/og-image.png') %}
   <meta property="og:url" content="{{ ogUrl }}">
   <meta property="og:title" content="Speed &amp; Function | {{ ogTitle }}">
   <meta property="og:image" content="{{ ogImage }}">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:type" content="{% if data.piece %}article{% else %}website{% endif %}">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
