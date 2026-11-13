@@ -24,6 +24,7 @@ import { scrollToTopAndRevealHeader } from './headerReveal';
 import { initMenuToggle, initSkipLink, setMenuOpen } from './initMenuToggle';
 import { closeNavSubmenus } from './initNavSubmenus';
 import { initRecaptcha, startRecaptcha } from './js/recaptcha';
+import { syncDocumentHead } from './syncDocumentHead';
 function revealLoaded() {
   document
     .querySelectorAll('.sf-container.loading, .page-main_content.loading')
@@ -191,7 +192,8 @@ function initBarbaPageTransitions() {
       saveScrollPosition(data.current.url.href);
     });
 
-    barba.hooks.after(() => {
+    barba.hooks.after((data) => {
+      syncDocumentHead(data.next.html);
       initRecaptcha();
 
       // Update menu active state
